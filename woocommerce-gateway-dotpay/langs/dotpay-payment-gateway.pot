@@ -1,0 +1,83 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce Gateway Dotpay\n"
+"POT-Creation-Date: 2016-02-25 12:03+0100\n"
+"PO-Revision-Date: 2016-02-25 12:03+0100\n"
+"Last-Translator: Dotpay <tech@dotpay.pl>\n"
+"Language-Team: Dotpay <tech@dotpay.pl>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ..\n"
+
+#: ../includes/settings-dotpay.php:12
+msgid "Enable/Disable"
+msgstr ""
+
+#: ../includes/settings-dotpay.php:14
+msgid "Enable Dotpay Payment"
+msgstr ""
+
+#: ../includes/settings-dotpay.php:18
+msgid "Dotpay customer ID"
+msgstr ""
+
+#: ../includes/settings-dotpay.php:23
+msgid "Dotpay customer PIN"
+msgstr ""
+
+#: ../includes/settings-dotpay.php:28
+msgid "Testing environment"
+msgstr ""
+
+#: ../includes/settings-dotpay.php:29
+msgid "Only payment simulation. Forced PLN."
+msgstr ""
+
+#: ../includes/settings-dotpay.php:34
+msgid "Title"
+msgstr ""
+
+#: ../includes/settings-dotpay.php:36
+msgid "This controls the title which user sees during checkout."
+msgstr ""
+
+#: ../includes/settings-dotpay.php:41
+msgid "Customer Message"
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:42
+msgid "Credit card payment via Dotpay"
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:89
+msgid "Shop - "
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:90
+msgid "Order ID: "
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:123
+msgid ""
+"Thank you for your order. We are now redirecting you to Dotpay to make "
+"payment."
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:127
+msgid "Transaction Details"
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:128
+msgid "You chose payment by Dotpay. Click Continue do proceed"
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:129
+msgid "Continue"
+msgstr ""
