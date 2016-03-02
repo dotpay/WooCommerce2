@@ -2,8 +2,12 @@
 
 class WC_Gateway_Dotpay extends WC_Payment_Gateway {
 
+    // Check Real IP if server is proxy, balancer...
+    const CHECK_REAL_IP = false;
     // Dotpay IP address
     const DOTPAY_IP = '195.150.9.37';
+    // Local IP address
+    const LOCAL_IP = '127.0.0.1';
     // Dotpay URL
     const DOTPAY_URL = 'https://ssl.dotpay.pl';
     // Dotpay URL TEST
@@ -18,6 +22,8 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         'operation_status' => '',
         'operation_amount' => '',
         'operation_currency' => '',
+        'operation_withdrawal_amount' => '',
+        'operation_commission_amount' => '',
         'operation_original_amount' => '',
         'operation_original_currency' => '',
         'operation_datetime' => '',
@@ -28,6 +34,8 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         'p_info' => '',
         'p_email' => '',
         'channel' => '',
+        'channel_country' => '',
+        'geoip_country' => '',
         'signature' => ''
     );
 
@@ -148,13 +156,24 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
     function check_dotpay_response() {
         $this->checkRemoteIP();
         $this->getPostParams();
+
+        /**
+         * check order
+         */
         $order = $this->getOrder($this->fieldsResponse['control']);
 
         /**
-         * check order amount, currency, email
+         * check currency, amount, email
+         */
+        $this->checkCurrency($order);
+        $this->checkAmount($order);
+        $this->checkEmail($order);
+        
+        /**
+         * check signature
          */
         $this->checkSignature($order);
-        
+
         /**
          * update status
          */
@@ -170,7 +189,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             default:
                 $order->update_status('processing', $note);
         }
-        
+
         /**
          * OK
          */
@@ -187,23 +206,57 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
     }
 
     protected function checkRemoteIP() {
-        $ip = self::DOTPAY_IP;
-
-        $realIp = isset($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : '0.0.0.0';
         $remoteIp = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
+        $realIp = isset($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : '0.0.0.0';
 
-        if (($realIp !== $ip) && ($remoteIp !== $ip)) {
-            die('FAIL');
+        if ($remoteIp === self::DOTPAY_IP) {
+            /**
+             * OK NOP
+             */
+        } elseif (self::CHECK_REAL_IP && $realIp === self::DOTPAY_IP && $remoteIp === self::LOCAL_IP) {
+            /**
+             * OK NOP
+             */
+        } else {
+            die('FAIL IP: access denied');
         }
     }
 
     protected function getOrder($idOrder) {
         $order = new WC_Order($idOrder);
         if (!$order) {
-            die('FAIL');
+            die('FAIL ORDER: not exist');
         }
 
         return $order;
+    }
+
+    protected function checkCurrency($order) {
+        $currencyOrder = $order->get_order_currency();
+        $currencyResponse = $this->fieldsResponse['operation_original_currency'];
+
+        if ($currencyOrder !== $currencyResponse) {
+            die('FAIL CURRENCY');
+        }
+    }
+
+    protected function checkAmount($order) {
+        $amount = round($order->get_total(), 2);
+        $amountOrder = sprintf("%01.2f", $amount);
+        $amountResponse = $this->fieldsResponse['operation_original_amount'];
+
+        if ($amountOrder !== $amountResponse) {
+            die('FAIL AMOUNT');
+        }
+    }
+
+    protected function checkEmail($order) {
+        $emailBilling = $order->billing_email;
+        $emailResponse = $this->fieldsResponse['email'];
+        
+        if ($emailBilling !== $emailResponse) {
+            die('FAIL EMAIL');
+        }
     }
 
     protected function checkSignature($order) {
@@ -211,7 +264,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         $hashCalculate = $this->calculateSignature($order);
 
         if ($hashDotpay !== $hashCalculate) {
-            die('FAIL');
+            die('FAIL SIGNATURE');
         }
     }
 
@@ -225,16 +278,6 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
                     /**
                      * NOP
                      */
-                    break;
-                case 'operation_original_amount':
-                    $origAmount = round($order->get_total(), 2);
-                    $string .= sprintf("%01.2f", $origAmount);
-                    break;
-                case 'operation_original_currency':
-                     $string .= $order->get_order_currency();
-                    break;
-                case 'email':
-                     $string .= $order->billing_email;
                     break;
                 default:
                     $string .= $v;
