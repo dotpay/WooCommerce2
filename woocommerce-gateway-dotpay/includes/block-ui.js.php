@@ -4,8 +4,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+if($data['widget'] === 'yes') {
+    
+}
+
 return <<<END
-    $.blockUI({
+    /*$.blockUI({
         message: "{$data['message']}",
         baseZ: 99999,
         overlayCSS: {
@@ -23,6 +27,6 @@ return <<<END
             lineHeight: "24px"
         }
     });
-    jQuery('#submit_dotpay_payment_form').click();
+    jQuery('#submit_dotpay_payment_form').click();*/
 
 END;
