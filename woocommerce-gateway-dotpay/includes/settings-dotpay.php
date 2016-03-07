@@ -24,6 +24,12 @@ return array(
         'type' => 'text',
         'default' => '',
     ),
+    'dotpay_channel_show' => array(
+        'title' => __('Widget', 'woocommerce'),
+        'type' => 'checkbox',
+        'label' => __('Display payment channels in a shop', 'dotpay-payment-gateway'),
+        'default' => 'yes',
+    ),
     'dotpay_test' => array(
         'title' => __('Testing environment', 'dotpay-payment-gateway'),
         'label' => __('Only payment simulation. Forced PLN.', 'dotpay-payment-gateway'),

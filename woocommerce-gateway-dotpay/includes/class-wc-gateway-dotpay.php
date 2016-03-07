@@ -9,7 +9,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
     // Local IP address
     const LOCAL_IP = '127.0.0.1';
     // Dotpay URL
-    const DOTPAY_URL = 'https://ssl.dotpay.pl';
+    const DOTPAY_URL = 'https://ssl.dotpay.pl/t2/';
     // Dotpay URL TEST
     const DOTPAY_URL_TEST = 'https://ssl.dotpay.pl/test_payment/';
     // Gateway name
@@ -60,7 +60,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         $this->form_fields = WC_Gateway_Dotpay_Include('/includes/settings-dotpay.php');
     }
 
-    function process_payment($order_id) {
+    public function process_payment($order_id) {
         global $woocommerce;
 
         $order = new WC_Order($order_id);
@@ -75,21 +75,66 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         );
     }
 
-    function receipt_page($order) {
+    public function receipt_page($order) {
         echo $this->generate_dotpay_form($order);
     }
+    
+    protected function getDotpayUrl() {
+        $dotpay_url = self::DOTPAY_URL;
+        if ($this->get_option('dotpay_test') == 'yes') {
+            $dotpay_url = self::DOTPAY_URL_TEST;
+        }
+        
+        return $dotpay_url;
+    }
+    
+    protected function getPaymentCurrency() {
+        $payment_currency = get_woocommerce_currency();
+        if ($this->get_option('dotpay_test') == 'yes') {
+            $payment_currency = 'PLN';
+        }
+        
+        return $payment_currency;
+    }
+    
+    protected function getAmmount($amount) {
+        $roundAmount = round($amount, 2);
+        $formatAmount = sprintf("%01.2f", $roundAmount);
+        
+        return $formatAmount;
+    }
+    
+    protected function getOrderAmmount($order) {
+        return $this->getAmmount($order->get_total());
+    }
+    
+    protected function getPaymentLang() {
+        $dotpay_lang = 'pl';
+        if ($this->get_option('dotpay_test') != 'yes') {
+            $language = get_bloginfo('language');
+            if(is_string($language)) {
+                $languageArray = explode('-', $language);
+                if(isset($languageArray[0])) {
+                    $languageLower = strtolower($languageArray[0]);
+                    if(in_array($languageLower, $this->getDotpayAcceptLang())) {
+                        $dotpay_lang = $languageLower;
+                    }
+                }
+            }
+        }
+        
+        return $dotpay_lang;
+    }
 
-    function generate_dotpay_form($order_id) {
+    public function generate_dotpay_form($order_id) {
         $order = new WC_Order($order_id);
+        
+        $widget = $this->get_option('dotpay_channel_show');
 
         $dotpay_id = $this->get_option('dotpay_id');
 
-        $dotpay_url = self::DOTPAY_URL;
-        $payment_currency = get_woocommerce_currency();
-        if ($this->get_option('dotpay_test') == 'yes') {
-            $dotpay_url = self::DOTPAY_URL_TEST;
-            $payment_currency = 'PLN';
-        }
+        $dotpay_url = $this->getDotpayUrl();
+        $payment_currency = $this->getPaymentCurrency();
 
         /**
          * info and description
@@ -100,17 +145,12 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         /**
          * amount
          */
-        $amount = round($order->get_total(), 2);
-        $order_amount = sprintf("%01.2f", $amount);
+        $order_amount = $this->getOrderAmmount($order);
 
         /**
          * lang
          */
-        $lang = strtolower(explode('-', get_bloginfo('language'))[0]);
-        $dotpay_lang = 'pl';
-        if (in_array($lang, $this->getDotpayAcceptLang())) {
-            $dotpay_lang = $lang;
-        }
+        $dotpay_lang = $this->getPaymentLang();
 
         /**
          * url redirect and back
@@ -125,17 +165,11 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         $firstname = $order->billing_first_name;
         $lastname = $order->billing_last_name;
         $email = $order->billing_email;
-
-
-        wc_enqueue_js(WC_Gateway_Dotpay_Include('/includes/block-ui.js.php', array(
-            'message' => esc_js(__('Thank you for your order. We are now redirecting you to Dotpay to make payment.', 'dotpay-payment-gateway')),
-        )));
-
-        return WC_Gateway_Dotpay_Include('/includes/form-redirect.html.php', array(
-            'h3' => __('Transaction Details', 'dotpay-payment-gateway'),
-            'p' => __('You chose payment by Dotpay. Click Continue do proceed', 'dotpay-payment-gateway'),
-            'submit' => __('Continue', 'dotpay-payment-gateway'),
-            'action' => esc_attr($dotpay_url),
+        
+        /**
+         * hidden fields
+         */
+        $hiddenFields = array(
             'id' => $dotpay_id,
             'control' => esc_attr($order_id),
             'p_info' => esc_attr($dotpay_info),
@@ -149,11 +183,57 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             'type' => 0,
             'firstname' => esc_attr($firstname),
             'lastname' => esc_attr($lastname),
-            'email' => esc_attr($email),
+            'email' => esc_attr($email)
+        );
+        
+        /**
+         * 
+         */
+        if($widget === 'yes') {
+            /**
+             * 
+             */
+            $hiddenFields['type'] = 4;
+            $hiddenFields['ch_lock'] = 1;
+            
+            /**
+             * 
+             */
+            $agreementByLaw = $this->getDotpayAgreement($order, 'bylaw');
+            $agreementPersonalData = $this->getDotpayAgreement($order, 'personal_data');
+            $tagP = __('You chose payment by Dotpay. Select a payment channel and click Continue do proceed', 'dotpay-payment-gateway');
+            $message = esc_js(__('Thank you for your order. We are now redirecting you to channel payment.', 'dotpay-payment-gateway'));
+        } else {
+            $agreementByLaw = '';
+            $agreementPersonalData = '';
+            $tagP = __('You chose payment by Dotpay. Click Continue do proceed', 'dotpay-payment-gateway');
+            $message = esc_js(__('Thank you for your order. We are now redirecting you to Dotpay to make payment.', 'dotpay-payment-gateway'));
+        }
+        
+        /**
+         * js code
+         */
+        wc_enqueue_js(WC_Gateway_Dotpay_Include('/includes/block-ui.js.php', array(
+            'widget' => $widget,
+            'message' => $message,
+        )));
+        
+        /**
+         * html code
+         */
+        return WC_Gateway_Dotpay_Include('/includes/form-redirect.html.php', array(
+            'widget' => $widget,
+            'h3' => __('Transaction Details', 'dotpay-payment-gateway'),
+            'p' => $tagP,
+            'agreement_bylaw' => $agreementByLaw,
+            'agreement_personal_data' => $agreementPersonalData,
+            'submit' => __('Continue', 'dotpay-payment-gateway'),
+            'action' => esc_attr($dotpay_url),
+            'hiddenFields' => $hiddenFields,
         ));
     }
 
-    function check_dotpay_response() {
+    public function check_dotpay_response() {
         $this->checkRemoteIP();
         $this->getPostParams();
 
@@ -168,7 +248,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         $this->checkCurrency($order);
         $this->checkAmount($order);
         $this->checkEmail($order);
-        
+
         /**
          * check signature
          */
@@ -253,7 +333,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
     protected function checkEmail($order) {
         $emailBilling = $order->billing_email;
         $emailResponse = $this->fieldsResponse['email'];
-        
+
         if ($emailBilling !== $emailResponse) {
             die('FAIL EMAIL');
         }
@@ -303,6 +383,53 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             'ru',
             'bg'
         );
+    }
+    
+    protected function getDotpayAgreement($order, $what) {
+        $resultStr = '';
+        
+        $dotpay_url = $this->getDotpayUrl();
+        $payment_currency = $this->getPaymentCurrency();
+        
+        $dotpay_id = $this->get_option('dotpay_id');
+        
+        $order_amount = $this->getOrderAmmount($order);
+        
+        $dotpay_lang = $this->getPaymentLang();
+        
+        $curl_url = "{$dotpay_url}payment_api/channels/";
+        $curl_url .= "?currency={$payment_currency}";
+        $curl_url .= "&id={$dotpay_id}";
+        $curl_url .= "&amount={$order_amount}";
+        $curl_url .= "&lang={$dotpay_lang}";
+        
+        /**
+         * curl
+         */
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_URL, $curl_url);
+        curl_setopt($ch, CURLOPT_REFERER, $curl_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $resultJson = curl_exec($ch);
+        curl_close($ch);
+        
+        /**
+         * 
+         */
+        $result = json_decode($resultJson, true);
+
+        foreach ($result['forms'] as $forms) {
+            foreach ($forms['fields'] as $forms1) {
+                if ($forms1['name'] == $what) {
+                    $resultStr = $forms1['description_html'];
+                }
+            }
+        }
+
+        return $resultStr;
     }
 
 }
