@@ -202,7 +202,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             $agreementByLaw = $this->getDotpayAgreement($order, 'bylaw');
             $agreementPersonalData = $this->getDotpayAgreement($order, 'personal_data');
             $tagP = __('You chose payment by Dotpay. Select a payment channel and click Continue do proceed', 'dotpay-payment-gateway');
-            $message = esc_js(__('Thank you for your order. We are now redirecting you to channel to make payment.', 'dotpay-payment-gateway'));
+            $message = esc_js(__('Thank you for your order. We are now redirecting you to channel payment.', 'dotpay-payment-gateway'));
         } else {
             $agreementByLaw = '';
             $agreementPersonalData = '';

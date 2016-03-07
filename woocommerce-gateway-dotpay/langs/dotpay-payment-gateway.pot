@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2016-02-25 12:03+0100\n"
-"PO-Revision-Date: 2016-02-25 12:03+0100\n"
+"POT-Creation-Date: 2016-03-07 12:00+0100\n"
+"PO-Revision-Date: 2016-03-07 12:00+0100\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: en_US\n"
@@ -33,51 +33,70 @@ msgid "Dotpay customer PIN"
 msgstr ""
 
 #: ../includes/settings-dotpay.php:28
-msgid "Testing environment"
+msgid "Widget"
 msgstr ""
 
-#: ../includes/settings-dotpay.php:29
-msgid "Only payment simulation. Forced PLN."
+#: ../includes/settings-dotpay.php:30
+msgid "Display payment channels in a shop"
 msgstr ""
 
 #: ../includes/settings-dotpay.php:34
+msgid "Testing environment"
+msgstr ""
+
+#: ../includes/settings-dotpay.php:35
+msgid "Only payment simulation. Forced PLN."
+msgstr ""
+
+#: ../includes/settings-dotpay.php:40
 msgid "Title"
 msgstr ""
 
-#: ../includes/settings-dotpay.php:36
+#: ../includes/settings-dotpay.php:42
 msgid "This controls the title which user sees during checkout."
 msgstr ""
 
-#: ../includes/settings-dotpay.php:41
+#: ../includes/settings-dotpay.php:47
 msgid "Customer Message"
 msgstr ""
 
-#: ../includes/class-wc-gateway-dotpay.php:42
+#: ../includes/class-wc-gateway-dotpay.php:50
 msgid "Credit card payment via Dotpay"
 msgstr ""
 
-#: ../includes/class-wc-gateway-dotpay.php:89
+#: ../includes/class-wc-gateway-dotpay.php:142
 msgid "Shop - "
 msgstr ""
 
-#: ../includes/class-wc-gateway-dotpay.php:90
+#: ../includes/class-wc-gateway-dotpay.php:143
 msgid "Order ID: "
 msgstr ""
 
-#: ../includes/class-wc-gateway-dotpay.php:123
+#: ../includes/class-wc-gateway-dotpay.php:204
+msgid ""
+"You chose payment by Dotpay. Select a payment channel and click Continue do "
+"proceed"
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:205
+msgid ""
+"Thank you for your order. We are now redirecting you to channel payment."
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:209
+msgid "You chose payment by Dotpay. Click Continue do proceed"
+msgstr ""
+
+#: ../includes/class-wc-gateway-dotpay.php:210
 msgid ""
 "Thank you for your order. We are now redirecting you to Dotpay to make "
 "payment."
 msgstr ""
 
-#: ../includes/class-wc-gateway-dotpay.php:127
+#: ../includes/class-wc-gateway-dotpay.php:226
 msgid "Transaction Details"
 msgstr ""
 
-#: ../includes/class-wc-gateway-dotpay.php:128
-msgid "You chose payment by Dotpay. Click Continue do proceed"
-msgstr ""
-
-#: ../includes/class-wc-gateway-dotpay.php:129
+#: ../includes/class-wc-gateway-dotpay.php:230
 msgid "Continue"
 msgstr ""
