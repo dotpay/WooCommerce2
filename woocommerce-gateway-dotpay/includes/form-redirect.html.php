@@ -52,13 +52,13 @@ if($data['widget'] === 'yes') {
     $widgetAgreement = <<<END
         <p>
             <label>
-                <input type="checkbox" name="bylaw" value="1" checked>
+                <input type="checkbox" id="bylaw" name="bylaw" value="1" checked>
                 {$data['agreement_bylaw']}
             </label>
         </p>
         <p>
             <label>
-                <input type="checkbox" name="personal_data" value="1" checked>
+                <input type="checkbox" id="personal_data" name="personal_data" value="1" checked>
                 {$data['agreement_personal_data']}
             </label>
         </p>

@@ -190,6 +190,15 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
          * 
          */
         if($widget === 'yes') {
+            /**
+             * 
+             */
+            $hiddenFields['type'] = 4;
+            $hiddenFields['ch_lock'] = 1;
+            
+            /**
+             * 
+             */
             $agreementByLaw = $this->getDotpayAgreement($order, 'bylaw');
             $agreementPersonalData = $this->getDotpayAgreement($order, 'personal_data');
             $tagP = __('You chose payment by Dotpay. Select a payment channel and click Continue do proceed', 'dotpay-payment-gateway');
