@@ -54,7 +54,7 @@ if($data['widget'] === 'yes') {
             });
             
             $('body').on('click', '#bylaw', submitHideShow);
-            $('#personal_data').on('click', '#personal_data', submitHideShow);
+            $('body').on('click', '#personal_data', submitHideShow);
             
             $('body').on('click', '#submit_dotpay_payment_form', function(){
                 {$blockUI}
