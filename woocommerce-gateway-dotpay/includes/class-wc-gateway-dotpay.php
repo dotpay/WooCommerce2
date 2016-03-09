@@ -18,27 +18,27 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
     const STR_EMPTY = '';
 
     protected $fieldsResponse = array(
-        'id' => '',
-        'operation_number' => '',
-        'operation_type' => '',
-        'operation_status' => '',
-        'operation_amount' => '',
-        'operation_currency' => '',
-        'operation_withdrawal_amount' => '',
-        'operation_commission_amount' => '',
-        'operation_original_amount' => '',
-        'operation_original_currency' => '',
-        'operation_datetime' => '',
-        'operation_related_number' => '',
-        'control' => '',
-        'description' => '',
-        'email' => '',
-        'p_info' => '',
-        'p_email' => '',
-        'channel' => '',
-        'channel_country' => '',
-        'geoip_country' => '',
-        'signature' => ''
+        'id' => self::STR_EMPTY,
+        'operation_number' => self::STR_EMPTY,
+        'operation_type' => self::STR_EMPTY,
+        'operation_status' => self::STR_EMPTY,
+        'operation_amount' => self::STR_EMPTY,
+        'operation_currency' => self::STR_EMPTY,
+        'operation_withdrawal_amount' => self::STR_EMPTY,
+        'operation_commission_amount' => self::STR_EMPTY,
+        'operation_original_amount' => self::STR_EMPTY,
+        'operation_original_currency' => self::STR_EMPTY,
+        'operation_datetime' => self::STR_EMPTY,
+        'operation_related_number' => self::STR_EMPTY,
+        'control' => self::STR_EMPTY,
+        'description' => self::STR_EMPTY,
+        'email' => self::STR_EMPTY,
+        'p_info' => self::STR_EMPTY,
+        'p_email' => self::STR_EMPTY,
+        'channel' => self::STR_EMPTY,
+        'channel_country' => self::STR_EMPTY,
+        'geoip_country' => self::STR_EMPTY,
+        'signature' => self::STR_EMPTY
     );
 
     /**
@@ -56,6 +56,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
         add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
         add_action('woocommerce_api_' . strtolower(get_class($this)), array($this, 'check_dotpay_response'));
+        add_action('woocommerce_api_' . strtolower(get_class($this)) . '_2', array($this, 'check_dotpay_signature'));
     }
 
     public function init_form_fields() {
@@ -184,6 +185,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             'description' => esc_attr($dotpay_description),
             'lang' => $dotpay_lang,
             'URL' => $return_url,
+            'ch_lock' => 0,
             'URLC' => $notify_url,
             'api_version' => $this->getDotpayApiVersion(),
             'type' => 0,
@@ -237,6 +239,10 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             'action' => esc_attr($dotpay_url),
             'hiddenFields' => $hiddenFields,
         ));
+    }
+    
+    public function test() {
+        die(__METHOD__);
     }
 
     public function check_dotpay_response() {
@@ -449,9 +455,9 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             'description' => $hiddenFields['description'],
             'control' => $hiddenFields['control'],
             'channel' => self::STR_EMPTY,
-            'ch_lock' => self::STR_EMPTY,
+            'ch_lock' => $hiddenFields['ch_lock'],
             'URL' => $hiddenFields['URL'],
-            'type' => self::STR_EMPTY,
+            'type' => $hiddenFields['type'],
             'buttontext' => self::STR_EMPTY,
             'URLC' => $hiddenFields['URLC'],
             'firstname' => $hiddenFields['firstname'],
