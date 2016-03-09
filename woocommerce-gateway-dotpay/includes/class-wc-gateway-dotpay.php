@@ -14,6 +14,8 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
     const DOTPAY_URL_TEST = 'https://ssl.dotpay.pl/test_payment/';
     // Gateway name
     const PAYMENT_METHOD = 'dotpay';
+    // STR EMPTY
+    const STR_EMPTY = '';
 
     protected $fieldsResponse = array(
         'id' => '',
@@ -86,6 +88,10 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         }
         
         return $dotpay_url;
+    }
+    
+    protected function getDotpayApiVersion() {
+        return 'dev';
     }
     
     protected function getPaymentCurrency() {
@@ -179,7 +185,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             'lang' => $dotpay_lang,
             'URL' => $return_url,
             'URLC' => $notify_url,
-            'api_version' => 'dev',
+            'api_version' => $this->getDotpayApiVersion(),
             'type' => 0,
             'firstname' => esc_attr($firstname),
             'lastname' => esc_attr($lastname),
@@ -430,6 +436,44 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         }
 
         return $resultStr;
+    }
+    
+    protected function buildSignature4Request(array $hiddenFields) {
+        $fieldsRequestArray = array(
+            'DOTPAY_PIN' => $this->get_option('dotpay_pin'),
+            'api_version' => $this->getDotpayApiVersion(),
+            'lang' => $hiddenFields['lang'],
+            'DOTPAY_ID' => $hiddenFields['id'],
+            'amount' => $hiddenFields['amount'],
+            'currency' => $hiddenFields['currency'],
+            'description' => $hiddenFields['description'],
+            'control' => $hiddenFields['control'],
+            'channel' => self::STR_EMPTY,
+            'ch_lock' => self::STR_EMPTY,
+            'URL' => $hiddenFields['URL'],
+            'type' => self::STR_EMPTY,
+            'buttontext' => self::STR_EMPTY,
+            'URLC' => $hiddenFields['URLC'],
+            'firstname' => $hiddenFields['firstname'],
+            'lastname' => $hiddenFields['lastname'],
+            'email' => $hiddenFields['email'],
+            'street' => self::STR_EMPTY,
+            'street_n1' => self::STR_EMPTY,
+            'street_n2' => self::STR_EMPTY,
+            'state' => self::STR_EMPTY,
+            'addr3' => self::STR_EMPTY,
+            'city' => self::STR_EMPTY,
+            'postcode' => self::STR_EMPTY,
+            'phone' => self::STR_EMPTY,
+            'country' => self::STR_EMPTY,
+            'bylaw' => '1',
+            'personal_data' => '1',
+            'blik_code' => self::STR_EMPTY
+        );
+        
+        $fieldsRequestStr = implode(self::STR_EMPTY, $fieldsRequestArray);
+        
+        return hash('sha256', $fieldsRequestStr);
     }
 
 }
