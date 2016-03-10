@@ -46,7 +46,7 @@ if($data['widget'] === 'yes') {
             
             $('body').on('click', '.channel-container', function(){
                 if($(this).hasClass('not-online')) {
-                     checkChannel = false;
+                    checkChannel = false;
                 } else {
                     checkChannel = true;
                 }
@@ -57,7 +57,29 @@ if($data['widget'] === 'yes') {
             $('body').on('click', '#personal_data', submitHideShow);
             
             $('body').on('click', '#submit_dotpay_payment_form', function(){
-                {$blockUI}
+                var channel;
+                
+                $('input[name="channel"]').each(function(key, val){
+                    var checked = $(val).is(':checked');
+                    if(checked) {
+                        channel = $(val).val();
+                        return false;
+                    }
+                });
+                
+                var data = {
+                    channel: channel
+                };
+                
+                if(channel) {
+                    $.post('{$data['signature_url']}', data, function(result) {
+                        $('input[name="CHK"]').val(result);
+                        {$blockUI}
+                        $('#dotpay_form_send').submit();
+                    });
+                }
+                
+                return false;
             });
         });
 

@@ -26,10 +26,23 @@ function init_woocommerce_gateway_dotpay() {
     WC_Gateway_Dotpay_Include('/includes/class-wc-gateway-dotpay.php');
 }
 
+function init_woocommerce_gateway_dotpay_session_start() {
+    if(!session_id()) {
+        session_start();
+    }
+}
+
+function init_woocommerce_gateway_dotpay_session_end() {
+    session_destroy();
+}
+
 if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
     load_plugin_textdomain('dotpay-payment-gateway', false, dirname(plugin_basename(__FILE__)) . '/langs/');
 
     add_action('init', 'init_woocommerce_gateway_dotpay');
+    add_action('init', 'init_woocommerce_gateway_dotpay_session_start');
+    add_action('wp_logout', 'init_woocommerce_gateway_dotpay_session_end');
+    add_action('wp_login', 'init_woocommerce_gateway_dotpay_session_end');
 
     function add_dotpay_class($methods) {
         $methods[] = 'WC_Gateway_Dotpay';

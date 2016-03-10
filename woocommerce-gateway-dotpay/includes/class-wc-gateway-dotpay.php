@@ -56,7 +56,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
         add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
         add_action('woocommerce_api_' . strtolower(get_class($this)), array($this, 'check_dotpay_response'));
-        add_action('woocommerce_api_' . strtolower(get_class($this)) . '_2', array($this, 'check_dotpay_signature'));
+        add_action('woocommerce_api_' . strtolower(get_class($this)) . '_2', array($this, 'build_dotpay_signature'));
     }
 
     public function init_form_fields() {
@@ -137,6 +137,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         $order = new WC_Order($order_id);
         
         $widget = $this->get_option('dotpay_channel_show');
+        $security = $this->get_option('dotpay_security');
 
         $dotpay_id = $this->get_option('dotpay_id');
 
@@ -164,7 +165,11 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
          */
         $return_url = $this->get_return_url($order);
         $notify_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay', home_url('/')));
-
+        
+        /**
+         * url build signature
+         */
+        $signature_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay_2', home_url('/')));
 
         /**
          * user data
@@ -219,11 +224,23 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         }
         
         /**
+         * 
+         */
+        if($security === 'yes') {
+            $chk = $this->buildSignature4Request($hiddenFields);
+            
+            $_SESSION['hiddenFields'] = $hiddenFields;
+            
+            $hiddenFields['CHK'] = $chk;
+        }
+        
+        /**
          * js code
          */
         wc_enqueue_js(WC_Gateway_Dotpay_Include('/includes/block-ui.js.php', array(
             'widget' => $widget,
             'message' => $message,
+            'signature_url' => $signature_url,
         )));
         
         /**
@@ -241,8 +258,18 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         ));
     }
     
-    public function test() {
-        die(__METHOD__);
+    public function build_dotpay_signature() {
+        $chk = '';
+        if(isset($_SESSION['hiddenFields'])) {
+            $hiddenFields = $_SESSION['hiddenFields'];
+            if(isset($_POST['channel'])) {
+                $channel = $_POST['channel'];
+                $chk = $this->buildSignature4Request($hiddenFields, $channel);
+            } else {
+                $chk = $this->buildSignature4Request($hiddenFields);
+            }
+        }
+        die($chk);
     }
 
     public function check_dotpay_response() {
@@ -444,7 +471,7 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
         return $resultStr;
     }
     
-    protected function buildSignature4Request(array $hiddenFields) {
+    protected function buildSignature4Request(array $hiddenFields, $channel = null) {
         $fieldsRequestArray = array(
             'DOTPAY_PIN' => $this->get_option('dotpay_pin'),
             'api_version' => $this->getDotpayApiVersion(),
@@ -472,10 +499,21 @@ class WC_Gateway_Dotpay extends WC_Payment_Gateway {
             'postcode' => self::STR_EMPTY,
             'phone' => self::STR_EMPTY,
             'country' => self::STR_EMPTY,
-            'bylaw' => '1',
-            'personal_data' => '1',
+            'bylaw' => self::STR_EMPTY,
+            'personal_data' => self::STR_EMPTY,
             'blik_code' => self::STR_EMPTY
         );
+        
+        $widget = $this->get_option('dotpay_channel_show');
+        
+        if($channel) {
+            $fieldsRequestArray['channel'] = $channel;
+        }
+        
+        if($widget) {
+            $fieldsRequestArray['bylaw'] = '1';
+            $fieldsRequestArray['personal_data'] = '1';
+        }
         
         $fieldsRequestStr = implode(self::STR_EMPTY, $fieldsRequestArray);
         

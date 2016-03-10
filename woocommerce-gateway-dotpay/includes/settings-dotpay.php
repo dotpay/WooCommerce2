@@ -30,6 +30,12 @@ return array(
         'label' => __('Display payment channels in a shop', 'dotpay-payment-gateway'),
         'default' => 'yes',
     ),
+    'dotpay_security' => array(
+        'title' => __('Security', 'woocommerce'),
+        'type' => 'checkbox',
+        'label' => __('Protect data sent', 'dotpay-payment-gateway'),
+        'default' => 'yes',
+    ),
     'dotpay_test' => array(
         'title' => __('Testing environment', 'dotpay-payment-gateway'),
         'label' => __('Only payment simulation. Forced PLN.', 'dotpay-payment-gateway'),

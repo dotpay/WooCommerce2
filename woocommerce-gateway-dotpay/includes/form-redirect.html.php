@@ -67,7 +67,7 @@ END;
 }
     
 return <<<END
-    <form method="post" action="{$data['action']}">
+    <form id="dotpay_form_send" method="post" action="{$data['action']}">
         <h3>{$data['h3']}</h3>
         <p>{$data['p']}</p>
         
