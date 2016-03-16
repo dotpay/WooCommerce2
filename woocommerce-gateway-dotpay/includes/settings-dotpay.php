@@ -25,13 +25,13 @@ return array(
         'default' => '',
     ),
     'dotpay_channel_show' => array(
-        'title' => __('Widget', 'woocommerce'),
+        'title' => __('Widget', 'dotpay-payment-gateway'),
         'type' => 'checkbox',
         'label' => __('Display payment channels in a shop', 'dotpay-payment-gateway'),
         'default' => 'yes',
     ),
     'dotpay_security' => array(
-        'title' => __('Security', 'woocommerce'),
+        'title' => __('Security', 'dotpay-payment-gateway'),
         'type' => 'checkbox',
         'label' => __('Protect data sent', 'dotpay-payment-gateway'),
         'default' => 'yes',
