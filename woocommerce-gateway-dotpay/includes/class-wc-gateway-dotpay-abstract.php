@@ -337,7 +337,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         return $resultStr;
     }
     
-    protected function buildSignature4Request(array $hiddenFields, $channel = null) {
+    protected function buildSignature4Request(array $hiddenFields, $channel = null, $blik = null) {
         $fieldsRequestArray = array(
             'DOTPAY_PIN' => $this->get_option('dotpay_pin'),
             'api_version' => $this->getDotpayApiVersion(),
