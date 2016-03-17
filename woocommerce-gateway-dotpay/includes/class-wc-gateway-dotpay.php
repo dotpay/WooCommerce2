@@ -48,6 +48,33 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             }
         }
         
+        /**
+         * 
+         */
+        
+        $agreements = array(
+            'bylaw' => $agreementByLaw,
+            'personal_data' => $agreementPersonalData,
+        );
+        
+        /**
+         * hidden fields MasterPass, BLIK, Dotpay
+         */
+        $hiddenFields = array(
+            'mp' => array(
+                'fields' => $this->getHiddenFieldsMasterPass($order_id),
+                'agreements' => $agreements,
+            ),
+            'blik' => array(
+                'fields' => $this->getHiddenFieldsBlik($order_id),
+                'agreements' => $agreements,
+            ),
+            'dotpay' => array(
+                'fields' => $this->getHiddenFieldsDotpay($order_id),
+                'agreements' => $agreements,
+            ),
+        );
+        
         $security = $this->isDotSecurity();
 
         $dotpay_url = $this->getDotpayUrl();
@@ -57,9 +84,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          */
         $signature_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay_2', home_url('/')));
         
-        /**
-         * hidden fields MasterPass, BLIK, Dotpay
-         */
+        
         $hiddenFieldsMasterPass = $this->getHiddenFieldsMasterPass($order_id);
         $hiddenFieldsBlik = $this->getHiddenFieldsBlik($order_id);
         $hiddenFieldsDotpay = $this->getHiddenFieldsDotpay($order_id);
@@ -103,6 +128,8 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          * js code
          */
         wc_enqueue_js(WC_Gateway_Dotpay_Include('/includes/block-ui.js.php', array(
+            'mp' => $mp,
+            'blik' => $blik,
             'widget' => $widget,
             'message' => $message,
             'signature_url' => $signature_url,
