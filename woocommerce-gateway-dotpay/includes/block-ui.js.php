@@ -26,7 +26,7 @@ $.blockUI({
 
 END;
 
-if($data['widget'] === 'yes') {
+if($data['widget']) {
     $result = <<<END
         $('#submit_dotpay_payment_form').hide();
         
@@ -80,6 +80,17 @@ if($data['widget'] === 'yes') {
                 }
                 
                 return false;
+            });
+                        
+            $('input[name="strategy"]').on('click', function(){
+                $('form').hide();
+                $(this).each(function(key, val){
+                    var checked = $(val).is(':checked');
+                    var target = $(val).attr('form-target');
+                    if(checked) {
+                       $('#dotpay_form_send_' + target).show();
+                    }
+                });
             });
         });
 

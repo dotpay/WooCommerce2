@@ -13,7 +13,7 @@ END;
 }
 
 $widgetStyle = '';
-if($data['widget'] === 'yes') {
+if($data['widget']) {
     $widgetStyle = <<<END
         <link href="{$data['action']}widget/payment_widget.min.css" rel="stylesheet">
 
@@ -21,7 +21,7 @@ END;
 }
 
 $widgetScript = '';
-if($data['widget'] === 'yes') {
+if($data['widget']) {
     $widgetScript = <<<END
         <script type="text/javascript" id="dotpay-payment-script" src="{$data['action']}widget/payment_widget.js"></script>
         <script type="text/javascript">
@@ -32,7 +32,8 @@ if($data['widget'] === 'yes') {
                 lang: '{$data['hiddenFields']['lang']}',
                 widgetFormContainerClass: 'my-form-widget-container',
                 offlineChannel: 'mark',
-                offlineChannelTooltip: true
+                offlineChannelTooltip: true,
+                disabledChannels: [71, 73]
             }
         </script>
 
@@ -40,7 +41,7 @@ END;
 }
 
 $widgetContainer = '';
-if($data['widget'] === 'yes') {
+if($data['widget']) {
     $widgetContainer = <<<END
         <p class="my-form-widget-container"></p>
 
@@ -48,7 +49,7 @@ END;
 }
 
 $widgetAgreement = '';
-if($data['widget'] === 'yes') {
+if($data['widget']) {
     $widgetAgreement = <<<END
         <p>
             <label>
@@ -66,6 +67,60 @@ if($data['widget'] === 'yes') {
 END;
 }
     
+return <<<END
+    <h3>{$data['h3']}</h3>
+    <p>{$data['p']}</p>
+    
+    <style type="text/css" scoped>
+        form[id^="dotpay_form"] {
+            display:none;
+        }
+        img.master_pass {
+            height: 60px;
+        }
+        img.blik {
+            height: 35px;
+        }
+        label {
+            cursor: pointer;
+        }
+    </style>
+    
+    <p>
+        <label>
+            <input type="radio" name="strategy" form-target="mp">
+            <img class="master_pass" src="{$data['iconMasterPass']}">
+        </label>
+        <form id="dotpay_form_send_mp" method="post" action="{$data['action']}">
+            {$widgetAgreement}
+        </form>
+    </p>
+    <hr>
+    <p>
+        <label>
+            <input type="radio" name="strategy" form-target="b">
+            <img class="blik" src="{$data['iconBLIK']}">
+        </label>
+        <form id="dotpay_form_send_b" method="post" action="{$data['action']}">
+            {$widgetAgreement}
+        </form>
+    </p>
+    <hr>
+    <p>
+        <label>
+            <input type="radio" name="strategy" form-target="d">
+            <img src="{$data['iconDotpay']}">
+        </label>
+        <form id="dotpay_form_send_d" method="post" action="{$data['action']}">
+            {$widgetStyle}
+            {$widgetScript}
+            {$widgetContainer}
+            {$widgetAgreement}
+        </form>
+    </p>
+
+END;
+
 return <<<END
     <form id="dotpay_form_send" method="post" action="{$data['action']}">
         <h3>{$data['h3']}</h3>

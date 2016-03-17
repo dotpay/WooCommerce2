@@ -23,6 +23,7 @@ function init_woocommerce_gateway_dotpay() {
     define('WOOCOMMERCE_DOTPAY_PLUGIN_DIR', plugin_dir_path(__FILE__));
     define('WOOCOMMERCE_DOTPAY_PLUGIN_URL', plugin_dir_url(__FILE__));
 
+    WC_Gateway_Dotpay_Include('/includes/class-wc-gateway-dotpay-abstract.php');
     WC_Gateway_Dotpay_Include('/includes/class-wc-gateway-dotpay.php');
 }
 
