@@ -112,6 +112,8 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          * html code
          */
         return WC_Gateway_Dotpay_Include('/includes/form-redirect.html.php', array(
+            'mp' => $mp,
+            'blik' => $blik,
             'widget' => $widget,
             'h3' => __('Transaction Details', 'dotpay-payment-gateway'),
             'p' => $tagP,
