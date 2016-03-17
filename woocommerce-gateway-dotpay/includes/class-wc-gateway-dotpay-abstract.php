@@ -309,30 +309,50 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $curl_url .= "&lang={$dotpay_lang}";
         
         /**
-         * curl
+         * 
          */
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_URL, $curl_url);
-        curl_setopt($ch, CURLOPT_REFERER, $curl_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $resultJson = curl_exec($ch);
-        curl_close($ch);
+        $resultJson = false;
+        
+        /**
+        * curl
+        */
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_URL, $curl_url);
+            curl_setopt($ch, CURLOPT_REFERER, $curl_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $resultJson = curl_exec($ch);
+        } catch (Exception $exc) {
+            /**
+             * NOP
+             */
+        } finally {
+            if($ch) {
+                curl_close($ch);
+            }
+        }
+
         
         /**
          * 
          */
         $result = json_decode($resultJson, true);
-
-        foreach ($result['forms'] as $forms) {
-            foreach ($forms['fields'] as $forms1) {
-                if ($forms1['name'] == $what) {
-                    $resultStr = $forms1['description_html'];
+        
+        if(isset($result['forms']) && is_array($result['forms'])) {
+            foreach ($result['forms'] as $forms) {
+                if(isset($forms['fields']) && is_array($forms['fields'])) {
+                    foreach ($forms['fields'] as $forms1) {
+                        if ($forms1['name'] == $what) {
+                            $resultStr = $forms1['description_html'];
+                        }
+                    }
                 }
             }
         }
+        
 
         return $resultStr;
     }

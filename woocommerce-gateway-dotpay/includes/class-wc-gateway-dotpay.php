@@ -31,7 +31,23 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
     protected function generate_dotpay_form($order_id) {
         $order = new WC_Order($order_id);
         
+        $mp = $this->isDotMasterPass();
+        $blik = $this->isDotBlik();
         $widget = $this->isDotWidget();
+        
+        $agreementByLaw = '';
+        $agreementPersonalData = '';
+        if($mp || $blik || $widget) {
+            $agreementByLaw = $this->getDotpayAgreement($order, 'bylaw');
+            $agreementPersonalData = $this->getDotpayAgreement($order, 'personal_data');
+            
+            if(!$agreementByLaw || !$agreementPersonalData) {
+                $mp = false;
+                $blik = false;
+                $widget = false;
+            }
+        }
+        
         $security = $this->isDotSecurity();
 
         $dotpay_url = $this->getDotpayUrl();
