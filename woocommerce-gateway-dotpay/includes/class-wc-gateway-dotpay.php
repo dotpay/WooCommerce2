@@ -34,65 +34,19 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         $widget = $this->isDotWidget();
         $security = $this->isDotSecurity();
 
-        $dotpay_id = $this->get_option('dotpay_id');
-
         $dotpay_url = $this->getDotpayUrl();
-        $payment_currency = $this->getPaymentCurrency();
-
-        /**
-         * info and description
-         */
-        $dotpay_info = __('Shop - ', 'dotpay-payment-gateway') . $_SERVER['HTTP_HOST'];
-        $dotpay_description = __('Order ID: ', 'dotpay-payment-gateway') . esc_attr($order_id);
-
-        /**
-         * amount
-         */
-        $order_amount = $this->getOrderAmmount($order);
-
-        /**
-         * lang
-         */
-        $dotpay_lang = $this->getPaymentLang();
-
-        /**
-         * url redirect and back
-         */
-        $return_url = $this->get_return_url($order);
-        $notify_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay', home_url('/')));
         
         /**
          * url build signature
          */
         $signature_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay_2', home_url('/')));
-
-        /**
-         * user data
-         */
-        $firstname = $order->billing_first_name;
-        $lastname = $order->billing_last_name;
-        $email = $order->billing_email;
         
         /**
-         * hidden fields
+         * hidden fields MasterPass, BLIK, Dotpay
          */
-        $hiddenFields = array(
-            'id' => $dotpay_id,
-            'control' => esc_attr($order_id),
-            'p_info' => esc_attr($dotpay_info),
-            'amount' => $order_amount,
-            'currency' => $payment_currency,
-            'description' => esc_attr($dotpay_description),
-            'lang' => $dotpay_lang,
-            'URL' => $return_url,
-            'ch_lock' => 0,
-            'URLC' => $notify_url,
-            'api_version' => $this->getDotpayApiVersion(),
-            'type' => 0,
-            'firstname' => esc_attr($firstname),
-            'lastname' => esc_attr($lastname),
-            'email' => esc_attr($email)
-        );
+        $hiddenFieldsMasterPass = $this->getHiddenFieldsMasterPass($order_id);
+        $hiddenFieldsBlik = $this->getHiddenFieldsBlik($order_id);
+        $hiddenFieldsDotpay = $this->getHiddenFieldsDotpay($order_id);
         
         /**
          * 
