@@ -40,6 +40,23 @@
             });
         });
         
+        $('body').on('input', 'input[name="blik_code"]', function(){
+            var target = $(this).attr('form-target');
+        
+            var data = {
+                type: target,
+                channel: $('form[form-target="' + target + '"] input[name="channel"]').val(),
+                blik: $(this).val()
+            };
+            
+            if(data.channel && data.blik) {
+                $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
+                    $('form[form-target="' + target + '"] input[name="CHK"]').val(result);
+                    submitHideShow(target);
+                });
+            }
+        });
+        
         function submitHideShow(target) {
             var result = false;
             
@@ -52,6 +69,9 @@
             }
             
             if('mp' === target && checkBylaw && checkPersonalData) {
+                $('form[form-target="' + target + '"] input[type="submit"]').show();
+                result = true;
+            } else if('blik' === target && checkBylaw && checkPersonalData) {
                 $('form[form-target="' + target + '"] input[type="submit"]').show();
                 result = true;
             }
