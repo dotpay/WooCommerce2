@@ -129,7 +129,8 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * html code
          */
-        return WC_Gateway_Dotpay_Include('/includes/form-redirect.html.php', array(
+        ob_start();
+        WC_Gateway_Dotpay_Include('/includes/form-redirect.html.php', array(
             'mp' => $mp,
             'blik' => $blik,
             'widget' => $widget,
@@ -139,6 +140,10 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             'action' => esc_attr($dotpay_url),
             'hiddenFields' => $hiddenFields,
         ));
+        $html = ob_get_contents();
+        ob_end_clean();
+        
+        return $html;
     }
     
     public function build_dotpay_signature() {

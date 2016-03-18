@@ -1,36 +1,80 @@
+<div>
+    <style type="text/css" scoped>
+        form[form-target] {
+            display:none;
+        }
+        img.mp {
+            height: 60px;
+        }
+        img.blik {
+            height: 35px;
+        }
+        label {
+            cursor: pointer;
+        }
+    </style>
+    
+    <h3><?php echo $data['h3'] ?></h3>
+    <p><?php echo $data['p'] ?></p>
+    
+    <?php foreach($data['hiddenFields'] as $keyR => $valR) : ?>
+        <?php if($valR['active']) : ?>
+            <p>
+                <label>
+                    <input type="radio" name="strategy" form-target="<?php echo $keyR; ?>">
+                    <img class="<?php echo $keyR; ?>" src="<?php echo $valR['icon']; ?>">
+                </label>
+                <form form-target="<?php echo $keyR; ?>" method="post" action="<?php echo $data['action']; ?>">
+                    <?php foreach($valR['fields'] as $keyF => $valF) : ?>
+                        <input type="text" value="<?php echo $valF; ?>" name="<?php echo $keyF; ?>">
+                    <?php endforeach; ?>
+                    
+                    <?php foreach($valR['agreements'] as $keyA => $valA) : ?>
+                        <p>
+                            <label>
+                                <input type="checkbox" name="<?php echo $keyA; ?>" value="1" checked>
+                                <?php echo $valA; ?>
+                            </label>
+                        </p>
+                    <?php endforeach; ?>
+                </form>
+            </p>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    
+    
+</div>
+
+
 <?php
+return;
+//$widgetStyle = '';
+//if($data['widget']) {
+//    $widgetStyle = <<<END
+//        <link href="{$data['action']}widget/payment_widget.min.css" rel="stylesheet">
+//
+//END;
+//}
 
-if (!defined('ABSPATH')) {
-    exit;
-}
-
-$widgetStyle = '';
-if($data['widget']) {
-    $widgetStyle = <<<END
-        <link href="{$data['action']}widget/payment_widget.min.css" rel="stylesheet">
-
-END;
-}
-
-$widgetScript = '';
-if($data['widget']) {
-    $widgetScript = <<<END
-        <script type="text/javascript" id="dotpay-payment-script" src="{$data['action']}widget/payment_widget.js"></script>
-        <script type="text/javascript">
-            var dotpayWidgetConfig = {
-                sellerAccountId: '{$data['hiddenFields']['id']}',
-                amount: '{$data['hiddenFields']['amount']}',
-                currency: '{$data['hiddenFields']['currency']}',
-                lang: '{$data['hiddenFields']['lang']}',
-                widgetFormContainerClass: 'my-form-widget-container',
-                offlineChannel: 'mark',
-                offlineChannelTooltip: true,
-                disabledChannels: [71, 73]
-            }
-        </script>
-
-END;
-}
+//$widgetScript = '';
+//if($data['widget']) {
+//    $widgetScript = <<<END
+//        <script type="text/javascript" id="dotpay-payment-script" src="{$data['action']}widget/payment_widget.js"></script>
+//        <script type="text/javascript">
+//            var dotpayWidgetConfig = {
+//                sellerAccountId: '{$data['hiddenFields']['id']}',
+//                amount: '{$data['hiddenFields']['amount']}',
+//                currency: '{$data['hiddenFields']['currency']}',
+//                lang: '{$data['hiddenFields']['lang']}',
+//                widgetFormContainerClass: 'my-form-widget-container',
+//                offlineChannel: 'mark',
+//                offlineChannelTooltip: true,
+//                disabledChannels: [71, 73]
+//            }
+//        </script>
+//
+//END;
+//}
 
 $formsHtmlArray = array();
 
