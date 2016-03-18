@@ -4,6 +4,34 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$widgetStyle = '';
+if($data['widget']) {
+    $widgetStyle = <<<END
+        <link href="{$data['action']}widget/payment_widget.min.css" rel="stylesheet">
+
+END;
+}
+
+$widgetScript = '';
+if($data['widget']) {
+    $widgetScript = <<<END
+        <script type="text/javascript" id="dotpay-payment-script" src="{$data['action']}widget/payment_widget.js"></script>
+        <script type="text/javascript">
+            var dotpayWidgetConfig = {
+                sellerAccountId: '{$data['hiddenFields']['id']}',
+                amount: '{$data['hiddenFields']['amount']}',
+                currency: '{$data['hiddenFields']['currency']}',
+                lang: '{$data['hiddenFields']['lang']}',
+                widgetFormContainerClass: 'my-form-widget-container',
+                offlineChannel: 'mark',
+                offlineChannelTooltip: true,
+                disabledChannels: [71, 73]
+            }
+        </script>
+
+END;
+}
+
 $formsHtmlArray = array();
 
 foreach($data['hiddenFields'] as $keyR => $valR) {
@@ -38,6 +66,8 @@ foreach($data['hiddenFields'] as $keyR => $valR) {
 
 $formsHtml = implode(' <hr> ', $formsHtmlArray);
 
+
+
 return <<<END
     <div>
         <h3>{$data['h3']}</h3>
@@ -61,34 +91,6 @@ return <<<END
     </div>
 
 END;
-
-$widgetStyle = '';
-if($data['widget']) {
-    $widgetStyle = <<<END
-        <link href="{$data['action']}widget/payment_widget.min.css" rel="stylesheet">
-
-END;
-}
-
-$widgetScript = '';
-if($data['widget']) {
-    $widgetScript = <<<END
-        <script type="text/javascript" id="dotpay-payment-script" src="{$data['action']}widget/payment_widget.js"></script>
-        <script type="text/javascript">
-            var dotpayWidgetConfig = {
-                sellerAccountId: '{$data['hiddenFields']['id']}',
-                amount: '{$data['hiddenFields']['amount']}',
-                currency: '{$data['hiddenFields']['currency']}',
-                lang: '{$data['hiddenFields']['lang']}',
-                widgetFormContainerClass: 'my-form-widget-container',
-                offlineChannel: 'mark',
-                offlineChannelTooltip: true,
-                disabledChannels: [71, 73]
-            }
-        </script>
-
-END;
-}
 
 $widgetContainer = '';
 if($data['widget']) {
