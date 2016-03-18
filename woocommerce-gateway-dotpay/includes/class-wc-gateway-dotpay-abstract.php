@@ -18,6 +18,10 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     const STR_EMPTY = '';
     
     protected $dotpayAgreements = true;
+    
+    protected $agreementByLaw = '';
+    
+    protected $agreementPersonalData = '';
 
     protected $fieldsResponse = array(
         'id' => self::STR_EMPTY,

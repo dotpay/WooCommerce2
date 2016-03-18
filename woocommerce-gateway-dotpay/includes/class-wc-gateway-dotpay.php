@@ -25,24 +25,24 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
     }
 
     public function receipt_page($order) {
+        $orderRecord = new WC_Order($order);
+        
+        /**
+         * 
+         */
+        $this->agreementByLaw = $this->getDotpayAgreement($orderRecord, 'bylaw');
+        $this->agreementPersonalData = $this->getDotpayAgreement($orderRecord, 'personal_data');
+        
         echo $this->generate_dotpay_form($order);
     }
     
     protected function generate_dotpay_form($order_id) {
-        $order = new WC_Order($order_id);
-        
-        /**
-         * 
-         */
-        $agreementByLaw = $this->getDotpayAgreement($order, 'bylaw');
-        $agreementPersonalData = $this->getDotpayAgreement($order, 'personal_data');
-        
         /**
          * 
          */
         $agreements = array(
-            'bylaw' => $agreementByLaw,
-            'personal_data' => $agreementPersonalData,
+            'bylaw' => $this->agreementByLaw,
+            'personal_data' => $this->agreementPersonalData,
         );
         
         /**
