@@ -16,6 +16,8 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     const PAYMENT_METHOD = 'dotpay';
     // STR EMPTY
     const STR_EMPTY = '';
+    
+    protected $dotpayAgreements = true;
 
     protected $fieldsResponse = array(
         'id' => self::STR_EMPTY,
@@ -108,6 +110,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         if ('yes' === $this->get_option('dotpay_channel_show')) {
             $result = true;
         }
+        if(false === $this->dotpayAgreements) {
+            $result = false;
+        }
         
         return $result;
     }
@@ -126,6 +131,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         if ('yes' === $this->get_option('dotpay_masterpass_show')) {
             $result = true;
         }
+        if(false === $this->dotpayAgreements) {
+            $result = false;
+        }
         
         return $result;
     }
@@ -134,6 +142,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $result = false;
         if ('yes' === $this->get_option('dotpay_blik_show')) {
             $result = true;
+        }
+        if(false === $this->dotpayAgreements) {
+            $result = false;
         }
         
         return $result;
@@ -309,11 +320,6 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $curl_url .= "&lang={$dotpay_lang}";
         
         /**
-         * 
-         */
-        $resultJson = false;
-        
-        /**
         * curl
         */
         try {
@@ -326,9 +332,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $resultJson = curl_exec($ch);
         } catch (Exception $exc) {
-            /**
-             * NOP
-             */
+             $resultJson = false;
         } finally {
             if($ch) {
                 curl_close($ch);
@@ -339,20 +343,25 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         /**
          * 
          */
-        $result = json_decode($resultJson, true);
-        
-        if(isset($result['forms']) && is_array($result['forms'])) {
-            foreach ($result['forms'] as $forms) {
-                if(isset($forms['fields']) && is_array($forms['fields'])) {
-                    foreach ($forms['fields'] as $forms1) {
-                        if ($forms1['name'] == $what) {
-                            $resultStr = $forms1['description_html'];
+        if(false !== $resultJson) {
+            $result = json_decode($resultJson, true);
+
+            if (isset($result['forms']) && is_array($result['forms'])) {
+                foreach ($result['forms'] as $forms) {
+                    if (isset($forms['fields']) && is_array($forms['fields'])) {
+                        foreach ($forms['fields'] as $forms1) {
+                            if ($forms1['name'] == $what) {
+                                $resultStr = $forms1['description_html'];
+                            }
                         }
                     }
                 }
             }
         }
         
+        if($resultStr === '') {
+            $this->dotpayAgreements = false;
+        }
 
         return $resultStr;
     }
@@ -474,11 +483,19 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     protected function getHiddenFieldsMasterPass($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);
         
+        $hiddenFields['channel'] = 71;
+        $hiddenFields['ch_lock'] = 1;
+        $hiddenFields['type'] = 4;
+        
         return $hiddenFields;
     }
     
     protected function getHiddenFieldsBlik($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);
+        
+        $hiddenFields['channel'] = 73;
+        $hiddenFields['ch_lock'] = 1;
+        $hiddenFields['type'] = 4;
         
         return $hiddenFields;
     }

@@ -31,27 +31,15 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
     protected function generate_dotpay_form($order_id) {
         $order = new WC_Order($order_id);
         
-        $mp = $this->isDotMasterPass();
-        $blik = $this->isDotBlik();
-        $widget = $this->isDotWidget();
-        
-        $agreementByLaw = '';
-        $agreementPersonalData = '';
-        if($mp || $blik || $widget) {
-            $agreementByLaw = $this->getDotpayAgreement($order, 'bylaw');
-            $agreementPersonalData = $this->getDotpayAgreement($order, 'personal_data');
-            
-            if(!$agreementByLaw || !$agreementPersonalData) {
-                $mp = false;
-                $blik = false;
-                $widget = false;
-            }
-        }
+        /**
+         * 
+         */
+        $agreementByLaw = $this->getDotpayAgreement($order, 'bylaw');
+        $agreementPersonalData = $this->getDotpayAgreement($order, 'personal_data');
         
         /**
          * 
          */
-        
         $agreements = array(
             'bylaw' => $agreementByLaw,
             'personal_data' => $agreementPersonalData,
@@ -62,19 +50,19 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          */
         $hiddenFields = array(
             'mp' => array(
-                'active' => $mp,
+                'active' => $this->isDotMasterPass(),
                 'fields' => $this->getHiddenFieldsMasterPass($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconMasterPass(),
             ),
             'blik' => array(
-                'active' => $blik,
+                'active' => $this->isDotBlik(),
                 'fields' => $this->getHiddenFieldsBlik($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconBLIK(),
             ),
             'dotpay' => array(
-                'active' => $widget,
+                'active' => $this->isDotWidget(),
                 'fields' => $this->getHiddenFieldsDotpay($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconDotpay(),
@@ -93,7 +81,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * 
          */
-        if($widget) {
+        if($this->isDotWidget()) {
             /**
              * 
              */
@@ -119,9 +107,9 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          * js code
          */
         wc_enqueue_js(WC_Gateway_Dotpay_Include('/includes/block-ui.js.php', array(
-            'mp' => $mp,
-            'blik' => $blik,
-            'widget' => $widget,
+            'mp' => $this->isDotMasterPass(),
+            'blik' => $this->isDotBlik(),
+            'widget' => $this->isDotWidget(),
             'message' => $message,
             'signature_url' => $signature_url,
         )));
@@ -131,9 +119,9 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          */
         ob_start();
         WC_Gateway_Dotpay_Include('/includes/form-redirect.html.php', array(
-            'mp' => $mp,
-            'blik' => $blik,
-            'widget' => $widget,
+            'mp' => $this->isDotMasterPass(),
+            'blik' => $this->isDotBlik(),
+            'widget' => $this->isDotWidget(),
             'h3' => __('Transaction Details', 'dotpay-payment-gateway'),
             'p' => $tagP,
             'submit' => __('Continue', 'dotpay-payment-gateway'),
