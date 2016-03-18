@@ -62,16 +62,22 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          */
         $hiddenFields = array(
             'mp' => array(
+                'active' => $mp,
                 'fields' => $this->getHiddenFieldsMasterPass($order_id),
                 'agreements' => $agreements,
+                'icon' => $this->getIconMasterPass(),
             ),
             'blik' => array(
+                'active' => $blik,
                 'fields' => $this->getHiddenFieldsBlik($order_id),
                 'agreements' => $agreements,
+                'icon' => $this->getIconBLIK(),
             ),
             'dotpay' => array(
+                'active' => $widget,
                 'fields' => $this->getHiddenFieldsDotpay($order_id),
                 'agreements' => $agreements,
+                'icon' => $this->getIconDotpay(),
             ),
         );
         
@@ -84,11 +90,6 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          */
         $signature_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay_2', home_url('/')));
         
-        
-        $hiddenFieldsMasterPass = $this->getHiddenFieldsMasterPass($order_id);
-        $hiddenFieldsBlik = $this->getHiddenFieldsBlik($order_id);
-        $hiddenFieldsDotpay = $this->getHiddenFieldsDotpay($order_id);
-        
         /**
          * 
          */
@@ -96,19 +97,9 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             /**
              * 
              */
-            $hiddenFields['type'] = 4;
-            $hiddenFields['ch_lock'] = 1;
-            
-            /**
-             * 
-             */
-            $agreementByLaw = $this->getDotpayAgreement($order, 'bylaw');
-            $agreementPersonalData = $this->getDotpayAgreement($order, 'personal_data');
             $tagP = __('You chose payment by Dotpay. Select a payment channel and click Continue do proceed', 'dotpay-payment-gateway');
             $message = esc_js(__('Thank you for your order. We are now redirecting you to channel payment.', 'dotpay-payment-gateway'));
         } else {
-            $agreementByLaw = '';
-            $agreementPersonalData = '';
             $tagP = __('You chose payment by Dotpay. Click Continue do proceed', 'dotpay-payment-gateway');
             $message = esc_js(__('Thank you for your order. We are now redirecting you to Dotpay to make payment.', 'dotpay-payment-gateway'));
         }
@@ -116,13 +107,13 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * 
          */
-        if($security) {
-            $chk = $this->buildSignature4Request($hiddenFields);
-            
-            $_SESSION['hiddenFields'] = $hiddenFields;
-            
-            $hiddenFields['CHK'] = $chk;
-        }
+//        if($security) {
+//            $chk = $this->buildSignature4Request($hiddenFields);
+//            
+//            $_SESSION['hiddenFields'] = $hiddenFields;
+//            
+//            $hiddenFields['CHK'] = $chk;
+//        }
         
         /**
          * js code
@@ -144,14 +135,9 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             'widget' => $widget,
             'h3' => __('Transaction Details', 'dotpay-payment-gateway'),
             'p' => $tagP,
-            'agreement_bylaw' => $agreementByLaw,
-            'agreement_personal_data' => $agreementPersonalData,
             'submit' => __('Continue', 'dotpay-payment-gateway'),
             'action' => esc_attr($dotpay_url),
             'hiddenFields' => $hiddenFields,
-            'iconMasterPass' => $this->getIconMasterPass(),
-            'iconBLIK' => $this->getIconBLIK(),
-            'iconDotpay' => $this->getIconDotpay(),
         ));
     }
     

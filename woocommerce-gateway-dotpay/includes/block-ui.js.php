@@ -83,12 +83,12 @@ if($data['widget']) {
             });
                         
             $('input[name="strategy"]').on('click', function(){
-                $('form').hide();
+                $('form[form-target]').hide();
                 $(this).each(function(key, val){
                     var checked = $(val).is(':checked');
                     var target = $(val).attr('form-target');
                     if(checked) {
-                       $('#dotpay_form_send_' + target).show();
+                       $('form[form-target="' + target + '"]').show();
                     }
                 });
             });

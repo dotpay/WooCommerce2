@@ -4,6 +4,56 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$formsHtmlArray = array();
+
+foreach($data['hiddenFields'] as $keyR => $valR) {
+    $form = '';
+    if($valR['active']) {
+        $form .= '<p>';
+        $form .= '<label>';
+        $form .= '<input type="radio" name="strategy" form-target="' . $keyR . '">';
+        $form .= '<img class="' . $keyR . '" src="' . $valR['icon'] . '">';
+        $form .= '</label>';
+        $form .= '<form form-target="' . $keyR . '" method="post" action="' . $data['action'] . '">';
+        
+        foreach($valR['fields'] as $keyF => $valF) {
+            $form .= '<input type="text" value="' . $valF . '" name="' . $keyF . '">';
+        }
+        
+        $form .= '</form>';
+        $form .= '</p>';
+        
+        array_push($formsHtmlArray, $form);
+    }
+}
+
+$formsHtml = implode(' <hr> ', $formsHtmlArray);
+
+return <<<END
+    <div>
+        <h3>{$data['h3']}</h3>
+        <p>{$data['p']}</p>
+
+        <style type="text/css" scoped>
+            form[form-target] {
+                display:none;
+            }
+            img.mp {
+                height: 60px;
+            }
+            img.blik {
+                height: 35px;
+            }
+            label {
+                cursor: pointer;
+            }
+        </style>
+        {$formsHtml}
+    </div>
+
+END;
+
+
 $hiddenFields = '';
 foreach($data['hiddenFields'] as $k => $v) {
     $hiddenFields .= <<<END
