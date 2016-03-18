@@ -485,6 +485,12 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $firstname = $order->billing_first_name;
         $lastname = $order->billing_last_name;
         $email = $order->billing_email;
+        $phone = $order->billing_phone;
+        $street = $order->billing_address_1;
+        $street_n1 = $order->billing_address_2;
+        $city = $city = $order->billing_city;
+        $postcode = $order->billing_postcode;
+        $country = $order->billing_country;
         
         return array(
             'id' => $this->get_option('dotpay_id'),
@@ -501,7 +507,13 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             'type' => 0,
             'firstname' => esc_attr($firstname),
             'lastname' => esc_attr($lastname),
-            'email' => esc_attr($email)
+            'email' => esc_attr($email),
+            'phone' => esc_attr($phone),
+            'street' => esc_attr($street),
+            'street_n1' => esc_attr($street_n1),
+            'city' => esc_attr($city),
+            'postcode' => esc_attr($postcode),
+            'country' => esc_attr($country)
         );
     }
     
