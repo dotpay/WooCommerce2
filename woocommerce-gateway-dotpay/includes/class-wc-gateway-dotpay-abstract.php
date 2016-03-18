@@ -374,10 +374,10 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         
         switch ($type) {
             case 'mp':
-                $hiddenFields = $allHiddenFields['mp']['fields'];
+                $hiddenFields = $allHiddenFields[$type]['fields'];
                 break;
             case 'blik':
-                $hiddenFields = $allHiddenFields['blik']['fields'];
+                $hiddenFields = $allHiddenFields[$type]['fields'];
                 break;
             case 'dotpay':
             default:
@@ -417,9 +417,15 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         );
         
         if('mp' === $type && $this->isDotMasterPass()) {
+            if(isset($channel)) {
+                $fieldsRequestArray['channel'] = $channel;
+            }
             $fieldsRequestArray['bylaw'] = '1';
             $fieldsRequestArray['personal_data'] = '1';
         } elseif('blik' === $type && $this->isDotBlik()) {
+            if(isset($channel)) {
+                $fieldsRequestArray['channel'] = $channel;
+            }
             if(isset($blik)) {
                 $fieldsRequestArray['blik_code'] = $blik;
             }

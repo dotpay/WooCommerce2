@@ -53,6 +53,10 @@
                         <p class="my-form-widget-container"></p>
                     <?php endif; ?>
                         
+                    <?php if('blik' === $keyR) : ?>
+                        <input type="text" value="" name="blik_code">
+                    <?php endif; ?>
+                        
                     <?php foreach($valR['agreements'] as $keyA => $valA) : ?>
                         <p>
                             <label>

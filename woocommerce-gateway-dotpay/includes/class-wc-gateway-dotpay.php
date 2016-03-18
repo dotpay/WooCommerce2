@@ -113,19 +113,23 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * js code
          */
-        wc_enqueue_js(WC_Gateway_Dotpay_Include('/includes/block-ui.js.php', array(
+        ob_start();
+        WC_Gateway_Dotpay_Include('/includes/block-ui.js.phtml', array(
             'mp' => $this->isDotMasterPass(),
             'blik' => $this->isDotBlik(),
             'widget' => $this->isDotWidget(),
             'message' => $message,
             'signature_url' => $signature_url,
-        )));
+        ));
+        $js = ob_get_contents();
+        wc_enqueue_js($js);
+        ob_end_clean();
         
         /**
          * html code
          */
         ob_start();
-        WC_Gateway_Dotpay_Include('/includes/form-redirect.html.php', array(
+        WC_Gateway_Dotpay_Include('/includes/form-redirect.phtml', array(
             'mp' => $this->isDotMasterPass(),
             'blik' => $this->isDotBlik(),
             'widget' => $this->isDotWidget(),
@@ -143,15 +147,28 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
     
     public function build_dotpay_signature() {
         $chk = '';
-        if(isset($_SESSION['hiddenFields'])) {
-            $hiddenFields = $_SESSION['hiddenFields'];
-            if(isset($_POST['channel'])) {
-                $channel = $_POST['channel'];
-                $chk = $this->buildSignature4Request($hiddenFields, $channel);
-            } else {
-                $chk = $this->buildSignature4Request($hiddenFields);
-            }
+        
+        $type = isset($_POST['type']) ? $_POST['type'] : '';
+        $channel = isset($_POST['channel']) ? $_POST['channel'] : '';
+        $blik = isset($_POST['blik']) ? $_POST['blik'] : '';
+        
+        $hiddenFields = isset($_SESSION['hiddenFields']) ? $_SESSION['hiddenFields'] : null;
+        
+        if($hiddenFields) {
+            switch ($type) {
+                case 'mp':
+                    $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
+                    break;
+                case 'blik':
+                    $chk = $this->buildSignature4Request($hiddenFields, $type, $channel, $blik);
+                    break;
+                case 'dotpay':
+                    $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
+                    break;
+                default:
+            } 
         }
+        
         die($chk);
     }
 
