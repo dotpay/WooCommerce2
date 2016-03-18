@@ -20,6 +20,15 @@ foreach($data['hiddenFields'] as $keyR => $valR) {
             $form .= '<input type="text" value="' . $valF . '" name="' . $keyF . '">';
         }
         
+        foreach($valR['agreements'] as $keyA => $valA) {
+             $form .= '<p>';
+             $form .= '<label>';
+             $form .= '<input type="checkbox" name="' . $keyA . '" value="1" checked>';
+             $form .= $valA;
+             $form .= '</label>';
+             $form .= '</p>';
+        }
+        
         $form .= '</form>';
         $form .= '</p>';
         
@@ -53,15 +62,6 @@ return <<<END
 
 END;
 
-
-$hiddenFields = '';
-foreach($data['hiddenFields'] as $k => $v) {
-    $hiddenFields .= <<<END
-        <input type="hidden" value="{$v}" name="{$k}">
-
-END;
-}
-
 $widgetStyle = '';
 if($data['widget']) {
     $widgetStyle = <<<END
@@ -94,25 +94,6 @@ $widgetContainer = '';
 if($data['widget']) {
     $widgetContainer = <<<END
         <p class="my-form-widget-container"></p>
-
-END;
-}
-
-$widgetAgreement = '';
-if($data['widget']) {
-    $widgetAgreement = <<<END
-        <p>
-            <label>
-                <input type="checkbox" id="bylaw" name="bylaw" value="1" checked>
-                {$data['agreement_bylaw']}
-            </label>
-        </p>
-        <p>
-            <label>
-                <input type="checkbox" id="personal_data" name="personal_data" value="1" checked>
-                {$data['agreement_personal_data']}
-            </label>
-        </p>
 
 END;
 }
