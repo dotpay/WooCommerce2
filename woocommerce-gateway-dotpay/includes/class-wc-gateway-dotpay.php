@@ -69,8 +69,9 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             ),
         );
         
-        $security = $this->isDotSecurity();
-
+        /**
+         * 
+         */
         $dotpay_url = $this->getDotpayUrl();
         
         /**
@@ -81,7 +82,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * 
          */
-        if($this->isDotWidget()) {
+        if($this->isDotMasterPass() || $this->isDotBlik() || $this->isDotWidget()) {
             /**
              * 
              */
@@ -95,13 +96,19 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * 
          */
-//        if($security) {
-//            $chk = $this->buildSignature4Request($hiddenFields);
-//            
-//            $_SESSION['hiddenFields'] = $hiddenFields;
-//            
-//            $hiddenFields['CHK'] = $chk;
-//        }
+        if($this->isDotSecurity()) {
+            foreach($hiddenFields as $key => $val) {
+                $chk = $this->buildSignature4Request($hiddenFields, $key);
+                
+                if(!is_array($_SESSION['hiddenFields'])) {
+                    $_SESSION['hiddenFields'] = array();
+                }
+                
+                $_SESSION['hiddenFields'][$key] = $val;
+                
+                $hiddenFields[$key]['fields']['CHK'] = $chk;
+            }
+        }
         
         /**
          * js code

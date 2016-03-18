@@ -370,7 +370,20 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         return $resultStr;
     }
     
-    protected function buildSignature4Request(array $hiddenFields, $channel = null, $blik = null) {
+    protected function buildSignature4Request(array $allHiddenFields, $type, $channel = null, $blik = null) {
+        
+        switch ($type) {
+            case 'mp':
+                $hiddenFields = $allHiddenFields['mp']['fields'];
+                break;
+            case 'blik':
+                $hiddenFields = $allHiddenFields['blik']['fields'];
+                break;
+            case 'dotpay':
+            default:
+                $hiddenFields = $allHiddenFields['dotpay']['fields'];
+        }
+        
         $fieldsRequestArray = array(
             'DOTPAY_PIN' => $this->get_option('dotpay_pin'),
             'api_version' => $this->getDotpayApiVersion(),
@@ -403,15 +416,23 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             'blik_code' => self::STR_EMPTY
         );
         
-        $widget = $this->isDotWidget();
-        
-        if($channel) {
-            $fieldsRequestArray['channel'] = $channel;
-        }
-        
-        if($widget) {
+        if('mp' === $type && $this->isDotMasterPass()) {
             $fieldsRequestArray['bylaw'] = '1';
             $fieldsRequestArray['personal_data'] = '1';
+        } elseif('blik' === $type && $this->isDotBlik()) {
+            if(isset($blik)) {
+                $fieldsRequestArray['blik_code'] = $blik;
+            }
+            $fieldsRequestArray['bylaw'] = '1';
+            $fieldsRequestArray['personal_data'] = '1';
+        } elseif('dotpay' === $type) {
+            if(isset($channel)) {
+                $fieldsRequestArray['channel'] = $channel;
+            }
+            if($this->isDotWidget()) {
+                $fieldsRequestArray['bylaw'] = '1';
+                $fieldsRequestArray['personal_data'] = '1';
+            }
         }
         
         $fieldsRequestStr = implode(self::STR_EMPTY, $fieldsRequestArray);
@@ -480,6 +501,11 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     
     protected function getHiddenFieldsDotpay($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);
+        
+        if($this->isDotWidget()) {
+            $hiddenFields['ch_lock'] = 1;
+            $hiddenFields['type'] = 4;
+        }
         
         return $hiddenFields;
     }
