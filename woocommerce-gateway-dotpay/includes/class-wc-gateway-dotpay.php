@@ -100,7 +100,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             foreach($hiddenFields as $key => $val) {
                 $chk = $this->buildSignature4Request($hiddenFields, $key);
                 
-                if(!is_array($_SESSION['hiddenFields'])) {
+                if(!isset($_SESSION['hiddenFields'])) {
                     $_SESSION['hiddenFields'] = array();
                 }
                 
