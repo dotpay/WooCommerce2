@@ -393,7 +393,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             'currency' => $hiddenFields['currency'],
             'description' => $hiddenFields['description'],
             'control' => $hiddenFields['control'],
-            'channel' => self::STR_EMPTY,
+            'channel' => isset($hiddenFields['channel']) ? $hiddenFields['channel'] : self::STR_EMPTY,
             'ch_lock' => $hiddenFields['ch_lock'],
             'URL' => $hiddenFields['URL'],
             'type' => $hiddenFields['type'],
@@ -402,15 +402,15 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             'firstname' => $hiddenFields['firstname'],
             'lastname' => $hiddenFields['lastname'],
             'email' => $hiddenFields['email'],
-            'street' => self::STR_EMPTY,
-            'street_n1' => self::STR_EMPTY,
+            'street' => $hiddenFields['street'],
+            'street_n1' => $hiddenFields['street_n1'],
             'street_n2' => self::STR_EMPTY,
             'state' => self::STR_EMPTY,
             'addr3' => self::STR_EMPTY,
-            'city' => self::STR_EMPTY,
-            'postcode' => self::STR_EMPTY,
-            'phone' => self::STR_EMPTY,
-            'country' => self::STR_EMPTY,
+            'city' => $hiddenFields['city'],
+            'postcode' => $hiddenFields['postcode'],
+            'phone' => $hiddenFields['phone'],
+            'country' => $hiddenFields['country'],
             'bylaw' => self::STR_EMPTY,
             'personal_data' => self::STR_EMPTY,
             'blik_code' => self::STR_EMPTY
@@ -488,9 +488,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $phone = $order->billing_phone;
         $street = $order->billing_address_1;
         $street_n1 = $order->billing_address_2;
-        $city = $city = $order->billing_city;
+        $city = $order->billing_city;
         $postcode = $order->billing_postcode;
-        $country = $order->billing_country;
+        $country = strtoupper($order->billing_country);
         
         return array(
             'id' => $this->get_option('dotpay_id'),

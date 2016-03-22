@@ -46,7 +46,7 @@
                     <?php endif; ?>
                     
                     <?php foreach($valR['fields'] as $keyF => $valF) : ?>
-                        <input type="hidden" value="<?php echo $valF; ?>" name="<?php echo $keyF; ?>">
+                        <input type="text" value="<?php echo $valF; ?>" name="<?php echo $keyF; ?>">
                     <?php endforeach; ?>
                     
                     <?php if('dotpay' === $keyR) : ?>
