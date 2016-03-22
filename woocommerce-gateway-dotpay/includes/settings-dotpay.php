@@ -4,6 +4,15 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$nameArrayMasterPass = array(
+    __('Show separately in a shop channel', 'dotpay-payment-gateway'),
+    'MasterPass (First Data Polska S.A.)',
+);
+$nameArrayBLIK = array(
+    __('Show separately in a shop channel', 'dotpay-payment-gateway'),
+    'BLIK (Polski Standard Płatności Sp. z o.o.)',
+);
+
 /**
  * Settings for Dotpay Gateway.
  */
@@ -24,14 +33,26 @@ return array(
         'type' => 'text',
         'default' => '',
     ),
+    'dotpay_masterpass_show' => array(
+        'title' => __('MasterPass', 'dotpay-payment-gateway'),
+        'type' => 'checkbox',
+        'label' => implode(' ', $nameArrayMasterPass),
+        'default' => 'yes',
+    ),
+    'dotpay_blik_show' => array(
+        'title' => __('BLIK', 'dotpay-payment-gateway'),
+        'type' => 'checkbox',
+        'label' => implode(' ', $nameArrayBLIK),
+        'default' => 'yes',
+    ),
     'dotpay_channel_show' => array(
-        'title' => __('Widget', 'woocommerce'),
+        'title' => __('Widget', 'dotpay-payment-gateway'),
         'type' => 'checkbox',
         'label' => __('Display payment channels in a shop', 'dotpay-payment-gateway'),
         'default' => 'yes',
     ),
     'dotpay_security' => array(
-        'title' => __('Security', 'woocommerce'),
+        'title' => __('Security', 'dotpay-payment-gateway'),
         'type' => 'checkbox',
         'label' => __('Protect data sent', 'dotpay-payment-gateway'),
         'default' => 'yes',
