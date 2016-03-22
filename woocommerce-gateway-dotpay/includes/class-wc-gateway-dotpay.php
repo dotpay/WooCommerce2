@@ -150,7 +150,6 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         
         $type = isset($_POST['type']) ? $_POST['type'] : '';
         $channel = isset($_POST['channel']) ? $_POST['channel'] : '';
-        $blik = isset($_POST['blik']) ? $_POST['blik'] : '';
         
         $hiddenFields = isset($_SESSION['hiddenFields']) ? $_SESSION['hiddenFields'] : null;
         
@@ -160,9 +159,13 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
                     break;
                 case 'blik':
+                    $blik = isset($_POST['blik']) ? $_POST['blik'] : '';
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel, $blik);
                     break;
                 case 'dotpay':
+                    if(!(bool) $this->getRequest()->getParam('widget')) {
+                        $this->dotpayAgreements = false;
+                    }
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
                     break;
                 default:

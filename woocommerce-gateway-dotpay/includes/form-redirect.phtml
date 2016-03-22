@@ -15,6 +15,10 @@
         label {
             cursor: pointer;
         }
+        input[name="blik_code"] {
+            width:200px;
+            margin: 0px 0px 20px 0px;
+        }
     </style>
     
     <h3><?php echo $data['h3'] ?></h3>
@@ -22,16 +26,15 @@
     
     <?php $countStrategy = 0; ?>
     <?php foreach($data['hiddenFields'] as $keyR => $valR) : ?>
-        <?php if($valR['active']) : ?>
+        <?php if($valR['active'] || 'dotpay' === $keyR) : ?>
             <p>
-                <label>
+                <label form-target="<?php echo $keyR; ?>">
                     <input type="radio" name="strategy" form-target="<?php echo $keyR; ?>">
                     <img class="<?php echo $keyR; ?>" src="<?php echo $valR['icon']; ?>">
                 </label>
                 <form form-target="<?php echo $keyR; ?>" method="post" action="<?php echo $data['action']; ?>">
-                    <?php if('dotpay' === $keyR) : ?>
+                    <?php if('dotpay' === $keyR && $data['widget']) : ?>
                         <link href="<?php echo $data['action']; ?>widget/payment_widget.min.css" rel="stylesheet">
-                        <script type="text/javascript" id="dotpay-payment-script" src="<?php echo $data['action']; ?>widget/payment_widget.js"></script>
                         <script type="text/javascript">
                             var dotpayWidgetConfig = {
                                 sellerAccountId: '<?php echo $valR['fields']['id']; ?>',
@@ -43,28 +46,31 @@
                                 offlineChannelTooltip: true
                             };
                         </script>
+                        <script type="text/javascript" id="dotpay-payment-script" src="<?php echo $data['action']; ?>widget/payment_widget.js"></script>
                     <?php endif; ?>
                     
                     <?php foreach($valR['fields'] as $keyF => $valF) : ?>
                         <input type="text" value="<?php echo $valF; ?>" name="<?php echo $keyF; ?>">
                     <?php endforeach; ?>
                     
-                    <?php if('dotpay' === $keyR) : ?>
+                    <?php if('dotpay' === $keyR && $data['widget']) : ?>
                         <p class="my-form-widget-container"></p>
                     <?php endif; ?>
                         
                     <?php if('blik' === $keyR) : ?>
                         <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code">
                     <?php endif; ?>
-                        
-                    <?php foreach($valR['agreements'] as $keyA => $valA) : ?>
-                        <p>
-                            <label>
-                                <input type="checkbox" name="<?php echo $keyA; ?>" value="1" checked>
-                                <?php echo $valA; ?>
-                            </label>
-                        </p>
-                    <?php endforeach; ?>
+                    
+                    <?php if('dotpay' !== $keyR || ('dotpay' === $keyR && $data['widget'])) : ?>
+                        <?php foreach($valR['agreements'] as $keyA => $valA) : ?>
+                            <p>
+                                <label>
+                                    <input type="checkbox" name="<?php echo $keyA; ?>" value="1" checked>
+                                    <?php echo $valA; ?>
+                                </label>
+                            </p>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                         
                     <p>
                         <input form-target="<?php echo $keyR; ?>" class="button" type="submit" value="<?php echo $data['submit']; ?>">
