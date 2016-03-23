@@ -106,7 +106,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
                 
                 $_SESSION['hiddenFields'][$key] = $val;
                 
-                $hiddenFields[$key]['fields']['CHK'] = $chk;
+                $hiddenFields[$key]['fields']['chk'] = $chk;
             }
         }
         
