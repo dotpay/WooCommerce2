@@ -163,8 +163,11 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel, $blik);
                     break;
                 case 'dotpay':
-                    if(!(bool) $this->getRequest()->getParam('widget')) {
-                        $this->dotpayAgreements = false;
+                    if(isset($_POST['widget'])) {
+                        $widget = (bool) $_POST['widget'];
+                        if(!$widget) {
+                            $this->dotpayAgreements = false;
+                        }
                     }
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
                     break;
