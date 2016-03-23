@@ -27,7 +27,7 @@ $(document).ready(function() {
 
                 if(data.channel) {
                     $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
-                        $('form[form-target="' + target + '"] input[name="CHK"]').val(result);
+                        $('form[form-target="' + target + '"] input[name="chk"]').val(result);
                         submitHideShow(target);
                     });
                 }
@@ -38,7 +38,7 @@ $(document).ready(function() {
 
                 if(data.channel && data.blik) {
                     $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
-                        $('form[form-target="' + target + '"] input[name="CHK"]').val(result);
+                        $('form[form-target="' + target + '"] input[name="chk"]').val(result);
                         submitHideShow(target);
                     });
                 }
@@ -58,7 +58,7 @@ $(document).ready(function() {
 
                     if(data.channel) {
                         $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
-                            $('form[form-target="' + target + '"] input[name="CHK"]').val(result);
+                            $('form[form-target="' + target + '"] input[name="chk"]').val(result);
                             submitHideShow(target);
                         });
                     }
@@ -86,7 +86,7 @@ $(document).ready(function() {
 
         if(data.channel && data.blik) {
             $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
-                $('form[form-target="' + target + '"] input[name="CHK"]').val(result);
+                $('form[form-target="' + target + '"] input[name="chk"]').val(result);
                 submitHideShow(target);
             });
         }
@@ -112,7 +112,7 @@ $(document).ready(function() {
 
         if(data.channel) {
             $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
-                $('form[form-target="' + target + '"] input[name="CHK"]').val(result);
+                $('form[form-target="' + target + '"] input[name="chk"]').val(result);
                 submitHideShow(target);
             });
         }
