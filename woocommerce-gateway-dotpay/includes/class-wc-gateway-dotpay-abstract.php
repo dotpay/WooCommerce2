@@ -337,12 +337,11 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             $resultJson = curl_exec($ch);
         } catch (Exception $exc) {
              $resultJson = false;
-        } finally {
-            if($ch) {
-                curl_close($ch);
-            }
         }
-
+        
+        if($ch) {
+            curl_close($ch);
+        }
         
         /**
          * 
