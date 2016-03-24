@@ -261,14 +261,14 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
 
     protected function checkSignature($order) {
         $hashDotpay = $this->fieldsResponse['signature'];
-        $hashCalculate = $this->calculateSignature($order);
+        $hashCalculate = $this->calculateSignature();
 
         if ($hashDotpay !== $hashCalculate) {
             die('FAIL SIGNATURE');
         }
     }
 
-    protected function calculateSignature($order) {
+    protected function calculateSignature() {
         $string = '';
         $string .= $this->get_option('dotpay_pin');
 
@@ -410,6 +410,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             'postcode' => $hiddenFields['postcode'],
             'phone' => $hiddenFields['phone'],
             'country' => $hiddenFields['country'],
+            'p_info' => $hiddenFields['p_info'],
             'bylaw' => self::STR_EMPTY,
             'personal_data' => self::STR_EMPTY,
             'blik_code' => self::STR_EMPTY
