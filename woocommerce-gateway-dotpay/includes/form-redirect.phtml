@@ -9,6 +9,9 @@
         img.mp {
             height: 60px;
         }
+		img.pv {
+            height: 60px;
+        }
         img.blik {
             height: 35px;
         }
@@ -28,10 +31,20 @@
     <?php foreach($data['hiddenFields'] as $keyR => $valR) : ?>
         <?php if($valR['active'] || 'dotpay' === $keyR) : ?>
             <p>
-                <label form-target="<?php echo $keyR; ?>">
-                    <input type="radio" name="strategy" form-target="<?php echo $keyR; ?>">
-                    <img class="<?php echo $keyR; ?>" src="<?php echo $valR['icon']; ?>">
-                </label>
+				
+                <?php if('pv' === $keyR) : ?> 	
+                    <label form-target="<?php echo $keyR; ?>">
+                        <input type="radio" name="strategy" form-target="<?php echo $keyR; ?>">
+                        <img class="<?php echo $keyR; ?>" src="<?php echo $valR['icon']; ?>"> <?php if('pv' === $keyR) : ?> Credit Card via Dotpay ( accouting in <?php echo $valR['fields']['currency']; ?> )<?php endif; ?>
+                    </label>
+                <?php elseif ('pv' <> $keyR ) : ?>
+                    <label form-target="<?php echo $keyR; ?>">
+                        <input type="radio" name="strategy" form-target="<?php echo $keyR; ?>">
+                        <img class="<?php echo $keyR; ?>" src="<?php echo $valR['icon']; ?>"> <?php if('pv' <> $keyR) : ?>  - wybierz kanał płatności w Dotpay i zapłać<?php endif; ?>
+                    </label>
+                <?php else : ?>
+                <?php continue; ?>
+		<?php endif; ?>
                 <form form-target="<?php echo $keyR; ?>" method="post" action="<?php echo $data['action']; ?>">
                     <?php if('dotpay' === $keyR && $data['widget']) : ?>
                         <link href="<?php echo $data['action']; ?>widget/payment_widget.min.css" rel="stylesheet">
@@ -58,7 +71,7 @@
                     <?php endif; ?>
                         
                     <?php if('blik' === $keyR) : ?>
-                        <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code">
+                        <input form-target="<?php echo $keyR; ?>" pattern="[0-9]{6}" type="text" value="" name="blik_code">
                     <?php endif; ?>
                     
                     <?php if('dotpay' !== $keyR || ('dotpay' === $keyR && $data['widget'])) : ?>
@@ -79,10 +92,13 @@
             </p>
             
             <?php if($valR !== end($data['hiddenFields'])) : ?>
-                <hr>
+                <hr />
             <?php endif; ?>
             
             <?php $countStrategy++; ?>
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
+<script>
+    
+</script>

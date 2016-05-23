@@ -46,28 +46,37 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         );
         
         /**
-         * hidden fields MasterPass, BLIK, Dotpay
+         * hidden fields MasterPass, BLIK, Dotpay, CreditCard for other currency
          */
-        $hiddenFields = array(
-            'mp' => array(
+		$hiddenFields = array();
+		if($this->isDotMasterPass())
+			$hiddenFields['mp'] = array(
                 'active' => $this->isDotMasterPass(),
                 'fields' => $this->getHiddenFieldsMasterPass($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconMasterPass(),
-            ),
-            'blik' => array(
+            );
+		if($this->isDotccPV())
+			$hiddenFields['pv'] = array(
+                'active' => $this->isDotccPV(),
+                'fields' => $this->getHiddenFieldsccPV($order_id),
+                'agreements' => $agreements,
+                'icon' => $this->getIconccPV(),
+            );
+		if($this->isDotBlik())
+			$hiddenFields['blik'] = array(
                 'active' => $this->isDotBlik(),
                 'fields' => $this->getHiddenFieldsBlik($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconBLIK(),
-            ),
-            'dotpay' => array(
+            );
+		if($this->isDotMainChannel())
+			$hiddenFields['dotpay'] = array(
                 'active' => $this->isDotWidget(),
                 'fields' => $this->getHiddenFieldsDotpay($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconDotpay(),
-            ),
-        );
+            );
         
         /**
          * 
@@ -82,7 +91,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * 
          */
-        if($this->isDotMasterPass() || $this->isDotBlik() || $this->isDotWidget()) {
+        if($this->isDotccPV() || $this->isDotMasterPass() || $this->isDotBlik() || $this->isDotWidget()) {
             /**
              * 
              */
@@ -116,6 +125,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         ob_start();
         WC_Gateway_Dotpay_Include('/includes/block-ui.js.phtml', array(
             'mp' => $this->isDotMasterPass(),
+            'pv' => $this->isDotccPV(),
             'blik' => $this->isDotBlik(),
             'widget' => $this->isDotWidget(),
             'message' => $message,
@@ -131,13 +141,14 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         ob_start();
         WC_Gateway_Dotpay_Include('/includes/form-redirect.phtml', array(
             'mp' => $this->isDotMasterPass(),
+            'pv' => $this->isDotccPV(),
             'blik' => $this->isDotBlik(),
             'widget' => $this->isDotWidget(),
             'h3' => __('Transaction Details', 'dotpay-payment-gateway'),
             'p' => $tagP,
             'submit' => __('Continue', 'dotpay-payment-gateway'),
             'action' => esc_attr($dotpay_url),
-            'hiddenFields' => $hiddenFields,
+            'hiddenFields' => $hiddenFields
         ));
         $html = ob_get_contents();
         ob_end_clean();
@@ -158,6 +169,9 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
                 case 'mp':
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
                     break;
+				case 'pv':
+                    $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
+                    break;	
                 case 'blik':
                     $blik = isset($_POST['blik']) ? $_POST['blik'] : '';
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel, $blik);
@@ -186,7 +200,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          * check order
          */
         $order = $this->getOrder($this->fieldsResponse['control']);
-
+        
         /**
          * check currency, amount, email
          */

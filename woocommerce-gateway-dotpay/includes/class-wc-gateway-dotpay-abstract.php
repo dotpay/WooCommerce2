@@ -55,10 +55,30 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $this->icon = $this->getIconDotpay();
         $this->has_fields = false;
         $this->title = 'Dotpay';
-        $this->description = __('Credit card payment via Dotpay', 'dotpay-payment-gateway');
+		$dotpay_logo_lang = ($this->getPaymentLang() === 'pl')?'pl':'en';
+		$DotLogo = WOOCOMMERCE_DOTPAY_PLUGIN_URL . 'resources/images/Dotpay_logo_desc_'.$dotpay_logo_lang .'.png';
+        $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
+		$this->method_description = '<div class="'.$this->isEnabled().'" tyle="text-align:left;font-size:14px;font-weight:normal">
+				<a href="http://www.dotpay.pl/" target="_blank" ><img src="'.$DotLogo.'" style= "margin-top: 20px;" alt="Dotpay.pl website" title="www.dotpay.pl" width="250px" border="0"></a>'
+               .sprintf( __( '
+				<p>In response to the market\'s needs Dotpay has been delivering innovative Internet payment services providing the widest e-commerce solution offer for years. The domain is money transfers between a buyer and a merchant within a complex service based on counselling and additional security. Within an offer of Internet payments Dotpay offers over 140 payment channels including: mobile payments, instalments, cash, e-wallets, transfers and credit card payments.</p>
+				<p class="main"><strong>Getting started</strong></p>
+				<p>
+				<ol>
+					<li>Thanks to Dotpay payment module the only activities needed for integration are: ID and PIN numbers and URLC confirmation configuration.</li>
+					<li>ID and PIN can be found in Dotpay panel in Settings in the top bar. ID number is a 6-digit string after # in a "Shop" line.</li>
+					<li>Only thing You have to do is log in to the Dotpay user panel and untick "Block external URLC" option in Settings -> Notifications -> Urlc configuration -> Edit.</li>
+				</ol>
+				</p>
+				<br>
+				<p><a href="https://ssl.dotpay.pl/s2/login/registration/?affilate_id=woocommerce" class="button button-primary" target="_blank" title="Account registration in Dotpay">Account registration in Dotpay</a> &nbsp;&nbsp;&nbsp;<a href="http://www.dotpay.pl/" target="_blank" class="button">Dotpay Home Page</a></p>
+
+			</div>
+			
+		', 'dotpay-payment-gateway' ));
         $this->init_form_fields();
         $this->init_settings();
-        
+		
         /**
          * Actions
          */
@@ -78,6 +98,10 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     protected function getIconMasterPass() {
         return WOOCOMMERCE_DOTPAY_PLUGIN_URL . 'resources/images/MasterPass.png';
     }
+	
+	 protected function getIconccPV() {
+        return WOOCOMMERCE_DOTPAY_PLUGIN_URL . 'resources/images/pv.png';
+    }
     
     protected function getIconBLIK() {
         return WOOCOMMERCE_DOTPAY_PLUGIN_URL . 'resources/images/BLIK.png';
@@ -89,7 +113,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
 
     public function init_form_fields() {
         $this->form_fields = WC_Gateway_Dotpay_Include('/includes/settings-dotpay.php');
-    }
+        $this->method_title = 'Dotpay';
+		
+		}
 
     protected function getDotpayUrl() {
         $dotpay_url = self::DOTPAY_URL;
@@ -108,6 +134,24 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         
         return $result;
     }
+	
+	protected function isEnabled() {
+        $result = 'error';
+        if ('yes' === $this->get_option('enabled')) {
+            $result = 'updated';
+        }
+        
+        return $result;
+    }
+	
+	
+	protected function isDotMainChannel() {
+		$result = true;
+		if($this->isDotSelectedCurrency($this->get_option('dotpay_dontview_currency'))) {
+            $result = false;
+        }
+		return $result;
+	}
     
     protected function isDotWidget() {
         $result = false;
@@ -141,12 +185,45 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         
         return $result;
     }
+	
+    protected function isDotccPV() {
+        $result = true;
+        if ('no' === $this->get_option('dotpay_ccPV_show')) {
+            $result = false;
+        }
+        if(!$this->isDotSelectedCurrency($this->get_option('dotpay_ccPV_currency'))) {
+            $result = false;
+        }
+        if(false === $this->dotpayAgreements) {
+            $result = false;
+        }
+        
+        return $result;
+    }
+    
+    protected function isDotSelectedCurrency($allow_currency_form) {
+
+        $result = false;
+        $payment_currency = $this->getPaymentCurrency();
+        $allow_currency = str_replace(';', ',', $allow_currency_form);
+        $allow_currency = strtoupper(str_replace(' ', '', $allow_currency));
+        $allow_currency_array =  explode(",",trim($allow_currency));
+        
+        if(in_array(strtoupper($payment_currency), $allow_currency_array)) {
+            $result = true;
+        }
+        
+        return $result;
+    }
     
     protected function isDotBlik() {
         $result = false;
         if ('yes' === $this->get_option('dotpay_blik_show')) {
             $result = true;
         }
+		if($this->getPaymentCurrency() != 'PLN') {
+			$result = false;
+		}
         if(false === $this->dotpayAgreements) {
             $result = false;
         }
@@ -160,10 +237,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     
     protected function getPaymentCurrency() {
         $payment_currency = get_woocommerce_currency();
-        if ($this->isDotTest()) {
-            $payment_currency = 'PLN';
-        }
-        
+	
         return $payment_currency;
     }
     
@@ -259,18 +333,36 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         }
     }
 
+	
+    protected function checkPin() {
+        $pinDotpay = '';
+        if ('248' === $this->fieldsResponse['channel']){
+            $pinDotpay = $this->get_option('dotpay_pin2');
+        }else{
+            $pinDotpay = $this->get_option('dotpay_pin');
+        }
+
+        return $pinDotpay;
+				
+    }
+	
+	
+	
     protected function checkSignature($order) {
         $hashDotpay = $this->fieldsResponse['signature'];
         $hashCalculate = $this->calculateSignature();
-
+        $PINY = $this->checkPin();
+	
         if ($hashDotpay !== $hashCalculate) {
             die('FAIL SIGNATURE');
         }
     }
 
     protected function calculateSignature() {
-        $string = '';
-        $string .= $this->get_option('dotpay_pin');
+			
+        $PIN = $this->checkPin();
+
+        $string = $PIN;
 
         foreach ($this->fieldsResponse as $k => $v) {
             switch ($k) {
@@ -371,10 +463,15 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     
     protected function buildSignature4Request(array $allHiddenFields, $type, $channel = null, $blik = null) {
         
+        $pin = $this->get_option('dotpay_pin');
         switch ($type) {
             case 'mp':
                 $hiddenFields = $allHiddenFields[$type]['fields'];
                 break;
+            case 'pv':
+                $hiddenFields = $allHiddenFields[$type]['fields'];
+                $pin = $this->get_option('dotpay_pin2');
+                break;	
             case 'blik':
                 $hiddenFields = $allHiddenFields[$type]['fields'];
                 break;
@@ -383,8 +480,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
                 $hiddenFields = $allHiddenFields['dotpay']['fields'];
         }
         
+		
         $fieldsRequestArray = array(
-            'DOTPAY_PIN' => $this->get_option('dotpay_pin'),
+            'DOTPAY_PIN' => $pin,
             'api_version' => $this->getDotpayApiVersion(),
             'lang' => $hiddenFields['lang'],
             'DOTPAY_ID' => $hiddenFields['id'],
@@ -417,6 +515,12 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         );
         
         if('mp' === $type && $this->isDotMasterPass()) {
+            if(isset($channel)) {
+                $fieldsRequestArray['channel'] = $channel;
+            }
+            $fieldsRequestArray['bylaw'] = '1';
+            $fieldsRequestArray['personal_data'] = '1';
+        }elseif('pv' === $type && $this->isDotccPV()) {
             if(isset($channel)) {
                 $fieldsRequestArray['channel'] = $channel;
             }
@@ -492,6 +596,16 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $postcode = $order->billing_postcode;
         $country = strtoupper($order->billing_country);
         
+        if(empty($street_n1))
+        {
+            preg_match("/\s[\w\d\/_\-]{0,30}$/", $street, $matches);
+			if(count($matches)>0)
+			{
+				$street_n1 = trim($matches[0]);
+				$street = str_replace($matches[0], '', $street);
+			}
+        }
+	
         return array(
             'id' => $this->get_option('dotpay_id'),
             'control' => esc_attr($order_id),
@@ -531,12 +645,25 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     protected function getHiddenFieldsMasterPass($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);
         
-        $hiddenFields['channel'] = 71;
+        $hiddenFields['channel'] = ($this->isDotTest())?246:71;
         $hiddenFields['ch_lock'] = 1;
         $hiddenFields['type'] = 4;
         
         return $hiddenFields;
     }
+	
+    protected function getHiddenFieldsccPV($order_id) {
+        $hiddenFields = $this->getHiddenFields($order_id);
+        
+        $hiddenFields['channel'] = 248;
+        $hiddenFields['ch_lock'] = 1;
+        $hiddenFields['type'] = 4;
+        $hiddenFields['id'] = $this->get_option('dotpay_id2');
+
+        
+        return $hiddenFields;
+    }
+	
     
     protected function getHiddenFieldsBlik($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);

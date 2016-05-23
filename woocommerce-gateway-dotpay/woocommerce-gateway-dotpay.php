@@ -1,14 +1,14 @@
 <?php
 
 /*
-  Plugin Name: WooCommerce Gateway Dotpay
+  Plugin Name: WooCommerce Gateway Dotpay (PV)
   Plugin URI: https://github.com/dotpay/WooCommerce2
-  Description: Add a credit card payment gateway for Dotpay (Poland) to WooCommerce
-  Version: 2.5
+  Description: Fast and secure payment gateway for Dotpay (Poland) to WooCommerce
+  Version: 2.7
   Author: Dotpay (tech@dotpay.pl)
   Author URI: mailto:tech@dotpay.pl
   Text Domain: dotpay-payment-gateway
-  Last modified: 2016-02-25 by tech@dotpay.pl in 'class-wc-gateway-dotpay.php'
+  Last modified: 2016-05-23 by tech@dotpay.pl in 'class-wc-gateway-dotpay.php'
  */
 
 if (!defined('ABSPATH')) {
@@ -37,6 +37,14 @@ function init_woocommerce_gateway_dotpay_session_end() {
     session_destroy();
 }
 
+function my_enqueue($hook) {
+    if($hook != 'woocommerce_page_wc-settings') {
+        return;
+    }
+    wp_enqueue_script( 'admin-script', plugin_dir_url( __FILE__ ) . 'resources/js/admin.js' );
+}
+
+
 if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
     load_plugin_textdomain('dotpay-payment-gateway', false, dirname(plugin_basename(__FILE__)) . '/langs/');
 
@@ -51,6 +59,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     }
 
     add_filter('woocommerce_payment_gateways', 'add_dotpay_class');
+    
+    
+    add_action( 'admin_enqueue_scripts', 'my_enqueue' );
 }
 
 function WC_Gateway_Dotpay_Include($file, array $data = array()) {

@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2016-03-16 13:24+0100\n"
-"PO-Revision-Date: 2016-03-16 13:24+0100\n"
+"POT-Creation-Date: 2016-05-23 09:16+0200\n"
+"PO-Revision-Date: 2016-05-23 09:17+0200\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.2\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
@@ -17,83 +17,88 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../includes/settings-dotpay.php:8 ../includes/settings-dotpay.php:12
-msgid "Show separately in a shop channel"
-msgstr "Pokaż osobno w sklepie kanał"
+#: ../includes/class-wc-gateway-dotpay-abstract.php:60
+msgid "Fast and secure payment via Dotpay"
+msgstr "Szybkie i bezpieczne płatności dzięki Dotpay"
 
-#: ../includes/settings-dotpay.php:21
-msgid "Enable/Disable"
-msgstr "Włącz/Wyłącz"
+#: ../includes/class-wc-gateway-dotpay-abstract.php:63
+msgid ""
+"\n"
+"\t\t\t\t<p>In response to the market's needs Dotpay has been delivering "
+"innovative Internet payment services providing the widest e-commerce "
+"solution offer for years. The domain is money transfers between a buyer and "
+"a merchant within a complex service based on counselling and additional "
+"security. Within an offer of Internet payments Dotpay offers over 140 "
+"payment channels including: mobile payments, instalments, cash, e-wallets, "
+"transfers and credit card payments.</p>\n"
+"\t\t\t\t<p class=\"main\"><strong>Getting started</strong></p>\n"
+"\t\t\t\t<p>\n"
+"\t\t\t\t<ol>\n"
+"\t\t\t\t\t<li>Thanks to Dotpay payment module the only activities needed for "
+"integration are: ID and PIN numbers and URLC confirmation configuration.</"
+"li>\n"
+"\t\t\t\t\t<li>ID and PIN can be found in Dotpay panel in Settings in the top "
+"bar. ID number is a 6-digit string after # in a \"Shop\" line.</li>\n"
+"\t\t\t\t\t<li>Only thing You have to do is log in to the Dotpay user panel "
+"and untick \"Block external URLC\" option in Settings -> Notifications -> "
+"Urlc configuration -> Edit.</li>\n"
+"\t\t\t\t</ol>\n"
+"\t\t\t\t</p>\n"
+"\t\t\t\t<br>\n"
+"\t\t\t\t<p><a href=\"https://ssl.dotpay.pl/s2/login/registration/?"
+"affilate_id=woocommerce\" class=\"button button-primary\" target=\"_blank\" "
+"title=\"Account registration in Dotpay\">Account registration in Dotpay</a> "
+"&nbsp;&nbsp;&nbsp;<a href=\"http://www.dotpay.pl/\" target=\"_blank\" class="
+"\"button\">Dotpay Home Page</a></p>\n"
+"\n"
+"\t\t\t</div>\n"
+"\t\t\t\n"
+"\t\t"
+msgstr ""
+"\n"
+"\n"
+"\n"
+"\t\t\t\t<p>W odpowiedzi na zapotrzebowanie rynku Dotpay od lat świadczy "
+"innowacyjne usługi płatności internetowych, dostarczając najszerszą ofertę "
+"rozwiązań dla klientów z branży e-commerce. Domeną są transfery pieniężne "
+"przesyłane pomiędzy kupującym a sprzedającym, wraz z kompleksowym serwisem, "
+"opartym na fachowym doradztwie i stosowaniu dodatkowych zabezpieczeń. W "
+"ramach oferty płatności internetowych Dotpay oferuje ponad 140 kanałów "
+"płatności, w tym: płatności mobilne, ratalne, gotówkowe, e-portfele, "
+"przelewy i karty płatnicze.</p>\n"
+"\t\t\t\t<p class=\"main\"><strong>Szybki start</strong></p>\n"
+"\t\t\t\t<p>\n"
+"\t\t\t\t<ol>\n"
+"\t\t\t\t\t<li>Dzięki modułowi płatności Dotpay, jedyne czynności niezbędne "
+"do integracji to przepisanie numeru ID, PIN oraz odpowiednia konfiguracja "
+"powiadomień URLC.</li>\n"
+"\t\t\t\t\t<li>ID oraz PIN można odnaleźć w panelu Dotpay po zalogowaniu "
+"klikając \"Ustawienia\" na górnym pasku. Numer ID to 6-cyfrowy ciąg "
+"umieszczony po znaku # w wierszu \"Sklep\".</li>\n"
+"\t\t\t\t\t<li>Aby otrzymywać notyfikację o dokonanej transakcji, po "
+"zalogowaniu w panelu Dotpay odznacz opcję (zezwól) \"Blokuj zewnętrzne URLC"
+"\" klikając przycisk \"Edycja\" w sekcji \"Ustawienia -> Powiadomienia -> "
+"Konfiguracja URLC\".</li>\n"
+"\t\t\t\t</ol>\n"
+"\t\t\t\t</p>\n"
+"\t\t\t\t<br>\n"
+"\t\t\t\t<p><a href=\"https://ssl.dotpay.pl/s2/login/registration/?"
+"affilate_id=woocommerce\" class=\"button button-primary\" target=\"_blank\" "
+"title=\"Rejestracja konta w Dotpay\">Zarejestruj konto w Dotpay</a> &nbsp;"
+"&nbsp;&nbsp;<a href=\"http://www.dotpay.pl/\" target=\"_blank\" class="
+"\"button\">Dotpay - zobacz ofertę</a></p>\n"
+"\n"
+"\t\t\t</div>"
 
-#: ../includes/settings-dotpay.php:23
-msgid "Enable Dotpay Payment"
-msgstr "Włącz Płatności Dotpay"
-
-#: ../includes/settings-dotpay.php:27
-msgid "Dotpay customer ID"
-msgstr "ID klienta Dotpay"
-
-#: ../includes/settings-dotpay.php:32
-msgid "Dotpay customer PIN"
-msgstr "PIN klienta Dotpay"
-
-#: ../includes/settings-dotpay.php:37
-msgid "MasterPass"
-msgstr "MasterPass"
-
-#: ../includes/settings-dotpay.php:43
-msgid "BLIK"
-msgstr "BLIK"
-
-#: ../includes/settings-dotpay.php:49
-msgid "Widget"
-msgstr "Widżet"
-
-#: ../includes/settings-dotpay.php:51
-msgid "Display payment channels in a shop"
-msgstr "Pokaż kanały płatności w sklepie"
-
-#: ../includes/settings-dotpay.php:55
-msgid "Security"
-msgstr "Bezpieczeństwo"
-
-#: ../includes/settings-dotpay.php:57
-msgid "Protect data sent"
-msgstr "Zabezpiecz wysyłane dane"
-
-#: ../includes/settings-dotpay.php:61
-msgid "Testing environment"
-msgstr "Środowisko testowe"
-
-#: ../includes/settings-dotpay.php:62
-msgid "Only payment simulation. Forced PLN."
-msgstr "Symulacja płatności z walutą PLN."
-
-#: ../includes/settings-dotpay.php:67
-msgid "Title"
-msgstr "Tytuł"
-
-#: ../includes/settings-dotpay.php:69
-msgid "This controls the title which user sees during checkout."
-msgstr "Tytuł, który widzi użytkownik podczas składania zamówienia."
-
-#: ../includes/settings-dotpay.php:74
-msgid "Customer Message"
-msgstr "Wiadomość dla Klienta"
-
-#: ../includes/class-wc-gateway-dotpay.php:52
-msgid "Credit card payment via Dotpay"
-msgstr "Płatność poprzez Dotpay"
-
-#: ../includes/class-wc-gateway-dotpay.php:150
+#: ../includes/class-wc-gateway-dotpay-abstract.php:567
 msgid "Shop - "
 msgstr "Sklep - "
 
-#: ../includes/class-wc-gateway-dotpay.php:151
+#: ../includes/class-wc-gateway-dotpay-abstract.php:568
 msgid "Order ID: "
 msgstr "Nr zamówienia: "
 
-#: ../includes/class-wc-gateway-dotpay.php:217
+#: ../includes/class-wc-gateway-dotpay.php:98
 msgid ""
 "You chose payment by Dotpay. Select a payment channel and click Continue do "
 "proceed"
@@ -101,17 +106,17 @@ msgstr ""
 "Wybrałeś płatność poprzez Dotpay. Wybierz kanał płatności i kliknij "
 "Kontynuuj aby przejść dalej."
 
-#: ../includes/class-wc-gateway-dotpay.php:218
+#: ../includes/class-wc-gateway-dotpay.php:99
 msgid ""
 "Thank you for your order. We are now redirecting you to channel payment."
 msgstr ""
 "Dziękujemy za zamówienie. Zostaniesz przekierowany teraz do kanału płatności."
 
-#: ../includes/class-wc-gateway-dotpay.php:222
+#: ../includes/class-wc-gateway-dotpay.php:101
 msgid "You chose payment by Dotpay. Click Continue do proceed"
 msgstr "Wybrałeś płatność poprzez Dotpay. Kliknij Kontynuuj aby przejść dalej."
 
-#: ../includes/class-wc-gateway-dotpay.php:223
+#: ../includes/class-wc-gateway-dotpay.php:102
 msgid ""
 "Thank you for your order. We are now redirecting you to Dotpay to make "
 "payment."
@@ -119,13 +124,177 @@ msgstr ""
 "Dziękujemy za zamówienie. Zostaniesz przekierowany teraz do Dotpay, aby "
 "dokonać płatności."
 
-#: ../includes/class-wc-gateway-dotpay.php:251
+#: ../includes/class-wc-gateway-dotpay.php:147
 msgid "Transaction Details"
 msgstr "Szczegóły Płatności"
 
-#: ../includes/class-wc-gateway-dotpay.php:255
+#: ../includes/class-wc-gateway-dotpay.php:149
 msgid "Continue"
 msgstr "Kontynuuj"
+
+#: ../includes/settings-dotpay.php:8
+msgid "Show separately payment channel in a shop. "
+msgstr "Pokaż jako dodatkowy kanał płatności w sklepie. "
+
+#: ../includes/settings-dotpay.php:9
+msgid "Payment with a credit card by MasterPass"
+msgstr "Płatności kartą kredytową z wykorzystaniem MasterPass"
+
+#: ../includes/settings-dotpay.php:12
+msgid ""
+"I have a separate account in Dotpay: show separately payment channel in a "
+"shop. "
+msgstr ""
+"Mam osobne konto w Dotpay: pokaż jako dodatkowy kanał płatności w sklepie. "
+
+#: ../includes/settings-dotpay.php:13
+msgid "Credit Card for currencies (PLN, EUR, USD or GBP)"
+msgstr " Płatności kartą kredytową w walucie (EUR, USD, GBP lub PLN)"
+
+#: ../includes/settings-dotpay.php:16
+msgid "Show separately payment channel in a shop"
+msgstr "Pokaż jako dodatkowy kanał płatności w sklepie. "
+
+#: ../includes/settings-dotpay.php:17
+msgid "<strong>(only PLN)</strong>"
+msgstr "<strong>(tylko waluta PLN)</strong>"
+
+#: ../includes/settings-dotpay.php:29
+msgid "C O N F I G U R A T I O N  :"
+msgstr "K O N F I G U R A C J A :"
+
+#: ../includes/settings-dotpay.php:34
+msgid "Enable/Disable"
+msgstr "Włącz/Wyłącz"
+
+#: ../includes/settings-dotpay.php:36
+msgid "Enable Dotpay Payment"
+msgstr "Włącz Płatności Dotpay"
+
+#: ../includes/settings-dotpay.php:40
+msgid "Dotpay customer ID"
+msgstr "ID klienta Dotpay"
+
+#: ../includes/settings-dotpay.php:46
+msgid "Dotpay customer PIN"
+msgstr "PIN klienta Dotpay"
+
+#: ../includes/settings-dotpay.php:52
+msgid ""
+"<span style=\"color: #0073AA;\">Separate Dotpay account for currencies (EUR, "
+"USD or GBP)</span>"
+msgstr ""
+"<span style=\"color: #0073AA;\">Osobne konto Dotpay dla księgowania w "
+"walutach (EUR, USD lub GBP)</span>"
+
+#: ../includes/settings-dotpay.php:61
+msgid ""
+"<span style=\"color: #0073AA;\">Dotpay customer ID2 (for second account)</"
+"span>"
+msgstr ""
+"<span style=\"color: #0073AA;\">Identyfikator drugiego konta w Dotpay ID2 "
+"(osobne konto w Dotpay)</span>"
+
+#: ../includes/settings-dotpay.php:68
+msgid ""
+"<span style=\"color: #0073AA;\">Dotpay customer PIN2 (for second account)</"
+"span>"
+msgstr ""
+"<span style=\"color: #0073AA;\">PIN drugiego konta w Dotpay, PIN2 (osobne "
+"konto w Dotpay)</span>"
+
+#: ../includes/settings-dotpay.php:75
+msgid ""
+"<span style=\"color: #0073AA;\">Channel visible only for currencies</span>"
+msgstr ""
+"<span style=\"color: #0073AA;\">Kanał widoczny tylko dla walut: </span>"
+
+#: ../includes/settings-dotpay.php:79 ../includes/settings-dotpay.php:88
+msgid "Leave it blank or enter a currency separated by commas eg. (EUR, GBP)."
+msgstr ""
+"Pozostaw puste pole lub wprowadź waluty rozdzielając je przecinkiem (np. EUR,"
+"USD)"
+
+#: ../includes/settings-dotpay.php:85
+msgid "Currencies for disable main method"
+msgstr ""
+"Waluty zamówienia dla, których główna metoda płatności będzie niedostępna"
+
+#: ../includes/settings-dotpay.php:93
+msgid "MasterPass"
+msgstr "MasterPass"
+
+#: ../includes/settings-dotpay.php:100
+msgid "BLIK"
+msgstr "BLIK"
+
+#: ../includes/settings-dotpay.php:107
+msgid "Widget"
+msgstr "Widżet"
+
+#: ../includes/settings-dotpay.php:109
+msgid "Display payment channels in a shop"
+msgstr "Pokaż kanały płatności w sklepie"
+
+#: ../includes/settings-dotpay.php:113
+msgid "Security"
+msgstr "Bezpieczeństwo"
+
+#: ../includes/settings-dotpay.php:115
+msgid "Protect data sent"
+msgstr "Zabezpiecz wysyłane dane"
+
+#: ../includes/settings-dotpay.php:119
+msgid "Testing environment"
+msgstr "Środowisko testowe"
+
+#: ../includes/settings-dotpay.php:120
+msgid "Only payment simulation."
+msgstr "Symulacja płatności."
+
+#: ../includes/settings-dotpay.php:125
+msgid "Title"
+msgstr "Tytuł"
+
+#: ../includes/settings-dotpay.php:127
+msgid "This controls the title which user see during checkout."
+msgstr ""
+"Ten tytuł będzie prezentowany dla kupującego podczas składania zamówienia."
+
+#: ../includes/settings-dotpay.php:132
+msgid "Customer Message"
+msgstr "Wiadomość dla Klienta"
+
+#~ msgid "Show separately payment channel in a shop "
+#~ msgstr "Pokaż jako dodatkowy kanał płatności w sklepie "
+
+#~ msgid "This controls the title which user sees during checkout."
+#~ msgstr "Tytuł, który widzi użytkownik podczas składania zamówienia."
+
+#~ msgid "Credit card payment via Dotpay"
+#~ msgstr "Płatność karta kredytową poprzez Dotpay"
+
+#~ msgid "Show separately in a shop channel"
+#~ msgstr "Pokaż osobno w sklepie kanał"
+
+#~ msgid "<span style=\"color: blue;\">Credit Card by PV</span>"
+#~ msgstr ""
+#~ "<span style=\"color: blue;\">Płatność kartami przez PayVision</span>"
+
+#~ msgid "<span style=\"color: blue;\">Dotpay customer ID2 (for PV)</span>"
+#~ msgstr "<span style=\"color: blue;\">Drugi ID użytkownika (dla PV)</span>"
+
+#~ msgid "<span style=\"color: blue;\">Dotpay customer PIN2 (for PV)</span>"
+#~ msgstr "<span style=\"color: blue;\">Drugi PIN (for PV)</span>"
+
+#~ msgid "<span style=\"color: blue;\">Currencies for PV</span>"
+#~ msgstr "<span style=\"color: blue;\">Waluty dla PV</span>"
+
+#~ msgid "Dotpay gateway"
+#~ msgstr "Bramka Dotpay"
+
+#~ msgid "Dotpay settings"
+#~ msgstr "Ustawienia bramki Dotpay"
 
 #~ msgid "in a shop"
 #~ msgstr "w sklepie"

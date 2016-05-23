@@ -1,11 +1,12 @@
 $(document).ready(function() {
     var isMasterPass = Boolean('<?php echo $data['mp'] ?>');
+    var isccPV = Boolean('<?php echo $data['pv'] ?>');
     var isBlik = Boolean('<?php echo $data['blik'] ?>');
     var isWidget = Boolean('<?php echo $data['widget'] ?>');
 
     $('form[form-target]').hide();
     
-    if(!isMasterPass && !isBlik && !isWidget) {
+    if(!isccPV && !isMasterPass && !isBlik && !isWidget) {
         $('label[form-target]').hide();
         $('form[form-target="dotpay"]').show();
         $('form[form-target="dotpay"] input[type="submit"]').show();
@@ -22,6 +23,16 @@ $(document).ready(function() {
             var data = {};
 
             if('mp' === target) {
+                data.type = target;
+                data.channel = $('form[form-target="' + target + '"] input[name="channel"]').val();
+
+                if(data.channel) {
+                    $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
+                        $('form[form-target="' + target + '"] input[name="chk"]').val(result);
+                        submitHideShow(target);
+                    });
+                }
+            } else if('pv' === target) {
                 data.type = target;
                 data.channel = $('form[form-target="' + target + '"] input[name="channel"]').val();
 
@@ -122,6 +133,9 @@ $(document).ready(function() {
         runBlockUI();
         return true;
     });
+    
+    if($('input[name="strategy"]').length == 1)
+        $('input[name="strategy"]').click();
 
     function submitHideShow(target) {
         var result = false;
@@ -135,16 +149,19 @@ $(document).ready(function() {
         }
 
         if('mp' === target && checkBylaw && checkPersonalData) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').show().goTo();
+            result = true;
+        } else if('pv' === target && checkBylaw && checkPersonalData) {
+            $('form[form-target="' + target + '"] input[type="submit"]').show().goTo();
             result = true;
         } else if('blik' === target && checkBylaw && checkPersonalData) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').show().goTo();
             result = true;
         } else if('dotpay' === target && checkBylaw && checkPersonalData) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').show().goTo();
             result = true;
         } else if('dotpay' === target && (isMasterPass || isBlik) && !isWidget) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').show().goTo();
             result = true;
         }
 
@@ -171,4 +188,13 @@ $(document).ready(function() {
             }
         });
     }
+    
+    (function($) {
+        $.fn.goTo = function() {
+            $('html, body').animate({
+                scrollTop: $(this).offset().top + 'px'
+            }, 'fast');
+            return this;
+        }
+    })(jQuery);
 });
