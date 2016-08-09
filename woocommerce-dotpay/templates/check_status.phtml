@@ -1,0 +1,174 @@
+<style type="text/css">
+    #statusMessageContainer {
+        text-align: center;
+    }
+
+    #statusMessageContainer p {
+        text-align: left;
+    }
+
+    /* Loader */
+    .loading {
+        position: relative;
+        width: 100%;
+        height: 70px;
+    }
+
+    .loading:after {
+        font-family: Sans-Serif !important;
+        box-sizing: border-box;
+        content: '';
+        position: absolute;
+        z-index: 100;
+        left: 50%;
+        top: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 40px;
+        border-right: 3px solid #9e191d;
+        border-bottom: 1px solid #ebebeb;
+        border-top: 2px solid #9e191d;
+        border-radius: 100px;
+        margin: -30px 0 0 -20px; 
+        animation: spin .75s infinite linear;
+        -webkit-animation: spin .75s infinite linear;
+        -moz-animation: spin .75s infinite linear;
+        -o-animation: spin .75s infinite linear;
+    }
+
+    .spin {
+        -webkit-animation: spin 1000ms infinite linear;
+        animation: spin 1000ms infinite linear;
+    }
+
+    @keyframes spin {
+        from { transform:rotate(0deg); }
+        to { transform:rotate(360deg); }
+    }
+
+    @-webkit-keyframes spin {
+        from { -webkit-transform: rotate(0deg); }
+        to { -webkit-transform: rotate(360deg); }
+    }
+    
+    .return-to-my-account {
+        display: none;
+    }
+    
+    .dotpay-alert {
+        width: 100%;
+        margin: 10px 2px;
+    }
+    .dotpay-alert h3,p {
+        margin: 10px;
+        padding-top: 3px;
+    }
+    .dotpay-alert.error {
+        border: 1px solid #ec4d51;
+        color: #9e191d;
+        background-color: #ffe9e9;
+    }
+    .dotpay-alert.info {
+        border: 1px solid #4dcaec;
+        color: #194e9e;
+        background-color: #e9ffff;
+    }
+    .dotpay-alert.success {
+        border: 1px solid #39da4c;
+        color: #0d9347;
+        background-color: #e9ffeb;
+    }
+</style>
+<script type="text/javascript">
+    var dotpayCheckStatusTimeout = 2;//in minutes
+    function dotpayCheckStatus(interval) {
+        jQuery.ajax({
+            "url":"<?php echo $this->generateWcApiUrl('status'); ?>",
+            "method":"POST",
+            "success":function(r){
+                switch(r) {
+                    case '1':
+                        clearAlerts();
+                        createAlert('success', '<?php echo __('Status confirmed', 'dotpay-payment-gateway'); ?>', '<?php echo __('Success', 'dotpay-payment-gateway'); ?>');
+                        setTimeout(function(){location.href = "<?php echo $this->getOrderSummaryUrl(); ?>";}, 3000);
+                        break;
+                    case '-1':
+                        clearAlerts();
+                        createAlert('error', '<?php echo __('Payment can not confirmated by Dotpay', 'dotpay-payment-gateway'); ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
+                        jQuery('.return-to-my-account').show();
+                        break;
+                    case '0':
+                        break;
+                    default:
+                        clearAlerts();
+                        createAlert('error', '<?php echo __('Order not found', 'dotpay-payment-gateway'); ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
+                        jQuery('.return-to-my-account').show();
+                }
+                if(r!='0')
+                    stopWaiting(interval);
+            }
+        });
+    }
+    function createAlert(type, message, header) {
+        var types = ['error', 'info', 'success'];
+        if(types.indexOf(type)==-1)
+            type = 'info';
+        var div = document.createElement('div');
+        div.className = "dotpay-alert "+type;
+        if(header!=undefined) {
+            var h3 = document.createElement('h3');
+            h3.appendChild(document.createTextNode(header));
+            div.appendChild(h3);
+        }
+        var p = document.createElement('p');
+        p.appendChild(document.createTextNode(message));
+        div.appendChild(p);
+        document.getElementById('dotpay-alert-container').appendChild(div);
+    }
+    function clearAlerts() {
+        var elems = document.getElementById('dotpay-alert-container').children;
+        while(elems.length>0)
+            elems[0].remove();
+    }
+    function stopWaiting(interval) {
+        jQuery('.loading').remove();
+        clearInterval(interval);
+    }
+</script>
+<?php if($this->message == NULL): ?>
+<div class="loading"></div>
+<script>
+    if(typeof jQuery!="undefined") {
+        var dotpayCheckStatusInterval = 5000;
+        var dotpayCheckStatusLimit = dotpayCheckStatusTimeout*60000/dotpayCheckStatusInterval;
+        jQuery(document).ready(function(){
+            var blocked = false;
+            var counter = 0;
+            createAlert('info', '<?php echo __('Payment wait for confirmation by Dotpay', 'dotpay-payment-gateway'); ?>');
+            var interval = setInterval(function(){
+                if(blocked)
+                    return true;
+                dotpayCheckStatus(interval);
+                ++counter;
+                if(counter>dotpayCheckStatusLimit) {
+                    blocked = true;
+                    stopWaiting(interval);
+                    clearAlerts();
+                    createAlert('error', '<?php echo __('Timeout of waiting for confirmation of payment', 'dotpay-payment-gateway'); ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
+                    jQuery('.return-to-my-account').show();
+                }
+            }, 5000);
+        });
+    }
+</script>
+<?php else: ?>
+<script>
+    if(typeof jQuery!="undefined") {
+        jQuery(document).ready(function(){
+            createAlert('error', '<?php echo $this->message; ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
+        });
+    }
+</script>
+<?php endif; ?>
+<div id="dotpay-alert-container"></div>
+<a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="return-to-my-account"><?php echo __('You can go to your account page', 'dotpay-payment-gateway'); ?></a>

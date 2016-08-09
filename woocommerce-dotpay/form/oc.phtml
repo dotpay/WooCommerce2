@@ -1,0 +1,46 @@
+<style>
+    .oc_main_element {
+        width: 100%;
+        display: block;
+        margin: 10px 0px;
+    }
+    select.oc_main_element {
+        width: 400px;
+        margin-left: 15px;
+    }
+</style>
+<script type="text/javascript">
+    if(typeof jQuery!="undefined") {
+        jQuery(document).ready(function(){
+            if(jQuery('select[name="saved_card"] option').length == 0) {
+                jQuery('.savedCardsContainer').hide();
+                jQuery('input[name="oc_type"]:last').prop('checked', true);
+            } else {
+                jQuery('input[name="oc_type"]:first').prop('checked', true);
+            }
+            jQuery('input[name="oc_type"]').change(function(){
+                jQuery('select[name="saved_card"]').attr('disabled', (jQuery(this).val()=='new'));
+            });
+        });
+    }
+</script>
+<div class="savedCardsContainer">
+    <label class="oc_main_element">
+        <input type="radio" name="oc_type" value="choose" />
+        <?php echo __('Select your saved card', 'dotpay-payment-gateway'); ?>
+    </label>
+    <select name="saved_card" class="oc_main_element">
+        <?php foreach ($this->getCreditCards() as $card): ?>
+        <option value="<?php echo $card->cc_id; ?>"><?php echo $card->mask; ?> (<?php echo $card->brand; ?>)</option>
+        <?php endforeach; ?>
+    </select>
+</div>
+<label class="oc_main_element">
+    <input type="radio" name="oc_type" value="new" />
+    <?php echo __('Register new card', 'dotpay-payment-gateway'); ?>
+</label>
+<label class="dotpay_agreements">
+    <input type="checkbox" value="1" name="oc_agreements" required="true" checked="true" />
+    <?php echo __('I agree to repeated loading bill my credit card for the payment One-Click by way of purchase of goods or services offered by the store.', 'dotpay-payment-gateway'); ?>
+</label>
+<?php include(__DIR__.'/agreements.phtml'); ?>

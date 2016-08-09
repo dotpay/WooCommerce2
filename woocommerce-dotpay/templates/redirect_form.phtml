@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript">
+            setTimeout(function(){document.getElementsByClassName('dotpay-form')[0].submit();}, 10);
+        </script>
+    </head>
+    <body>
+        <?php $formData = $this->getHiddenFields(); ?>
+        <form method="POST" class="dotpay-form" action="<?php echo $this->getPaymentUrl(); ?>">
+            <?php foreach($formData as $name => $value): ?>
+            <input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>" />
+            <?php endforeach; ?>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<?php if($this->isWidgetEnabled()): ?>
+<script type="text/javascript">
+    var dotpayWidgetConfig = {
+        sellerAccountId: 723289,
+        amount: 33.21,
+        currency: 'PLN',
+        lang: 'pl',
+        widgetFormContainerClass: 'my-form-widget-container',
+        offlineChannel: 'mark',
+        offlineChannelTooltip: true,
+        disabledChannels: [<?php echo $this->getDisabledChannelsList(); ?>]
+    };
+    if(jQuery != undefined) {
+        setTimeout(function(){
+            jQuery('.channel-container ').click(function(){
+                jQuery('html, body').animate({
+                    scrollTop: (jQuery('.place-order #place_order').offset().top) + 'px'
+                }, 'fast');
+            });
+        }, 1000);
+    }
+</script>
+<link href="<?php echo $this->getPaymentUrl(); ?>widget/payment_widget.min.css" rel="stylesheet">
+<script id="dotpay-payment-script" src="<?php echo $this->getPaymentUrl(); ?>widget/payment_widget.js"></script>
+<p class="my-form-widget-container"></p>
+<?php endif; ?>
+<?php include(__DIR__.'/agreements.phtml'); ?>

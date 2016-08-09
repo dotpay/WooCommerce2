@@ -1,0 +1,17 @@
+<style>
+    .dotpay_agreements {
+        display: block;
+        width: 100%;
+        margin: 10px 0px;
+    }
+</style>
+<div class="dotpay_agreements_container">
+    <label class="dotpay_agreements">
+        <input type="checkbox" value="1" name="bylaw" required="true" checked="true" />
+        <?php echo $this->getBylaw(); ?>
+    </label>
+    <label class="dotpay_agreements">
+        <input type="checkbox" value="1" name="personal_data" required="true" checked="true" />
+        <?php echo $this->getPersonalData(); ?>
+    </label>
+</div>

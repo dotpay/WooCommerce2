@@ -1,0 +1,45 @@
+<style>
+    .dotpay_manage_cards td, th {
+        text-align: center;
+    }
+    .dotpay_remove_card {
+        margin: auto;
+    }
+</style>
+<script type="text/javascript">
+    if(typeof jQuery!="undefined") {
+        jQuery(document).ready(function(){
+            jQuery('.dotpay_remove_card').on('click', function(){
+                jQuery.ajax({
+                    "url":"<?php echo $this->generateWcApiUrl('rmcard'); ?>",
+                    "method":"POST",
+                    "data":{
+                        "cardId":jQuery(this).data('id')
+                    },
+                    "success":function(r){
+                        if(r=='1')
+                            location.reload(); 
+                        else
+                            alert("<?php echo __('You can not remove this credit card', 'dotpay-payment-gateway'); ?>");
+                    }
+                });
+            });
+        });
+    }
+</script>
+<table class="dotpay_manage_cards">
+    <tr>
+        <th><?php echo __('Card mask name', 'dotpay-payment-gateway'); ?></th>
+        <th><?php echo __('Card brand', 'dotpay-payment-gateway'); ?></th>
+        <th><?php echo __('Register date', 'dotpay-payment-gateway'); ?></th>
+        <th><?php echo __('Remove', 'dotpay-payment-gateway'); ?></th>
+    </tr>
+    <?php foreach ($this->getCreditCards() as $card): ?>
+    <tr>
+        <td><?php echo $card->mask; ?></td>
+        <td><?php echo $card->brand; ?></td>
+        <td><?php echo $card->register_date; ?></td>
+        <td><input data-id="<?php echo $card->cc_id; ?>" class="dotpay_remove_card" type="button" value="X" /></td>
+    </tr>
+    <?php endforeach; ?>
+</table>

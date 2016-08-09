@@ -1,0 +1,131 @@
+<style>
+#instruction {
+    text-align: left;
+    float: left;
+    margin: 0px;
+    padding: 0px 10px 10px;
+    border: 1px solid #F1F1F1;
+    width: 100%;
+}
+
+#instruction label {
+    display: block;
+    font-weight: normal;
+    font-size: 18px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+#instruction label > input, #instruction label > .input-group {
+    margin-top: 7px;
+}
+
+#instruction input.important {
+    color: #881920;
+    font-weight: bold;
+}
+
+#instruction-content {
+    font-size: 1.3em;
+    margin: 15px 0px 20px;
+    text-align: center;
+}
+
+#blankiet-download-form {
+    text-align: center;
+    padding: 0px;
+    margin: 20px 0px;
+}
+
+#channel_container_confirm {
+    border-radius: 3px;
+    display: inline-block;
+    margin: 5px 10px;
+    border: 1px solid #F0F0F0;
+    background-color: #FFF;
+    text-align: center;
+    width: 200px;
+}
+
+#channel_container_confirm a {
+    width: 100%;
+    height: 100%;
+}
+
+#channel_container_confirm img {
+    margin: auto;
+}
+
+#channel_container_confirm span {
+    font-size: 1.3em;
+    font-weight: bold;
+    display: block;
+    margin: 10px;
+}
+</style>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('#instruction input').keypress(function(e){
+            e.preventDefault();
+        }).focus(function(e){
+            jQuery(this).select();
+        });
+    });
+</script>
+<section id="instruction">
+    <div class="row">
+        <div class="col-xs-12">
+            <p id="instruction-content"><?php echo __('To pay by cash you need login to your bank system and make a money transfer, entering the following data:', 'dotpay-payment-gateway'); ?></p>
+        </div>
+        <div class="col-md-6">
+            <?php if($this->getBankAccount()!=NULL): ?>
+            <label clas="row">
+                <?php echo __('Account number', 'dotpay-payment-gateway'); ?>
+                <input type="text" class="important" id="iban" value="<?php echo $this->getBankAccount(); ?>" />
+            </label>
+            <?php endif; ?>
+            <label clas="row">
+                <?php echo __('Amount of payment', 'dotpay-payment-gateway'); ?>
+                <div class="input-group">
+                    <input type="text" class="important col-md-10" id="amount" value="<?php echo $this->getAmount(); ?>" aria-describedby="transfer-currency">
+                    <span class="input-group-addon col-md-2" id="transfer-currency"><?php echo $this->getCurrency(); ?></span>
+                </div>
+            </label>
+            <label clas="row">
+                <?php echo __('Title of payment', 'dotpay-payment-gateway'); ?>
+                <input type="text" class="important" id="payment-title" value="<?php echo $this->getNumber(); ?>" />
+            </label>
+        </div>
+        <div class="col-md-6">
+            <label clas="row">
+                <?php echo __('Name of recipient', 'dotpay-payment-gateway'); ?>
+                <input type="text" class="important" id="recipient" value="<?php echo $this->getRecipient(); ?>" />
+            </label>
+            <label clas="row">
+                <?php echo __('Street', 'dotpay-payment-gateway'); ?>
+                <input type="text" class="important" id="street" value="<?php echo $this->getStreet(); ?>" />
+            </label>
+            <label clas="row">
+                <?php echo __('Post code and city', 'dotpay-payment-gateway'); ?>
+                <input type="text" class="important" id="post-code-city" value="<?php echo $this->getCity(); ?>" />
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <section id="payment-form" class="col-xs-12">
+            <div id="blankiet-download-form">
+                <div id="channel_container_confirm">
+                    <a href="<?php echo $this->getAddress(); ?>" target="_blank" title="<?php echo $this->getCommand(); ?>">
+                        <div>
+                            <img src="<?php echo $this->getChannelLogo(); ?>" alt="<?php echo __('Payment channel logo', 'dotpay-payment-gateway'); ?>" />
+                            <span><?php echo $this->getCommand(); ?></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <div class="col-xs-12">
+            <p class="alert alert-info"><?php echo __('Not following the above procedure (e.g. changing the amount or payment title) will make your payment not handled automatically, and therefore lengthen finalization time of the transaction.', 'dotpay-payment-gateway'); ?></p>
+        </div>
+    </div>
+</section>
