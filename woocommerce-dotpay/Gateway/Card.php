@@ -75,6 +75,6 @@ class Gateway_Card extends Gateway_Gateway {
      * @return bool
      */
     protected function isEnabled() {
-        return parent::isEnabled() ;
+        return parent::isEnabled() && $this->isCreditCardEnabled();
     }
 }

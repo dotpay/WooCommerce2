@@ -350,7 +350,7 @@ msgstr "Strona główna Dotpay"
 
 #: ../templates/check_status.phtml:92
 msgid "Status confirmed"
-msgstr "Status płatności został potwierdzony"
+msgstr "Płatność została potwierdzona"
 
 #: ../templates/check_status.phtml:92
 msgid "Success"

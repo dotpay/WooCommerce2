@@ -570,7 +570,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     /**
      * Confirm payment after getting confirmation info from Dotpay
      * @global string $wp_version version of installed instance of WordPress
-     * @global type $woocommerce WOOCOMMERCE object
+     * @global type $woocommerce WOOCOMMERCE object 
      */
     public function confirmPayment() {
         global $wp_version, $woocommerce;
