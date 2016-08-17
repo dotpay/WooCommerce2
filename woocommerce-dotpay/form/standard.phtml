@@ -1,10 +1,10 @@
 <?php if($this->isWidgetEnabled()): ?>
 <script type="text/javascript">
     var dotpayWidgetConfig = {
-        sellerAccountId: 723289,
-        amount: 33.21,
-        currency: 'PLN',
-        lang: 'pl',
+        sellerAccountId: <?php echo $this->getSellerId(); ?>,
+        amount: '301.00',
+        currency: '<?php echo $this->getCurrency(); ?>',
+        lang: '<?php echo $this->getPaymentLang(); ?>',
         widgetFormContainerClass: 'my-form-widget-container',
         offlineChannel: 'mark',
         offlineChannelTooltip: true,
