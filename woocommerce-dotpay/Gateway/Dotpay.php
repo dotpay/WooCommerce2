@@ -11,13 +11,13 @@
 * http://opensource.org/licenses/afl-3.0.php
 * If you did not receive a copy of the license and are unable to
 * obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
+* to tech@dotpay.pl so we can send you a copy immediately.
 *
 * DISCLAIMER
 *
 * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
 * versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
+* needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
 *  @copyright Dotpay
@@ -112,7 +112,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 
             'test' => array(
                 'title' => __('Testing environment', 'dotpay-payment-gateway'),
-                'label' => __('Only payment simulation.', 'dotpay-payment-gateway'),
+                'label' => __('Only payment simulation - required Dotpay test account: <a href="https://ssl.dotpay.pl/test_seller/test/registration/" class="hide-if-no-js page-title-action"  target="_blank" title="Dotpay test account registration">registration</a>', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'default' => 'yes'
             ),

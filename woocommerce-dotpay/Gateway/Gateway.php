@@ -11,13 +11,13 @@
 * http://opensource.org/licenses/afl-3.0.php
 * If you did not receive a copy of the license and are unable to
 * obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
+* to tech@dotpay.pl so we can send you a copy immediately.
 *
 * DISCLAIMER
 *
 * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
 * versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
+* needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
 *  @copyright Dotpay
@@ -42,8 +42,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * Prepare gateway
      */
     public function __construct() {
-        $id = 'dotpay';
-        $this->id = $id;
+        $this->id = 'dotpay';
         $this->icon = $this->getIcon();
         $this->has_fields = true;
         
@@ -141,6 +140,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @return array
      */
     protected function getDataForm() {
+        if(empty($_SESSION['dotpay_payment_order_id']))
+            die(__('Order not found', 'dotpay-payment-gateway'));
         $this->setOrderId($_SESSION['dotpay_payment_order_id']);
         $streetData = $this->getStreetAndStreetN1();
         return array(
@@ -669,20 +670,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->getParam('geoip_country');	
 
         return ($this->getParam('signature') === hash('sha256', $signature));
-    }
-    
-    /**
-     * Returns Dotpay seller Api url
-     * @return type
-     */
-    public function getSellerApiUrl()
-    {
-        $dotSellerApi = self::DOTPAY_SELLER_API_URL;
-        if($this->isTestMode()) {
-            $dotSellerApi = self::DOTPAY_TEST_SELLER_API_URL;
-        }
-        
-        return $dotSellerApi;
     }
     
     /**

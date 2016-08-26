@@ -2,13 +2,14 @@
 <script type="text/javascript">
     var dotpayWidgetConfig = {
         sellerAccountId: <?php echo $this->getSellerId(); ?>,
-        amount: '301.00',
+        amount: '<?php echo $this->getCartAmount(); ?>',
         currency: '<?php echo $this->getCurrency(); ?>',
         lang: '<?php echo $this->getPaymentLang(); ?>',
         widgetFormContainerClass: 'my-form-widget-container',
         offlineChannel: 'mark',
         offlineChannelTooltip: true,
-        disabledChannels: [<?php echo $this->getDisabledChannelsList(); ?>]
+        disabledChannels: [<?php echo $this->getDisabledChannelsList(); ?>],
+        host: '<?php echo $this->getPaymentChannelsUrl(); ?>'
     };
     if(jQuery != undefined) {
         setTimeout(function(){

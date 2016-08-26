@@ -11,13 +11,13 @@
 * http://opensource.org/licenses/afl-3.0.php
 * If you did not receive a copy of the license and are unable to
 * obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
+* to tech@dotpay.pl so we can send you a copy immediately.
 *
 * DISCLAIMER
 *
 * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
 * versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
+* needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
 *  @copyright Dotpay
@@ -162,6 +162,15 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     }
     
     /**
+     * Return amount of cart
+     * @return float
+     */
+    public function getCartAmount() {
+        global $woocommerce;
+        return $this->getFormatAmount($woocommerce->cart->get_total());
+    }
+    
+    /**
      * Return currency name
      * @return string
      */
@@ -281,6 +290,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      */
     public function getPostcode() {
         $postcode = esc_attr($this->getOrder()->billing_postcode);
+        if(empty($postcode))
+            return $postcode;
         if(strpos('-', $postcode) === false && $this->getCountry() == 'pl') {
             $part1 = substr($postcode, 0, 2);
             $part2 = substr($postcode, 2, 3);
@@ -340,12 +351,33 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     }
     
     /**
+     * Returns Dotpay seller Api url
+     * @return string
+     */
+    public function getSellerApiUrl() {
+        $dotSellerApi = self::DOTPAY_SELLER_API_URL;
+        if($this->isTestMode()) {
+            $dotSellerApi = self::DOTPAY_TEST_SELLER_API_URL;
+        }
+        
+        return $dotSellerApi;
+    }
+    
+    /**
+     * Returns Dotpay payment Api url
+     * @return string
+     */
+    public function getPaymentChannelsUrl() {
+        return $this->getPaymentUrl().'payment_api/v1/channels/';
+    }
+    
+    /**
      * 
      * @param float $amount
      * @return float
      */
     public function getFormatAmount($amount) {
-        return preg_replace('/[^0-9.]/', '', str_replace(',', '.', $amount));
+        return number_format(preg_replace('/[^0-9.]/', '', str_replace(',', '.', $amount)), 2, '.', '');
     }
     
     /**
@@ -372,8 +404,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @param float $amount amount
      * @return boolean
      */
-    protected function getDotpayChannels($amount) {
-        $dotpay_url = $this->getPaymentUrl();
+    public function getDotpayChannels($amount) {
+        $dotpay_url = $this->getPaymentChannelsUrl();
         $payment_currency = $this->getCurrency();
         
         $dotpay_id = $this->get_option('id');
@@ -382,7 +414,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         
         $dotpay_lang = $this->getPaymentLang();
         
-        $curl_url = "{$dotpay_url}payment_api/channels/";
+        $curl_url = "{$dotpay_url}";
         $curl_url .= "?currency={$payment_currency}";
         $curl_url .= "&id={$dotpay_id}";
         $curl_url .= "&amount={$order_amount}";
@@ -400,7 +432,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $resultJson = curl_exec($ch);
         } catch (Exception $exc) {
-             $resultJson = false;
+            $resultJson = false;
         }
         
         if($ch) {
@@ -419,7 +451,6 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     $resultJson = $this->getDotpayChannels($this->getOrderAmount());
         if(false !== $resultJson) {
             $result = json_decode($resultJson, true);
-
             if (isset($result['channels']) && is_array($result['channels'])) {
                 foreach ($result['channels'] as $channel) {
                     if (isset($channel['id']) && $channel['id']==$id) {
@@ -467,6 +498,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      */
     public function getFormPath() {
         return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/'.str_replace('Dotpay_', '', $this->id).'.phtml';
+    }
+    
+    public function getFullFormPath() {
+        return $_SERVER['HTTP_ORIGIN'].WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/'.str_replace('Dotpay_', '', $this->id).'.phtml';
     }
     
     /**
