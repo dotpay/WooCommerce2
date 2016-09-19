@@ -15,8 +15,8 @@
 *
 * DISCLAIMER
 *
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
+* Do not edit or add to this file if you wish to upgrade WooCommerce to newer
+* versions in the future. If you wish to customize WooCommerce for your
 * needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
@@ -42,8 +42,7 @@ class Gateway_Transfer extends Gateway_Gateway {
     }
     
     /**
-     * Create table for this model
-     * @global type $wpdb WPDB object
+     * Create page
      */
     public static function install() {
         $page = new Dotpay_Page(DOTPAY_PAYINFO_PNAME);
@@ -53,8 +52,7 @@ class Gateway_Transfer extends Gateway_Gateway {
     }
     
     /**
-     * Remove table
-     * @global type $wpdb WPDB object
+     * Remove page
      */
     public static function uninstall() {
         $page = new Dotpay_Page(DOTPAY_PAYINFO_PNAME);

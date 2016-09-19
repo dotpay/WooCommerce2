@@ -15,8 +15,8 @@
 *
 * DISCLAIMER
 *
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
+* Do not edit or add to this file if you wish to upgrade WooCommerce to newer
+* versions in the future. If you wish to customize WooCommerce for your
 * needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
@@ -102,12 +102,16 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'title' => __('Dotpay customer ID', 'dotpay-payment-gateway'),
                 'type' => 'text',
                 'default' => '',
+				'description' => __('ID number is a 6-digit string after # in a "Shop" line. You can find it at the Dotpay panel in Settings in the top bar.', 'dotpay-payment-gateway'),
+                'desc_tip' => true,
             ),
 
             'pin' => array(
                 'title' => __('Dotpay customer PIN', 'dotpay-payment-gateway'),
                 'type' => 'text',
                 'default' => '',
+				'description' => __('PIN number is a minimum 16 and maximum 32 alphanumeric characters. You can find it at the Dotpay panel in Settings in the top bar.', 'dotpay-payment-gateway'),
+                'desc_tip' => true,
             ),
 
             'test' => array(

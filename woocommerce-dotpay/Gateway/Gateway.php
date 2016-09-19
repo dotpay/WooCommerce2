@@ -15,8 +15,8 @@
 *
 * DISCLAIMER
 *
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
+* Do not edit or add to this file if you wish to upgrade WooCommerce to newer
+* versions in the future. If you wish to customize WooCommerce for your
 * needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
@@ -116,9 +116,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $woocommerce->cart->empty_cart();
         
         $this->setOrderId($order_id);
-        if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup)))
-            $redirectUrl = (new Gateway_Transfer())->generateWcApiUrl('form');
-        else
+        if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup))) {
+            $gateway = new Gateway_Transfer();
+            $redirectUrl = $gateway->generateWcApiUrl('form');
+        } else
             $redirectUrl = $this->generateWcApiUrl('form');
         return array(
             'result'   => 'success',
@@ -585,16 +586,16 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             );
         
         if($_SERVER['REMOTE_ADDR'] != self::DOTPAY_IP)
-            die("PrestaShop - ERROR (REMOTE ADDRESS: ".$_SERVER['REMOTE_ADDR'].")");
+            die("WooCommerce - ERROR (REMOTE ADDRESS: ".$_SERVER['REMOTE_ADDR'].")");
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST')
-            die("PrestaShop - ERROR (METHOD <> POST)");
+            die("WooCommerce - ERROR (METHOD <> POST)");
         
         if (!$this->checkConfirmSign())
-            die("PrestaShop - ERROR SIGN");
+            die("WooCommerce - ERROR SIGN");
         
         if ($this->getParam('id') != $this->getSellerId())
-            die("PrestaShop - ERROR ID: ".$this->getSellerId());
+            die("WooCommerce - ERROR ID: ".$this->getSellerId());
         
         $order = new WC_Order($this->getParam('control'));
         if (!$order && $order->id === NULL) {
@@ -603,7 +604,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         
         $this->checkCurrency($order);
         $this->checkAmount($order);
-        $this->checkEmail($order);
         
         $status = $this->getParam('operation_status');
         $note = __("Dotpay send status", 'dotpay-payment-gateway');
@@ -696,19 +696,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 
         if ($amountOrder !== $amountResponse) {
             die('FAIL AMOUNT');
-        }
-    }
-
-    /**
-     * Break the program, if email in order and in confirmation are different
-     * @param WC_Order $order order object
-     */
-    protected function checkEmail($order) {
-        $emailBilling = $order->billing_email;
-        $emailResponse = $this->getParam('email');
-
-        if ($emailBilling !== $emailResponse) {
-            die('FAIL EMAIL');
         }
     }
     

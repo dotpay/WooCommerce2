@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2016-08-26 08:58+0200\n"
+"POT-Creation-Date: 2016-09-15 15:20+0200\n"
 "PO-Revision-Date: 2016-03-16 13:23+0100\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
@@ -53,9 +53,9 @@ msgstr ""
 msgid "You must select a payment channel"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:81 ../Gateway/Dotpay.php:163
-#: ../Gateway/Dotpay.php:169 ../Gateway/Dotpay.php:177
-#: ../Gateway/Dotpay.php:184
+#: ../Gateway/Dotpay.php:81 ../Gateway/Dotpay.php:167
+#: ../Gateway/Dotpay.php:173 ../Gateway/Dotpay.php:181
+#: ../Gateway/Dotpay.php:188
 msgid "Show separately payment channel in a shop. "
 msgstr ""
 
@@ -93,15 +93,27 @@ msgstr ""
 msgid "Dotpay customer ID"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:108
+#: ../Gateway/Dotpay.php:105
+msgid ""
+"ID number is a 6-digit string after # in a \"Shop\" line. You can find it "
+"at the Dotpay panel in Settings in the top bar."
+msgstr ""
+
+#: ../Gateway/Dotpay.php:110
 msgid "Dotpay customer PIN"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:114
+#: ../Gateway/Dotpay.php:113
+msgid ""
+"PIN number is a minimum 16 and maximum 32 alphanumeric characters. You can "
+"find it at the Dotpay panel in Settings in the top bar."
+msgstr ""
+
+#: ../Gateway/Dotpay.php:118
 msgid "Testing environment"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:115
+#: ../Gateway/Dotpay.php:119
 msgid ""
 "Only payment simulation - required Dotpay test account: <a href=\"https://"
 "ssl.dotpay.pl/test_seller/test/registration/\" class=\"hide-if-no-js page-"
@@ -109,113 +121,113 @@ msgid ""
 "\">registration</a>"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:121
+#: ../Gateway/Dotpay.php:125
 msgid "Separate Dotpay account for currencies (EUR, USD or GBP)"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:130
+#: ../Gateway/Dotpay.php:134
 msgid "Dotpay customer ID2 (for second account)"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:137
+#: ../Gateway/Dotpay.php:141
 msgid "Dotpay customer PIN2 (for second account)"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:144
+#: ../Gateway/Dotpay.php:148
 msgid "Channel visible only for currencies"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:148 ../Gateway/Dotpay.php:156
+#: ../Gateway/Dotpay.php:152 ../Gateway/Dotpay.php:160
 msgid "Leave it blank or enter a currency separated by commas eg. (EUR, GBP)."
 msgstr ""
 
-#: ../Gateway/Dotpay.php:153
+#: ../Gateway/Dotpay.php:157
 msgid "Currencies for disable main method"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:161
+#: ../Gateway/Dotpay.php:165
 msgid "OneClick"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:167
+#: ../Gateway/Dotpay.php:171
 msgid "Credit cards"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:174
+#: ../Gateway/Dotpay.php:178
 msgid "Username API"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:181
+#: ../Gateway/Dotpay.php:185
 msgid "Password API"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:188
+#: ../Gateway/Dotpay.php:192
 msgid "MasterPass"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:195
+#: ../Gateway/Dotpay.php:199
 msgid "BLIK"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:202
+#: ../Gateway/Dotpay.php:206
 msgid "Widget"
 msgstr ""
 
-#: ../Gateway/Dotpay.php:204
+#: ../Gateway/Dotpay.php:208
 msgid "Display payment channels in a shop"
 msgstr ""
 
-#: ../Gateway/Gateway.php:144 ../templates/check_status.phtml:104
+#: ../Gateway/Gateway.php:145 ../templates/check_status.phtml:104
 msgid "Order not found"
 msgstr ""
 
-#: ../Gateway/Gateway.php:492
+#: ../Gateway/Gateway.php:493
 msgid "Exceeded expiration date of the generated payment link."
 msgstr ""
 
-#: ../Gateway/Gateway.php:495
+#: ../Gateway/Gateway.php:496
 msgid "Selected payment channel is unknown."
 msgstr ""
 
-#: ../Gateway/Gateway.php:498
+#: ../Gateway/Gateway.php:499
 msgid "Selected channel payment is desabled."
 msgstr ""
 
-#: ../Gateway/Gateway.php:501
+#: ../Gateway/Gateway.php:502
 msgid "Account is disabled."
 msgstr ""
 
-#: ../Gateway/Gateway.php:504
+#: ../Gateway/Gateway.php:505
 msgid "Seller account is inactive."
 msgstr ""
 
-#: ../Gateway/Gateway.php:507
+#: ../Gateway/Gateway.php:508
 msgid "Amount is too low."
 msgstr ""
 
-#: ../Gateway/Gateway.php:510
+#: ../Gateway/Gateway.php:511
 msgid "Amount is too high."
 msgstr ""
 
-#: ../Gateway/Gateway.php:513
+#: ../Gateway/Gateway.php:514
 msgid "Data format is bad."
 msgstr ""
 
-#: ../Gateway/Gateway.php:516
+#: ../Gateway/Gateway.php:517
 msgid "Request has been modified during transmission."
 msgstr ""
 
-#: ../Gateway/Gateway.php:519
+#: ../Gateway/Gateway.php:520
 msgid "There were not given all request parameters."
 msgstr ""
 
-#: ../Gateway/Gateway.php:522
+#: ../Gateway/Gateway.php:523
 msgid ""
 "There was an unidentified error. Please contact to your seller and give him "
 "the order number."
 msgstr ""
 
-#: ../Gateway/Gateway.php:550 ../Gateway/OneClick.php:122
+#: ../Gateway/Gateway.php:551 ../Gateway/OneClick.php:122
 msgid "Please accept all agreements"
 msgstr ""
 
@@ -251,7 +263,7 @@ msgstr ""
 msgid "Credit Cards (3-D Secure) via Dotpay"
 msgstr ""
 
-#: ../Gateway/Transfer.php:84
+#: ../Gateway/Transfer.php:82
 msgid "Payment not exist"
 msgstr ""
 
@@ -380,41 +392,41 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: ../templates/payment_info.phtml:78
+#: ../templates/payment_info.phtml:79
 msgid ""
 "To pay by cash you need login to your bank system and make a money "
 "transfer, entering the following data:"
 msgstr ""
 
-#: ../templates/payment_info.phtml:83
+#: ../templates/payment_info.phtml:84
 msgid "Account number"
 msgstr ""
 
-#: ../templates/payment_info.phtml:88
+#: ../templates/payment_info.phtml:89
 msgid "Amount of payment"
 msgstr ""
 
-#: ../templates/payment_info.phtml:95
+#: ../templates/payment_info.phtml:96
 msgid "Title of payment"
 msgstr ""
 
-#: ../templates/payment_info.phtml:101
+#: ../templates/payment_info.phtml:102
 msgid "Name of recipient"
 msgstr ""
 
-#: ../templates/payment_info.phtml:105
+#: ../templates/payment_info.phtml:106
 msgid "Street"
 msgstr ""
 
-#: ../templates/payment_info.phtml:109
+#: ../templates/payment_info.phtml:110
 msgid "Post code and city"
 msgstr ""
 
-#: ../templates/payment_info.phtml:120
+#: ../templates/payment_info.phtml:121
 msgid "Payment channel logo"
 msgstr ""
 
-#: ../templates/payment_info.phtml:128
+#: ../templates/payment_info.phtml:129
 msgid ""
 "Not following the above procedure (e.g. changing the amount or payment "
 "title) will make your payment not handled automatically, and therefore "
