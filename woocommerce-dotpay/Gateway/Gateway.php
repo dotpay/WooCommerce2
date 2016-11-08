@@ -30,7 +30,7 @@
  */
 abstract class Gateway_Gateway extends Dotpay_Payment {
     
-    const STATUS_COMPLETED = 'completed';
+    const STATUS_COMPLETED = 'processing';
     const STATUS_REJECTED = 'failed';
     const STATUS_DEFAULT = 'pending';
     
