@@ -35,7 +35,7 @@ class Gateway_Blik extends Gateway_Gateway {
     public function __construct() {
         parent::__construct();
         $this->id = 'Dotpay_blik';
-        $this->title = __('BLIK via Dotpay', 'dotpay-payment-gateway');;
+        $this->title = __('BLIK via Dotpay', 'dotpay-payment-gateway');
         $this->addActions();
     }
     

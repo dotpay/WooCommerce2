@@ -30,14 +30,31 @@
  */
 abstract class Gateway_Gateway extends Dotpay_Payment {
     
+    /**
+     * Status of order after complete payment
+     */
     const STATUS_COMPLETED = 'processing';
+    
+    /**
+     * Status of order after failed payment
+     */
     const STATUS_REJECTED = 'failed';
+    
+    /**
+     * Status of order before complete payment
+     */
     const STATUS_DEFAULT = 'pending';
     
+    /**
+     * Name of cash group of channels
+     */
     const cashGroup = 'cash';
+    
+    /**
+     * Name of transfer group of channels
+     */
     const transferGroup = 'transfers';
     
-    public $dotpayAgreements = true;
     /**
      * Prepare gateway
      */
@@ -214,7 +231,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             $result = true;
         }
         
-        return $result;
+        return $result && $this->is_available();
     }
     
     /**
@@ -251,9 +268,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' === $this->get_option('channels_show')) {
             $result = true;
         }
-        if(false === $this->dotpayAgreements) {
-            $result = false;
-        }
         
         return $result;
     }
@@ -280,9 +294,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' === $this->get_option('masterpass_show')) {
             $result = true;
         }
-        if(false === $this->dotpayAgreements) {
-            $result = false;
-        }
         
         return $result;
     }
@@ -299,9 +310,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if(!$this->isDotSelectedCurrency($this->get_option('ccPV_currency'))) {
             $result = false;
         }
-        if(false === $this->dotpayAgreements) {
-            $result = false;
-        }
         
         return $result;
     }
@@ -316,9 +324,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             $result = true;
         }
         if($this->getCurrency() != 'PLN') {
-            $result = false;
-        }
-        if(false === $this->dotpayAgreements) {
             $result = false;
         }
         
@@ -576,14 +581,27 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     public function confirmPayment() {
         global $wp_version, $woocommerce;
-        if($_SERVER['REMOTE_ADDR'] == self::OFFICE_IP && $_SERVER['REQUEST_METHOD'] == 'GET')
+        if($_SERVER['REMOTE_ADDR'] == self::OFFICE_IP && $_SERVER['REQUEST_METHOD'] == 'GET') {
+            $dotpayGateways = '';
+            foreach(self::getDotpayChannelsList() as $channel) {
+                $gateway = new $channel();
+                $dotpayGateways .= $gateway->id.': '.$this->checkIfEnabled($gateway)."<br />";
+            }
+            $shopGateways = '';
+            foreach(WC_Payment_Gateways::instance()->payment_gateways() as $channel) {
+                $gateway = new $channel();
+                $shopGateways .= $gateway->id.': '.$this->checkIfEnabled($gateway)."<br />";
+            }
             die("WooCommerce - M.Ver: ".self::MODULE_VERSION.
                 ", WP.Ver: ". $wp_version .
                 ", WC.Ver: ". $woocommerce->version .
                 ", ID: ".$this->getSellerId().
                 ", Active: ".(bool)$this->isEnabled().
-                ", Test: ".(bool)$this->isTestMode()
+                ", Test: ".(bool)$this->isTestMode().
+                "<br />---Dotpay channels:---<br />".$dotpayGateways.
+                "<br />---Shop channels:---<br />".$shopGateways
             );
+        }
         
         if($_SERVER['REMOTE_ADDR'] != self::DOTPAY_IP)
             die("WooCommerce - ERROR (REMOTE ADDRESS: ".$_SERVER['REMOTE_ADDR'].")");
@@ -619,6 +637,15 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
         if($this->postConfirmOrder($order))
             die('OK');
+    }
+    
+    /**
+     * Check, if payment gateway is enabled
+     * @param type $object Payment gateway instance
+     * @return int
+     */
+    private function checkIfEnabled($object) {
+        return (int)$object->is_available();
     }
     
     /**

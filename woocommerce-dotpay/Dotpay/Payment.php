@@ -46,7 +46,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.0.1';
+    const MODULE_VERSION = '3.0.5';
     
     public static $ocChannel = 248;
     public static $pvChannel = 248;
@@ -87,6 +87,17 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      */
     protected function getSellerPin() {
         return $this->get_option('pin');
+    }
+    
+    public static function getDotpayChannelsList() {
+        return array(
+            'Gateway_OneClick',
+            'Gateway_PV',
+            'Gateway_Card',
+            'Gateway_Blik',
+            'Gateway_MasterPass',
+            'Gateway_Dotpay'
+        );
     }
 
     /**
@@ -167,7 +178,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      */
     public function getCartAmount() {
         global $woocommerce;
-        return $this->getFormatAmount($woocommerce->cart->get_total());
+        return $this->getFormatAmount($woocommerce->cart->total);
     }
     
     /**
