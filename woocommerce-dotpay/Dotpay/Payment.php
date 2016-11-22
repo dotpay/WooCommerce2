@@ -46,7 +46,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.0.5';
+    const MODULE_VERSION = '3.0.6';
     
     public static $ocChannel = 248;
     public static $pvChannel = 248;
@@ -179,6 +179,19 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     public function getCartAmount() {
         global $woocommerce;
         return $this->getFormatAmount($woocommerce->cart->total);
+    }
+    
+    /**
+     * Return amount of order or card if it's available
+     * @return float
+     */
+    public function getAmountForWidget() {
+        if($this->getOrder()->id == null && !empty(get_query_var('order-pay')))
+            $this->setOrderId(get_query_var('order-pay'));
+        if($this->getOrder()->id != null)
+            return $this->getOrderAmount();
+        else
+            return $this->getCartAmount();
     }
     
     /**
@@ -548,7 +561,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return WC_Order
      */
     protected function getOrder() {
-        if($this->orderObject == null) {
+        if($this->orderObject == null || $this->orderObject->id == null) {
             if($this->orderId == null)
                 $this->orderId = $_SESSION['dotpay_payment_order_id'];
             $this->orderObject = new WC_Order($this->orderId);

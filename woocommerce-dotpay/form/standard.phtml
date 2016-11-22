@@ -2,7 +2,7 @@
 <script type="text/javascript">
     var dotpayWidgetConfig = {
         sellerAccountId: <?php echo $this->getSellerId(); ?>,
-        amount: '<?php echo $this->getCartAmount(); ?>',
+        amount: '<?php echo $this->getAmountForWidget(); ?>',
         currency: '<?php echo $this->getCurrency(); ?>',
         lang: '<?php echo $this->getPaymentLang(); ?>',
         widgetFormContainerClass: 'my-form-widget-container',

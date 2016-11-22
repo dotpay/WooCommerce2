@@ -231,7 +231,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             $result = true;
         }
         
-        return $result && $this->is_available();
+        return $result;
     }
     
     /**
@@ -672,6 +672,14 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     public function getCheckStatusUrl() {
         return get_site_url(Dotpay_Page::getPageId(DOTPAY_STATUS_PNAME));
+    }
+    
+    /**
+     * Overrides a method from parent, because Dotpay Payment Gateway uses another method to checking if gateway is available
+     * @return boolean
+     */
+    public function is_available() {
+        return $this->isEnabled();
     }
     
     protected function checkConfirmSign() {
