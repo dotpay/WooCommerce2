@@ -33,7 +33,7 @@ class Gateway_PV extends Gateway_Gateway {
      * Prepare gateway
      */
     public function __construct() {
-        $this->title = __('Credit Cards (3-D Secure) via Dotpay', 'dotpay-payment-gateway');;
+        $this->title = __('Credit Cards (currencies) via Dotpay', 'dotpay-payment-gateway');;
         parent::__construct();
         $this->id = 'Dotpay_pv';
         $this->addActions();

@@ -562,8 +562,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      */
     protected function getOrder() {
         if($this->orderObject == null || $this->orderObject->id == null) {
-            if($this->orderId == null)
-                $this->orderId = $_SESSION['dotpay_payment_order_id'];
+            if($this->orderId == null) {
+                if(isset($_SESSION['dotpay_payment_order_id']))
+                    $this->orderId = $_SESSION['dotpay_payment_order_id'];
+            }
             $this->orderObject = new WC_Order($this->orderId);
         }
         return $this->orderObject;

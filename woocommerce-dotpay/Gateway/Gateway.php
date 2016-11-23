@@ -127,13 +127,13 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         global $woocommerce;
 
         $order = new WC_Order($order_id);
-
         $order->reduce_order_stock();
-
         $woocommerce->cart->empty_cart();
-        
         $this->setOrderId($order_id);
-        if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup))) {
+
+        $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
+        if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup)) && 
+           $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword())) {
             $gateway = new Gateway_Transfer();
             $redirectUrl = $gateway->generateWcApiUrl('form');
         } else
