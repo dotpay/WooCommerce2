@@ -761,16 +761,4 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function forgetChannel() {
         unset($_SESSION['dotpay_payment_channel']);
     }
-    
-    /**
-     * Return postcode in correct format
-     * @param string $postcode post code
-     * @return string
-     */
-    protected function getCorrectPostcode($postcode) {
-        if(!empty($postcode) && strpos('-', $postcode)===false) {
-            $postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2);
-        }
-        return $postcode;
-    }
 }

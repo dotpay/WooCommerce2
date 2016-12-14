@@ -186,7 +186,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return float
      */
     public function getAmountForWidget() {
-        if($this->getOrder()->id == null && !empty(get_query_var('order-pay')))
+        $orderPay = get_query_var('order-pay');
+        if($this->getOrder()->id == null && !empty($orderPay))
             $this->setOrderId(get_query_var('order-pay'));
         if($this->getOrder()->id != null)
             return $this->getOrderAmount();
@@ -316,10 +317,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         $postcode = esc_attr($this->getOrder()->billing_postcode);
         if(empty($postcode))
             return $postcode;
-        if(strpos('-', $postcode) === false && $this->getCountry() == 'pl') {
-            $part1 = substr($postcode, 0, 2);
-            $part2 = substr($postcode, 2, 3);
-            $postcode = $part1.'-'.$part2;
+        if(preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && $this->getCountry() == 'pl') {
+            $postcode = str_replace('-', '', $postcode);
+            $postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
         }
         return $postcode;
     }
