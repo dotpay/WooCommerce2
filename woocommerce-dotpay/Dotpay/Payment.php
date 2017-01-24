@@ -317,7 +317,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         $postcode = esc_attr($this->getOrder()->billing_postcode);
         if(empty($postcode))
             return $postcode;
-        if(preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && $this->getCountry() == 'pl') {
+        if(preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && strtolower($this->getCountry()) == 'pl') {
             $postcode = str_replace('-', '', $postcode);
             $postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
         }

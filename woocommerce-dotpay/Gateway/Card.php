@@ -57,7 +57,7 @@ class Gateway_Card extends Gateway_Gateway {
         $hiddenFields['channel'] = $this->getChannel();
         $hiddenFields['ch_lock'] = 1;
         $hiddenFields['type'] = 4;
-         $hiddenFields['postcode'] = $this->getCorrectPostcode($hiddenFields['postcode']);
+         $hiddenFields['postcode'] = $this->getPostcode($hiddenFields['postcode']);
         
         return $hiddenFields;
     }
