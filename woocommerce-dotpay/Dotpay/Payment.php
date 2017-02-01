@@ -256,8 +256,12 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      */
     public function getUrlc() {
         $http = 'http:';
-        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on")
+        if(isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'] == "on" || $_SERVER['HTTPS']) == "1"))
             $http = 'https:';
+		elseif ( isset($_SERVER['SERVER_PORT']) && ( '443' == $_SERVER['SERVER_PORT']))
+			$http = 'https:';
+		elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
+			$http = 'https:';
         return str_replace('https:', $http, add_query_arg('wc-api', $this->id.'_confirm', home_url('/')));
     }
     
