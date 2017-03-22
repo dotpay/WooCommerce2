@@ -158,6 +158,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @return array
      */
     protected function getDataForm() {
+        global $file_prefix;
+        if (function_exists('wp_cache_clean_cache')) {
+            wp_cache_clean_cache($file_prefix, true);
+        }
         if(empty($_SESSION['dotpay_payment_order_id']))
             die(__('Order not found', 'dotpay-payment-gateway'));
         $this->setOrderId($_SESSION['dotpay_payment_order_id']);
@@ -603,8 +607,17 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             );
         }
         
-        if($_SERVER['REMOTE_ADDR'] != self::DOTPAY_IP)
+        if (
+            !($_SERVER['REMOTE_ADDR'] == self::DOTPAY_IP ||
+                ($this->isTestMode() &&
+                 ($_SERVER['REMOTE_ADDR'] == self::OFFICE_IP ||
+                  $_SERVER['REMOTE_ADDR'] == self::LOCAL_IP
+                 )
+                )
+            )
+        ) {
             die("WooCommerce - ERROR (REMOTE ADDRESS: ".$_SERVER['REMOTE_ADDR'].")");
+        }   
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST')
             die("WooCommerce - ERROR (METHOD <> POST)");
@@ -628,6 +641,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         switch ($status) {
             case 'completed':
                 $order->update_status(self::STATUS_COMPLETED, $note.' '.__('completed', 'dotpay-payment-gateway'));
+                do_action( 'woocommerce_order_status_pending_to_quote', $order->id );
                 break;
             case 'rejected':
                 $order->update_status(self::STATUS_REJECTED, $note.' '.__('cancelled', 'dotpay-payment-gateway'));

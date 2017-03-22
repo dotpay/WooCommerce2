@@ -1,4 +1,9 @@
 <?php if($this->isWidgetEnabled()): ?>
+<style>
+    .dotpay-channels-selection input[type=radio] {
+        display: block !important;
+    }
+</style>
 <script type="text/javascript">
     var dotpayWidgetConfig = {
         sellerAccountId: <?php echo $this->getSellerId(); ?>,
@@ -22,7 +27,7 @@
     }
 </script>
 <link href="<?php echo $this->getPaymentUrl(); ?>widget/payment_widget.min.css" rel="stylesheet">
-<script id="dotpay-payment-script" src="<?php echo $this->getPaymentUrl(); ?>widget/payment_widget.js"></script>
+<script id="dotpay-payment-script" src="<?php echo $this->getResourcePath(); ?>js/payment_widget.js"></script>
 <p class="my-form-widget-container"></p>
 <?php endif; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>

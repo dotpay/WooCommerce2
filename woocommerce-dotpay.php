@@ -15,6 +15,21 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+define('DOTPAY_CARD_MANAGE_PTITLE', __("My saved credit cards", 'dotpay-payment-gateway'));
+define('DOTPAY_CARD_MANAGE_PNAME', "oc_manage_cards");
+
+define('DOTPAY_STATUS_PTITLE', __("Checking payment status...", 'dotpay-payment-gateway'));
+define('DOTPAY_STATUS_PNAME', "dotpay_order_status");
+
+define('DOTPAY_PAYINFO_PTITLE', __("Details of your payment", 'dotpay-payment-gateway'));
+define('DOTPAY_PAYINFO_PNAME', "dotpay_payment_info");
+
+define('DOTPAY_GATEWAY_ONECLICK_TAB_NAME', 'dotpay_oneclick_cards');
+define('DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME', 'dotpay_instructions');
+
+define('WOOCOMMERCE_DOTPAY_GATEWAY_DIR', plugin_dir_path(__FILE__));
+define('WOOCOMMERCE_DOTPAY_GATEWAY_URL', plugin_dir_url(__FILE__));
+
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__);
 
 function is_session_started() {
@@ -28,36 +43,21 @@ function is_session_started() {
     return FALSE;
 }
 
-if(!is_session_started())
+if(!is_session_started()) {
     session_start();
+}
 
 function woocommerce_dotpay_autoload($className){
     $filename = plugin_dir_path(__FILE__).str_replace('_', '/', $className).'.php';
-    if(file_exists($filename))
+    if(file_exists($filename)) {
         include_once($filename);
+    }
 }
 
 spl_autoload_register('woocommerce_dotpay_autoload');
 
-function init_dotpay_defines() {
-    define('DOTPAY_CARD_MANAGE_PTITLE', __("My saved credit cards", 'dotpay-payment-gateway'));
-    define('DOTPAY_CARD_MANAGE_PNAME', "oc_manage_cards");
-
-    define('DOTPAY_STATUS_PTITLE', __("Checking payment status...", 'dotpay-payment-gateway'));
-    define('DOTPAY_STATUS_PNAME', "dotpay_order_status");
-
-    define('DOTPAY_PAYINFO_PTITLE', __("Details of your payment", 'dotpay-payment-gateway'));
-    define('DOTPAY_PAYINFO_PNAME', "dotpay_payment_info");
-
-    define('DOTPAY_GATEWAY_ONECLICK_TAB_NAME', 'dotpay_oneclick_cards');
-    define('DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME', 'dotpay_instructions');
-
-    define('WOOCOMMERCE_DOTPAY_GATEWAY_DIR', plugin_dir_path(__FILE__));
-    define('WOOCOMMERCE_DOTPAY_GATEWAY_URL', plugin_dir_url(__FILE__));
-}
-
 function init_woocommerce_dotpay() {
-    init_dotpay_defines();
+    
 }
 
 function init_woocommerce_dotpay_session_start() {
@@ -97,7 +97,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 function wc_dotpay_gateway_activate(){
     $plugin_dir = basename(dirname(__FILE__)).'/langs';
     load_plugin_textdomain( 'dotpay-payment-gateway', false, $plugin_dir );
-    init_dotpay_defines();
     Dotpay_Card::install();
     $page = new Dotpay_Page(DOTPAY_STATUS_PNAME);
     $page->setTitle(DOTPAY_STATUS_PTITLE)
@@ -108,7 +107,6 @@ function wc_dotpay_gateway_activate(){
 }
 
 function wc_dotpay_gateway_uninstall(){
-    init_dotpay_defines();
     Dotpay_Card::uninstall();
     $page = new Dotpay_Page(DOTPAY_STATUS_PNAME);
     $page->remove();

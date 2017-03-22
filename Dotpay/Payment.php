@@ -541,6 +541,14 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     }
     
     /**
+     * Return path to resource dir
+     * @return strin
+     */
+    public function getResourcePath() {
+        return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/';
+    }
+    
+    /**
      * Return rendered HTML from tamplate file
      * @param string $file name of template file
      * @return string
