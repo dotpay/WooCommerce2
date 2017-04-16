@@ -200,7 +200,7 @@ class Dotpay_Card {
         $count = 200;
         $result = false;
         do {
-            $cardHash = $this->generateCardHash();
+            $cardHash = self::generateCardHash();
             $test = $wpdb->query('
                 SELECT count(*) as count  
                 FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_ONECLICK_TAB_NAME.'` 
