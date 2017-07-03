@@ -11162,7 +11162,7 @@ define('formWidget',['jquery', 'xhr', 'config', 'widgetsCommon', 'errorHandler']
                 e.preventDefault();
             });
             $_dp('.channel-input').click(function(e){
-                $(this).parents('.channel-container').click();
+                $_dp(this).parents('.channel-container').click();
                 e.stopPropagation();
             });
             /* ------- koniec obszaru zmienianego ------- */
