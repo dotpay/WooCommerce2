@@ -25,7 +25,7 @@
 *
 */
 
-require_once('../../vendor/simple_html_dom.php');
+require_once('vendor/simple_html_dom.php');
 
 /**
  * Payment instruction model for Dotpay payment gateway for WooCommerce
