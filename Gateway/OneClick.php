@@ -124,8 +124,9 @@ class Gateway_OneClick extends Gateway_Gateway {
         }
         
         $_SESSION['dotpay_form_oc_type'] = $_POST['oc_type'];
-        if($_POST['oc_type'] == 'choose')
+        if($_POST['oc_type'] == 'choose') {
             $_SESSION['dotpay_form_saved_card'] = $_POST['saved_card'];
+        }
         return true;
     }
     

@@ -1,0 +1,104 @@
+#instruction {
+    text-align: left;
+    float: left;
+    margin: 10px;
+    width: 100%;
+    background-color: #fbfbfb;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 10px;
+    min-width: 700px;
+}
+
+#instruction label {
+    display: block;
+    font-weight: normal;
+    font-size: 18px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+#instruction label > input, #instruction label > .input-group {
+    margin-top: 7px;
+}
+
+#instruction input.important {
+    color: #881920;
+    font-weight: bold;
+    background-color: #ebebeb;
+    padding: 0;
+    width: 100%;
+}
+
+#instruction-content {
+    font-size: 1.1em;
+    margin: 15px 0px 20px;
+    line-height: 28px;
+}
+
+#instruction .input-group {
+    width: 100%;
+}
+
+#amount {
+    width: 83.33333333% !important;
+}
+
+#transfer-currency {
+    width: 16.66666667%;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-left: 0;
+}
+
+#instruction .input-group-addon {
+    padding: 0.35em .75rem;
+}
+
+#instruction .col-with-margin {
+    margin-left: 16.6667%;
+}
+
+#blankiet-download-form {
+    text-align: center;
+    padding: 0px;
+    margin: 20px 0px;
+}
+
+#channel_container_confirm {
+    border-radius: 3px;
+    display: inline-block;
+    margin: 5px 10px;
+    border: 1px solid #B7AFAF;
+    background-color: #FFF;
+    text-align: center;
+}
+
+#channel_container_confirm:hover {
+    box-shadow: 5px 5px 2px #AAA;
+}
+
+#channel_container_confirm a {
+    width: 100%;
+    height: 100%;
+}
+
+#channel_container_confirm img {
+    margin: auto;
+    width: 150px
+}
+
+#channel_container_confirm span {
+    font-size: 1.3em;
+    font-weight: bold;
+    display: block;
+    margin: 10px;
+    width: 280px
+}
+
+#instruction .alert-info {
+    background-color: #e1f6ff;
+    color: #003380;
+    border: 1px solid #7cb6ff;
+    padding: 3px;
+}

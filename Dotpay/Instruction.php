@@ -25,7 +25,7 @@
 *
 */
 
-require_once('../../vendor/simple_html_dom.php');
+require_once(dirname(__DIR__).'/vendor/simple_html_dom.php');
 
 /**
  * Payment instruction model for Dotpay payment gateway for WooCommerce
@@ -62,7 +62,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     }
     
     /**
-     * Return mask number
+     * Return instruction number
      * @return string
      */
     public function getNumber() {
@@ -236,10 +236,11 @@ class Dotpay_Instruction extends Dotpay_Payment {
      * @return string
      */
     public function getCommand() {
-        if($this->isCash)
+        if($this->isCash) {
             return __('Download blankiet', 'dotpay-payment-gateway');
-        else
+        } else {
             return __('Make a money transfer', 'dotpay-payment-gateway');
+        }
     }
 
     /**
@@ -288,8 +289,9 @@ class Dotpay_Instruction extends Dotpay_Payment {
             FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.'` 
             WHERE order_id = '.(int)$orderId
         );
-        if(!is_array($result))
+        if(!is_array($result)) {
             return NULL;
+        }
         return new Dotpay_Instruction($result[count($result)-1]->id);
     }
     
@@ -305,14 +307,14 @@ class Dotpay_Instruction extends Dotpay_Payment {
     
     /**
      * Return url to bank site
-     * @param string $baseUrl base url for Dotpay server
      * @return string
      */
-    public function getBankPage($baseUrl) {
-        $url = $this->buildInstructionUrl($baseUrl);
+    public function getBankPage() {
+        $url = $this->buildInstructionUrl();
         $html = file_get_html($url);
-        if($html==false)
+        if($html==false) {
             return null;
+        }
         return $html->getElementById('channel_container_')->firstChild()->getAttribute('href');
     }
     
@@ -326,10 +328,9 @@ class Dotpay_Instruction extends Dotpay_Payment {
     
     /**
      * Return url to the payment instruction on Dotpay server
-     * @param string $baseUrl base url for Dotpay server
      * @return string
      */
-    protected function buildInstructionUrl($baseUrl) {
+    protected function buildInstructionUrl() {
         return $this->getPaymentUrl().'instruction/'.$this->number.'/'.$this->hash.'/';
     }
     
@@ -404,16 +405,21 @@ class Dotpay_Instruction extends Dotpay_Payment {
      * @return type
      */
     public function __construct($id = null) {
+        $this->id = 'dotpay';
+        $this->has_fields = true;
+        $this->init_settings();
         global $wpdb;
-        if($id===NULL)
+        if($id===NULL) {
             return;
+        }
         $result = $wpdb->get_row('
             SELECT * 
             FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.'` 
             WHERE instruction_id = '.(int)$id
         );
-        if(empty($result))
+        if(empty($result)) {
             return;
+        }
         $this->amount = $result->amount;
         $this->channel = $result->channel;
         $this->currency = $result->currency;
@@ -447,9 +453,9 @@ class Dotpay_Instruction extends Dotpay_Payment {
      */
     public function getAddress() {
         if($this->isCash) {
-            return $this->getPdfUrl($this->getPaymentUrl());
+            return $this->getPdfUrl();
         } else {
-            return $this->getBankPage($this->getPaymentUrl());
+            return $this->getBankPage();
         }
     }
 }

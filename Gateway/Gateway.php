@@ -127,7 +127,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         global $woocommerce;
 
         $order = new WC_Order($order_id);
-        $order->reduce_order_stock();
         $woocommerce->cart->empty_cart();
         $this->setOrderId($order_id);
 
@@ -136,8 +135,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
            $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword())) {
             $gateway = new Gateway_Transfer();
             $redirectUrl = $gateway->generateWcApiUrl('form');
-        } else
+        } else {
             $redirectUrl = $this->generateWcApiUrl('form');
+        }
         return array(
             'result'   => 'success',
             'redirect' => $redirectUrl
@@ -162,8 +162,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if (function_exists('wp_cache_clean_cache')) {
             wp_cache_clean_cache($file_prefix, true);
         }
-        if(empty($_SESSION['dotpay_payment_order_id']))
+        if(empty($_SESSION['dotpay_payment_order_id'])) {
             die(__('Order not found', 'dotpay-payment-gateway'));
+        }
         $this->setOrderId($_SESSION['dotpay_payment_order_id']);
         $streetData = $this->getStreetAndStreetN1();
         return array(
@@ -496,8 +497,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     public function getStatusPage() {
         $this->message = NULL;
         if($this->getParam('error_code')!==false) {
-            switch($this->getParam('error_code'))
-            {
+            switch($this->getParam('error_code')) {
                 case 'PAYMENT_EXPIRED':
                     $this->message = __('Exceeded expiration date of the generated payment link.', 'dotpay-payment-gateway');
                     break;
@@ -619,14 +619,17 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             die("WooCommerce - ERROR (REMOTE ADDRESS: ".$_SERVER['REMOTE_ADDR'].")");
         }   
 
-        if ($_SERVER['REQUEST_METHOD'] != 'POST')
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             die("WooCommerce - ERROR (METHOD <> POST)");
+        }
         
-        if (!$this->checkConfirmSign())
+        if (!$this->checkConfirmSign()) {
             die("WooCommerce - ERROR SIGN");
+        }
         
-        if ($this->getParam('id') != $this->getSellerId())
+        if ($this->getParam('id') != $this->getSellerId()) {
             die("WooCommerce - ERROR ID: ".$this->getSellerId());
+        }
         
         $order = new WC_Order($this->getParam('control'));
         if (!$order && $order->id === NULL) {
@@ -641,7 +644,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         switch ($status) {
             case 'completed':
                 $order->update_status(self::STATUS_COMPLETED, $note.' '.__('completed', 'dotpay-payment-gateway'));
-                do_action( 'woocommerce_order_status_pending_to_quote', $order->id );
+                do_action('woocommerce_order_status_pending_to_quote', $order->id);
+                do_action('woocommerce_payment_complete', $order->id);
                 break;
             case 'rejected':
                 $order->update_status(self::STATUS_REJECTED, $note.' '.__('cancelled', 'dotpay-payment-gateway'));
@@ -649,8 +653,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             default:
                 $order->update_status(self::STATUS_DEFAULT, $note.' '.__('processing', 'dotpay-payment-gateway'));
         }
-        if($this->postConfirmOrder($order))
+        if($this->postConfirmOrder($order)) {
             die('OK');
+        }
     }
     
     /**

@@ -126,7 +126,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * Return flag, if test mode is enabled
      * @return boolean
      */
-    protected function isTestMode() {
+    public function isTestMode() {
         $result = false;
         if ('yes' === $this->get_option('test')) {
             $result = true;
@@ -153,7 +153,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getControl() {
-        return $this->getOrder()->id;
+        $order = $this->getOrder();
+        return $this->getLegacyOrderId($order);
     }
 
     /**
@@ -187,12 +188,16 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      */
     public function getAmountForWidget() {
         $orderPay = get_query_var('order-pay');
-        if($this->getOrder()->id == null && !empty($orderPay))
+        $order = $this->getOrder();
+        $id = $this->getLegacyOrderId($order);
+        if($id == null && !empty($orderPay)) {
             $this->setOrderId(get_query_var('order-pay'));
-        if($this->getOrder()->id != null)
+        }
+        if($id != null) {
             return $this->getOrderAmount();
-        else
+        } else {
             return $this->getCartAmount();
+        }
     }
     
     /**
@@ -617,5 +622,13 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
             return addslashes($ret);
         }
         return $ret;
+    }
+    
+    private function getLegacyOrderId($orderObject) {
+        if(method_exists($orderObject,'get_id')) {
+            return $orderObject->get_id();
+        } else {
+            return $orderObject->id;
+        }
     }
 }

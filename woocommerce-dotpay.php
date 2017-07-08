@@ -4,31 +4,16 @@
   Plugin Name: WooCommerce Dotpay Gateway
   Plugin URI: https://github.com/dotpay/WooCommerce2
   Description: Fast and secure payment gateway for Dotpay (Poland) to WooCommerce
-  Version: 3.0.9
+  Version: 3.0.11
   Author: Dotpay (tech@dotpay.pl)
   Author URI: mailto:tech@dotpay.pl
   Text Domain: dotpay-payment-gateway
-  Last modified: 2017-03-22 by tech@dotpay.pl
+  Last modified: 2017-07-08 by tech@dotpay.pl
  */
 
 if (!defined('ABSPATH')) {
     exit;
 }
-
-define('DOTPAY_CARD_MANAGE_PTITLE', __("My saved credit cards", 'dotpay-payment-gateway'));
-define('DOTPAY_CARD_MANAGE_PNAME', "oc_manage_cards");
-
-define('DOTPAY_STATUS_PTITLE', __("Checking payment status...", 'dotpay-payment-gateway'));
-define('DOTPAY_STATUS_PNAME', "dotpay_order_status");
-
-define('DOTPAY_PAYINFO_PTITLE', __("Details of your payment", 'dotpay-payment-gateway'));
-define('DOTPAY_PAYINFO_PNAME', "dotpay_payment_info");
-
-define('DOTPAY_GATEWAY_ONECLICK_TAB_NAME', 'dotpay_oneclick_cards');
-define('DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME', 'dotpay_instructions');
-
-define('WOOCOMMERCE_DOTPAY_GATEWAY_DIR', plugin_dir_path(__FILE__));
-define('WOOCOMMERCE_DOTPAY_GATEWAY_URL', plugin_dir_url(__FILE__));
 
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__);
 
@@ -94,6 +79,21 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     add_action( 'admin_enqueue_scripts', 'dotpay_admin_enqueue_scripts' );
 }
 
+define('DOTPAY_CARD_MANAGE_PTITLE', __("My saved credit cards", 'dotpay-payment-gateway'));
+define('DOTPAY_CARD_MANAGE_PNAME', "oc_manage_cards");
+
+define('DOTPAY_STATUS_PTITLE', __("Checking payment status...", 'dotpay-payment-gateway'));
+define('DOTPAY_STATUS_PNAME', "dotpay_order_status");
+
+define('DOTPAY_PAYINFO_PTITLE', __("Details of your payment", 'dotpay-payment-gateway'));
+define('DOTPAY_PAYINFO_PNAME', "dotpay_payment_info");
+
+define('DOTPAY_GATEWAY_ONECLICK_TAB_NAME', 'dotpay_oneclick_cards');
+define('DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME', 'dotpay_instructions');
+
+define('WOOCOMMERCE_DOTPAY_GATEWAY_DIR', plugin_dir_path(__FILE__));
+define('WOOCOMMERCE_DOTPAY_GATEWAY_URL', plugin_dir_url(__FILE__));
+
 function wc_dotpay_gateway_activate(){
     $plugin_dir = basename(dirname(__FILE__)).'/langs';
     load_plugin_textdomain( 'dotpay-payment-gateway', false, $plugin_dir );
@@ -119,21 +119,23 @@ register_deactivation_hook( __FILE__, 'wc_dotpay_gateway_uninstall' );
 
 function wc_dotpay_gateway_hide_pages( $pages) {
     foreach ($pages as $index => $page) {
-        if(!is_user_logged_in() && wc_dotpay_compare_page($page, Dotpay_Page::getPageId(DOTPAY_CARD_MANAGE_PNAME)))
+        if(!is_user_logged_in() && wc_dotpay_compare_page($page, Dotpay_Page::getPageId(DOTPAY_CARD_MANAGE_PNAME))) {
             unset($pages[$index]);
-        else if(wc_dotpay_compare_page($page, Dotpay_Page::getPageId(DOTPAY_STATUS_PNAME)))
+        } else if(wc_dotpay_compare_page($page, Dotpay_Page::getPageId(DOTPAY_STATUS_PNAME))) {
             unset($pages[$index]);
-        else if(wc_dotpay_compare_page($page, Dotpay_Page::getPageId(DOTPAY_PAYINFO_PNAME)))
+        } else if(wc_dotpay_compare_page($page, Dotpay_Page::getPageId(DOTPAY_PAYINFO_PNAME))) {
             unset($pages[$index]);
+        }
     }
     return $pages;
 }
 
 function wc_dotpay_compare_page($page, $id) {
-    if($page->ID == $id || $page->object_id == $id)
+    if($page->ID == $id || $page->object_id == $id) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 add_filter('get_pages','wc_dotpay_gateway_hide_pages');
 add_filter('wp_get_nav_menu_items','wc_dotpay_gateway_hide_pages');
@@ -164,7 +166,8 @@ function wc_dotpay_gateway_content($content) {
  * @return string
  */
 function mydirname($dir, $levels) {
-    while(--$levels)
+    while(--$levels) {
         $dir = dirname($dir);
+    }
     return $dir;
 }
