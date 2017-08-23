@@ -710,6 +710,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->getParam('operation_currency').
         $this->getParam('operation_withdrawal_amount').
         $this->getParam('operation_commission_amount').
+        $this->getParam('is_completed').
         $this->getParam('operation_original_amount').
         $this->getParam('operation_original_currency').
         $this->getParam('operation_datetime').

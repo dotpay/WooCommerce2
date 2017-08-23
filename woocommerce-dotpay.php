@@ -8,7 +8,7 @@
   Author: Dotpay (tech@dotpay.pl)
   Author URI: mailto:tech@dotpay.pl
   Text Domain: dotpay-payment-gateway
-  Last modified: 2017-07-08 by tech@dotpay.pl
+  Last modified: 2017-08-23 by tech@dotpay.pl
  */
 
 if (!defined('ABSPATH')) {
