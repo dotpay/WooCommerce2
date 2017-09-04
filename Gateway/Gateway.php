@@ -599,6 +599,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             die("WooCommerce - M.Ver: ".self::MODULE_VERSION.
                 ", WP.Ver: ". $wp_version .
                 ", WC.Ver: ". $woocommerce->version .
+		", PHP.Ver: ". phpversion() .
                 ", ID: ".$this->getSellerId().
                 ", Active: ".(bool)$this->isEnabled().
                 ", Test: ".(bool)$this->isTestMode().
