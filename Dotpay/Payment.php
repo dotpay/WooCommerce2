@@ -50,7 +50,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     
     public static $ocChannel = 248;
     public static $pvChannel = 248;
-    public static $ccChannel = 246;
+    public static $ccChannel = 248; // or 246
     public static $blikChannel = 73;
     public static $mpChannel = 71;
     
