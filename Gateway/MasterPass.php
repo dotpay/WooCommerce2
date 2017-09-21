@@ -45,7 +45,7 @@ class Gateway_MasterPass extends Gateway_Gateway {
      */
     protected function getChannel() {
         if($this->isTestMode()) {
-            return 246;
+            return 71; //or 248 (cc)
         } else {
             return self::$mpChannel;
         }
