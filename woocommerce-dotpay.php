@@ -4,11 +4,11 @@
   Plugin Name: WooCommerce Dotpay Gateway
   Plugin URI: https://github.com/dotpay/WooCommerce2
   Description: Fast and secure payment gateway for Dotpay (Poland) to WooCommerce
-  Version: 3.0.11
+  Version: 3.0.12
   Author: Dotpay (tech@dotpay.pl)
   Author URI: mailto:tech@dotpay.pl
   Text Domain: dotpay-payment-gateway
-  Last modified: 2017-08-23 by tech@dotpay.pl
+  Last modified: 2017-10-09 by tech@dotpay.pl
  */
 
 if (!defined('ABSPATH')) {
@@ -52,7 +52,9 @@ function init_woocommerce_dotpay_session_start() {
 }
 
 function init_woocommerce_dotpay_session_end() {
-    session_destroy();
+	 if (is_session_started() !== FALSE) {
+        session_destroy();
+    }
 }
 
 function dotpay_admin_enqueue_scripts($hook) {
