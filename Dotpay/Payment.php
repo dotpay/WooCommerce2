@@ -213,7 +213,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getDescription() {
-        return __('Order ID: ', 'dotpay-payment-gateway') . esc_attr($this->getOrder()->id);
+        return __('Order ID: ', 'dotpay-payment-gateway') . esc_attr($this->getLegacyOrderId($this->getOrder()));
     }
     
     /**
@@ -261,12 +261,13 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      */
     public function getUrlc() {
         $http = 'http:';
-        if(isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'] == "on" || $_SERVER['HTTPS']) == "1"))
+        if(isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'] == "on" || $_SERVER['HTTPS']) == "1")) {
             $http = 'https:';
-		elseif ( isset($_SERVER['SERVER_PORT']) && ( '443' == $_SERVER['SERVER_PORT']))
-			$http = 'https:';
-		elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
-			$http = 'https:';
+        } elseif ( isset($_SERVER['SERVER_PORT']) && ( '443' == $_SERVER['SERVER_PORT'])) {
+            $http = 'https:';
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+            $http = 'https:';
+        }
         return str_replace('https:', $http, add_query_arg('wc-api', $this->id.'_confirm', home_url('/')));
     }
     
@@ -283,7 +284,13 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getFirstname() {
-        return esc_attr($this->getOrder()->billing_first_name);
+        $order = $this->getOrder();
+        if(method_exists($order, 'get_billing_first_name')) {
+            $firstName = esc_attr($order->get_billing_first_name());
+        } else {
+            $firstName = esc_attr($order->billing_first_name);
+        }
+        return $firstName;
     }
     
     /**
@@ -291,7 +298,13 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getLastname() {
-        return esc_attr($this->getOrder()->billing_last_name);
+        $order = $this->getOrder();
+        if(method_exists($order, 'get_billing_last_name')) {
+            $lastName = esc_attr($order->get_billing_last_name());
+        } else {
+            $lastName = esc_attr($order->billing_last_name);
+        }
+        return $lastName;
     }
     
     /**
@@ -299,7 +312,13 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getEmail() {
-        return esc_attr($this->getOrder()->billing_email);
+        $order = $this->getOrder();
+        if(method_exists($order, 'get_billing_email')) {
+            $email = esc_attr($order->get_billing_email());
+        } else {
+            $email = esc_attr($order->billing_email);
+        }
+        return $email;
     }
     
     /**
@@ -307,7 +326,13 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getPhone() {
-        return esc_attr($this->getOrder()->billing_phone);
+        $order = $this->getOrder();
+        if(method_exists($order, 'get_billing_phone')) {
+            $phone = esc_attr($order->get_billing_phone());
+        } else {
+            $phone = esc_attr($order->billing_phone);
+        }
+        return $phone;
     }
     
     /**
@@ -315,7 +340,13 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getCity() {
-        return esc_attr($this->getOrder()->billing_city);
+        $order = $this->getOrder();
+        if(method_exists($order, 'get_billing_city')) {
+            $city = esc_attr($order->get_billing_city());
+        } else {
+            $city = esc_attr($order->billing_city);
+        }
+        return $city;
     }
     
     /**
@@ -323,9 +354,15 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getPostcode() {
-        $postcode = esc_attr($this->getOrder()->billing_postcode);
-        if(empty($postcode))
+        $order = $this->getOrder();
+        if(method_exists($order, 'get_billing_postcode')) {
+            $postcode = esc_attr($order->get_billing_postcode());
+        } else {
+            $postcode = esc_attr($order->billing_postcode);
+        }
+        if(empty($postcode)) {
             return $postcode;
+        }
         if(preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && strtolower($this->getCountry()) == 'pl') {
             $postcode = str_replace('-', '', $postcode);
             $postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
@@ -338,7 +375,13 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getCountry() {
-        return esc_attr(strtoupper($this->getOrder()->billing_country));
+        $order = $this->getOrder();
+        if(method_exists($order, 'get_billing_country')) {
+            $country = $order->get_billing_country();
+        } else {
+            $country = $order->billing_country;
+        }
+        return esc_attr(strtoupper($country));
     }
     
     /**
@@ -346,8 +389,17 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return string
      */
     public function getStreetAndStreetN1() {
-        $street = esc_attr($this->getOrder()->billing_address_1);
-        $street_n1 = esc_attr($this->getOrder()->billing_address_2);
+        $order = $this->getOrder();
+        if(method_exists($order, 'get_billing_address_1')) {
+            $street = esc_attr($order->get_billing_address_1());
+        } else {
+            $street = esc_attr($order->billing_address_1);
+        }
+        if(method_exists($order, 'get_billing_address_2')) {
+            $street_n1 = esc_attr($order->get_billing_address_2());
+        } else {
+            $street_n1 = esc_attr($order->billing_address_2);
+        }
         
         if(empty($street_n1))
         {
@@ -578,10 +630,11 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @return WC_Order
      */
     protected function getOrder() {
-        if($this->orderObject == null || $this->orderObject->id == null) {
+        if($this->orderObject == null || $this->getLegacyOrderId($this->orderObject) == null) {
             if($this->orderId == null) {
-                if(isset($_SESSION['dotpay_payment_order_id']))
+                if(isset($_SESSION['dotpay_payment_order_id'])) {
                     $this->orderId = $_SESSION['dotpay_payment_order_id'];
+                }
             }
             $this->orderObject = new WC_Order($this->orderId);
         }
