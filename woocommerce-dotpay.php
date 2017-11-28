@@ -51,7 +51,7 @@ function init_woocommerce_dotpay_session_start() {
 }
 
 function init_woocommerce_dotpay_session_end() {
-	 if (is_session_started() !== FALSE) {
+    if (is_session_started() !== FALSE) {
         session_destroy();
     }
 }

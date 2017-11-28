@@ -771,10 +771,14 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     
     /**
      * Return channel id
-     * @return int
+     * @return int/null
      */
     protected function getChannel() {
-        $channel = $_SESSION['dotpay_payment_channel'];
+        if(isset($_SESSION['dotpay_payment_channel'])) {
+            $channel = $_SESSION['dotpay_payment_channel'];
+        } else {
+            $channel = null;
+        }
         return $channel;
     }
     
