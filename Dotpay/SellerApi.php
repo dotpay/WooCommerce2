@@ -62,8 +62,9 @@ class Dotpay_SellerApi {
      */
     public function isAccountRight($username, $password)
     {
-        if(empty($username) && empty($password))
-            return true;
+        if (empty($username) && empty($password)) {
+            return null;
+        }
         $url = $this->_baseurl.$this->getDotPaymentApi()."payments/";
         $curl = new Dotpay_Curl();
         $curl->addOption(CURLOPT_URL, $url)

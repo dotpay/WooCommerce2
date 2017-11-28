@@ -46,7 +46,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.0.12';
+    const MODULE_VERSION = '3.0.13';
     
     public static $ocChannel = 248;
     public static $pvChannel = 248;
@@ -359,9 +359,15 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
             }
         }
         
+		if (!empty($street_n1)){
+			$building_numberRO = $street_n1;
+		}else{
+			$building_numberRO = " ";  //this field may not be blank in register order
+		}
+		
         return array(
             'street' => $street,
-            'street_n1' => $street_n1
+            'street_n1' => $building_numberRO
         );
     }
     

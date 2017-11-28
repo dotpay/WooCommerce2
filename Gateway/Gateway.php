@@ -189,8 +189,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'city' => $this->getCity(),
             'postcode' => $this->getPostcode(),
             'country' => $this->getCountry(),
-            'bylaw' => 1,
-            'personal_data' => 1
+			// 'personal_data' => 1,
+            'bylaw' => 1
+
         );
     }
     
@@ -556,7 +557,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @return boolean
      */
     public function validate_fields() {
-        if($this->getParam('bylaw')!= '1' || $this->getParam('personal_data') != '1') {
+        // if($this->getParam('bylaw')!= '1' || $this->getParam('personal_data') != '1') {
+        if($this->getParam('bylaw')!= '1' ) {
             wc_add_notice( __('Please accept all agreements', 'dotpay-payment-gateway') , 'error' );
             return false;
         }
@@ -733,7 +735,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @param WC_Order $order order object
      */
     protected function checkCurrency($order) {
-        $currencyOrder = $order->get_order_currency();
+        $currencyOrder = $order->get_currency();
         $currencyResponse = $this->getParam('operation_original_currency');
         
         if ($currencyOrder !== $currencyResponse) {
