@@ -24,8 +24,8 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *
 */
-
-require_once(dirname(__DIR__).'/vendor/simple_html_dom.php');
+if (! class_exists('simple_html_dom_node'))
+    require_once(dirname(__DIR__).'/vendor/simple_html_dom.php');
 
 /**
  * Payment instruction model for Dotpay payment gateway for WooCommerce
