@@ -100,6 +100,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             'id' => array(
                 'title' => __('Dotpay customer ID', 'dotpay-payment-gateway'),
                 'type' => 'text',
+				'css' => 'max-width: 100px; color: #006799; font-size: 16px; border-color: #6ec5ef;',
                 'default' => '',
 				'description' => __('ID number is a 6-digit string after # in a "Shop" line. You can find it at the Dotpay panel in Settings in the top bar.', 'dotpay-payment-gateway'),
                 'desc_tip' => true,
@@ -108,6 +109,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             'pin' => array(
                 'title' => __('Dotpay customer PIN', 'dotpay-payment-gateway'),
                 'type' => 'text',
+				'css' => 'min-width: 200px; color: #006799; font-size: 16px; border-color: #6ec5ef;',
                 'default' => '',
 				'description' => __('PIN number is a minimum 16 and maximum 32 alphanumeric characters. You can find it at the Dotpay panel in Settings in the top bar.', 'dotpay-payment-gateway'),
                 'desc_tip' => true,
@@ -132,6 +134,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             'id2' => array(
                 'title' => '<span style="color: #0073AA;">'.__('Dotpay customer ID2 (for second account)', 'dotpay-payment-gateway').'</span>',
                 'type' => 'text',
+				'css' => 'max-width: 100px; color: #006799; font-size: 16px; border-color: #6ec5ef;',
                 'default' => '',
                 'class' => 'pv_option'
             ),
@@ -139,6 +142,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             'pin2' => array(
                 'title' => '<span style="color: #0073AA;">'.__('Dotpay customer PIN2 (for second account)', 'dotpay-payment-gateway').'</span>',
                 'type' => 'text',
+				'css' => 'min-width: 200px; color: #006799; font-size: 16px; border-color: #6ec5ef;',
                 'default' => '',
                 'class' => 'pv_option'
             ),
@@ -160,17 +164,29 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'desc_tip' => true,
             ),
 
-            'oneclick_show' => array(
-                'title' => __('OneClick', 'dotpay-payment-gateway'),
-                'type' => 'checkbox',
-                'label' => __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
-                'default' => 'yes',
-            ),
             'credit_card_show' => array(
                 'title' => __('Credit cards', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'label' => __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
-                'default' => 'yes',
+                'default' => 'no',
+				'class' => 'cc_switch',
+            ),
+			'credit_card_channel_number' => array(
+                'title' => '<span style="color: #666666;">'.__('Number of credit card channel', 'dotpay-payment-gateway').'</span>',
+                'type' => 'text',
+				'css' => 'max-width: 50px; color: #91999c; font-size: 16px; border-color: #b2bfc5;',
+                'default' => '248',
+				'description' => __('The default card channel number for the Dotpay account is 248. Leave this number if everything works for you.', 'dotpay-payment-gateway'),
+				'desc_tip' => true,
+				'placeholder' => _x(' eq. 248', 'placeholder', 'dotpay-payment-gateway'),
+                'class' => 'cc_option'
+            ),
+			
+            'oneclick_show' => array(
+                'title' => __('OneClick', 'dotpay-payment-gateway'),
+                'type' => 'checkbox',
+                'label' => __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
+                'default' => 'no',
             ),
             
             'api_username' => array(
@@ -219,7 +235,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
     }
     
     /**
-     * Return list of channels, eenabled as independent channel and blocked on widget
+     * Return list of channels, enabled as independent channel and blocked on widget
      * @return array
      */
     protected function getDisabledChannelsList() {
@@ -229,7 +245,8 @@ class Gateway_Dotpay extends Gateway_Gateway {
         if($this->isCcPVEnabled())
             $dChannels[] = self::$pvChannel;
         if($this->isCreditCardEnabled())
-            $dChannels[] = self::$ccChannel;
+            // $dChannels[] = self::$ccChannel;
+            $dChannels[] = $this->getCCnumber();
         if($this->isMasterPassEnabled())
             $dChannels[] = self::$mpChannel;
         if($this->isBlikEnabled())

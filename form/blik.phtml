@@ -1,9 +1,8 @@
 <style>
-    input[name=blik_code] {
-        width: 200px;
-    }
+	<?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>
 <label>
     <input name="blik_code" type="text" placeholder="<?php echo __('BLIK code', 'dotpay-payment-gateway'); ?>" />
 </label>
+<?php if((bool)$this->isTestMode()) echo "<br><br><p class=\"error-alert\" style=\"font-size:1.0em\"><strong>".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>

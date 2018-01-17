@@ -1,16 +1,5 @@
 <style>
-    .oc_main_element {
-        width: 100%;
-        display: block;
-        margin: 10px 0px;
-    }
-    .oc_main_element input[type=radio] {
-        display: block !important;
-    }
-    select.oc_main_element {
-        width: 400px;
-        margin-left: 15px;
-    }
+	<?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>
 <script type="text/javascript">
     if(typeof jQuery!="undefined") {
@@ -46,4 +35,5 @@
     <input type="checkbox" value="1" name="oc_agreements" required="true" checked="true" />
     <?php echo __('I agree to repeated loading bill my credit card for the payment One-Click by way of purchase of goods or services offered by the store.', 'dotpay-payment-gateway'); ?>
 </label>
+<?php if((bool)$this->isTestMode()) echo "<br><p class=\"error-alert\" style=\"font-size:1.0em\"><strong>".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>

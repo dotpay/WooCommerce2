@@ -44,7 +44,8 @@ class Gateway_Card extends Gateway_Gateway {
      * @return int
      */
     protected function getChannel() {
-        return self::$ccChannel;
+        // return self::$ccChannel;
+		return $this->getCCnumber();
     }
 
     /**

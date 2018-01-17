@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2016-09-15 15:20+0200\n"
+"POT-Creation-Date: 2018-01-17 11:49+0100\n"
 "PO-Revision-Date: 2016-03-16 13:23+0100\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"

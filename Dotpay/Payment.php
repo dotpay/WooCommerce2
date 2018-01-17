@@ -46,7 +46,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.0.13';
+    const MODULE_VERSION = '3.0.15';
     
     public static $ocChannel = 248;
     public static $pvChannel = 248;
@@ -65,6 +65,20 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         return $this->get_option('api_username');
     }
     
+	/**
+     * Return channel number of credit card
+     * @return string
+     */
+    public function getCCnumber() {
+		if(($this->get_option('credit_card_channel_number')) && is_numeric($this->get_option('credit_card_channel_number')))
+		{	
+				return $this->get_option('credit_card_channel_number');
+			}else{	 
+				return self::$ccChannel;
+			}
+    }
+	
+	
     /**
      * Return API password
      * @return string
@@ -290,7 +304,11 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         } else {
             $firstName = esc_attr($order->billing_first_name);
         }
-        return $firstName;
+			//allowed only: letters, digits, spaces, symbols _-.,'
+			 $firstName = preg_replace('/[^.\w _-]/u', '', $firstName);
+			 $firstName1 = html_entity_decode($firstName, ENT_QUOTES, 'UTF-8');
+			 
+        return $firstName1;
     }
     
     /**
@@ -304,7 +322,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         } else {
             $lastName = esc_attr($order->billing_last_name);
         }
-        return $lastName;
+			//allowed only: letters, digits, spaces, symbols _-.,'
+			 $lastName = preg_replace('/[^\w _-]/u', '', $lastName);
+			 $lastName1 = html_entity_decode($lastName, ENT_QUOTES, 'UTF-8');        
+		return $lastName1;
     }
     
     /**
@@ -332,6 +353,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         } else {
             $phone = esc_attr($order->billing_phone);
         }
+			 $phone = str_replace(' ', '', $phone);
+			 $phone = str_replace('+', '', $phone);
         return $phone;
     }
     
@@ -346,7 +369,11 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         } else {
             $city = esc_attr($order->billing_city);
         }
-        return $city;
+			//allowed only: letters, digits, spaces, symbols _-.,'
+				 $city = preg_replace('/[^.\w \'_-]/u', '', $city);
+				 $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
+				 
+        return $city1;
     }
     
     /**
@@ -395,6 +422,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         } else {
             $street = esc_attr($order->billing_address_1);
         }
+			//allowed only: letters, digits, spaces, symbols _-.,'
+				$street = preg_replace('/[^.\w \'_-]/u', '', $street);
+				$street1 = html_entity_decode($street, ENT_QUOTES, 'UTF-8');
+		
         if(method_exists($order, 'get_billing_address_2')) {
             $street_n1 = esc_attr($order->get_billing_address_2());
         } else {
@@ -403,11 +434,11 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         
         if(empty($street_n1))
         {
-            preg_match("/\s[\w\d\/_\-]{0,30}$/", $street, $matches);
+            preg_match("/\s[\w\d\/_\-]{0,30}$/", $street1, $matches);
             if(count($matches)>0)
             {
                 $street_n1 = trim($matches[0]);
-                $street = str_replace($matches[0], '', $street);
+                $street1 = str_replace($matches[0], '', $street1);
             }
         }
         
@@ -418,7 +449,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
 		}
 		
         return array(
-            'street' => $street,
+            'street' => $street1,
             'street_n1' => $building_numberRO
         );
     }

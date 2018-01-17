@@ -1,0 +1,26 @@
+
+    .dotpay_agreements {
+        display: block;
+        margin: 10px 0px;
+		font-size:90%;
+    }
+
+    input[name=blik_code] {
+        width: 200px;
+    }
+    .oc_main_element {
+        width: 100%;
+        display: block;
+        margin: 10px 0px;
+    }
+    .oc_main_element input[type=radio] {
+        display: block !important;
+    }
+    select.oc_main_element {
+        width: 400px;
+        margin-left: 15px;
+    }
+    .dotpay-channels-selection input[type=radio] {
+        display: block !important;
+    }
+	

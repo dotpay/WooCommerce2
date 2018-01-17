@@ -30,6 +30,13 @@ function switchPV(obj) {
         jQuery('.pv_option').parents('tr').hide();
 }
 
+function shownumberCHcc(obj) {
+    if(jQuery(obj).prop('checked'))
+        jQuery('.cc_option').parents('tr').show();
+    else
+        jQuery('.cc_option').parents('tr').hide();
+}
+
 if(typeof jQuery!="undefined") {
     var dotpayModules = ['blik', 'mp', 'oc', 'pv', 'tc'];
     jQuery(document).ready(function(){
@@ -41,5 +48,44 @@ if(typeof jQuery!="undefined") {
         jQuery('.pv_switch').change(function() {
             switchPV(this);
         });
+		shownumberCHcc(jQuery('.cc_switch'));
+        jQuery('.cc_switch').change(function() {
+            shownumberCHcc(this);
+        });
+	
+		 // module setup: validate ID
+		 jQuery("#woocommerce_dotpay_id").attr("pattern", "[0-9]{5,8}");
+		 jQuery("#woocommerce_dotpay_id").attr("title", "Dozwolone tylko cyfry (6 cyfr)");
+		 jQuery("#woocommerce_dotpay_id").attr("maxlength", "8");
+		 jQuery("#woocommerce_dotpay_id").prop("placeholder", "np. 123456");
+
+			 jQuery("#woocommerce_dotpay_id").bind('keyup paste keydown', function(e)
+											{
+			  if (/\D/g.test(this.value))
+			  {
+				// Filter non-digits from input value.
+				this.value = this.value.replace(/\D/g, '');
+			  }
+			});
+		
+		//  module setup: validatte ID2
+		 jQuery("#woocommerce_dotpay_id2").attr("pattern", "[0-9]{5,8}");
+		 jQuery("#woocommerce_dotpay_id2").attr("title", "Dozwolone tylko cyfry (6 cyfr)");
+		 jQuery("#woocommerce_dotpay_id2").attr("maxlength", "8");
+		 jQuery("#woocommerce_dotpay_id2").prop("placeholder", "np. 123456");
+
+			 jQuery("#woocommerce_dotpay_id2").bind('keyup paste keydown', function(e)
+											{
+			  if (/\D/g.test(this.value))
+			  {
+				// Filter non-digits from input value.
+				this.value = this.value.replace(/\D/g, '');
+			  }
+			});	
+		
     });
+	
+
 }
+
+
