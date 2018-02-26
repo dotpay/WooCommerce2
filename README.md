@@ -3,7 +3,7 @@ WooCommerce Dotpay payment module
 
 *English version below*
 
-####Wtyczka dla WooCommerce dodająca bramkę płatności Dotpay####
+#### Wtyczka dla WooCommerce dodająca bramkę płatności Dotpay
 
 ### Instrukcja: ###
 1. Pobierz najnowszą wersję wtyczki: https://github.com/dotpay/WooCommerce2/releases/latest
@@ -12,7 +12,7 @@ WooCommerce Dotpay payment module
 
 ---------------------------------------
 
-####WooCommerce plugin adding Dotpay payment gateway####
+#### WooCommerce plugin adding Dotpay payment gateway
 
 ### Instructions: ###
 1. Download latest plugin version https://github.com/dotpay/WooCommerce2/releases/latest
