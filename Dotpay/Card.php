@@ -84,8 +84,9 @@ class Dotpay_Card {
      * @param int $cardId card identifier from Dotpay
      * @param string $mask card mask name
      * @param string $brand card brand
+	 * @param string $logo logo card brand
      */
-    public static function updateCard($id, $cardId, $mask, $brand) {
+    public static function updateCard($id, $cardId, $mask, $brand, $logo) {
         global $wpdb;
         $wpdb->update( 
             $wpdb->prefix.DOTPAY_GATEWAY_ONECLICK_TAB_NAME,
@@ -93,10 +94,12 @@ class Dotpay_Card {
                 'card_id' => $cardId,
                 'mask' => $mask,
                 'brand' => $brand,
+				'logo' => $logo,
                 'register_date' => date('Y-m-d')
             ), 
             array( 'cc_id' => $id ), 
             array( 
+                '%s',
                 '%s',
                 '%s',
                 '%s',
@@ -170,6 +173,19 @@ class Dotpay_Card {
         return $wpdb->get_row( 'SELECT * FROM '.$wpdb->prefix.DOTPAY_GATEWAY_ONECLICK_TAB_NAME.' WHERE cc_id = '.(int)$id );
     }
     
+	 /**
+     * Return engine type database of WP `users` table 
+     * @global type $wpdb WPDB object
+     * @param The name of the database for WordPress DB_NAME
+     * @return string
+     */
+    protected static function getEngineUsersTable() {
+        global $wpdb;
+		$Engine_users_Table = $wpdb->get_row( "SELECT ENGINE FROM information_schema.TABLES where TABLE_SCHEMA = '".DB_NAME."' AND ENGINE IS NOT NULL AND TABLE_NAME = '".$wpdb->prefix."users'" );
+        return $Engine_users_Table->ENGINE;
+    }
+	
+	
     /**
      * Return card hash
      * @return type
@@ -230,6 +246,7 @@ class Dotpay_Card {
                     `customer_id` BIGINT(20) UNSIGNED NOT NULL,
                     `mask` varchar(20) DEFAULT NULL,
                     `brand` varchar(20) DEFAULT NULL,
+                    `logo` varchar(200) DEFAULT NULL,
                     `hash` varchar(100) NOT NULL,
                     `card_id` VARCHAR(128) DEFAULT NULL,
                     `register_date` DATE DEFAULT NULL,
@@ -242,7 +259,7 @@ class Dotpay_Card {
                         FOREIGN KEY (customer_id)
                         REFERENCES `'.$wpdb->prefix.'users` (`ID`)
                         ON DELETE CASCADE
-                ) DEFAULT CHARSET=utf8;';
+                ) ENGINE='.self::getEngineUsersTable().' DEFAULT CHARSET=utf8;';
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
     }

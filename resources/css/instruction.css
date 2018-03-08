@@ -7,13 +7,13 @@
     border: 1px solid #ddd;
     border-radius: 15px;
     padding: 10px;
-    min-width: 700px;
+    min-width: 99%;
 }
 
 #instruction label {
     display: block;
     font-weight: normal;
-    font-size: 18px;
+    font-size: 99%;
     margin-bottom: 15px;
     margin-top: 5px;
 }

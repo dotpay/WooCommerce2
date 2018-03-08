@@ -93,8 +93,8 @@ class Gateway_Transfer extends Gateway_Gateway {
     private function processPayment() {
         if(isset($_GET['order_id'])) {
             $orderId = (int)$_GET['order_id'];
-        } else if($this->getOrder()->id!=null) {
-            $orderId = $this->getOrder()->id;
+        } else if($this->getOrder()->get_id()!=null) {
+            $orderId = $this->getOrder()->get_id();
         } else {
             return NULL;
         }

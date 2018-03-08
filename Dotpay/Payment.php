@@ -46,7 +46,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.0.15';
+    const MODULE_VERSION = '3.0.16';
     
     public static $ocChannel = 248;
     public static $pvChannel = 248;
@@ -165,10 +165,16 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     /**
      * Return value for control field
      * @return string
+	 * @param full|null $full - set 'control' to sent 
      */
-    public function getControl() {
+function getControl($full = null) {
         $order = $this->getOrder();
-        return $this->getLegacyOrderId($order);
+			if($full = 'full')
+			{
+				return $this->getLegacyOrderId($order).'; Store domain: '.$_SERVER['SERVER_NAME'].'; WC module: '.self::MODULE_VERSION;		
+			} else {
+				return $this->getLegacyOrderId($order);			
+			}  
     }
 
     /**
@@ -293,6 +299,35 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         return 'dev';
     }
     
+	/**
+     * Return ip address from is the confirmation request.
+     */
+	
+	 public function getClientIp() {
+        $ipaddress = '';
+        if (getenv('HTTP_CLIENT_IP')) {
+            $ipaddress = getenv('HTTP_CLIENT_IP');
+        } else if(getenv('HTTP_X_FORWARDED_FOR')) {
+            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+        } else if(getenv('HTTP_X_FORWARDED')) {
+            $ipaddress = getenv('HTTP_X_FORWARDED');
+        } else if(getenv('HTTP_FORWARDED_FOR')) {
+            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+        } else if(getenv('HTTP_FORWARDED')) {
+           $ipaddress = getenv('HTTP_FORWARDED');
+        } else if(getenv('REMOTE_ADDR')) {
+            $ipaddress = getenv('REMOTE_ADDR');
+        } else {
+            $ipaddress = 'UNKNOWN';
+        }
+        if($ipaddress === '0:0:0:0:0:0:0:1' || $ipaddress === '::1') {
+            $ipaddress = self::LOCAL_IP;
+        }
+        return $ipaddress;
+    }
+	
+	
+	
     /**
      * Return customer firstname
      * @return string
@@ -305,7 +340,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
             $firstName = esc_attr($order->billing_first_name);
         }
 			//allowed only: letters, digits, spaces, symbols _-.,'
-			 $firstName = preg_replace('/[^.\w _-]/u', '', $firstName);
+			 $firstName = preg_replace('/[^\w _-]/u', '', $firstName);
 			 $firstName1 = html_entity_decode($firstName, ENT_QUOTES, 'UTF-8');
 			 
         return $firstName1;
@@ -468,7 +503,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
             'es',
             'cz',
             'ru',
-            'bg'
+            'hu',
+            'ro'
         );
     }
     
@@ -583,7 +619,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
         }
         return false;
     }
-    
+   
+	
     /**
      * Return Dotpay agreement for the given amount and type
      * @param float $amount amount
@@ -613,7 +650,30 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
 
         return $resultStr;
     }
-    
+  
+    /**
+     * Returns channel name
+     * @param type $id channel id
+     * @return array|false
+     */  
+	
+	 public function getChannelName($Nr) {
+	 
+	     $resultJson = $this->getDotpayChannels('1000');
+        if(false !== $resultJson) {
+            $result = json_decode($resultJson, true);
+            if (isset($result['channels']) && is_array($result['channels'])) {
+                foreach ($result['channels'] as $channel) {
+                    if (isset($channel['id']) && $channel['id'] == $Nr) {
+                        return $channel;
+                    }
+                }
+            }
+        }
+        return false;
+	 }
+	
+	
     /**
      * Return path to file with payment form
      * @return string

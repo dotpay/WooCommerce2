@@ -31,7 +31,7 @@ if (! class_exists('simple_html_dom_node'))
  * Payment instruction model for Dotpay payment gateway for WooCommerce
  */
 class Dotpay_Instruction extends Dotpay_Payment {
-    const DOTPAY_NAME = 'DOTPAY SA';
+    const DOTPAY_NAME = 'Dotpay sp. z o.o.';
     const DOTPAY_STREET = 'Wielicka 72';
     const DOTPAY_CITY = '30-552 Kraków';
     

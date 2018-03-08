@@ -126,7 +126,7 @@ abstract class Dotpay_RegisterOrder {
                 'amount' => self::$payment->getOrderAmount(),
                 'currency' => self::$payment->getCurrency(),
                 'description' => self::$payment->getDescription(),
-                'control' => self::$payment->getControl()
+                'control' => self::$payment->getControl('full')
             ),
 
             'seller' => array (
@@ -153,7 +153,7 @@ abstract class Dotpay_RegisterOrder {
             ),
 
             'request_context' => array (
-                'ip' => $_SERVER['REMOTE_ADDR']
+                'ip' => self::$payment->getClientIp()
             )
 
         );

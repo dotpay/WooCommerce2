@@ -169,7 +169,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $streetData = $this->getStreetAndStreetN1();
         return array(
             'id' => $this->getSellerId(),
-            'control' => $this->getControl(),
+            'control' => $this->getControl('full'),
             'p_info' => $this->getPinfo(),
             'amount' => $this->getOrderAmount(),
             'currency' => $this->getCurrency(),
@@ -360,126 +360,63 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $ParametersArray['id'] = $DotpayId;
         $ChkParametersChain =
         $DotpayPin.
-        (isset($ParametersArray['api_version']) ?
-        $ParametersArray['api_version'] : null).
-        (isset($ParametersArray['charset']) ?
-        $ParametersArray['charset'] : null).
-        (isset($ParametersArray['lang']) ?
-        $ParametersArray['lang'] : null).
-        (isset($ParametersArray['id']) ?
-        $ParametersArray['id'] : null).
-        (isset($ParametersArray['amount']) ?
-        $ParametersArray['amount'] : null).
-        (isset($ParametersArray['currency']) ?
-        $ParametersArray['currency'] : null).
-        (isset($ParametersArray['description']) ?
-        $ParametersArray['description'] : null).
-        (isset($ParametersArray['control']) ?
-        $ParametersArray['control'] : null).
-        (isset($ParametersArray['channel']) ?
-        $ParametersArray['channel'] : null).
-        (isset($ParametersArray['credit_card_brand']) ?
-        $ParametersArray['credit_card_brand'] : null).
-        (isset($ParametersArray['ch_lock']) ?
-        $ParametersArray['ch_lock'] : null).
-        (isset($ParametersArray['channel_groups']) ?
-        $ParametersArray['channel_groups'] : null).
-        (isset($ParametersArray['onlinetransfer']) ?
-        $ParametersArray['onlinetransfer'] : null).
-        (isset($ParametersArray['URL']) ?
-        $ParametersArray['URL'] : null).
-        (isset($ParametersArray['type']) ?
-        $ParametersArray['type'] : null).
-        (isset($ParametersArray['buttontext']) ?
-        $ParametersArray['buttontext'] : null).
-        (isset($ParametersArray['URLC']) ?
-        $ParametersArray['URLC'] : null).
-        (isset($ParametersArray['firstname']) ?
-        $ParametersArray['firstname'] : null).
-        (isset($ParametersArray['lastname']) ?
-        $ParametersArray['lastname'] : null).
-        (isset($ParametersArray['email']) ?
-        $ParametersArray['email'] : null).
-        (isset($ParametersArray['street']) ?
-        $ParametersArray['street'] : null).
-        (isset($ParametersArray['street_n1']) ?
-        $ParametersArray['street_n1'] : null).
-        (isset($ParametersArray['street_n2']) ?
-        $ParametersArray['street_n2'] : null).
-        (isset($ParametersArray['state']) ?
-        $ParametersArray['state'] : null).
-        (isset($ParametersArray['addr3']) ?
-        $ParametersArray['addr3'] : null).
-        (isset($ParametersArray['city']) ?
-        $ParametersArray['city'] : null).
-        (isset($ParametersArray['postcode']) ?
-        $ParametersArray['postcode'] : null).
-        (isset($ParametersArray['phone']) ?
-        $ParametersArray['phone'] : null).
-        (isset($ParametersArray['country']) ?
-        $ParametersArray['country'] : null).
-        (isset($ParametersArray['code']) ?
-        $ParametersArray['code'] : null).
-        (isset($ParametersArray['p_info']) ?
-        $ParametersArray['p_info'] : null).
-        (isset($ParametersArray['p_email']) ?
-        $ParametersArray['p_email'] : null).
-        (isset($ParametersArray['n_email']) ?
-        $ParametersArray['n_email'] : null).
-        (isset($ParametersArray['expiration_date']) ?
-        $ParametersArray['expiration_date'] : null).
-        (isset($ParametersArray['recipient_account_number']) ?
-        $ParametersArray['recipient_account_number'] : null).
-        (isset($ParametersArray['recipient_company']) ?
-        $ParametersArray['recipient_company'] : null).
-        (isset($ParametersArray['recipient_first_name']) ?
-        $ParametersArray['recipient_first_name'] : null).
-        (isset($ParametersArray['recipient_last_name']) ?
-        $ParametersArray['recipient_last_name'] : null).
-        (isset($ParametersArray['recipient_address_street']) ?
-        $ParametersArray['recipient_address_street'] : null).
-        (isset($ParametersArray['recipient_address_building']) ?
-        $ParametersArray['recipient_address_building'] : null).
-        (isset($ParametersArray['recipient_address_apartment']) ?
-        $ParametersArray['recipient_address_apartment'] : null).
-        (isset($ParametersArray['recipient_address_postcode']) ?
-        $ParametersArray['recipient_address_postcode'] : null).
-        (isset($ParametersArray['recipient_address_city']) ?
-        $ParametersArray['recipient_address_city'] : null).
-        (isset($ParametersArray['warranty']) ?
-        $ParametersArray['warranty'] : null).
-        (isset($ParametersArray['bylaw']) ?
-        $ParametersArray['bylaw'] : null).
-        (isset($ParametersArray['personal_data']) ?
-        $ParametersArray['personal_data'] : null).
-        (isset($ParametersArray['credit_card_number']) ?
-        $ParametersArray['credit_card_number'] : null).
-        (isset($ParametersArray['credit_card_expiration_date_year']) ?
-        $ParametersArray['credit_card_expiration_date_year'] : null).
-        (isset($ParametersArray['credit_card_expiration_date_month']) ?
-        $ParametersArray['credit_card_expiration_date_month'] : null).
-        (isset($ParametersArray['credit_card_security_code']) ?
-        $ParametersArray['credit_card_security_code'] : null).
-        (isset($ParametersArray['credit_card_store']) ?
-        $ParametersArray['credit_card_store'] : null).
-        (isset($ParametersArray['credit_card_store_security_code']) ?
-        $ParametersArray['credit_card_store_security_code'] : null).
-        (isset($ParametersArray['credit_card_customer_id']) ?
-        $ParametersArray['credit_card_customer_id'] : null).
-        (isset($ParametersArray['credit_card_id']) ?
-        $ParametersArray['credit_card_id'] : null).
-        (isset($ParametersArray['blik_code']) ?
-        $ParametersArray['blik_code'] : null).
-        (isset($ParametersArray['credit_card_registration']) ?
-        $ParametersArray['credit_card_registration'] : null).
-        (isset($ParametersArray['recurring_frequency']) ?
-        $ParametersArray['recurring_frequency'] : null).
-        (isset($ParametersArray['recurring_interval']) ?
-        $ParametersArray['recurring_interval'] : null).
-        (isset($ParametersArray['recurring_start']) ?
-        $ParametersArray['recurring_start'] : null).
-        (isset($ParametersArray['recurring_count']) ?
-        $ParametersArray['recurring_count'] : null);
+        (isset($ParametersArray['api_version']) ? $ParametersArray['api_version'] : null).
+        (isset($ParametersArray['charset']) ? $ParametersArray['charset'] : null).
+        (isset($ParametersArray['lang']) ? $ParametersArray['lang'] : null).
+        (isset($ParametersArray['id']) ? $ParametersArray['id'] : null).
+        (isset($ParametersArray['amount']) ? $ParametersArray['amount'] : null).
+        (isset($ParametersArray['currency']) ? $ParametersArray['currency'] : null).
+        (isset($ParametersArray['description']) ? $ParametersArray['description'] : null).
+        (isset($ParametersArray['control']) ? $ParametersArray['control'] : null).
+        (isset($ParametersArray['channel']) ? $ParametersArray['channel'] : null).
+        (isset($ParametersArray['credit_card_brand']) ? $ParametersArray['credit_card_brand'] : null).
+        (isset($ParametersArray['ch_lock']) ? $ParametersArray['ch_lock'] : null).
+        (isset($ParametersArray['channel_groups']) ? $ParametersArray['channel_groups'] : null).
+        (isset($ParametersArray['onlinetransfer']) ? $ParametersArray['onlinetransfer'] : null).
+        (isset($ParametersArray['URL']) ? $ParametersArray['URL'] : null).
+        (isset($ParametersArray['type']) ? $ParametersArray['type'] : null).
+        (isset($ParametersArray['buttontext']) ? $ParametersArray['buttontext'] : null).
+        (isset($ParametersArray['URLC']) ? $ParametersArray['URLC'] : null).
+        (isset($ParametersArray['firstname']) ? $ParametersArray['firstname'] : null).
+        (isset($ParametersArray['lastname']) ? $ParametersArray['lastname'] : null).
+        (isset($ParametersArray['email']) ? $ParametersArray['email'] : null).
+        (isset($ParametersArray['street']) ? $ParametersArray['street'] : null).
+        (isset($ParametersArray['street_n1']) ? $ParametersArray['street_n1'] : null).
+        (isset($ParametersArray['street_n2']) ? $ParametersArray['street_n2'] : null).
+        (isset($ParametersArray['state']) ? $ParametersArray['state'] : null).
+        (isset($ParametersArray['addr3']) ? $ParametersArray['addr3'] : null).
+        (isset($ParametersArray['city']) ? $ParametersArray['city'] : null).
+        (isset($ParametersArray['postcode']) ? $ParametersArray['postcode'] : null).
+        (isset($ParametersArray['phone']) ? $ParametersArray['phone'] : null).
+        (isset($ParametersArray['country']) ? $ParametersArray['country'] : null).
+        (isset($ParametersArray['code']) ? $ParametersArray['code'] : null).
+        (isset($ParametersArray['p_info']) ? $ParametersArray['p_info'] : null).
+        (isset($ParametersArray['p_email']) ? $ParametersArray['p_email'] : null).
+        (isset($ParametersArray['n_email']) ? $ParametersArray['n_email'] : null).
+        (isset($ParametersArray['expiration_date']) ? $ParametersArray['expiration_date'] : null).
+        (isset($ParametersArray['recipient_account_number']) ? $ParametersArray['recipient_account_number'] : null).
+        (isset($ParametersArray['recipient_company']) ? $ParametersArray['recipient_company'] : null).
+        (isset($ParametersArray['recipient_first_name']) ? $ParametersArray['recipient_first_name'] : null).
+        (isset($ParametersArray['recipient_last_name']) ? $ParametersArray['recipient_last_name'] : null).
+        (isset($ParametersArray['recipient_address_street']) ? $ParametersArray['recipient_address_street'] : null).
+        (isset($ParametersArray['recipient_address_building']) ? $ParametersArray['recipient_address_building'] : null).
+        (isset($ParametersArray['recipient_address_apartment']) ? $ParametersArray['recipient_address_apartment'] : null).
+        (isset($ParametersArray['recipient_address_postcode']) ? $ParametersArray['recipient_address_postcode'] : null).
+        (isset($ParametersArray['recipient_address_city']) ? $ParametersArray['recipient_address_city'] : null).
+        (isset($ParametersArray['warranty']) ? $ParametersArray['warranty'] : null).
+        (isset($ParametersArray['bylaw']) ? $ParametersArray['bylaw'] : null).
+        (isset($ParametersArray['personal_data']) ? $ParametersArray['personal_data'] : null).
+        (isset($ParametersArray['credit_card_number']) ? $ParametersArray['credit_card_number'] : null).
+        (isset($ParametersArray['credit_card_expiration_date_year']) ? $ParametersArray['credit_card_expiration_date_year'] : null).
+        (isset($ParametersArray['credit_card_expiration_date_month']) ? $ParametersArray['credit_card_expiration_date_month'] : null).
+        (isset($ParametersArray['credit_card_security_code']) ? $ParametersArray['credit_card_security_code'] : null).
+        (isset($ParametersArray['credit_card_store']) ? $ParametersArray['credit_card_store'] : null).
+        (isset($ParametersArray['credit_card_store_security_code']) ? $ParametersArray['credit_card_store_security_code'] : null).
+        (isset($ParametersArray['credit_card_customer_id']) ? $ParametersArray['credit_card_customer_id'] : null).
+        (isset($ParametersArray['credit_card_id']) ? $ParametersArray['credit_card_id'] : null).
+        (isset($ParametersArray['blik_code']) ? $ParametersArray['blik_code'] : null).
+        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null);
+     
         return hash('sha256',$ChkParametersChain);
     }
     
@@ -557,7 +494,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @return boolean
      */
     public function validate_fields() {
-        // if($this->getParam('bylaw')!= '1' || $this->getParam('personal_data') != '1') {
         if($this->getParam('bylaw')!= '1' ) {
             wc_add_notice( __('Please accept all agreements', 'dotpay-payment-gateway') , 'error' );
             return false;
@@ -587,7 +523,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     public function confirmPayment() {
         global $wp_version, $woocommerce;
-        if($_SERVER['REMOTE_ADDR'] == self::OFFICE_IP && $_SERVER['REQUEST_METHOD'] == 'GET') {
+        if($this->getClientIp() == self::OFFICE_IP && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET') {
             $dotpayGateways = '';
             foreach(self::getDotpayChannelsList() as $channel) {
                 $gateway = new $channel();
@@ -601,7 +537,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             die("WooCommerce - M.Ver: ".self::MODULE_VERSION.
                 ", WP.Ver: ". $wp_version .
                 ", WC.Ver: ". $woocommerce->version .
-		", PHP.Ver: ". phpversion() .
+				", PHP.Ver: ". phpversion() .
                 ", ID: ".$this->getSellerId().
                 ", Active: ".(bool)$this->isEnabled().
                 ", Test: ".(bool)$this->isTestMode().
@@ -611,18 +547,18 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
         
         if (
-            !($_SERVER['REMOTE_ADDR'] == self::DOTPAY_IP ||
+            !($this->getClientIp() == self::DOTPAY_IP ||
                 ($this->isTestMode() &&
-                 ($_SERVER['REMOTE_ADDR'] == self::OFFICE_IP ||
-                  $_SERVER['REMOTE_ADDR'] == self::LOCAL_IP
+                 ($this->getClientIp() == self::OFFICE_IP ||
+                  $this->getClientIp() == self::LOCAL_IP
                  )
                 )
             )
         ) {
-            die("WooCommerce - ERROR (REMOTE ADDRESS: ".$_SERVER['REMOTE_ADDR'].")");
+            die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp().")");
         }   
 
-        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        if (strtoupper($_SERVER['REQUEST_METHOD']) != 'POST') {
             die("WooCommerce - ERROR (METHOD <> POST)");
         }
         
@@ -634,8 +570,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             die("WooCommerce - ERROR ID: ".$this->getSellerId());
         }
         
-        $order = new WC_Order($this->getParam('control'));
-        if (!$order && $order->id === NULL) {
+		
+		$controlNr = explode(';', (string)$this->getParam('control'));
+        $order = new WC_Order($controlNr[0]);
+        if (!$order && $order->get_id() === NULL) {
             die('FAIL ORDER: not exist');
         }
         
@@ -643,18 +581,24 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->checkAmount($order);
         
         $status = $this->getParam('operation_status');
-        $note = __("Dotpay send status", 'dotpay-payment-gateway');
+        $operationNR = $this->getParam('operation_number');
+		$chNR = $this->getParam('channel');
+		$chDataNR = $this->getChannelName($chNR);
+        $PaymentChannelName = $chDataNR['name'];
+        $PaymentChannelLogo= $chDataNR['logo'];
+        $note = __("Dotpay send notification", 'dotpay-payment-gateway') . ": <br><span style=\"color: #4b5074; font-style: italic;\">".__("transaction number:", 'dotpay-payment-gateway') ." <span style=\"font-weight: bold;\">".$operationNR."</span>, <br>". __("payment channel:", 'dotpay-payment-gateway')." <span style=\"font-weight: bold;\">".$PaymentChannelName."</span> /<span style=\"font-weight: bold;\">".$chNR."</span>/</span><br><img src=\"".$PaymentChannelLogo."\" width=\"100px\" height=\"50px\" alt=\"".$PaymentChannelName."\"> <br><span style=\"font-weight: bold; \">status</span>: ";
+
         switch ($status) {
             case 'completed':
-                $order->update_status(self::STATUS_COMPLETED, $note.' '.__('completed', 'dotpay-payment-gateway'));
-                do_action('woocommerce_order_status_pending_to_quote', $order->id);
-                do_action('woocommerce_payment_complete', $order->id);
+                $order->update_status(self::STATUS_COMPLETED, $note.' <span style="color: green; font-weight: bold;">'.__('completed', 'dotpay-payment-gateway').'</span>. <br>');
+                do_action('woocommerce_order_status_pending_to_quote', $order->get_id());
+                do_action('woocommerce_payment_complete', $order->get_id());
                 break;
             case 'rejected':
-                $order->update_status(self::STATUS_REJECTED, $note.' '.__('cancelled', 'dotpay-payment-gateway'));
+                $order->update_status(self::STATUS_REJECTED, $note.' <span style="color: red; font-weight: bold;">'.__('cancelled', 'dotpay-payment-gateway').'</span>. <br>');
                 break;
             default:
-                $order->update_status(self::STATUS_DEFAULT, $note.' '.__('processing', 'dotpay-payment-gateway'));
+                $order->update_status(self::STATUS_DEFAULT, $note.'  <span style="color: orange; font-weight: bold;">'.__('processing', 'dotpay-payment-gateway').'</span>. <br>');
         }
         if($this->postConfirmOrder($order)) {
             die('OK');

@@ -85,7 +85,8 @@ class Gateway_OneClick extends Gateway_Gateway {
             unset($_SESSION['dotpay_form_saved_card']);
         } else {
             $hiddenFields['credit_card_store'] = '1';
-            $hash = Dotpay_Card::addCard($this->getCurrentUserId(), $this->getOrder()->id);
+            // $hash = Dotpay_Card::addCard($this->getCurrentUserId(), $this->getOrder()->id);
+            $hash = Dotpay_Card::addCard($this->getCurrentUserId(), $this->getOrder()->get_id());
         }
         $hiddenFields['credit_card_customer_id'] = $hash;
         unset($_SESSION['dotpay_form_oc_type']);
@@ -143,17 +144,25 @@ class Gateway_OneClick extends Gateway_Gateway {
      * @param WC_Order $order order object
      * @return boolean
      */
-    protected function postConfirmOrder($order) {
-        $cc = Dotpay_Card::getCardFromOrder($order->id);
-        if($cc->cc_id !== NULL && $cc->card_id == NULL) {
-            $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
-            $ccInfo = $sellerApi->getCreditCardInfo(
-                $this->getApiUsername(),
-                $this->getApiPassword(),
-                $this->getParam('operation_number')
-            );
-            Dotpay_Card::updateCard($cc->cc_id, $ccInfo->id, $ccInfo->masked_number, $ccInfo->brand->name);
-        }
+	 protected function postConfirmOrder($order) {
+        $cc = Dotpay_Card::getCardFromOrder($order->get_id());
+		if(count($cc))
+			{
+				if($cc->cc_id !== NULL && $cc->card_id == NULL) {
+					$sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
+					$ccInfo = $sellerApi->getCreditCardInfo(
+																$this->getApiUsername(),
+																$this->getApiPassword(),
+																$this->getParam('operation_number')
+															);
+					 if(isset($cc->cc_id) && isset($ccInfo->id) && isset($ccInfo->masked_number) && isset($ccInfo->brand->name) && isset($ccInfo->brand->logo) )
+						 {						
+							Dotpay_Card::updateCard($cc->cc_id, $ccInfo->id, $ccInfo->masked_number, $ccInfo->brand->name, $ccInfo->brand->logo);
+						 }		
+					}			
+			} 
+
         return true;
     }
+	
 }

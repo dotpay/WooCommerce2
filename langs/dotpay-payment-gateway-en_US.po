@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2018-01-17 11:48+0100\n"
-"PO-Revision-Date: 2018-01-17 11:48+0100\n"
+"POT-Creation-Date: 2018-03-08 11:01+0100\n"
+"PO-Revision-Date: 2018-03-08 11:01+0100\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: en_US\n"
@@ -25,11 +25,11 @@ msgstr "Download blankiet"
 msgid "Make a money transfer"
 msgstr "Make a money transfer"
 
-#: ../Dotpay/Payment.php:179
+#: ../Dotpay/Payment.php:185
 msgid "Shop - "
 msgstr "Shop - "
 
-#: ../Dotpay/Payment.php:230
+#: ../Dotpay/Payment.php:236
 msgid "Order ID: "
 msgstr "Order ID: "
 
@@ -203,47 +203,47 @@ msgstr "Display payment channels in a shop"
 msgid "Order not found"
 msgstr "Order not found"
 
-#: ../Gateway/Gateway.php:503
+#: ../Gateway/Gateway.php:440
 msgid "Exceeded expiration date of the generated payment link."
 msgstr "Exceeded expiration date of the generated payment link."
 
-#: ../Gateway/Gateway.php:506
+#: ../Gateway/Gateway.php:443
 msgid "Selected payment channel is unknown."
 msgstr "Selected payment channel is unknown."
 
-#: ../Gateway/Gateway.php:509
+#: ../Gateway/Gateway.php:446
 msgid "Selected channel payment is desabled."
 msgstr "Selected channel payment is desabled."
 
-#: ../Gateway/Gateway.php:512
+#: ../Gateway/Gateway.php:449
 msgid "Account is disabled."
 msgstr "Account is disabled."
 
-#: ../Gateway/Gateway.php:515
+#: ../Gateway/Gateway.php:452
 msgid "Seller account is inactive."
 msgstr "Seller account is inactive."
 
-#: ../Gateway/Gateway.php:518
+#: ../Gateway/Gateway.php:455
 msgid "Amount is too low."
 msgstr "Amount is too low."
 
-#: ../Gateway/Gateway.php:521
+#: ../Gateway/Gateway.php:458
 msgid "Amount is too high."
 msgstr "Amount is too high."
 
-#: ../Gateway/Gateway.php:524
+#: ../Gateway/Gateway.php:461
 msgid "Data format is bad."
 msgstr "Data format is bad."
 
-#: ../Gateway/Gateway.php:527
+#: ../Gateway/Gateway.php:464
 msgid "Request has been modified during transmission."
 msgstr "Request has been modified during transmission."
 
-#: ../Gateway/Gateway.php:530
+#: ../Gateway/Gateway.php:467
 msgid "There were not given all request parameters."
 msgstr "There were not given all request parameters."
 
-#: ../Gateway/Gateway.php:533
+#: ../Gateway/Gateway.php:470
 msgid ""
 "There was an unidentified error. Please contact to your seller and give him "
 "the order number."
@@ -251,23 +251,31 @@ msgstr ""
 "There was an unidentified error. Please contact to your seller and give him "
 "the order number."
 
-#: ../Gateway/Gateway.php:562 ../Gateway/OneClick.php:122
+#: ../Gateway/Gateway.php:499 ../Gateway/OneClick.php:123
 msgid "Please accept all agreements"
 msgstr "Please accept all agreements"
 
-#: ../Gateway/Gateway.php:646
-msgid "Dotpay send status"
-msgstr "Dotpay wysłał status"
+#: ../Gateway/Gateway.php:590
+msgid "Dotpay send notification"
+msgstr "Dotpay send notification"
 
-#: ../Gateway/Gateway.php:649
+#: ../Gateway/Gateway.php:590
+msgid "transaction number:"
+msgstr "transaction number:"
+
+#: ../Gateway/Gateway.php:590
+msgid "payment channel:"
+msgstr "payment channel:"
+
+#: ../Gateway/Gateway.php:594
 msgid "completed"
 msgstr "completed"
 
-#: ../Gateway/Gateway.php:654
+#: ../Gateway/Gateway.php:599
 msgid "cancelled"
 msgstr "cancelled"
 
-#: ../Gateway/Gateway.php:657
+#: ../Gateway/Gateway.php:602
 msgid "processing"
 msgstr "processing"
 
@@ -279,7 +287,7 @@ msgstr "MasterPass via Dotpay"
 msgid "One Click via Dotpay"
 msgstr "One Click via Dotpay"
 
-#: ../Gateway/OneClick.php:118
+#: ../Gateway/OneClick.php:119
 msgid "Please select One Click option"
 msgstr "Please select One Click option"
 
@@ -311,6 +319,16 @@ msgstr "Details of your payment"
 msgid "BLIK code"
 msgstr "BLIK code"
 
+#: ../form/blik.phtml:7 ../form/cc.phtml:1 ../form/mp.phtml:1
+#: ../form/oc.phtml:38 ../form/pv.phtml:1 ../form/standard.phtml:31
+msgid "Attention!"
+msgstr "Attention!"
+
+#: ../form/blik.phtml:7 ../form/cc.phtml:1 ../form/mp.phtml:1
+#: ../form/oc.phtml:38 ../form/pv.phtml:1 ../form/standard.phtml:31
+msgid "Test mode is activated. This is just a payment simulation."
+msgstr "Test mode is activated. This is just a payment simulation."
+
 #: ../form/oc.phtml:22
 msgid "Select your saved card"
 msgstr "Select your saved card"
@@ -326,14 +344,6 @@ msgid ""
 msgstr ""
 "I agree to repeated loading bill my credit card for the payment One-Click by "
 "way of purchase of goods or services offered by the store."
-
-#: ../form/standard.phtml:31
-msgid "Attention!"
-msgstr "Attention!"
-
-#: ../form/standard.phtml:31
-msgid "Test mode is activated. This is just a payment simulation."
-msgstr "Test mode is activated. This is just a payment simulation."
 
 #: ../templates/admin_header.phtml:2
 msgid "Dotpay.pl website"
@@ -424,27 +434,35 @@ msgstr "Timeout of waiting for confirmation of payment"
 msgid "You can go to your account page"
 msgstr "You can go to your account page"
 
-#: ../templates/oc_manage.phtml:23
+#: ../templates/oc_manage.phtml:29
 msgid "You can not remove this credit card"
 msgstr "You can not remove this credit card"
 
-#: ../templates/oc_manage.phtml:32
-msgid "Card mask name"
-msgstr "Card mask name"
+#: ../templates/oc_manage.phtml:38
+msgid "Card brand logo"
+msgstr "Card brand logo"
 
-#: ../templates/oc_manage.phtml:33
+#: ../templates/oc_manage.phtml:39
 msgid "Card brand"
 msgstr "Card brand"
 
-#: ../templates/oc_manage.phtml:34
+#: ../templates/oc_manage.phtml:40
+msgid "Card mask name"
+msgstr "Card mask name"
+
+#: ../templates/oc_manage.phtml:41
 msgid "Register date"
 msgstr "Register date"
 
-#: ../templates/oc_manage.phtml:35
+#: ../templates/oc_manage.phtml:42
 msgid "Remove"
 msgstr "Remove"
 
-#: ../templates/payment_info.phtml:15
+#: ../templates/oc_manage.phtml:54
+msgid "You do not have registered cards yet."
+msgstr "You do not have registered cards yet."
+
+#: ../templates/payment_info.phtml:16
 msgid ""
 "To pay by cash you need login to your bank system and make a money transfer, "
 "entering the following data:"
@@ -452,35 +470,35 @@ msgstr ""
 "To pay by cash you need login to your bank system and make a money transfer, "
 "entering the following data:"
 
-#: ../templates/payment_info.phtml:20
+#: ../templates/payment_info.phtml:21
 msgid "Account number"
 msgstr "Account number"
 
-#: ../templates/payment_info.phtml:25
+#: ../templates/payment_info.phtml:26
 msgid "Amount of payment"
 msgstr "Amount of payment"
 
-#: ../templates/payment_info.phtml:32
+#: ../templates/payment_info.phtml:33
 msgid "Title of payment"
 msgstr "Title of payment"
 
-#: ../templates/payment_info.phtml:38
+#: ../templates/payment_info.phtml:39
 msgid "Name of recipient"
 msgstr "Name of recipient"
 
-#: ../templates/payment_info.phtml:42
+#: ../templates/payment_info.phtml:43
 msgid "Street"
 msgstr "Street"
 
-#: ../templates/payment_info.phtml:46
+#: ../templates/payment_info.phtml:47
 msgid "Post code and city"
 msgstr "Post code and city"
 
-#: ../templates/payment_info.phtml:57
+#: ../templates/payment_info.phtml:58
 msgid "Payment channel logo"
 msgstr "Payment channel logo"
 
-#: ../templates/payment_info.phtml:65
+#: ../templates/payment_info.phtml:66
 msgid ""
 "Not following the above procedure (e.g. changing the amount or payment "
 "title) will make your payment not handled automatically, and therefore "
@@ -489,6 +507,15 @@ msgstr ""
 "Not following the above procedure (e.g. changing the amount or payment "
 "title) will make your payment not handled automatically, and therefore "
 "lengthen finalization time of the transaction."
+
+#~ msgid "Dotpay send status"
+#~ msgstr "Dotpay wysłał status"
+
+#~ msgid "Transaction number:"
+#~ msgstr "Transaction number:"
+
+#~ msgid "Payment channel:"
+#~ msgstr "Payment channel:"
 
 #~ msgid "Credit Cards (3-D Secure) via Dotpay"
 #~ msgstr "Credit Cards (3-D Secure) via Dotpay"

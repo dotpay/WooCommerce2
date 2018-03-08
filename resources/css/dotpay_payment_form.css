@@ -11,10 +11,10 @@
     .oc_main_element {
         width: 100%;
         display: block;
-        margin: 10px 0px;
+        margin: 10px 0px;		
     }
     .oc_main_element input[type=radio] {
-        display: block !important;
+        display: inline !important;
     }
     select.oc_main_element {
         width: 400px;

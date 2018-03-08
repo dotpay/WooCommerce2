@@ -69,10 +69,13 @@ class Gateway_Dotpay extends Gateway_Gateway {
         if(empty($_POST['channel'])&&$this->isWidgetEnabled()) {
             wc_add_notice( __('You must select a payment channel', 'dotpay-payment-gateway') , 'error' );
             return false;
-        } else if(!parent::validate_fields())
+        } else if(!parent::validate_fields()) {
             return false;
-        $this->setChannel($_POST['channel']);
-        return true;
+		}
+		if(!empty($_POST['channel'])){
+			$this->setChannel($_POST['channel']);
+		}
+		return true;
     }
     
     public function init_form_fields() {
