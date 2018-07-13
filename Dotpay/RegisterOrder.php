@@ -127,12 +127,14 @@ abstract class Dotpay_RegisterOrder {
                 'currency' => self::$payment->getCurrency(),
                 'description' => self::$payment->getDescription(),
                 'control' => self::$payment->getControl('full')
+
             ),
 
             'seller' => array (
                 'account_id' => self::$payment->getSellerId(),
                 'url' => self::$payment->getUrl(),
                 'urlc' => self::$payment->getUrlc(),
+                'p_info' => self::$payment->getPinfo()
             ),
 
             'payer' => array (

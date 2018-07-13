@@ -1,3 +1,4 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 	<?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>
@@ -21,9 +22,9 @@
         <input type="radio" name="oc_type" value="choose" />
         <?php echo __('Select your saved card', 'dotpay-payment-gateway'); ?>
     </label>
-    <select name="saved_card" class="oc_main_element" style="color: #547a00;">
+    <select name="saved_card" class="oc_main_element" style="color: #547a00; font-weight: 500; letter-spacing: 0.1rem;">
         <?php foreach ($this->getCreditCards() as $card): ?>
-        <option value="<?php echo $card->cc_id; ?>"><?php echo $card->mask; ?> (<?php echo $card->brand; ?>)</option>
+		<option value="<?php echo $card->cc_id; ?>" style="margin-right: 15px;"><?php echo $card->mask; ?> (<?php echo $card->brand; ?>)</option>
         <?php endforeach; ?>
     </select>
 </div>
@@ -31,10 +32,16 @@
     <input type="radio" name="oc_type" value="new" />
     <?php echo __('Register new card', 'dotpay-payment-gateway'); ?>
 </label>
+<?php 
+	if(count($this->getCreditCards()) > 0) {
+		$cc_manage_page = get_page_by_title(DOTPAY_CARD_MANAGE_PTITLE);
+		echo "<p style='text-align:right;'><a href=\"".get_page_link($cc_manage_page->ID)."\"><i class='material-icons'>credit_card</i> ".$cc_manage_page->post_title."</a></p>";
+	}
+?>
 <br>
 <label class="dotpay_agreements">
     <input type="checkbox" value="1" name="oc_agreements" required="true" checked="true" />
     <?php echo __('I agree to repeated loading bill my credit card for the payment One-Click by way of purchase of goods or services offered by the store.', 'dotpay-payment-gateway'); ?>
 </label>
-<?php if((bool)$this->isTestMode()) echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong>".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
+<?php if((bool)$this->isTestMode()) echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>

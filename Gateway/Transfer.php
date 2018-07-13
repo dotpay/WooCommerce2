@@ -33,14 +33,14 @@ class Gateway_Transfer extends Gateway_Gateway {
      * Prepare gateway
      */
     public function __construct() {
-        $this->title = 'Transfer and cash channels';
+        $this->title = __('Transfer and cash channels', 'dotpay-payment-gateway');
         parent::__construct();
         $this->id = 'Dotpay_tc';
         $this->addActions();
         $this->enabled = 'no';
-        
+
     }
-    
+
     /**
      * Create page
      */
@@ -50,7 +50,7 @@ class Gateway_Transfer extends Gateway_Gateway {
              ->setGuid('/dotpay/payment/info')
              ->add();
     }
-    
+
     /**
      * Remove page
      */
@@ -58,7 +58,7 @@ class Gateway_Transfer extends Gateway_Gateway {
         $page = new Dotpay_Page(DOTPAY_PAYINFO_PNAME);
         $page->remove();
     }
-    
+
     /**
      * Return url to target API action
      * @param string $target target action for plugin API
@@ -68,7 +68,7 @@ class Gateway_Transfer extends Gateway_Gateway {
         $page = new Dotpay_Page(DOTPAY_PAYINFO_PNAME);
         return $page->getUrl();
     }
-    
+
     /**
      * Return rendered information page (for transfer payments) or error meessage if an error occurred
      * @return string
@@ -85,7 +85,7 @@ class Gateway_Transfer extends Gateway_Gateway {
         }
         return __('Payment not exist', 'dotpay-payment-gateway');
     }
-    
+
     /**
      * Create instruction or read it from database
      * @return \Dotpay_Instruction|null|false
@@ -93,7 +93,7 @@ class Gateway_Transfer extends Gateway_Gateway {
     private function processPayment() {
         if(isset($_GET['order_id'])) {
             $orderId = (int)$_GET['order_id'];
-        } else if($this->getOrder()->get_id()!=null) {
+        } else if($this->getOrder() !== null && $this->getOrder()->get_id() !== null) {
             $orderId = $this->getOrder()->get_id();
         } else {
             return NULL;

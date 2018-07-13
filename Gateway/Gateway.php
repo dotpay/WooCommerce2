@@ -29,32 +29,37 @@
  * Abstract gateway channel
  */
 abstract class Gateway_Gateway extends Dotpay_Payment {
-    
+
     /**
      * Status of order after complete payment
      */
     const STATUS_COMPLETED = 'processing';
-    
+	
+	/**
+     * Status of order after complete payment for virtual products
+     */
+    const STATUS_COMPLETED_VIRTUAL = 'completed';
+
     /**
      * Status of order after failed payment
      */
     const STATUS_REJECTED = 'failed';
-    
+
     /**
      * Status of order before complete payment
      */
     const STATUS_DEFAULT = 'pending';
-    
+
     /**
      * Name of cash group of channels
      */
     const cashGroup = 'cash';
-    
+
     /**
      * Name of transfer group of channels
      */
     const transferGroup = 'transfers';
-    
+
     /**
      * Prepare gateway
      */
@@ -62,16 +67,19 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->id = 'dotpay';
         $this->icon = $this->getIcon();
         $this->has_fields = true;
-        
-        $this->description = __('Fast and secure payment via Dotpays', 'dotpay-payment-gateway');
-        
+        $this->method_title = __('DOTPAY PAYMENT', 'dotpay-payment-gateway');;
+        $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
+
+
         $this->init_form_fields();
         $this->init_settings();
         $this->enabled = ($this->isEnabled())?'yes':'no';
-        
+
+
         $this->method_description = $this->render('admin_header.phtml');
     }
-    
+
+
     /**
      * Add actions to API plugin
      */
@@ -80,7 +88,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         add_action('woocommerce_api_'.strtolower($this->id).'_confirm', array($this, 'confirmPayment'));
         add_action('woocommerce_api_'.strtolower($this->id).'_status', array($this, 'checkStatus'));
     }
-    
+
     /**
      * Return url to image with admin settings logo
      * @return string
@@ -89,7 +97,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $dotpay_logo_lang = ($this->getPaymentLang() === 'pl')?'pl':'en';
         return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/Dotpay_logo_desc_'.$dotpay_logo_lang .'.png';
     }
-    
+
     /**
      * Return option key for Dotpay plugin
      * @return string
@@ -97,26 +105,26 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     public function get_option_key() {
         return $this->plugin_id . $this->id . '_settings';
     }
-    
+
     /**
      * Init plugin settings and add save options action
      */
     public function init_settings() {
         parent::init_settings();
-        if ( version_compare( WOOCOMMERCE_VERSION, '2.0.0', '>=' ) ) {
+        if ( version_compare( WOOCOMMERCE_VERSION, '3.2.0', '>=' ) ) {
             add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( &$this, 'process_admin_options' ) );
         } else {
             add_action( 'woocommerce_update_options_payment_gateways', array( &$this, 'process_admin_options' ) );
         }
     }
-    
+
     /**
      * Includes payment fields for a specific channel
      */
     public function payment_fields() {
         include($this->getFormPath());
     }
-    
+
     /**
      * Create payment and return details of the next action
      * @global type $woocommerce WOOCOMMERCE object
@@ -131,7 +139,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->setOrderId($order_id);
 
         $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
-        if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup)) && 
+        if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup)) &&
            $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword())) {
             $gateway = new Gateway_Transfer();
             $redirectUrl = $gateway->generateWcApiUrl('form');
@@ -143,7 +151,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'redirect' => $redirectUrl
         );
     }
-    
+
     /**
      * Generate url address for plugin API functionality
      * @param string $target target API function
@@ -152,7 +160,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function generateWcApiUrl($target) {
         return add_query_arg('wc-api', $this->id.'_'.$target, home_url('/'));
     }
-    
+
     /**
      * Return data for payments form
      * @return array
@@ -189,12 +197,11 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'city' => $this->getCity(),
             'postcode' => $this->getPostcode(),
             'country' => $this->getCountry(),
-			// 'personal_data' => 1,
+			'personal_data' => 1,
             'bylaw' => 1
-
         );
     }
-    
+
     /**
      * Return fields for payments form with calculated CHK
      * @return array
@@ -205,7 +212,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $data['chk'] = $this->generateCHK($this->getSellerId(), $this->getSellerPin(), $data);
         return $data;
     }
-    
+
     /**
      * Check, if channel is in channels groups
      * @param int $channelId channel id
@@ -226,7 +233,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
         return false;
     }
-    
+
     /**
      * Return flag, if this channel is enabled
      * @return bool
@@ -236,10 +243,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' === $this->get_option('enabled')) {
             $result = true;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Return admin prompt class name
      * @return string
@@ -249,10 +256,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' === $this->get_option('enabled')) {
             $result = 'updated';
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Return flag, if main channel is enabled
      * @return boolean
@@ -264,7 +271,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
         return $result;
     }
-    
+
     /**
      * Return flag, if Dotpay widget is enabled
      * @return boolean
@@ -274,10 +281,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' === $this->get_option('channels_show')) {
             $result = true;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Return flag, if One Click is enabled
      * @return boolean
@@ -287,10 +294,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' === $this->get_option('oneclick_show')) {
             $result = true;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Return flag, if MasterPass is enabled
      * @return boolean
@@ -300,10 +307,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' === $this->get_option('masterpass_show')) {
             $result = true;
         }
-        
+
         return $result;
     }
-	
+
     /**
      * Return flag, if Credit card PV is enabled
      * @return boolean
@@ -316,10 +323,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if(!$this->isDotSelectedCurrency($this->get_option('ccPV_currency'))) {
             $result = false;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Return flag, if BLIK is enabled
      * @return boolean
@@ -332,10 +339,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if($this->getCurrency() != 'PLN') {
             $result = false;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Return flag, if credit card is enabled
      * @return boolean
@@ -345,10 +352,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' === $this->get_option('credit_card_show')) {
             $result = true;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Generate CHK for seller and payment data
      * @param type $DotpayId Dotpay seller ID
@@ -416,10 +423,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         (isset($ParametersArray['credit_card_id']) ? $ParametersArray['credit_card_id'] : null).
         (isset($ParametersArray['blik_code']) ? $ParametersArray['blik_code'] : null).
         (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null);
-     
+
         return hash('sha256',$ChkParametersChain);
     }
-    
+
     /**
      * Return url to icon file
      * @return string
@@ -427,7 +434,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function getIcon() {
         return '';
     }
-    
+
     /**
      * Return rendered status page HTML
      * @return string
@@ -472,7 +479,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
         return $this->render('check_status.phtml');
     }
-    
+
     /**
      * Return content of bylaw agreement
      * @return string
@@ -480,7 +487,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function getBylaw() {
         return $this->getDotpayAgreement($this->get_order_total(), 'bylaw');
     }
-    
+
     /**
      * Return content of personal data agreement
      * @return string
@@ -488,7 +495,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function getPersonalData() {
         return $this->getDotpayAgreement($this->get_order_total(), 'personal_data');
     }
-    
+
     /**
      * Validate fields before creation of order
      * @return boolean
@@ -500,7 +507,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
         return true;
     }
-    
+
     /**
      * Return ID of current shop client
      * @return int
@@ -508,18 +515,19 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function getCurrentUserId() {
         return wp_get_current_user()->ID;
     }
-    
+
     /**
      * Display redirect form with payment details
      */
     public function getRedirectForm() {
         die($this->render('redirect_form.phtml'));
     }
-    
+	
+	
     /**
      * Confirm payment after getting confirmation info from Dotpay
      * @global string $wp_version version of installed instance of WordPress
-     * @global type $woocommerce WOOCOMMERCE object 
+     * @global type $woocommerce WOOCOMMERCE object
      */
     public function confirmPayment() {
         global $wp_version, $woocommerce;
@@ -545,7 +553,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 "<br />---Shop channels:---<br />".$shopGateways
             );
         }
-        
+
         if (
             !($this->getClientIp() == self::DOTPAY_IP ||
                 ($this->isTestMode() &&
@@ -555,31 +563,31 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 )
             )
         ) {
-            die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp().")");
-        }   
+            die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true).")");
+        }
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) != 'POST') {
             die("WooCommerce - ERROR (METHOD <> POST)");
         }
-        
+
         if (!$this->checkConfirmSign()) {
             die("WooCommerce - ERROR SIGN");
         }
-        
+
         if ($this->getParam('id') != $this->getSellerId()) {
             die("WooCommerce - ERROR ID: ".$this->getSellerId());
         }
-        
-		
-		$controlNr = explode(';', (string)$this->getParam('control'));
+
+
+		$controlNr = explode('|', (string)$this->getParam('control'));
         $order = new WC_Order($controlNr[0]);
         if (!$order && $order->get_id() === NULL) {
             die('FAIL ORDER: not exist');
         }
-        
+
         $this->checkCurrency($order);
         $this->checkAmount($order);
-        
+
         $status = $this->getParam('operation_status');
         $operationNR = $this->getParam('operation_number');
 		$chNR = $this->getParam('channel');
@@ -589,9 +597,11 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $note = __("Dotpay send notification", 'dotpay-payment-gateway') . ": <br><span style=\"color: #4b5074; font-style: italic;\">".__("transaction number:", 'dotpay-payment-gateway') ." <span style=\"font-weight: bold;\">".$operationNR."</span>, <br>". __("payment channel:", 'dotpay-payment-gateway')." <span style=\"font-weight: bold;\">".$PaymentChannelName."</span> /<span style=\"font-weight: bold;\">".$chNR."</span>/</span><br><img src=\"".$PaymentChannelLogo."\" width=\"100px\" height=\"50px\" alt=\"".$PaymentChannelName."\"> <br><span style=\"font-weight: bold; \">status</span>: ";
 
         switch ($status) {
-            case 'completed':
-                $order->update_status(self::STATUS_COMPLETED, $note.' <span style="color: green; font-weight: bold;">'.__('completed', 'dotpay-payment-gateway').'</span>. <br>');
-                do_action('woocommerce_order_status_pending_to_quote', $order->get_id());
+            case 'completed':	
+				$order_status_note =  $order->needs_processing() ? __('paid - processing', 'dotpay-payment-gateway') :  __('paid - completed (virtual product)', 'dotpay-payment-gateway');
+				$order->update_status($order->needs_processing() ? self::STATUS_COMPLETED : self::STATUS_COMPLETED_VIRTUAL, $note.' <span style="color: green; font-weight: bold;">'.$order_status_note.'</span>. <br>');
+				
+			    do_action('woocommerce_order_status_pending_to_quote', $order->get_id());
                 do_action('woocommerce_payment_complete', $order->get_id());
                 break;
             case 'rejected':
@@ -604,7 +614,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             die('OK');
         }
     }
-    
+
     /**
      * Check, if payment gateway is enabled
      * @param type $object Payment gateway instance
@@ -613,7 +623,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     private function checkIfEnabled($object) {
         return (int)$object->is_available();
     }
-    
+
     /**
      * Display status number of selected order
      */
@@ -622,6 +632,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             case self::STATUS_COMPLETED:
                 $this->forgetOrder();
                 die('1');
+			case self::STATUS_COMPLETED_VIRTUAL:
+                $this->forgetOrder();
+                die('1');	
             case self::STATUS_REJECTED:
                 $this->forgetOrder();
                 die('-1');
@@ -631,7 +644,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 die('ERROR');
         }
     }
-    
+
     /**
      * Return url for check status request
      * @return string
@@ -639,7 +652,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     public function getCheckStatusUrl() {
         return get_site_url(Dotpay_Page::getPageId(DOTPAY_STATUS_PNAME));
     }
-    
+
     /**
      * Overrides a method from parent, because Dotpay Payment Gateway uses another method to checking if gateway is available
      * @return boolean
@@ -647,7 +660,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     public function is_available() {
         return $this->isEnabled();
     }
-    
+
     protected function checkConfirmSign() {
         $signature = $this->getSellerPin().$this->getSellerId().
         $this->getParam('operation_number').
@@ -669,11 +682,11 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->getParam('p_email').
         $this->getParam('channel').
         $this->getParam('channel_country').
-        $this->getParam('geoip_country');	
+        $this->getParam('geoip_country');
 
         return ($this->getParam('signature') === hash('sha256', $signature));
     }
-    
+
     /**
      * Break the program, if currency in order and in confirmation are different
      * @param WC_Order $order order object
@@ -681,7 +694,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function checkCurrency($order) {
         $currencyOrder = $order->get_currency();
         $currencyResponse = $this->getParam('operation_original_currency');
-        
+
         if ($currencyOrder !== $currencyResponse) {
             die('FAIL CURRENCY');
         }
@@ -700,11 +713,11 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             die('FAIL AMOUNT');
         }
     }
-    
+
     protected function postConfirmOrder($order) {
         return true;
     }
-    
+
     /**
      * Save channel id persistent
      * @param int $channel channel id
@@ -712,7 +725,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function setChannel($channel) {
         $_SESSION['dotpay_payment_channel'] = (int)$channel;
     }
-    
+
     /**
      * Return channel id
      * @return int/null
@@ -725,7 +738,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
         return $channel;
     }
-    
+
     /**
      * Forget channel id
      */

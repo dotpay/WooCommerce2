@@ -39,7 +39,7 @@ class Gateway_OneClick extends Gateway_Gateway {
         $this->addActions();
         add_action('woocommerce_api_'.strtolower($this->id).'_rmcard', array($this, 'removeCard'));
     }
-    
+
     /**
      * Return channel id
      * @return int
@@ -47,7 +47,7 @@ class Gateway_OneClick extends Gateway_Gateway {
     protected function getChannel() {
         return self::$ocChannel;
     }
-    
+
     /**
      * Remove a specified card from database. Card id is sending by POST method
      */
@@ -59,7 +59,7 @@ class Gateway_OneClick extends Gateway_Gateway {
         }
         die('0');
     }
-    
+
     /**
      * Return url to icon file
      * @return string
@@ -67,7 +67,7 @@ class Gateway_OneClick extends Gateway_Gateway {
     protected function getIcon() {
         return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/oneclick.png';
     }
-    
+
     /**
      * Return data for payments form
      * @return array
@@ -77,7 +77,7 @@ class Gateway_OneClick extends Gateway_Gateway {
         $hiddenFields['channel'] = $this->getChannel();
         $hiddenFields['ch_lock'] = 1;
         $hiddenFields['type'] = 4;
-        
+
         if($_SESSION['dotpay_form_oc_type'] == 'choose') {
             $card = Dotpay_Card::getCardById($_SESSION['dotpay_form_saved_card']);
             $hiddenFields['credit_card_id'] = $card->card_id;
@@ -92,7 +92,7 @@ class Gateway_OneClick extends Gateway_Gateway {
         unset($_SESSION['dotpay_form_oc_type']);
         return $hiddenFields;
     }
-    
+
     /**
      * Return list of credit cards for current customer
      * @return array
@@ -101,7 +101,7 @@ class Gateway_OneClick extends Gateway_Gateway {
         $cardModel = new Dotpay_Card();
         return $cardModel->getUsefulCardsForCustomer($this->getCurrentUserId());
     }
-    
+
     /**
      * Return flag, if this channel is enabled
      * @return bool
@@ -109,7 +109,7 @@ class Gateway_OneClick extends Gateway_Gateway {
     protected function isEnabled() {
         return parent::isEnabled() && $this->isOneClickEnabled() && is_user_logged_in();
     }
-    
+
     /**
      * Validate fields before creation of order
      * @return boolean
@@ -123,14 +123,14 @@ class Gateway_OneClick extends Gateway_Gateway {
             wc_add_notice( __('Please accept all agreements', 'dotpay-payment-gateway') , 'error' );
             return false;
         }
-        
+
         $_SESSION['dotpay_form_oc_type'] = $_POST['oc_type'];
         if($_POST['oc_type'] == 'choose') {
             $_SESSION['dotpay_form_saved_card'] = $_POST['saved_card'];
         }
         return true;
     }
-    
+
     /**
      * Return string with rendered oc manage page
      * @return string
@@ -145,8 +145,10 @@ class Gateway_OneClick extends Gateway_Gateway {
      * @return boolean
      */
 	 protected function postConfirmOrder($order) {
-        $cc = Dotpay_Card::getCardFromOrder($order->get_id());
-		if(count($cc))
+
+    $cc = Dotpay_Card::getCardFromOrder($order->get_id());
+        
+    if($cc && is_object($cc) && $cc->cc_id)
 			{
 				if($cc->cc_id !== NULL && $cc->card_id == NULL) {
 					$sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
@@ -156,13 +158,13 @@ class Gateway_OneClick extends Gateway_Gateway {
 																$this->getParam('operation_number')
 															);
 					 if(isset($cc->cc_id) && isset($ccInfo->id) && isset($ccInfo->masked_number) && isset($ccInfo->brand->name) && isset($ccInfo->brand->logo) )
-						 {						
+						 {
 							Dotpay_Card::updateCard($cc->cc_id, $ccInfo->id, $ccInfo->masked_number, $ccInfo->brand->name, $ccInfo->brand->logo);
-						 }		
-					}			
-			} 
+						 }
+					}
+			}
 
         return true;
     }
-	
+
 }

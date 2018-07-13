@@ -1,14 +1,35 @@
-
     .dotpay_agreements {
         display: block;
         margin: 10px 0px;
 		font-size:90%;
     }
 
-    input[name=blik_code] {
-        width: 200px;
-    }
-    .oc_main_element {
+  input[name=blik_code] {
+  width: 180px;
+  border: #ff6600 2px solid;
+  height: auto;
+  font-size: 30px;
+  color: #1e1e1e;
+  padding: 8px !important;
+  letter-spacing: 0.2rem;
+  display: inline-block;
+  text-align: center;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+
+  }
+input[name=blik_code]:hover {
+  border-color: #309b4e;
+  background-color: #f7f7f9;
+
+}
+input[name=blik_code]:focus {
+  border-color: #309b4e;
+  background-color: #f7f7f9;
+}
+	
+	
+  .oc_main_element {
         width: 100%;
         display: block;
         margin: 10px 0px;		
@@ -17,10 +38,22 @@
         display: inline !important;
     }
     select.oc_main_element {
-        width: 400px;
-        margin-left: 15px;
+        min-width: 200px;
+		width: auto !important;
+        margin-left: 15px !important;
     }
+
     .dotpay-channels-selection input[type=radio] {
         display: block !important;
     }
+	
+	
+	input::placeholder {
+		color: #333 !important;
+		text-align: center;
+	
+	}
+	input:focus::placeholder {
+		color: #6b6b6b !important;
+	}
 	

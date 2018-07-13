@@ -91,9 +91,9 @@ class Dotpay_Curl {
      * @return mixed
      */
     public function exec() {
+
         $response = curl_exec($this->_resource);
         $this->_info = curl_getinfo($this->_resource);
-        
         return $response;
     }
     

@@ -1,3 +1,4 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style type="text/css">
     #statusMessageContainer {
         text-align: center;
@@ -29,7 +30,7 @@
         border-bottom: 1px solid #ebebeb;
         border-top: 2px solid #9e191d;
         border-radius: 100px;
-        margin: -30px 0 0 -20px; 
+        margin: -30px 0 0 -20px;
         animation: spin .75s infinite linear;
         -webkit-animation: spin .75s infinite linear;
         -moz-animation: spin .75s infinite linear;
@@ -50,11 +51,11 @@
         from { -webkit-transform: rotate(0deg); }
         to { -webkit-transform: rotate(360deg); }
     }
-    
+
     .return-to-my-account {
         display: none;
     }
-    
+
     .dotpay-alert {
         width: 100%;
         margin: 10px 2px;
@@ -78,6 +79,14 @@
         color: #0d9347;
         background-color: #e9ffeb;
     }
+    .alertDot {
+      text-align: center !important;
+      margin: 24px 0 24px !important;
+      padding: 10px;
+    }
+    .gicons {
+      font-size: 36px;
+    }
 </style>
 <script type="text/javascript">
     var dotpayCheckStatusTimeout = 2;//in minutes
@@ -89,20 +98,25 @@
                 switch(r) {
                     case '1':
                         clearAlerts();
-                        createAlert('success', '<?php echo __('Status confirmed', 'dotpay-payment-gateway'); ?>', '<?php echo __('Success', 'dotpay-payment-gateway'); ?>');
+                        createAlert('success', '<?php echo __('Payment status: completed', 'dotpay-payment-gateway'); ?>', '<?php echo __('Payment Success', 'dotpay-payment-gateway'); ?>');
+                        jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>thumb_up_alt</i> " );
                         setTimeout(function(){location.href = "<?php echo $this->getOrderSummaryUrl(); ?>";}, 3000);
                         break;
                     case '-1':
                         clearAlerts();
-                        createAlert('error', '<?php echo __('Payment can not confirmated by Dotpay', 'dotpay-payment-gateway'); ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
+                        createAlert('error', '<?php echo __('Payment was rejected.', 'dotpay-payment-gateway'); if(isset($_SESSION['dotpay_payment_order_id'])) {echo  ' '.__('The order number:', 'dotpay-payment-gateway').' '.$_SESSION['dotpay_payment_order_id'].'.';}?>', '<?php echo __('Payment Error', 'dotpay-payment-gateway'); ?>');
                         jQuery('.return-to-my-account').show();
+                        jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>thumb_down</i> " );
+                        jQuery( "div.dotpay-alert > p.alertDot" ).append( "<br><br><a href='<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>&orders'> <?php echo __('try to pay again for this order', 'dotpay-payment-gateway'); ?></a>" );
                         break;
                     case '0':
                         break;
                     default:
                         clearAlerts();
-                        createAlert('error', '<?php echo __('Order not found', 'dotpay-payment-gateway'); ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
+                        createAlert('error', '<?php echo __('Order not found', 'dotpay-payment-gateway'); ?>', '<?php echo __('Status payment check error', 'dotpay-payment-gateway'); ?>');
                         jQuery('.return-to-my-account').show();
+                        jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>gps_off</i> " );
+                        gps_off
                 }
                 if(r!='0')
                     stopWaiting(interval);
@@ -121,6 +135,7 @@
             div.appendChild(h3);
         }
         var p = document.createElement('p');
+        p.className = 'alertDot';
         p.appendChild(document.createTextNode(message));
         div.appendChild(p);
         document.getElementById('dotpay-alert-container').appendChild(div);
@@ -144,7 +159,8 @@
         jQuery(document).ready(function(){
             var blocked = false;
             var counter = 0;
-            createAlert('info', '<?php echo __('Payment wait for confirmation by Dotpay', 'dotpay-payment-gateway'); ?>');
+            createAlert('info', '<?php echo __('Payment wait for confirmation by Dotpay... It make take up to 2 minutes.', 'dotpay-payment-gateway');?>');
+          jQuery( "p.alertDot" ).prepend( "<i class='material-icons' style='font-size: 48px; font-weight: bold;'>help_outline</i><br><br>" );
             var interval = setInterval(function(){
                 if(blocked)
                     return true;
@@ -154,8 +170,10 @@
                     blocked = true;
                     stopWaiting(interval);
                     clearAlerts();
-                    createAlert('error', '<?php echo __('Timeout of waiting for confirmation of payment', 'dotpay-payment-gateway'); ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
+                    createAlert('error', '<?php echo __('Timeout of waiting for confirmation of payment', 'dotpay-payment-gateway'); ?>', '<?php echo __('Payment Error', 'dotpay-payment-gateway'); ?>');
                     jQuery('.return-to-my-account').show();
+                    jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>timer_off</i> " );
+                    jQuery( "div.dotpay-alert > p.alertDot" ).append( "<br><br><em><?php echo __('When transaction will be confirmed we will notify you on email. If payment will not be confirmed, please contact with shop owner. ', 'dotpay-payment-gateway'); if(isset($_SESSION['dotpay_payment_order_id'])) {echo  '<br>'.__('And give him the order number:', 'dotpay-payment-gateway').' <b>'.$_SESSION['dotpay_payment_order_id'].'</b>';}?></em>" );
                 }
             }, 5000);
         });
@@ -166,6 +184,7 @@
     if(typeof jQuery!="undefined") {
         jQuery(document).ready(function(){
             createAlert('error', '<?php echo $this->message; ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
+            jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>warning</i> " );
         });
     }
 </script>

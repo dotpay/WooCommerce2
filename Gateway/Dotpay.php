@@ -35,7 +35,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
     public function __construct() {
         $this->title = 'Dotpay';
         parent::__construct();
-        $this->description = __('Fast and secure payment via Dotpays', 'dotpay-payment-gateway');
+        $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
         $this->addActions();
     }
     
@@ -81,7 +81,10 @@ class Gateway_Dotpay extends Gateway_Gateway {
     public function init_form_fields() {
         $nameArrayMasterPass = array(
             __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
-            __('Payment with a credit card by MasterPass', 'dotpay-payment-gateway'),
+            __('Payment with a credit card by MasterPass', 'dotpay-payment-gateway').
+            '<p class="description">'.__('Needed separate agreement.', 'dotpay-payment-gateway').'<br>'.
+			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
+               'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
         );
         $nameArrayccPV = array(
             __('I have a separate account in Dotpay: show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
@@ -96,9 +99,10 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $this->form_fields = array(
             'enabled' => array(
                 'title' => __('Enable', 'dotpay-payment-gateway'),
-                'label' => __('You can enable Dotpay payments', 'dotpay-payment-gateway'),
+                'label' => '<strong style="color: #881920; font-size: 1.4em;">'.__('You can enable Dotpay payments', 'dotpay-payment-gateway').'</strong>',
                 'type' => 'checkbox',
-                'default' => 'yes'
+                'default' => 'yes',
+				'class' => 'dotpay_module_enable'
             ),
             'id' => array(
                 'title' => __('Dotpay customer ID', 'dotpay-payment-gateway'),
@@ -120,7 +124,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 
             'test' => array(
                 'title' => __('Testing environment', 'dotpay-payment-gateway'),
-                'label' => __('Only payment simulation - required Dotpay test account: <a href="https://ssl.dotpay.pl/test_seller/test/registration/" class="hide-if-no-js page-title-action"  target="_blank" title="Dotpay test account registration">registration</a>', 'dotpay-payment-gateway'),
+                'label' => __('Only payment simulation - required Dotpay test account: <a href="https://ssl.dotpay.pl/test_seller/test/registration/?affilate_id=woocommerce" class="hide-if-no-js page-title-action"  target="_blank" title="Dotpay test account registration">registration</a>', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'default' => 'yes'
             ),
@@ -168,27 +172,42 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'credit_card_show' => array(
-                'title' => __('Credit cards', 'dotpay-payment-gateway'),
+                'title' => __('Credit cards', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="Credit Cards" width="83" height="25">',
                 'type' => 'checkbox',
-                'label' => __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
+				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
+				'desc_tip' => true,
+                'label' => __('Show separately payment channel in a shop.', 'dotpay-payment-gateway').'
+							<br><p class="description">'. __('Needed separate agreement.','dotpay-payment-gateway').'<br>'.
+						  __('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').
+                          ' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
+                          'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.
+						  __('Contact', 'dotpay-payment-gateway', 'dotpay-payment-gateway').'</a></p>',
                 'default' => 'no',
 				'class' => 'cc_switch',
             ),
 			'credit_card_channel_number' => array(
                 'title' => '<span style="color: #666666;">'.__('Number of credit card channel', 'dotpay-payment-gateway').'</span>',
                 'type' => 'text',
-				'css' => 'max-width: 50px; color: #91999c; font-size: 16px; border-color: #b2bfc5;',
+				'css' => 'max-width: 72px; color: #91999c; font-size: 16px; border-color: #b2bfc5;',
                 'default' => '248',
 				'description' => __('The default card channel number for the Dotpay account is 248. Leave this number if everything works for you.', 'dotpay-payment-gateway'),
 				'desc_tip' => true,
-				'placeholder' => _x(' eq. 248', 'placeholder', 'dotpay-payment-gateway'),
-                'class' => 'cc_option'
+				'placeholder' => __(' eq. 248','dotpay-payment-gateway'),
+                'class' => 'cc_option',
             ),
 			
             'oneclick_show' => array(
-                'title' => __('OneClick', 'dotpay-payment-gateway'),
+                'title' => __('One Click for credit card', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="One Click Credit Cards" width="83" height="25">',
                 'type' => 'checkbox',
-                'label' => __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
+				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
+				'desc_tip' => true,
+                'label' => __('Show separately payment channel in a shop.', 'dotpay-payment-gateway').'
+							<br><p class="description">'. __('Needed separate agreement.','dotpay-payment-gateway').'<br>'.
+						  __('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').
+                          ' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
+                          'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.
+						  __('Contact', 'dotpay-payment-gateway', 'dotpay-payment-gateway').'</a></p><strong>'.
+						  __('Requires Dotpay API username and password (enter below).', 'dotpay-payment-gateway').'</strong>',
                 'default' => 'no',
             ),
             
@@ -196,25 +215,29 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'title' => __('Username API', 'dotpay-payment-gateway'),
                 'type' => 'text',
                 'default' => '',
-                'label' => __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
+				'description' => __('Leave this field empty if you do not use One Click and if you do not want to present the payment instructions on the shop page for semi-automatic channels. Data for access to the Dotpay administration panel.', 'dotpay-payment-gateway'),
+                'desc_tip' => true,
             ),
             
             'api_password' => array(
                 'title' => __('Password API', 'dotpay-payment-gateway'),
                 'type' => 'password',
                 'default' => '',
-                'label' => __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
+                'description' => __('Leave this field empty if you do not use One Click and if you do not want to present the payment instructions on the shop page for semi-automatic channels. Data for access to the Dotpay administration panel.', 'dotpay-payment-gateway'),
+                'desc_tip' => true,
             ),
 
             'masterpass_show' => array(
-                'title' => __('MasterPass', 'dotpay-payment-gateway'),
+                'title' => __('MasterPass', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/MasterPass.png'.'" alt="MasterPass" width="83" height="25">',
                 'type' => 'checkbox',
+				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
+				'desc_tip' => true,
                 'label' => implode(' ', $nameArrayMasterPass),
                 'default' => 'no',
             ),
 
             'blik_show' => array(
-                'title' => __('BLIK', 'dotpay-payment-gateway'),
+                'title' => __('BLIK', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/BLIK.png'.'" alt="BLIK" width="63" height="25">',
                 'type' => 'checkbox',
                 'label' => implode(' ', $nameArrayBLIK),
                 'default' => 'no',

@@ -1,11 +1,12 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <?php if($this->isWidgetEnabled()): ?>
 <style>
-	<?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
+    <?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>
 <script type="text/javascript">
     var dotpayWidgetConfig = {
         sellerAccountId: <?php echo $this->getSellerId(); ?>,
-        amount: '<?php echo $this->getAmountForWidget(); ?>',
+        amount: '<?php if($this->getAmountForWidget() > 0) {echo $this->getAmountForWidget();}else{ echo '100.00';} ?>',
         currency: '<?php echo $this->getCurrency(); ?>',
         lang: '<?php echo $this->getPaymentLang(); ?>',
         widgetFormContainerClass: 'my-form-widget-container',
@@ -14,19 +15,54 @@
         disabledChannels: [<?php echo $this->getDisabledChannelsList(); ?>],
         host: '<?php echo $this->getPaymentChannelsUrl(); ?>'
     };
+
+	//make the widget show only chosen payment channel
+	//showing selected
     if(jQuery != undefined) {
         setTimeout(function(){
-            jQuery('.channel-container ').click(function(){
-                jQuery('html, body').animate({
-                    scrollTop: (jQuery('#place_order').offset().top) + 'px'
-                }, 'fast');
-            });
-        }, 1500);
-    }
+             jQuery('.channel-container').on('click', function () {
+				 jQuery('.channels-wrapper').css('text-align','center');
+				 //presenting selected channel
+                 jQuery('.selected').clone().insertBefore('.dotpay-channels-selection').addClass('cloned');	
+				 //hiding the list of channels
+                 jQuery('.dotpay-channels-selection').slideUp('600', 'swing');
+				 //add text info about channel selection				 
+				 jQuery('<?php echo "<br><p style=\"font-size:1.2em;text-align:center;color:#1515c4;padding:20px;border-radius:3px \"> <strong>".__('To select different channel click the above icon again', 'dotpay-payment-gateway')."</strong></p>"; ?>').insertAfter('.cloned').addClass('channelSelect');
+				 //remove copies of accidental click
+				 jQuery('.channelSelect').not(':last').remove();
+				 //remove copies of accidental click
+				 jQuery('.cloned').not(':last').remove();
+             });}, 1200);
+
+		//showing all, when deselecting previous
+        setTimeout(function() {
+                jQuery('.cloned').live('click', function(){
+					//presenting the list of channels
+                    jQuery('.dotpay-channels-selection').slideDown('600','swing');	
+					//hiding selection, removing clone
+                    jQuery('.cloned').toggle().remove();
+					//removing the channel selection
+					jQuery('.selected').removeClass('selected');
+					//removing text
+					jQuery('.channelSelect').remove();
+					//scroll to top of channel selection
+					jQuery('html, body').animate({
+						scrollTop: (jQuery('#payment_method_dotpay').offset().top -100)
+					}, 'fast');
+					//reset css of wrapper
+					jQuery('.channels-wrapper').css('text-align','left');
+
+                 });
+        }, 1200);
+
+	};
+
+
 </script>
 <link href="<?php echo $this->getResourcePath(); ?>css/payment_widget.min.css" rel="stylesheet">
 <script id="dotpay-payment-script" src="<?php echo $this->getResourcePath(); ?>js/payment_widget.js"></script>
 <p class="my-form-widget-container"></p>
 <?php endif; ?>
-<?php if((bool)$this->isTestMode()) echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong>".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
+<?php if((bool)$this->isTestMode()) echo "<p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."<br></p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
+

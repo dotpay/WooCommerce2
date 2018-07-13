@@ -10,6 +10,8 @@
             </ol>
         </p>
         <br>
-        <p><a href="https://ssl.dotpay.pl/s2/login/registration/?affilate_id=woocommerce" class="button button-primary" target="_blank" title="<?php echo __('Account registration in Dotpay', 'dotpay-payment-gateway'); ?>"><?php echo __('Account registration in Dotpay', 'dotpay-payment-gateway'); ?></a> &nbsp;&nbsp;&nbsp;<a href="http://www.dotpay.pl/" target="_blank" class="button"><?php echo __('Dotpay Home Page', 'dotpay-payment-gateway'); ?></a></p>
-
+        <p>
+		<?php if(isset($_GET['section']) && $_GET['section'] == 'dotpay'){echo "&nbsp;&nbsp;&nbsp;<span class=\"\" style=\"color:#881920;font-weight: bold; text-decoration: underline;\" >". __('Module configuration','dotpay-payment-gateway')." &#x2935;</span>"; }else{ echo "&nbsp;&nbsp;&nbsp;<a href=\"".admin_url('admin.php?page=wc-settings&tab=checkout&section=dotpay' )."\" target=\"_self\" class=\"button\" style=\"background-color:#8fd4ad;font-weight: bold;\" >". __('Module configuration','dotpay-payment-gateway')."</a>";} ?> &nbsp;&nbsp;&nbsp;<a href="https://ssl.dotpay.pl/s2/login/registration/?affilate_id=woocommerce" class="button button-primary" target="_blank" title="<?php echo __('Account registration in Dotpay', 'dotpay-payment-gateway'); ?>"><?php echo __('Account registration in Dotpay', 'dotpay-payment-gateway'); ?></a> &nbsp;&nbsp;&nbsp;<a href="http://www.dotpay.pl/" target="_blank" class="button"><?php echo __('Dotpay Home Page', 'dotpay-payment-gateway'); ?></a> 
+		</p>
+		
 </div>
