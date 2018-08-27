@@ -46,7 +46,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.2.1';
+    const MODULE_VERSION = '3.2.2';
+
     
     public static $ocChannel = 248;
     public static $pvChannel = 248;
@@ -54,10 +55,14 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     public static $blikChannel = 73;
     public static $transferChannel = 11;
     public static $mpChannel = 71;
-    
+		
+	
+
+	
     private $orderObject = null;
     private $orderId = null;
     
+	
     /**
      * Return API username
      * @return string
@@ -244,24 +249,33 @@ function getControl($full = null) {
      * Return payment language name
      * @return string
      */
-    protected function getPaymentLang() {
-        $dotpay_lang = 'pl';
-        if (!$this->isTestMode()) {
-            $language = get_bloginfo('language');
-            if(is_string($language)) {
+  protected function getPaymentLang() {
+			
+		   $language = get_bloginfo('language');
+		   $wp_dotpay_lang = '';
+		   
+		   if(is_string($language)) {
                 $languageArray = explode('-', $language);
                 if(isset($languageArray[0])) {
                     $languageLower = strtolower($languageArray[0]);
-                    if(in_array($languageLower, $this->getAcceptLang())) {
-                        $dotpay_lang = $languageLower;
-                    }
+                    $wp_dotpay_lang = $languageLower;	
                 }
             }
-        }
+			
+			if($wp_dotpay_lang == 'pl') {
+				$dotpay_lang = 'pl';
+			} else {
+				if (!in_array($languageLower, $this->getAcceptLang())) {
+				 	$dotpay_lang = 'en';
+				} else{
+					$dotpay_lang = $languageLower;
+				} 
+			}
         
         return $dotpay_lang;
     }
     
+	
     /**
      * Return url where Dotpay could do a redirection after payment making
      * @return string
@@ -527,6 +541,7 @@ function getControl($full = null) {
             'fr',
             'es',
             'cz',
+            'cs',
             'ru',
             'hu',
             'ro'
