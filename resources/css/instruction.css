@@ -6,7 +6,7 @@
     background-color: #fbfbfb;
     border: 1px solid #ddd;
     border-radius: 15px;
-    padding: 10px;
+    padding: 30px;
     min-width: 99%;
 }
 
@@ -27,7 +27,7 @@
     font-weight: bold;
     background-color: #ebebeb;
     padding: 0;
-    width: 100%;
+    width: 95%;
 }
 
 #instruction-content {
@@ -37,7 +37,7 @@
 }
 
 #instruction .input-group {
-    width: 100%;
+    width: 97%;
 }
 
 #amount {

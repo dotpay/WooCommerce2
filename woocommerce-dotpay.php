@@ -4,7 +4,7 @@
   Plugin Name: WooCommerce Dotpay Gateway
   Plugin URI: https://github.com/dotpay/WooCommerce2
   Description: Fast and secure payment gateway for Dotpay (Poland) to WooCommerce
-  Version: 3.2.0
+  Version: 3.2.2
   Author: Dotpay (tech@dotpay.pl)
   Author URI: mailto:tech@dotpay.pl
   Text Domain: dotpay-payment-gateway
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.2.0';
+		$thisVersionModule = '3.2.2';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -161,7 +161,19 @@ function dotpay_admin_enqueue_scripts($hook) {
     wp_enqueue_script( 'admin-script', plugin_dir_url( __FILE__ ) . 'resources/js/admin.js' );
 }
 
-if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+
+function woocommerce_is_active() {
+	if (!function_exists( 'is_plugin_active_for_network'))
+		require_once(ABSPATH . '/wp-admin/includes/plugin.php');
+	// Check if WooCommerce is active
+	if (!in_array( 'woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+		return (is_multisite() && is_plugin_active_for_network('woocommerce/woocommerce.php'));
+  }
+return true;
+}
+
+
+if (woocommerce_is_active() !== FALSE) {
     load_plugin_textdomain('dotpay-payment-gateway', false, dirname(plugin_basename(__FILE__)) . '/langs/');
 
     add_action('init', 'init_woocommerce_dotpay');
@@ -240,19 +252,22 @@ add_filter('the_content','wc_dotpay_gateway_content');
 
 function wc_dotpay_gateway_content($content) {
     global $wp_query;
-    switch($wp_query->post->ID) {
-        case Dotpay_Page::getPageId(DOTPAY_CARD_MANAGE_PNAME):
-            $oc = new Gateway_OneClick();
-            return $oc->getManagePage();
-        case Dotpay_Page::getPageId(DOTPAY_STATUS_PNAME):
-            $oc = new Gateway_Dotpay();
-            return $oc->getStatusPage();
-        case Dotpay_Page::getPageId(DOTPAY_PAYINFO_PNAME):
-            $oc = new Gateway_Transfer();
-            return $oc->getInformationPage();
-        default:
-            return $content;
-    }
+	
+	if (!empty($wp_query->post->ID)) {	
+		switch($wp_query->post->ID) {
+			case Dotpay_Page::getPageId(DOTPAY_CARD_MANAGE_PNAME):
+				$oc = new Gateway_OneClick();
+				return $oc->getManagePage();
+			case Dotpay_Page::getPageId(DOTPAY_STATUS_PNAME):
+				$oc = new Gateway_Dotpay();
+				return $oc->getStatusPage();
+			case Dotpay_Page::getPageId(DOTPAY_PAYINFO_PNAME):
+				$oc = new Gateway_Transfer();
+				return $oc->getInformationPage();
+			default:
+				return $content;
+		}
+  }
 }
 
 /**

@@ -542,15 +542,19 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 $gateway = new $channel();
                 $shopGateways .= $gateway->id.': '.$this->checkIfEnabled($gateway)."<br />";
             }
-            die("WooCommerce - M.Ver: ".self::MODULE_VERSION.
-                ", WP.Ver: ". $wp_version .
-                ", WC.Ver: ". $woocommerce->version .
-				", PHP.Ver: ". phpversion() .
-                ", ID: ".$this->getSellerId().
-                ", Active: ".(bool)$this->isEnabled().
-                ", Test: ".(bool)$this->isTestMode().
-                "<br />---Dotpay channels:---<br />".$dotpayGateways.
-                "<br />---Shop channels:---<br />".$shopGateways
+            die("WooCommerce Dotpay payment module debug:<br><br>
+			      * Dotpay module ver: ".self::MODULE_VERSION.
+                "<br> * Wordpress ver: ". $wp_version .
+                "<br> * Woocommerce ver: ". $woocommerce->version .
+				"<br> * PHP ver: ". phpversion() .
+                "<br>  _____________ ".
+				"<br>  - ID: ".$this->getSellerId().
+                "<br>  - Active: ".(bool)$this->isEnabled().
+                "<br>  - Test: ".(bool)$this->isTestMode().
+                "<br>  - is_multisite: ".(bool)is_multisite().
+                "<br>  - is_plugin_active_for_network: ".(bool)is_plugin_active_for_network('woocommerce/woocommerce.php').
+                "<br><br /> --- Dotpay channels: --- <br />".$dotpayGateways.
+                "<br /> --- Shop channels: --- <br />".$shopGateways
             );
         }
 
