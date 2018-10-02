@@ -137,8 +137,13 @@ if(typeof jQuery!="undefined") {
 	  jQuery("#woocommerce_dotpay_dontview_currency").attr("title", "Zostaw pole puste lub podaj walutę w formacie ISO 4217, np: EUR lub EUR,USD");
 
 
+    // removing redundant notifications
     jQuery('div.updated:has(a[href$=".dotpay.pl/"])').not(':first').remove();
     jQuery('div.error:has(a[href$=".dotpay.pl/"])').not(':first').remove();
+	
+	if ( jQuery('td.status:has(a[href$="dotpay"]) > span:not(woocommerce-input-toggle--disabled)') ) {
+		jQuery('div.updated:has(a[href$=".dotpay.pl/"])').remove();
+	} 
 
     jQuery('label[for="woocommerce_dotpay_id"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_pin"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
