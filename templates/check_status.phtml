@@ -116,7 +116,6 @@
                         createAlert('error', '<?php echo __('Order not found', 'dotpay-payment-gateway'); ?>', '<?php echo __('Status payment check error', 'dotpay-payment-gateway'); ?>');
                         jQuery('.return-to-my-account').show();
                         jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>gps_off</i> " );
-                        gps_off
                 }
                 if(r!='0')
                     stopWaiting(interval);

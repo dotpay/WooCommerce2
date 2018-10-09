@@ -4,7 +4,7 @@
   Plugin Name: WooCommerce Dotpay Gateway
   Plugin URI: https://github.com/dotpay/WooCommerce2
   Description: Fast and secure payment gateway for Dotpay (Poland) to WooCommerce
-  Version: 3.2.2
+  Version: 3.2.2.1
   Author: Dotpay (tech@dotpay.pl)
   Author URI: mailto:tech@dotpay.pl
   Text Domain: dotpay-payment-gateway
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.2.2';
+		$thisVersionModule = '3.2.2.1';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -100,15 +100,15 @@ add_action( 'admin_notices' , 'Check_WC_compare_for_Dotpay' );
        function noticeDotModule()
        {
        		global $thisVersionModule, $operator;
-             
-			if(getLatestVersionDotpayModule()['code_response'] != 200){				
+
+			if(getLatestVersionDotpayModule()['code_response'] != 200){
 				 print '<br><br><div class="notice is-dismissible notice-warning notice-alt"><p>'.__('Attention! There is a temporary problem with checking information about latest version of the Dotpay payment module','dotpay-payment-gateway').' (error: '.getLatestVersionDotpayModule()['code_response'].').
 				 <br>'.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Dotpay Gateway v'.$thisVersionModule.'</b>
                  <br>'.__('You can check manually and download latest version and upgrade from this address:','dotpay-payment-gateway').' <a href="https://github.com/dotpay/WooCommerce2/releases/latest" title="'.__('check if there is a new version of Dotpay payment plugin','dotpay-payment-gateway').'" target="_blank">'.__('WooCommerce Dotpay payment module','dotpay-payment-gateway').'</a></p></div>';
-			}else{				
+			}else{
 				print '<br><br><div class="update-message notice inline notice-warning notice-alt"><p>
 				'.__('Attention! A new version of the Dotpay payment module is available:','dotpay-payment-gateway').' '.getLatestVersionDotpayModule()['version'].'. '.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Dotpay Gateway v'.$thisVersionModule.'</b>
-				<br><b>'.__('Download latest version and upgrade manually this:','dotpay-payment-gateway').' <a href="'.getLatestVersionDotpayModule()['url'].'" class="update-link" aria-label="'.__('Upgrade WooCommerce Dotpay Gateway','dotpay-payment-gateway').'">'.getLatestVersionDotpayModule()['version'].'</b></a></p></div>';		
+				<br><b>'.__('Download latest version and upgrade manually this:','dotpay-payment-gateway').' <a href="'.getLatestVersionDotpayModule()['url'].'" class="update-link" aria-label="'.__('Upgrade WooCommerce Dotpay Gateway','dotpay-payment-gateway').'">'.getLatestVersionDotpayModule()['version'].'</b></a></p></div>';
 			}
 	   }
 
@@ -252,8 +252,8 @@ add_filter('the_content','wc_dotpay_gateway_content');
 
 function wc_dotpay_gateway_content($content) {
     global $wp_query;
-	
-	if (!empty($wp_query->post->ID)) {	
+
+	if (!empty($wp_query->post->ID)) {
 		switch($wp_query->post->ID) {
 			case Dotpay_Page::getPageId(DOTPAY_CARD_MANAGE_PNAME):
 				$oc = new Gateway_OneClick();
