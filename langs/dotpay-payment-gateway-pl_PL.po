@@ -492,8 +492,8 @@ msgstr ""
 "płatnicze."
 
 #: ../templates/admin_header.phtml:4
-msgid "Getting started"
-msgstr "Szybki start"
+msgid "Getting started instructions"
+msgstr "Instrukcja Szybki Start"
 
 #: ../templates/admin_header.phtml:7
 msgid ""
@@ -740,7 +740,7 @@ msgstr ""
 #~ "additional security. Within an offer of Internet payments Dotpay offers "
 #~ "over 140 payment channels including: mobile payments, instalments, cash, "
 #~ "e-wallets, transfers and credit card payments.</p>\n"
-#~ "\t\t\t\t<p class=\"main\"><strong>Getting started</strong></p>\n"
+#~ "\t\t\t\t<p class=\"main\"><strong>Getting started instructions</strong></p>\n"
 #~ "\t\t\t\t<p>\n"
 #~ "\t\t\t\t<ol>\n"
 #~ "\t\t\t\t\t<li>Thanks to Dotpay payment module the only activities needed "
