@@ -482,8 +482,8 @@ msgstr ""
 "credit card payments."
 
 #: ../templates/admin_header.phtml:4
-msgid "Getting started"
-msgstr "Getting started"
+msgid "Getting started instructions"
+msgstr "Getting started instructions"
 
 #: ../templates/admin_header.phtml:7
 msgid ""
