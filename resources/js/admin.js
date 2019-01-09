@@ -159,6 +159,8 @@ if (typeof jQuery != "undefined") {
 
     jQuery('tr').each(function(element) {
       var dotpayGatewayid = jQuery(this).attr('data-gateway_id');
+      var dotpayFastStart = jQuery(this).find('div:has(a.dotpay_fstart)');
+		  jQuery(dotpayFastStart).remove();
       //console.log(dotpayGatewayid)
       if (dotpayGatewayid !== undefined) {
         if (dotpayGatewayid.indexOf('Dotpay_') !== -1) {
