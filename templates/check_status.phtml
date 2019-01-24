@@ -107,7 +107,7 @@
                         createAlert('error', '<?php echo __('Payment was rejected.', 'dotpay-payment-gateway'); if(isset($_SESSION['dotpay_payment_order_id'])) {echo  ' '.__('The order number:', 'dotpay-payment-gateway').' '.$_SESSION['dotpay_payment_order_id'].'.';}?>', '<?php echo __('Payment Error', 'dotpay-payment-gateway'); ?>');
                         jQuery('.return-to-my-account').show();
                         jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>thumb_down</i> " );
-                        jQuery( "div.dotpay-alert > p.alertDot" ).append( "<br><br><a href='<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>&orders'> <?php echo __('try to pay again for this order', 'dotpay-payment-gateway'); ?></a>" );
+                        jQuery( "div.dotpay-alert > p.alertDot" ).append( "<br><br><a href='<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>orders'> <?php echo __('try to pay again for this order', 'dotpay-payment-gateway'); ?></a>" );
                         break;
                     case '0':
                         break;
