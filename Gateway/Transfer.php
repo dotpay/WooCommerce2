@@ -29,17 +29,6 @@
  * Transfer gateway channel
  */
 class Gateway_Transfer extends Gateway_Gateway {
-    /**
-     * Prepare gateway
-     */
-    public function __construct() {
-        $this->title = __('Transfer and cash channels', 'dotpay-payment-gateway');
-        parent::__construct();
-        $this->id = 'Dotpay_tc';
-        $this->addActions();
-        $this->enabled = 'no';
-
-    }
 
     /**
      * Create page
