@@ -240,6 +240,14 @@ msgstr "Widget"
 msgid "Display payment channels in a shop"
 msgstr "Display payment channels in a shop"
 
+#: ../Gateway/Dotpay.php:253
+msgid "Toggle channel names in widget view"
+msgstr "Toggle channel names in widget view"
+
+#: ../Gateway/Dotpay.php:255
+msgid "Display payment channels names in widget"
+msgstr "Display payment channels names in widget"
+
 #: ../Gateway/Gateway.php:70
 msgid "DOTPAY PAYMENT"
 msgstr "DOTPAY PAYMENT"

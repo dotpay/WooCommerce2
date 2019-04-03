@@ -246,6 +246,14 @@ msgstr "Widżet"
 msgid "Display payment channels in a shop"
 msgstr "Pokaż kanały płatności w sklepie"
 
+#: ../Gateway/Dotpay.php:253
+msgid "Toggle channel names in widget view"
+msgstr "Widoczność nazw kanałów w widżecie"
+
+#: ../Gateway/Dotpay.php:255
+msgid "Display payment channels names in widget"
+msgstr "Wyświetl nazwy kanałów płatności w widżecie"
+
 #: ../Gateway/Gateway.php:70
 msgid "DOTPAY PAYMENT"
 msgstr "PŁATNOŚCI DOTPAY"
