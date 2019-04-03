@@ -10839,7 +10839,8 @@ define('config',[],function(){
       disabledChannels: dotpayWidgetConfig.disabledChannels,
       channelsOrder: dotpayWidgetConfig.channelsOrder,
       channel: dotpayWidgetConfig.channel,
-      channelGroups: dotpayWidgetConfig.channelGroups,
+	  channelGroups: dotpayWidgetConfig.channelGroups,
+	  channelNameVisibility: dotpayWidgetConfig.channelNameVisibility,
       channelsUnavailableMsg: dotpayWidgetConfig.channelsUnavailableMsg
     }
   }
@@ -10858,7 +10859,9 @@ define('config',[],function(){
     config.widget.widgetClass = typeof config.widget.widgetClass !== 'undefined' ? config.widget.widgetClass : 'dotpay-channels-selection';
     config.widget.selectedWidgets = typeof config.widget.selectedWidgets !== 'undefined' ? config.widget.selectedWidgets : ['formWidget'];
     config.widget.offlineChannel = typeof config.widget.offlineChannel !== 'undefined' ? config.widget.offlineChannel : 'mark';
-    config.widget.channelsUnavailableMsg = typeof config.widget.channelsUnavailableMsg !== 'undefined' ? config.widget.channelsUnavailableMsg : 'All payment methods are unavailable';
+	config.widget.channelsUnavailableMsg = typeof config.widget.channelsUnavailableMsg !== 'undefined' ? config.widget.channelsUnavailableMsg : 'All payment methods are unavailable';
+	config.widget.channelNameVisibility = typeof config.widget.channelNameVisibility !== 'undefined' ? config.widget.channelNameVisibility : false;
+			return config;
 
     return config;
   }
@@ -10972,15 +10975,19 @@ define('widgetsCommon',['jquery', 'xhr', 'config'], function ($, xhr, config) {
                 if($.parseJSON(value.is_not_online.toLowerCase())) {
                     var channelNotOnlineClass = this.getChannelNotOnlineClass();
                 }
-                switch(widget) {
-                    case 'FormWidget':
-                        var tooltipMessage = this.setTooltip(value.not_online_message);
-                        return "<div class='channel-container " + channelNotOnlineClass + "'>" + tooltipMessage + "<div class='image-container'><img src='" + value.logo + "'/></div><div class='input-container'><input type='radio' id='" + value.id + "' value='" + value.id + "' name='channel'  class='channel-input'/></div><div class='label-container'><label for='" + value.id + "'>" + value.name + "</label></div></div>";
-                    break;
-                    case 'selectWidget':
-                        return "<option class='" + channelNotOnlineClass + "' value='" + value.id + "'>" + value.name + "</option>";
-                    break;
-                }
+                switch (widget) {
+					case 'FormWidget':
+						var tooltipMessage = this.setTooltip(value.not_online_message);
+						if (config.widget.channelNameVisibility == 1) {
+							return `<div class='channel-container ${channelNotOnlineClass}'> ${tooltipMessage} <div class='image-container'><img src='${value.logo}' alt='${value.name}' title='${value.name}'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='channel-input'/></div><div class='label-container'><label for='${value.id}'> ${value.name}</label></div></div>`;
+						} else {
+							return `<div class='channel-container ${channelNotOnlineClass}'> ${tooltipMessage} <div class='image-container only-dotpay-logo'><img src='${value.logo}' alt='${value.name}' title='${value.name}'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='channel-input'/></div></div>`;
+						}
+						break;
+					case 'selectWidget':
+						return `<option class='${channelNotOnlineClass}' value='${value.id}'> ${value.name}</option>`;
+						break;
+				}
             }
         },
 

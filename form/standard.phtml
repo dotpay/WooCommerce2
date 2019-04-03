@@ -12,6 +12,7 @@
         widgetFormContainerClass: 'my-form-widget-container',
         offlineChannel: 'mark',
         offlineChannelTooltip: true,
+		channelNameVisibility: '<?php echo $this->getChannelNameVisiblity(); ?>',
         disabledChannels: [<?php echo $this->getDisabledChannelsList(); ?>],
         host: '<?php echo $this->getPaymentChannelsUrl(); ?>'
     };

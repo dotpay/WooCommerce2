@@ -84,6 +84,17 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
 			}
     }
 
+   /**
+     * Return channel name visibility
+     * @return boolean
+     */
+    public function getChannelNameVisiblity() {
+        $result = 0;
+        if ('yes' === $this->get_option('channel_name_show')) {
+            $result = true;
+        }
+        return $result;
+    }
 
     /**
      * Return API password
