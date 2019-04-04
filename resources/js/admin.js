@@ -87,6 +87,13 @@ if (typeof jQuery != "undefined") {
       }
     });
 
+    //remove spaces from PIN input
+			jQuery("#woocommerce_dotpay_pin").bind('keyup paste keydown', function(e) {
+				jQuery(this).val(function(_, v){
+					return v.replace(/\s+/g, '');
+				});
+    		});
+
     //  module setup: validatte ID2
     jQuery("#woocommerce_dotpay_id2").attr("pattern", "[0-9]{5,8}");
     jQuery("#woocommerce_dotpay_id2").attr("title", "Dozwolone tylko cyfry (6 cyfr)");
