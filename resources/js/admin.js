@@ -27,21 +27,27 @@
 
 function switchPV(obj) {
   if (jQuery(obj).prop('checked')) {
-    jQuery('.pv_option').parents('tr').show();
+    jQuery('.pv_option').parents('tr').fadeIn();
     jQuery("#woocommerce_dotpay_pin2").attr("pattern", "[a-zA-Z0-9]{16,32}");
     jQuery("#woocommerce_dotpay_pin2").prop('required', true);
     jQuery("#woocommerce_dotpay_pin2").attr("title", "Pin składa się przynajmniej z 16 a maksymalnie z 32 znaków alfanumerycznych!");
   } else {
-    jQuery('.pv_option').parents('tr').hide();
+    jQuery('.pv_option').parents('tr').fadeOut();
     jQuery("#woocommerce_dotpay_pin2").prop('required', false);
   }
 }
 
 function shownumberCHcc(obj) {
   if (jQuery(obj).prop('checked'))
-    jQuery('.cc_option').parents('tr').show();
+    jQuery('.cc_option').parents('tr').fadeIn();
   else
-    jQuery('.cc_option').parents('tr').hide();
+    jQuery('.cc_option').parents('tr').fadeOut();
+}
+function showChannelNames(obj) {
+  if (jQuery(obj).prop('checked'))
+    jQuery('.widget_channel_names').parents('tr').fadeIn();
+  else
+    jQuery('.widget_channel_names').parents('tr').fadeOut();
 }
 
 function isenambledDotpaymodule(obj) {
@@ -70,6 +76,10 @@ if (typeof jQuery != "undefined") {
     shownumberCHcc(jQuery('.cc_switch'));
     jQuery('.cc_switch').change(function() {
       shownumberCHcc(this);
+    });
+    showChannelNames(jQuery('.widget_show'));
+    jQuery('.widget_show').change(function() {
+      showChannelNames(this);
     });
 
     isenambledDotpaymodule(jQuery('.dotpay_module_enable'));
@@ -130,8 +140,6 @@ if (typeof jQuery != "undefined") {
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_ccPV_show"]'));
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_test"]'));
     jQuery("<br><hr style='height: 3px; background: #c5ccd6;'>").insertAfter(jQuery('label[for="woocommerce_dotpay_enabled"]'));
-
-    jQuery("<br><hr style='height: 3px; background: #439c91;'>").insertAfter(jQuery('label[for="woocommerce_dotpay_channels_show"]'));
 
 
 

@@ -248,12 +248,14 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'type' => 'checkbox',
                 'label' => __('Display payment channels in a shop', 'dotpay-payment-gateway'),
                 'default' => 'yes',
+                'class' => 'widget_show',
             ),
             'channel_name_show' => array(
                 'title' => __('Toggle channel names in widget view', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'label' => __('Display payment channels names in widget', 'dotpay-payment-gateway'),
                 'default' => 'no',
+                'class' => 'widget_channel_names',
             ),
         );
     }
