@@ -32,7 +32,7 @@ if (! class_exists('simple_html_dom_node'))
  */
 class Dotpay_Instruction extends Dotpay_Payment {
     const DOTPAY_NAME = 'Dotpay sp. z o.o.';
-    const DOTPAY_STREET = 'Wielicka 72';
+    const DOTPAY_STREET = 'Wielicka 28B';
     const DOTPAY_CITY = '30-552 Kraków';
     
     private $instructionId;

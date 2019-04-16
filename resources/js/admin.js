@@ -158,7 +158,7 @@ if (typeof jQuery != "undefined") {
     if (jQuery('td.status:has(a[href$="dotpay"]) > span:not(woocommerce-input-toggle--disabled)')) {
       jQuery('div.updated:has(a[href$=".dotpay.pl/"])').hide();
       jQuery('a.dotpay_fstart').click(function() {
-        jQuery('div.updated:has(a[href$=".dotpay.pl/"])').toggle();
+        jQuery('div.updated:has(a[href$=".dotpay.pl/"])').slideToggle(700,"linear");
       });
     }
 

@@ -684,14 +684,14 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->getParam('email').
         $this->getParam('p_info').
         $this->getParam('p_email').
-	$this->getParam('credit_card_issuer_identification_number').
-	$this->getParam('credit_card_masked_number').
-	$this->getParam('credit_card_expiration_year').
-	$this->getParam('credit_card_expiration_month').
-	$this->getParam('credit_card_brand_codename').
-	$this->getParam('credit_card_brand_code').
-	$this->getParam('credit_card_unique_identifier').
-	$this->getParam('credit_card_id').
+        $this->getParam('credit_card_masked_number').
+        $this->getParam('credit_card_expiration_year').
+        $this->getParam('credit_card_expiration_month').
+        $this->getParam('credit_card_brand_codename').
+        $this->getParam('credit_card_issuer_identification_number').
+        $this->getParam('credit_card_brand_code').
+        $this->getParam('credit_card_unique_identifier').
+        $this->getParam('credit_card_id').
         $this->getParam('channel').
         $this->getParam('channel_country').
         $this->getParam('geoip_country');

@@ -708,14 +708,14 @@ function getControl($full = null) {
      * @return array|false
      */
 
-	 public function getChannelName($Nr) {
+	 public function getChannelName($id) {
 
 	     $resultJson = $this->getDotpayChannels('1000');
         if(false !== $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
                 foreach ($result['channels'] as $channel) {
-                    if (isset($channel['id']) && $channel['id'] == $Nr) {
+                    if (isset($channel['id']) && $channel['id'] == $id) {
                         return $channel;
                     }
                 }
