@@ -532,6 +532,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     public function confirmPayment() {
         global $wp_version, $woocommerce;
         if($this->getClientIp() == self::OFFICE_IP && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET') {
+            $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
             $dotpayGateways = '';
             foreach(self::getDotpayChannelsList() as $channel) {
                 $gateway = new $channel();
@@ -553,6 +554,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 "<br>  - Test: ".(bool)$this->isTestMode().
                 "<br>  - is_multisite: ".(bool)is_multisite().
                 "<br>  - is_plugin_active_for_network: ".(bool)is_plugin_active_for_network('woocommerce/woocommerce.php').
+                "<br>  - currencies_that_block_main:  ".$this->get_option('dontview_currency').
+				"<br><br /> --- Dotpay API data: --- <br />".
+				"<br>  - Dotpay username: ".$this->getApiUsername().
+				"<br>  - correct API auth data: ".$sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword()).
                 "<br><br /> --- Dotpay channels: --- <br />".$dotpayGateways.
                 "<br /> --- Shop channels: --- <br />".$shopGateways
             );
