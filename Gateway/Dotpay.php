@@ -36,6 +36,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $this->title = 'Dotpay';
         parent::__construct();
         $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
+        $this->method_description = __(' Online payment', 'dotpay-payment-gateway');
         $this->addActions();
     }
     
@@ -98,7 +99,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 
         $this->form_fields = array(
             'enabled' => array(
-                'title' => __('Enable', 'dotpay-payment-gateway'),
+                'title' => __('Enable', 'dotpay-payment-gateway').' <img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/dotpay.png'.'" style="vertical-align: text-bottom" alt="Dotpay">',
                 'label' => '<strong style="color: #881920; font-size: 1.4em;">'.__('You can enable Dotpay payments', 'dotpay-payment-gateway').'</strong>',
                 'type' => 'checkbox',
                 'default' => 'yes',
@@ -164,9 +165,9 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'dontview_currency' => array(
-                'title' => __('Currencies for disable main method', 'dotpay-payment-gateway'),
+                'title' => __('Currencies that disable main method', 'dotpay-payment-gateway'),
                 'type' => 'text',
-                'default' => 'EUR,USD,GBP',
+                'default' => '',
                 'description' => __('Leave it blank or enter a currency separated by commas eg. (EUR, GBP).', 'dotpay-payment-gateway'),
                 'desc_tip' => true,
             ),

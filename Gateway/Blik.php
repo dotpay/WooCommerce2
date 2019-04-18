@@ -36,6 +36,7 @@ class Gateway_Blik extends Gateway_Gateway {
         parent::__construct();
         $this->id = 'Dotpay_blik';
         $this->title = __('BLIK via Dotpay', 'dotpay-payment-gateway');
+        $this->method_description = __('All Dotpay settings can be adjusted', 'dotpay-payment-gateway').sprintf('<a href="%s"> ', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=dotpay' ) ).__('here', 'dotpay-payment-gateway').'</a>.';
         $this->addActions();
     }
     
@@ -86,7 +87,7 @@ class Gateway_Blik extends Gateway_Gateway {
     public function validate_fields() {
         $blikCode = (int)$_POST['blik_code'];
         if(strlen($blikCode) != 6) {
-            wc_add_notice( __('BLIK code is uncorrect', 'dotpay-payment-gateway') , 'error' );
+            wc_add_notice( __('BLIK code is incorrect', 'dotpay-payment-gateway') , 'error' );
         } else if(parent::validate_fields()) {
             $this->setBlikCode($blikCode);
             return true;

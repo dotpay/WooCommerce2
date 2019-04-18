@@ -37,9 +37,25 @@ msgstr "Order ID: "
 msgid "BLIK via Dotpay"
 msgstr "BLIK via Dotpay"
 
+#: ../Gateway/Dotpay.php:39
+msgid " Online payment"
+msgstr " Online payment"
+
+#: ../Gateway/Blik.php:39 ../Gateway/PV.php:39
+#: ../Gateway/OneClick.php:39 ../Gateway/MasterPass.php:39
+#: ../Gateway/Card.php:39
+msgid "All Dotpay settings can be adjusted"
+msgstr "All Dotpay settings can be adjusted"
+
+#: ../Gateway/Blik.php:39 ../Gateway/PV.php:39
+#: ../Gateway/OneClick.php:39 ../Gateway/MasterPass.php:39
+#: ../Gateway/Card.php:39
+msgid "here"
+msgstr "here"
+
 #: ../Gateway/Blik.php:89
-msgid "BLIK code is uncorrect"
-msgstr "BLIK code is uncorrect"
+msgid "BLIK code is incorrect"
+msgstr "BLIK code is incorrect"
 
 #: ../Gateway/Card.php:36
 msgid "Credit Cards via Dotpay"
@@ -171,8 +187,8 @@ msgid "Leave it blank or enter a currency separated by commas eg. (EUR, GBP)."
 msgstr "Leave it blank or enter a currency separated by commas eg. (EUR, GBP)."
 
 #: ../Gateway/Dotpay.php:167
-msgid "Currencies for disable main method"
-msgstr "Currencies for disable main method"
+msgid "Currencies that disable main method"
+msgstr "Currencies that disable main method"
 
 #: ../Gateway/Dotpay.php:175
 msgid "Credit cards"

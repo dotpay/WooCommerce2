@@ -67,7 +67,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->id = 'dotpay';
         $this->icon = $this->getIcon();
         $this->has_fields = true;
-        $this->method_title = __('DOTPAY PAYMENT', 'dotpay-payment-gateway');;
+        $this->method_title = __('DOTPAY PAYMENT', 'dotpay-payment-gateway');
         $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
 
 
@@ -75,8 +75,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->init_settings();
         $this->enabled = ($this->isEnabled())?'yes':'no';
 
-
-        $this->method_description = $this->render('admin_header.phtml');
     }
 
 
@@ -534,6 +532,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if($this->getClientIp() == self::OFFICE_IP && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET') {
             $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
             $dotpayGateways = '';
+            $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+			$curlvalues=curl_version();
             foreach(self::getDotpayChannelsList() as $channel) {
                 $gateway = new $channel();
                 $dotpayGateways .= $gateway->id.': '.$this->checkIfEnabled($gateway)."<br />";
@@ -547,15 +547,17 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 			      * Dotpay module ver: ".self::MODULE_VERSION.
                 "<br> * Wordpress ver: ". $wp_version .
                 "<br> * Woocommerce ver: ". $woocommerce->version .
-				"<br> * PHP ver: ". phpversion() .
+                "<br> * PHP ver: ". phpversion() .
+                "<br> * cURL ver: ". $curlvalues['version']." ".$curlvalues['ssl_version'].
+				"<br> * MySQL ver: ".  mysqli_get_server_info($connection).
                 "<br>  _____________ ".
-				"<br>  - ID: ".$this->getSellerId().
                 "<br>  - Active: ".(bool)$this->isEnabled().
+				"<br>  - ID: ".$this->getSellerId().
                 "<br>  - Test: ".(bool)$this->isTestMode().
+                "<br>  - currencies_that_block_main:  ".$this->get_option('dontview_currency').
                 "<br>  - is_multisite: ".(bool)is_multisite().
                 "<br>  - is_plugin_active_for_network: ".(bool)is_plugin_active_for_network('woocommerce/woocommerce.php').
-                "<br>  - currencies_that_block_main:  ".$this->get_option('dontview_currency').
-				"<br><br /> --- Dotpay API data: --- <br />".
+				"<br><br /> --- Dotpay API data: --- ".
 				"<br>  - Dotpay username: ".$this->getApiUsername().
 				"<br>  - correct API auth data: ".$sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword()).
                 "<br><br /> --- Dotpay channels: --- <br />".$dotpayGateways.

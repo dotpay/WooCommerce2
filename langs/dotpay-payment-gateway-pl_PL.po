@@ -38,8 +38,24 @@ msgstr "Nr zamówienia: "
 msgid "BLIK via Dotpay"
 msgstr "BLIK (Dotpay)"
 
+#: ../Gateway/Dotpay.php:39
+msgid " Online payment"
+msgstr " Płatności online"
+
+#: ../Gateway/Blik.php:39 ../Gateway/PV.php:39
+#: ../Gateway/OneClick.php:39 ../Gateway/MasterPass.php:39
+#: ../Gateway/Card.php:39
+msgid "All Dotpay settings can be adjusted"
+msgstr "Ustawienia Dotpay można znaleźć"
+
+#: ../Gateway/Blik.php:39 ../Gateway/PV.php:39
+#: ../Gateway/OneClick.php:39 ../Gateway/MasterPass.php:39
+#: ../Gateway/Card.php:39
+msgid "here"
+msgstr "tutaj"
+
 #: ../Gateway/Blik.php:89
-msgid "BLIK code is uncorrect"
+msgid "BLIK code is incorrect"
 msgstr "Kod BLIK jest niepoprawny"
 
 #: ../Gateway/Card.php:36
@@ -174,9 +190,9 @@ msgstr ""
 "USD)"
 
 #: ../Gateway/Dotpay.php:167
-msgid "Currencies for disable main method"
+msgid "Currencies that disable main method"
 msgstr ""
-"Waluty zamówienia dla, których główna metoda płatności będzie niedostępna"
+"Waluty zamówienia dla, których główna metoda płatności NIE będzie dostępna"
 
 #: ../Gateway/Dotpay.php:175
 msgid "Credit cards"
@@ -357,6 +373,7 @@ msgstr "Proszę wybrać opcję płatności One Click"
 #: ../Gateway/PV.php:36
 msgid "Credit Cards (currencies) via Dotpay"
 msgstr "Karty płatnicze (waluty) dzięki Dotpay"
+
 
 #: ../Gateway/Transfer.php:36
 msgid "Transfer and cash channels"
