@@ -394,10 +394,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             } else if (array_key_exists('HTTP_CF_CONNECTING_IP', $_SERVER)) {
                 return $_SERVER["HTTP_CF_CONNECTING_IP"];
             } else if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
-            return $_SERVER["REMOTE_ADDR"];
-            } else {
-                return $ipaddress;
+                return $_SERVER["REMOTE_ADDR"];
             }
+        } else {
+            return $ipaddress;
         }
     }
 
