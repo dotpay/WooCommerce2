@@ -367,13 +367,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         if (array_key_exists('X-Forwarded-For', $_SERVER)) {
             $_SERVER['HTTP_X_FORWARDED_FOR'] = $_SERVER['X-Forwarded-For'];
         }
-        if (
-            isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']
-            && (!isset($_SERVER['REMOTE_ADDR'])
-                || preg_match('/^127\..*/i', trim($_SERVER['REMOTE_ADDR'])) || preg_match('/^172\.16.*/i', trim($_SERVER['REMOTE_ADDR']))
-                || preg_match('/^192\.168\.*/i', trim($_SERVER['REMOTE_ADDR'])) || preg_match('/^10\..*/i', trim($_SERVER['REMOTE_ADDR'])))
-        ) {
-
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',')) {
                 $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
                 $ipaddress = $ips[0];
@@ -384,9 +378,6 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             $ipaddress = $_SERVER['REMOTE_ADDR'];
         }
 
-        if ($ipaddress === '0:0:0:0:0:0:0:1' || $ipaddress === '::1') {
-            $ipaddress = self::LOCAL_IP;
-        }
 
         if (isset($list_ip) && $list_ip != null) {
             if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
