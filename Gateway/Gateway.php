@@ -565,15 +565,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             );
         }
 
-        if (
-            !($this->getClientIp() == self::DOTPAY_IP ||
-                ($this->isTestMode() &&
-                 ($this->getClientIp() == self::OFFICE_IP ||
-                  $this->getClientIp() == self::LOCAL_IP
-                 )
-                )
-            )
-        ) {
+        if (!($this->getClientIp() == self::DOTPAY_IP || $this->getClientIp() == self::OFFICE_IP)) {
             die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true).")");
         }
 
