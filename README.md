@@ -9,7 +9,7 @@ _English version below_
 #### Instrukcja:
 
 1.  [Pobierz](https://github.com/dotpay/WooCommerce2/releases/latest "Pobierz") najnowszą wersję wtyczki (woocommerce-dotpay.x.x.x.x.zip).    
-2.  Zainstaluj wtyczkę z poziomu WooCommerce, menu: Wtyczki->Dodaj nową 
+2.  Zainstaluj wtyczkę z poziomu WooCommerce, menu: Wtyczki -> Dodaj nową -> Wyślij wtyczkę na serwer
 
 #### Konfiguracja URLC:
 
@@ -38,7 +38,7 @@ Jeśli strona sprzedażowa posiada certyfikat SSL (adres strony rozpoczyna się 
 #### Instructions:
 
 1.  [Download](https://github.com/dotpay/WooCommerce2/releases/latest "Download") latest plugin version (woocommerce-dotpay.x.x.x.x.zip).    
-2.  Install the plugin from the WooCommerce menu: Plugins-> Add New
+2.  Install the plugin from the WooCommerce menu: Plugins -> Add New -> Upload Plugin
 
 #### URLC configuration:
 
