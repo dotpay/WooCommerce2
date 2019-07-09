@@ -36,6 +36,7 @@ class Gateway_MasterPass extends Gateway_Gateway {
         $this->title = __('MasterPass via Dotpay', 'dotpay-payment-gateway');;
         parent::__construct();
         $this->id = 'Dotpay_mp';
+        $this->method_description = __('All Dotpay settings can be adjusted', 'dotpay-payment-gateway').sprintf('<a href="%s"> ', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=dotpay' ) ).__('here', 'dotpay-payment-gateway').'</a>.';
         $this->addActions();
     }
     

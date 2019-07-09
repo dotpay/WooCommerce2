@@ -67,7 +67,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->id = 'dotpay';
         $this->icon = $this->getIcon();
         $this->has_fields = true;
-        $this->method_title = __('DOTPAY PAYMENT', 'dotpay-payment-gateway');;
+        $this->method_title = __('DOTPAY PAYMENT', 'dotpay-payment-gateway');
         $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
 
 
@@ -75,8 +75,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->init_settings();
         $this->enabled = ($this->isEnabled())?'yes':'no';
 
-
-        $this->method_description = $this->render('admin_header.phtml');
     }
 
 
@@ -198,7 +196,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'postcode' => $this->getPostcode(),
             'country' => $this->getCountry(),
 			'personal_data' => 1,
-            'bylaw' => 1
+            'bylaw' => 1,
+	        'customer' => $this->getCustomerBase64()
         );
     }
 
@@ -212,6 +211,54 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $data['chk'] = $this->generateCHK($this->getSellerId(), $this->getSellerPin(), $data);
         return $data;
     }
+
+	/**
+	 * Returns data to 'customer' parameter
+	 * @return string encoded base64
+	 */
+	public function getCustomerBase64() {
+
+		$customer = array (
+			"payer" => array(
+				"first_name" => $this->getFirstname(),
+				"last_name" => $this->getLastname(),
+				"email" => $this->getEmail(),
+				"phone" => $this->getPhone()
+			),
+			"order" => array(
+				"delivery_address" => array(
+
+					"city" => $this->getShippingCity(),
+					"street" => $this->getShippingStreetAndStreetN1()['street'],
+					"building_number" => $this->getShippingStreetAndStreetN1()['street_n1'],
+					"postcode" => $this->getShippingPostcode(),
+					"country" => $this->getShippingCountry()
+				)
+			)
+		);
+
+		if($user = $this->getOrder()->get_user()) {
+
+			$customer["registered_since"] = date("Y-m-d", strtotime($user->get('user_registered')));
+			$customer["order_count"] = wc_get_customer_order_count($user->ID);
+        }
+
+        if ($this->getSelectedCarrierMethodGroup() != "") {
+            $customer["order"]["delivery_type"] = $this->getSelectedCarrierMethodGroup();
+        }
+        
+
+		$customer_base64 = base64_encode(json_encode($customer, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+		
+		return $customer_base64;
+	}
+
+	protected function getSelectedCarrierMethodGroup()
+	{
+		$methods = $this->getOrder()->get_shipping_methods();
+		$method = array_pop($methods);
+		return $this->getShippingMapping($method) ? $this->getShippingMapping($method->get_instance_id()) : "";
+	}
 
     /**
      * Check, if channel is in channels groups
@@ -422,7 +469,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         (isset($ParametersArray['credit_card_customer_id']) ? $ParametersArray['credit_card_customer_id'] : null).
         (isset($ParametersArray['credit_card_id']) ? $ParametersArray['credit_card_id'] : null).
         (isset($ParametersArray['blik_code']) ? $ParametersArray['blik_code'] : null).
-        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null);
+        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null).
+	    (isset($ParametersArray['customer']) ? $ParametersArray['customer'] : null);
 
         return hash('sha256',$ChkParametersChain);
     }
@@ -473,6 +521,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 case 'REQUIRED_PARAMS_NOT_FOUND':
                     $this->message = __('There were not given all request parameters.', 'dotpay-payment-gateway');
                     break;
+                case 'URLC_INVALID':
+                    $this->message = __('Account settings in Dotpay require the seller to have SSL certificate enabled on his website.', 'dotpay-payment-gateway');
+                    break; 
                 default:
                     $this->message = __('There was an unidentified error. Please contact to your seller and give him the order number.', 'dotpay-payment-gateway');
             }
@@ -532,7 +583,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     public function confirmPayment() {
         global $wp_version, $woocommerce;
         if($this->getClientIp() == self::OFFICE_IP && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET') {
+            $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
             $dotpayGateways = '';
+            $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+			$curlvalues=curl_version();
             foreach(self::getDotpayChannelsList() as $channel) {
                 $gateway = new $channel();
                 $dotpayGateways .= $gateway->id.': '.$this->checkIfEnabled($gateway)."<br />";
@@ -546,27 +600,25 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 			      * Dotpay module ver: ".self::MODULE_VERSION.
                 "<br> * Wordpress ver: ". $wp_version .
                 "<br> * Woocommerce ver: ". $woocommerce->version .
-				"<br> * PHP ver: ". phpversion() .
+                "<br> * PHP ver: ". phpversion() .
+                "<br> * cURL ver: ". $curlvalues['version']." ".$curlvalues['ssl_version'].
+				"<br> * MySQL ver: ".  mysqli_get_server_info($connection).
                 "<br>  _____________ ".
-				"<br>  - ID: ".$this->getSellerId().
                 "<br>  - Active: ".(bool)$this->isEnabled().
+				"<br>  - ID: ".$this->getSellerId().
                 "<br>  - Test: ".(bool)$this->isTestMode().
+                "<br>  - currencies_that_block_main:  ".$this->get_option('dontview_currency').
                 "<br>  - is_multisite: ".(bool)is_multisite().
                 "<br>  - is_plugin_active_for_network: ".(bool)is_plugin_active_for_network('woocommerce/woocommerce.php').
+				"<br><br /> --- Dotpay API data: --- ".
+				"<br>  - Dotpay username: ".$this->getApiUsername().
+				"<br>  - correct API auth data: ".$sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword()).
                 "<br><br /> --- Dotpay channels: --- <br />".$dotpayGateways.
                 "<br /> --- Shop channels: --- <br />".$shopGateways
             );
         }
 
-        if (
-            !($this->getClientIp() == self::DOTPAY_IP ||
-                ($this->isTestMode() &&
-                 ($this->getClientIp() == self::OFFICE_IP ||
-                  $this->getClientIp() == self::LOCAL_IP
-                 )
-                )
-            )
-        ) {
+        if (!($this->getClientIp() == self::DOTPAY_IP || $this->getClientIp() == self::OFFICE_IP)) {
             die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true).")");
         }
 
@@ -684,14 +736,14 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->getParam('email').
         $this->getParam('p_info').
         $this->getParam('p_email').
-	$this->getParam('credit_card_issuer_identification_number').
-	$this->getParam('credit_card_masked_number').
-	$this->getParam('credit_card_expiration_year').
-	$this->getParam('credit_card_expiration_month').
-	$this->getParam('credit_card_brand_codename').
-	$this->getParam('credit_card_brand_code').
-	$this->getParam('credit_card_unique_identifier').
-	$this->getParam('credit_card_id').
+        $this->getParam('credit_card_issuer_identification_number').
+        $this->getParam('credit_card_masked_number').
+        $this->getParam('credit_card_expiration_year').
+        $this->getParam('credit_card_expiration_month').
+        $this->getParam('credit_card_brand_codename').
+        $this->getParam('credit_card_brand_code').
+        $this->getParam('credit_card_unique_identifier').
+        $this->getParam('credit_card_id').
         $this->getParam('channel').
         $this->getParam('channel_country').
         $this->getParam('geoip_country');

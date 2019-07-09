@@ -1,34 +1,35 @@
 <?php
 
 /**
-*
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to tech@dotpay.pl so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade WooCommerce to newer
-* versions in the future. If you wish to customize WooCommerce for your
-* needs please refer to http://www.dotpay.pl for more information.
-*
-*  @author    Dotpay Team <tech@dotpay.pl>
-*  @copyright Dotpay
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*
-*/
+ *
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to tech@dotpay.pl so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade WooCommerce to newer
+ * versions in the future. If you wish to customize WooCommerce for your
+ * needs please refer to http://www.dotpay.pl for more information.
+ *
+ *  @author    Dotpay Team <tech@dotpay.pl>
+ *  @copyright Dotpay
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *
+ */
 
 /**
  * Abstract class of skeleton of Dotpay gateway plugin
  */
-abstract class Dotpay_Payment extends WC_Payment_Gateway {
+abstract class Dotpay_Payment extends WC_Payment_Gateway
+{
     // Dotpay IP address
     const DOTPAY_IP = '195.150.9.37';
     // Local IP address
@@ -46,7 +47,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.2.3';
+    const MODULE_VERSION = '3.2.4';
 
 
     public static $ocChannel = 248;
@@ -67,29 +68,43 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * Return API username
      * @return string
      */
-    public function getApiUsername() {
+    public function getApiUsername()
+    {
         return $this->get_option('api_username');
     }
 
-	/**
+    /**
      * Return channel number of credit card
      * @return string
      */
-    public function getCCnumber() {
-		if(($this->get_option('credit_card_channel_number')) && is_numeric($this->get_option('credit_card_channel_number')))
-		{
-				return $this->get_option('credit_card_channel_number');
-			}else{
-				return self::$ccChannel;
-			}
+    public function getCCnumber()
+    {
+        if (($this->get_option('credit_card_channel_number')) && is_numeric($this->get_option('credit_card_channel_number'))) {
+            return $this->get_option('credit_card_channel_number');
+        } else {
+            return self::$ccChannel;
+        }
     }
 
+    /**
+     * Return channel name visibility
+     * @return boolean
+     */
+    public function getChannelNameVisiblity()
+    {
+        $result = 0;
+        if ('yes' === $this->get_option('channel_name_show')) {
+            $result = true;
+        }
+        return $result;
+    }
 
     /**
      * Return API password
      * @return string
      */
-    public function getApiPassword() {
+    public function getApiPassword()
+    {
         return $this->get_option('api_password');
     }
 
@@ -97,19 +112,31 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * Return seller id
      * @return int
      */
-    public function getSellerId() {
+    public function getSellerId()
+    {
         return $this->get_option('id');
     }
+
+	/**
+	 * Return delivery type for specific shipping
+	 * @return int
+	 */
+	public function getShippingMapping($id)
+	{
+		return $this->get_option('shipping_mapping_'.$id);
+	}
 
     /**
      * Return seller pin
      * @return string
      */
-    protected function getSellerPin() {
+    protected function getSellerPin()
+    {
         return $this->get_option('pin');
     }
 
-    public static function getDotpayChannelsList() {
+    public static function getDotpayChannelsList()
+    {
         return array(
             'Gateway_OneClick',
             'Gateway_PV',
@@ -126,8 +153,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * @param int $channel channel id
      * @return string
      */
-    public static function getGatewayClassNameByChannelId($channel) {
-        switch($channel) {
+    public static function getGatewayClassNameByChannelId($channel)
+    {
+        switch ($channel) {
             case self::$blikChannel:
                 return 'Gateway_Blik';
             case self::$transferChannel:
@@ -149,7 +177,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * Return flag, if test mode is enabled
      * @return boolean
      */
-    public function isTestMode() {
+    public function isTestMode()
+    {
         $result = false;
         if ('yes' === $this->get_option('test')) {
             $result = true;
@@ -162,7 +191,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
      * Return url to Dotpay payment server
      * @return string
      */
-    public function getPaymentUrl() {
+    public function getPaymentUrl()
+    {
         $dotpay_url = self::DOTPAY_URL;
         if ($this->isTestMode()) {
             $dotpay_url = self::DOTPAY_URL_TEST;
@@ -174,23 +204,24 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway {
     /**
      * Return value for control field
      * @return string
-	 * @param full|null $full - set 'control' to sent
+     * @param full|null $full - set 'control' to sent
      */
-function getControl($full = null) {
+    function getControl($full = null)
+    {
         $order = $this->getOrder();
-			if($full == 'full')
-			{
-			   return $this->getLegacyOrderId($order).'|domain:'.$_SERVER['SERVER_NAME'].'|WC-module:'.self::MODULE_VERSION;
-			} else {
-				return $this->getLegacyOrderId($order);
-			}
+        if ($full == 'full') {
+            return $this->getLegacyOrderId($order) . '|domain:' . $_SERVER['SERVER_NAME'] . '|WC-module:' . self::MODULE_VERSION;
+        } else {
+            return $this->getLegacyOrderId($order);
+        }
     }
 
     /**
      * Return value for p_info field
      * @return string
      */
-    public function getPinfo() {
+    public function getPinfo()
+    {
         return __('Shop - ', 'dotpay-payment-gateway') . $_SERVER['HTTP_HOST'];
     }
 
@@ -198,7 +229,8 @@ function getControl($full = null) {
      * Return amount of order
      * @return float
      */
-    public function getOrderAmount() {
+    public function getOrderAmount()
+    {
         return $this->getFormatAmount($this->getOrder()->get_total());
     }
 
@@ -206,7 +238,8 @@ function getControl($full = null) {
      * Return amount of cart
      * @return float
      */
-    public function getCartAmount() {
+    public function getCartAmount()
+    {
         global $woocommerce;
         return $this->getFormatAmount($woocommerce->cart->total);
     }
@@ -215,14 +248,15 @@ function getControl($full = null) {
      * Return amount of order or card if it's available
      * @return float
      */
-    public function getAmountForWidget() {
+    public function getAmountForWidget()
+    {
         $orderPay = get_query_var('order-pay');
         $order = $this->getOrder();
         $id = $this->getLegacyOrderId($order);
-        if($id == null && !empty($orderPay)) {
+        if ($id == null && !empty($orderPay)) {
             $this->setOrderId(get_query_var('order-pay'));
         }
-        if($id != null) {
+        if ($id != null) {
             return $this->getOrderAmount();
         } else {
             return $this->getCartAmount();
@@ -233,7 +267,8 @@ function getControl($full = null) {
      * Return currency name
      * @return string
      */
-    public function getCurrency() {
+    public function getCurrency()
+    {
         return get_woocommerce_currency();
     }
 
@@ -241,7 +276,8 @@ function getControl($full = null) {
      * Return payment description
      * @return string
      */
-    public function getDescription() {
+    public function getDescription()
+    {
         return __('Order ID: ', 'dotpay-payment-gateway') . esc_attr($this->getLegacyOrderId($this->getOrder()));
     }
 
@@ -249,28 +285,29 @@ function getControl($full = null) {
      * Return payment language name
      * @return string
      */
-  protected function getPaymentLang() {
+    protected function getPaymentLang()
+    {
 
-		   $language = get_bloginfo('language');
-		   $wp_dotpay_lang = '';
+        $language = get_bloginfo('language');
+        $wp_dotpay_lang = '';
 
-		   if(is_string($language)) {
-                $languageArray = explode('-', $language);
-                if(isset($languageArray[0])) {
-                    $languageLower = strtolower($languageArray[0]);
-                    $wp_dotpay_lang = $languageLower;
-                }
+        if (is_string($language)) {
+            $languageArray = explode('-', $language);
+            if (isset($languageArray[0])) {
+                $languageLower = strtolower($languageArray[0]);
+                $wp_dotpay_lang = $languageLower;
             }
+        }
 
-			if($wp_dotpay_lang == 'pl') {
-				$dotpay_lang = 'pl';
-			} else {
-				if (!in_array($languageLower, $this->getAcceptLang())) {
-				 	$dotpay_lang = 'en';
-				} else{
-					$dotpay_lang = $languageLower;
-				}
-			}
+        if ($wp_dotpay_lang == 'pl') {
+            $dotpay_lang = 'pl';
+        } else {
+            if (!in_array($languageLower, $this->getAcceptLang())) {
+                $dotpay_lang = 'en';
+            } else {
+                $dotpay_lang = $languageLower;
+            }
+        }
 
         return $dotpay_lang;
     }
@@ -280,7 +317,8 @@ function getControl($full = null) {
      * Return url where Dotpay could do a redirection after payment making
      * @return string
      */
-    public function getUrl() {
+    public function getUrl()
+    {
         $page = new Dotpay_Page(DOTPAY_STATUS_PNAME);
         return $page->getUrl();
     }
@@ -289,7 +327,8 @@ function getControl($full = null) {
      * Return url for page with order summary
      * @return string
      */
-    public function getOrderSummaryUrl() {
+    public function getOrderSummaryUrl()
+    {
         return $this->get_return_url($this->getOrder());
     }
 
@@ -297,33 +336,35 @@ function getControl($full = null) {
      * Return url to payment confirmation by Dotpay
      * @return string
      */
-    public function getUrlc() {
+    public function getUrlc()
+    {
         $http = 'http:';
-        if(isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'] == "on" || $_SERVER['HTTPS']) == "1")) {
+        if (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'] == "on" || $_SERVER['HTTPS']) == "1")) {
             $http = 'https:';
-        } elseif ( isset($_SERVER['SERVER_PORT']) && ( '443' == $_SERVER['SERVER_PORT'])) {
+        } elseif (isset($_SERVER['SERVER_PORT']) && ('443' == $_SERVER['SERVER_PORT'])) {
             $http = 'https:';
         } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
             $http = 'https:';
         }
-        return str_replace('https:', $http, add_query_arg('wc-api', $this->id.'_confirm', home_url('/')));
+        return str_replace('https:', $http, add_query_arg('wc-api', $this->id . '_confirm', home_url('/')));
     }
 
     /**
      * Return Dotpay api version
      * @return string
      */
-    public function getApiVersion() {
+    public function getApiVersion()
+    {
         return 'dev';
     }
 
-	/**
+    /**
      * Return ip address from is the confirmation request.
      */
 
-	public function getClientIp($list_ip=null)
-     {
-		$ipaddress = '';
+    public function getClientIp($list_ip = null)
+    {
+        $ipaddress = '';
         // CloudFlare support
         if (array_key_exists('HTTP_CF_CONNECTING_IP', $_SERVER)) {
             // Validate IP address (IPv4/IPv6)
@@ -335,12 +376,8 @@ function getControl($full = null) {
         if (array_key_exists('X-Forwarded-For', $_SERVER)) {
             $_SERVER['HTTP_X_FORWARDED_FOR'] = $_SERVER['X-Forwarded-For'];
         }
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']
-			&& (!isset($_SERVER['REMOTE_ADDR'])
-            || preg_match('/^127\..*/i', trim($_SERVER['REMOTE_ADDR'])) || preg_match('/^172\.16.*/i', trim($_SERVER['REMOTE_ADDR']))
-            || preg_match('/^192\.168\.*/i', trim($_SERVER['REMOTE_ADDR'])) || preg_match('/^10\..*/i', trim($_SERVER['REMOTE_ADDR'])))) {
-
-			if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',')) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',')) {
                 $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
                 $ipaddress = $ips[0];
             } else {
@@ -350,19 +387,18 @@ function getControl($full = null) {
             $ipaddress = $_SERVER['REMOTE_ADDR'];
         }
 
-        if($ipaddress === '0:0:0:0:0:0:0:1' || $ipaddress === '::1') {
-            $ipaddress = self::LOCAL_IP;
-        }
 
-        if(isset($list_ip) && $list_ip != null){
-            return
-			(isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? "HTTP_X_FORWARDED_FOR ->".implode(" | ",$_SERVER['HTTP_X_FORWARDED_FOR']).", " : null).
-            (isset($_SERVER['HTTP_CF_CONNECTING_IP']) ? "HTTP_CF_CONNECTING_IP ->".$_SERVER['HTTP_CF_CONNECTING_IP'].", " : null).
-            (isset($_SERVER['REMOTE_ADDR']) ? "REMOTE_ADDR ->".$_SERVER['REMOTE_ADDR'].", " : " REMOTE_ADDR null ");
+        if (isset($list_ip) && $list_ip != null) {
+            if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
+                return  $_SERVER["HTTP_X_FORWARDED_FOR"];
+            } else if (array_key_exists('HTTP_CF_CONNECTING_IP', $_SERVER)) {
+                return $_SERVER["HTTP_CF_CONNECTING_IP"];
+            } else if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+                return $_SERVER["REMOTE_ADDR"];
+            }
         } else {
-           return $ipaddress;
+            return $ipaddress;
         }
-
     }
 
 
@@ -371,16 +407,17 @@ function getControl($full = null) {
      * Return customer firstname
      * @return string
      */
-    public function getFirstname() {
+    public function getFirstname()
+    {
         $order = $this->getOrder();
-        if(method_exists($order, 'get_billing_first_name')) {
+        if (method_exists($order, 'get_billing_first_name')) {
             $firstName = esc_attr($order->get_billing_first_name());
         } else {
             $firstName = esc_attr($order->billing_first_name);
         }
-			//allowed only: letters, digits, spaces, symbols _-.,'
-			 $firstName = preg_replace('/[^\w _-]/u', '', $firstName);
-			 $firstName1 = html_entity_decode($firstName, ENT_QUOTES, 'UTF-8');
+        //allowed only: letters, digits, spaces, symbols _-.,'
+        $firstName = preg_replace('/[^\w _-]/u', '', $firstName);
+        $firstName1 = html_entity_decode($firstName, ENT_QUOTES, 'UTF-8');
 
         return $firstName1;
     }
@@ -389,26 +426,28 @@ function getControl($full = null) {
      * Return customer lastname
      * @return string
      */
-    public function getLastname() {
+    public function getLastname()
+    {
         $order = $this->getOrder();
-        if(method_exists($order, 'get_billing_last_name')) {
+        if (method_exists($order, 'get_billing_last_name')) {
             $lastName = esc_attr($order->get_billing_last_name());
         } else {
             $lastName = esc_attr($order->billing_last_name);
         }
-			//allowed only: letters, digits, spaces, symbols _-.,'
-			 $lastName = preg_replace('/[^\w _-]/u', '', $lastName);
-			 $lastName1 = html_entity_decode($lastName, ENT_QUOTES, 'UTF-8');
-		return $lastName1;
+        //allowed only: letters, digits, spaces, symbols _-.,'
+        $lastName = preg_replace('/[^\w _-]/u', '', $lastName);
+        $lastName1 = html_entity_decode($lastName, ENT_QUOTES, 'UTF-8');
+        return $lastName1;
     }
 
     /**
      * Return customer email
      * @return string
      */
-    public function getEmail() {
+    public function getEmail()
+    {
         $order = $this->getOrder();
-        if(method_exists($order, 'get_billing_email')) {
+        if (method_exists($order, 'get_billing_email')) {
             $email = esc_attr($order->get_billing_email());
         } else {
             $email = esc_attr($order->billing_email);
@@ -420,15 +459,16 @@ function getControl($full = null) {
      * Return customer phone
      * @return string
      */
-    public function getPhone() {
+    public function getPhone()
+    {
         $order = $this->getOrder();
-        if(method_exists($order, 'get_billing_phone')) {
+        if (method_exists($order, 'get_billing_phone')) {
             $phone = esc_attr($order->get_billing_phone());
         } else {
             $phone = esc_attr($order->billing_phone);
         }
-			 $phone = str_replace(' ', '', $phone);
-			 $phone = str_replace('+', '', $phone);
+        $phone = str_replace(' ', '', $phone);
+        $phone = str_replace('+', '', $phone);
         return $phone;
     }
 
@@ -436,16 +476,17 @@ function getControl($full = null) {
      * Return customer city
      * @return string
      */
-    public function getCity() {
+    public function getCity()
+    {
         $order = $this->getOrder();
-        if(method_exists($order, 'get_billing_city')) {
+        if (method_exists($order, 'get_billing_city')) {
             $city = esc_attr($order->get_billing_city());
         } else {
             $city = esc_attr($order->billing_city);
         }
-			//allowed only: letters, digits, spaces, symbols _-.,'
-				 $city = preg_replace('/[^.\w \'_-]/u', '', $city);
-				 $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
+        //allowed only: letters, digits, spaces, symbols _-.,'
+        $city = preg_replace('/[^.\w \'_-]/u', '', $city);
+        $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
 
         return $city1;
     }
@@ -454,17 +495,18 @@ function getControl($full = null) {
      * Return customer postcode
      * @return string
      */
-    public function getPostcode() {
+    public function getPostcode()
+    {
         $order = $this->getOrder();
-        if(method_exists($order, 'get_billing_postcode')) {
+        if (method_exists($order, 'get_billing_postcode')) {
             $postcode = esc_attr($order->get_billing_postcode());
         } else {
             $postcode = esc_attr($order->billing_postcode);
         }
-        if(empty($postcode)) {
+        if (empty($postcode)) {
             return $postcode;
         }
-        if(preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && strtolower($this->getCountry()) == 'pl') {
+        if (preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && strtolower($this->getCountry()) == 'pl') {
             $postcode = str_replace('-', '', $postcode);
             $postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
         }
@@ -475,9 +517,10 @@ function getControl($full = null) {
      * Return customer country
      * @return string
      */
-    public function getCountry() {
+    public function getCountry()
+    {
         $order = $this->getOrder();
-        if(method_exists($order, 'get_billing_country')) {
+        if (method_exists($order, 'get_billing_country')) {
             $country = $order->get_billing_country();
         } else {
             $country = $order->billing_country;
@@ -487,40 +530,39 @@ function getControl($full = null) {
 
     /**
      * Return customer street and house number
-     * @return string
+     * @return array
      */
-    public function getStreetAndStreetN1() {
+    public function getStreetAndStreetN1()
+    {
         $order = $this->getOrder();
-        if(method_exists($order, 'get_billing_address_1')) {
+        if (method_exists($order, 'get_billing_address_1')) {
             $street = esc_attr($order->get_billing_address_1());
         } else {
             $street = esc_attr($order->billing_address_1);
         }
-			//allowed only: letters, digits, spaces, symbols _-.,'
-				$street = preg_replace('/[^.\w \'_-]/u', '', $street);
-				$street1 = html_entity_decode($street, ENT_QUOTES, 'UTF-8');
+        //allowed only: letters, digits, spaces, symbols _-.,'
+        $street = preg_replace('/[^.\w \'_-]/u', '', $street);
+        $street1 = html_entity_decode($street, ENT_QUOTES, 'UTF-8');
 
-        if(method_exists($order, 'get_billing_address_2')) {
+        if (method_exists($order, 'get_billing_address_2')) {
             $street_n1 = esc_attr($order->get_billing_address_2());
         } else {
             $street_n1 = esc_attr($order->billing_address_2);
         }
 
-        if(empty($street_n1))
-        {
+        if (empty($street_n1)) {
             preg_match("/\s[\w\d\/_\-]{0,30}$/", $street1, $matches);
-            if(count($matches)>0)
-            {
+            if (count($matches) > 0) {
                 $street_n1 = trim($matches[0]);
                 $street1 = str_replace($matches[0], '', $street1);
             }
         }
 
-		if (!empty($street_n1)){
-			$building_numberRO = $street_n1;
-		}else{
-			$building_numberRO = " ";  //this field may not be blank in register order
-		}
+        if (!empty($street_n1)) {
+            $building_numberRO = $street_n1;
+        } else {
+            $building_numberRO = " ";  //this field may not be blank in register order
+        }
 
         return array(
             'street' => $street1,
@@ -528,11 +570,110 @@ function getControl($full = null) {
         );
     }
 
+	/**
+	 * Return customer shipping city
+	 * @return string
+	 */
+	public function getShippingCity()
+	{
+		$order = $this->getOrder();
+		if (method_exists($order, 'get_shipping_city')) {
+			$city = esc_attr($order->get_shipping_city());
+		} else {
+			$city = esc_attr($order->shipping_city);
+		}
+		//allowed only: letters, digits, spaces, symbols _-.,'
+		$city = preg_replace('/[^.\w \'_-]/u', '', $city);
+		$city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
+
+		return $city1;
+	}
+
+	/**
+	 * Return customer shipping postcode
+	 * @return string
+	 */
+	public function getShippingPostcode()
+	{
+		$order = $this->getOrder();
+		if (method_exists($order, 'get_shipping_postcode')) {
+			$postcode = esc_attr($order->get_shipping_postcode());
+		} else {
+			$postcode = esc_attr($order->shipping_postcode);
+		}
+		if (empty($postcode)) {
+			return $postcode;
+		}
+		if (preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && strtolower($this->getShippingCountry()) == 'pl') {
+			$postcode = str_replace('-', '', $postcode);
+			$postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
+		}
+		return $postcode;
+	}
+
+	/**
+	 * Return customer shipping country
+	 * @return string
+	 */
+	public function getShippingCountry()
+	{
+		$order = $this->getOrder();
+		if (method_exists($order, 'get_shipping_country')) {
+			$country = $order->get_shipping_country();
+		} else {
+			$country = $order->shipping_country;
+		}
+		return esc_attr(strtoupper($country));
+	}
+
+	/**
+	 * Return customer shipping street and house number
+	 * @return array
+	 */
+	public function getShippingStreetAndStreetN1()
+	{
+		$order = $this->getOrder();
+		if (method_exists($order, 'get_shipping_address_1')) {
+			$street = esc_attr($order->get_shipping_address_1());
+		} else {
+			$street = esc_attr($order->shipping_address_1);
+		}
+		//allowed only: letters, digits, spaces, symbols _-.,'
+		$street = preg_replace('/[^.\w \'_-]/u', '', $street);
+		$street1 = html_entity_decode($street, ENT_QUOTES, 'UTF-8');
+
+		if (method_exists($order, 'get_shipping_address_2')) {
+			$street_n1 = esc_attr($order->get_shipping_address_2());
+		} else {
+			$street_n1 = esc_attr($order->shipping_address_2);
+		}
+
+		if (empty($street_n1)) {
+			preg_match("/\s[\w\d\/_\-]{0,30}$/", $street1, $matches);
+			if (count($matches) > 0) {
+				$street_n1 = trim($matches[0]);
+				$street1 = str_replace($matches[0], '', $street1);
+			}
+		}
+
+		if (!empty($street_n1)) {
+			$building_numberRO = $street_n1;
+		} else {
+			$building_numberRO = " ";  //this field may not be blank in register order
+		}
+
+		return array(
+			'street' => $street1,
+			'street_n1' => $building_numberRO
+		);
+	}
+
     /**
      * Return array of languages that are accepted by Dotpay
      * @return array
      */
-    public function getAcceptLang() {
+    public function getAcceptLang()
+    {
         return array(
             'pl',
             'en',
@@ -552,9 +693,10 @@ function getControl($full = null) {
      * Returns Dotpay seller Api url
      * @return string
      */
-    public function getSellerApiUrl() {
+    public function getSellerApiUrl()
+    {
         $dotSellerApi = self::DOTPAY_SELLER_API_URL;
-        if($this->isTestMode()) {
+        if ($this->isTestMode()) {
             $dotSellerApi = self::DOTPAY_TEST_SELLER_API_URL;
         }
 
@@ -565,8 +707,9 @@ function getControl($full = null) {
      * Returns Dotpay payment Api url
      * @return string
      */
-    public function getPaymentChannelsUrl() {
-        return $this->getPaymentUrl().'payment_api/v1/channels/';
+    public function getPaymentChannelsUrl()
+    {
+        return $this->getPaymentUrl() . 'payment_api/v1/channels/';
     }
 
     /**
@@ -574,7 +717,8 @@ function getControl($full = null) {
      * @param float $amount
      * @return float
      */
-    public function getFormatAmount($amount) {
+    public function getFormatAmount($amount)
+    {
         return number_format(preg_replace('/[^0-9.]/', '', str_replace(',', '.', $amount)), 2, '.', '');
     }
 
@@ -583,14 +727,15 @@ function getControl($full = null) {
      * @param string $allow_currency_form list of currencies
      * @return boolean
      */
-    protected function isDotSelectedCurrency($allow_currency_form) {
+    protected function isDotSelectedCurrency($allow_currency_form)
+    {
         $result = false;
         $payment_currency = $this->getCurrency();
         $allow_currency = str_replace(';', ',', $allow_currency_form);
         $allow_currency = strtoupper(str_replace(' ', '', $allow_currency));
-        $allow_currency_array =  explode(",",trim($allow_currency));
+        $allow_currency_array =  explode(",", trim($allow_currency));
 
-        if(in_array(strtoupper($payment_currency), $allow_currency_array)) {
+        if (in_array(strtoupper($payment_currency), $allow_currency_array)) {
             $result = true;
         }
 
@@ -602,7 +747,8 @@ function getControl($full = null) {
      * @param float $amount amount
      * @return boolean
      */
-    public function getDotpayChannels($amount) {
+    public function getDotpayChannels($amount)
+    {
         $dotpay_url = $this->getPaymentChannelsUrl();
         $payment_currency = $this->getCurrency();
 
@@ -618,8 +764,8 @@ function getControl($full = null) {
         $curl_url .= "&amount={$order_amount}";
         $curl_url .= "&lang={$dotpay_lang}";
         /**
-        * curl
-        */
+         * curl
+         */
         try {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -633,7 +779,7 @@ function getControl($full = null) {
             $resultJson = false;
         }
 
-        if($ch) {
+        if ($ch) {
             curl_close($ch);
         }
 
@@ -645,13 +791,14 @@ function getControl($full = null) {
      * @param type $id channel id
      * @return array|false
      */
-    public function getChannelData($id) {
-    $resultJson = $this->getDotpayChannels($this->getOrderAmount());
-        if(false !== $resultJson) {
+    public function getChannelData($id)
+    {
+        $resultJson = $this->getDotpayChannels($this->getOrderAmount());
+        if (false !== $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
                 foreach ($result['channels'] as $channel) {
-                    if (isset($channel['id']) && $channel['id']==$id) {
+                    if (isset($channel['id']) && $channel['id'] == $id) {
                         return $channel;
                     }
                 }
@@ -667,12 +814,13 @@ function getControl($full = null) {
      * @param string $what type of agreements
      * @return string
      */
-    protected function getDotpayAgreement($amount, $what) {
+    protected function getDotpayAgreement($amount, $what)
+    {
         $resultStr = '';
 
         $resultJson = $this->getDotpayChannels($amount);
 
-        if(false !== $resultJson) {
+        if (false !== $resultJson) {
             $result = json_decode($resultJson, true);
 
             if (isset($result['forms']) && is_array($result['forms'])) {
@@ -697,40 +845,44 @@ function getControl($full = null) {
      * @return array|false
      */
 
-	 public function getChannelName($Nr) {
+    public function getChannelName($id)
+    {
 
-	     $resultJson = $this->getDotpayChannels('1000');
-        if(false !== $resultJson) {
+        $resultJson = $this->getDotpayChannels('1000');
+        if (false !== $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
                 foreach ($result['channels'] as $channel) {
-                    if (isset($channel['id']) && $channel['id'] == $Nr) {
+                    if (isset($channel['id']) && $channel['id'] == $id) {
                         return $channel;
                     }
                 }
             }
         }
         return false;
-	 }
+    }
 
 
     /**
      * Return path to file with payment form
      * @return string
      */
-    public function getFormPath() {
-        return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/'.str_replace('Dotpay_', '', $this->id).'.phtml';
+    public function getFormPath()
+    {
+        return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/' . str_replace('Dotpay_', '', $this->id) . '.phtml';
     }
 
-    public function getFullFormPath() {
-        return $_SERVER['HTTP_ORIGIN'].WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/'.str_replace('Dotpay_', '', $this->id).'.phtml';
+    public function getFullFormPath()
+    {
+        return $_SERVER['HTTP_ORIGIN'] . WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/' . str_replace('Dotpay_', '', $this->id) . '.phtml';
     }
 
     /**
      * Return path to template dir
      * @return string
      */
-    public function getTemplatesPath() {
+    public function getTemplatesPath()
+    {
         return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'templates/';
     }
 
@@ -738,7 +890,8 @@ function getControl($full = null) {
      * Return path to resource dir
      * @return strin
      */
-    public function getResourcePath() {
+    public function getResourcePath()
+    {
         return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/';
     }
 
@@ -747,9 +900,10 @@ function getControl($full = null) {
      * @param string $file name of template file
      * @return string
      */
-    public function render($file) {
+    public function render($file)
+    {
         ob_start();
-        include($this->getTemplatesPath().$file);
+        include($this->getTemplatesPath() . $file);
         return ob_get_clean();
     }
 
@@ -757,7 +911,8 @@ function getControl($full = null) {
      * Persist order id
      * @param int $orderId order id
      */
-    protected function setOrderId($orderId) {
+    protected function setOrderId($orderId)
+    {
         $this->orderId = $orderId;
         $_SESSION['dotpay_payment_order_id'] = $orderId;
     }
@@ -766,10 +921,11 @@ function getControl($full = null) {
      * Return order object with last order
      * @return WC_Order
      */
-    protected function getOrder() {
-        if($this->orderObject == null || $this->getLegacyOrderId($this->orderObject) == null) {
-            if($this->orderId == null) {
-                if(isset($_SESSION['dotpay_payment_order_id'])) {
+    protected function getOrder()
+    {
+        if ($this->orderObject == null || $this->getLegacyOrderId($this->orderObject) == null) {
+            if ($this->orderId == null) {
+                if (isset($_SESSION['dotpay_payment_order_id'])) {
                     $this->orderId = $_SESSION['dotpay_payment_order_id'];
                 }
             }
@@ -781,7 +937,8 @@ function getControl($full = null) {
     /**
      * Forget saved order
      */
-    protected function forgetOrder() {
+    protected function forgetOrder()
+    {
         unset($_SESSION['dotpay_payment_order_id']);
         $this->orderObject = null;
         $this->orderId = null;
@@ -792,7 +949,8 @@ function getControl($full = null) {
      * @global type $woocommerce WOOCOMMERCE object
      * @return WC_Cart
      */
-    protected function getCart() {
+    protected function getCart()
+    {
         global $woocommerce;
         return $woocommerce->cart;
     }
@@ -803,7 +961,8 @@ function getControl($full = null) {
      * @param mixed $default default value
      * @return boolean
      */
-    public function getParam($name, $default = false) {
+    public function getParam($name, $default = false)
+    {
         if (!isset($name) || empty($name) || !is_string($name)) {
             return false;
         }
@@ -814,8 +973,9 @@ function getControl($full = null) {
         return $ret;
     }
 
-    private function getLegacyOrderId($orderObject) {
-        if(method_exists($orderObject,'get_id')) {
+    private function getLegacyOrderId($orderObject)
+    {
+        if (method_exists($orderObject, 'get_id')) {
             return $orderObject->get_id();
         } else {
             return $orderObject->id;

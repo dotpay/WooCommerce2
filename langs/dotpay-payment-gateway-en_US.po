@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2018-07-13 13:31+0200\n"
-"PO-Revision-Date: 2018-07-13 13:32+0200\n"
+"POT-Creation-Date: 2019-07-09 10:49+0200\n"
+"PO-Revision-Date: 2019-07-09 10:49+0200\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: en_US\n"
@@ -25,11 +25,11 @@ msgstr "Download blankiet"
 msgid "Make a money transfer"
 msgstr "Make a money transfer"
 
-#: ../Dotpay/Payment.php:189
+#: ../Dotpay/Payment.php:225
 msgid "Shop - "
 msgstr "Shop - "
 
-#: ../Dotpay/Payment.php:240
+#: ../Dotpay/Payment.php:281
 msgid "Order ID: "
 msgstr "Order ID: "
 
@@ -37,9 +37,19 @@ msgstr "Order ID: "
 msgid "BLIK via Dotpay"
 msgstr "BLIK via Dotpay"
 
-#: ../Gateway/Blik.php:89
-msgid "BLIK code is uncorrect"
-msgstr "BLIK code is uncorrect"
+#: ../Gateway/Blik.php:39 ../Gateway/Card.php:39 ../Gateway/MasterPass.php:39
+#: ../Gateway/OneClick.php:39 ../Gateway/PV.php:39
+msgid "All Dotpay settings can be adjusted"
+msgstr "All Dotpay settings can be adjusted"
+
+#: ../Gateway/Blik.php:39 ../Gateway/Card.php:39 ../Gateway/MasterPass.php:39
+#: ../Gateway/OneClick.php:39 ../Gateway/PV.php:39
+msgid "here"
+msgstr "here"
+
+#: ../Gateway/Blik.php:90
+msgid "BLIK code is incorrect"
+msgstr "BLIK code is incorrect"
 
 #: ../Gateway/Card.php:36
 msgid "Credit Cards via Dotpay"
@@ -49,40 +59,44 @@ msgstr "Credit Cards via Dotpay"
 msgid "Fast and secure payment via Dotpay"
 msgstr "Fast and secure payment via Dotpay"
 
-#: ../Gateway/Dotpay.php:70
+#: ../Gateway/Dotpay.php:39
+msgid " Online payment"
+msgstr " Online payment"
+
+#: ../Gateway/Dotpay.php:71
 msgid "You must select a payment channel"
 msgstr "You must select a payment channel"
 
-#: ../Gateway/Dotpay.php:83
+#: ../Gateway/Dotpay.php:84
 msgid "Show separately payment channel in a shop. "
 msgstr "Show separately payment channel in a shop. "
 
-#: ../Gateway/Dotpay.php:84
+#: ../Gateway/Dotpay.php:85
 msgid "Payment with a credit card by MasterPass"
 msgstr "Payment with a credit card by MasterPass"
 
-#: ../Gateway/Dotpay.php:85 ../Gateway/Dotpay.php:177
-#: ../Gateway/Dotpay.php:180 ../Gateway/Dotpay.php:202
-#: ../Gateway/Dotpay.php:205 ../Gateway/Dotpay.php:233
+#: ../Gateway/Dotpay.php:86 ../Gateway/Dotpay.php:178
+#: ../Gateway/Dotpay.php:181 ../Gateway/Dotpay.php:203
+#: ../Gateway/Dotpay.php:206 ../Gateway/Dotpay.php:234
 msgid "Needed separate agreement."
 msgstr "Needed separate agreement."
 
-#: ../Gateway/Dotpay.php:86 ../Gateway/Dotpay.php:181
-#: ../Gateway/Dotpay.php:206
+#: ../Gateway/Dotpay.php:87 ../Gateway/Dotpay.php:182
+#: ../Gateway/Dotpay.php:207
 msgid "Contact Dotpay customer service before using this option"
 msgstr "Contact Dotpay customer service before using this option"
 
-#: ../Gateway/Dotpay.php:87 ../Gateway/Dotpay.php:183
-#: ../Gateway/Dotpay.php:208
+#: ../Gateway/Dotpay.php:88 ../Gateway/Dotpay.php:184
+#: ../Gateway/Dotpay.php:209
 msgid "Dotpay customer service"
 msgstr "Dotpay customer service"
 
-#: ../Gateway/Dotpay.php:87 ../Gateway/Dotpay.php:184
-#: ../Gateway/Dotpay.php:209
+#: ../Gateway/Dotpay.php:88 ../Gateway/Dotpay.php:185
+#: ../Gateway/Dotpay.php:210
 msgid "Contact"
 msgstr "Contact"
 
-#: ../Gateway/Dotpay.php:90
+#: ../Gateway/Dotpay.php:91
 msgid ""
 "I have a separate account in Dotpay: show separately payment channel in a "
 "shop. "
@@ -90,31 +104,31 @@ msgstr ""
 "I have a separate account in Dotpay: show separately payment channel in a "
 "shop. "
 
-#: ../Gateway/Dotpay.php:91
+#: ../Gateway/Dotpay.php:92
 msgid "Credit Card for currencies (PLN, EUR, USD or GBP)"
 msgstr "Credit Card for currencies (PLN, EUR, USD or GBP)"
 
-#: ../Gateway/Dotpay.php:94
+#: ../Gateway/Dotpay.php:95
 msgid "Show separately payment channel in a shop"
 msgstr "Show separately payment channel in a shop"
 
-#: ../Gateway/Dotpay.php:95
+#: ../Gateway/Dotpay.php:96
 msgid "(only PLN)"
 msgstr "(only PLN)"
 
-#: ../Gateway/Dotpay.php:101
+#: ../Gateway/Dotpay.php:102
 msgid "Enable"
 msgstr "Enable"
 
-#: ../Gateway/Dotpay.php:102
+#: ../Gateway/Dotpay.php:103
 msgid "You can enable Dotpay payments"
 msgstr "You can enable Dotpay payments"
 
-#: ../Gateway/Dotpay.php:108
+#: ../Gateway/Dotpay.php:109
 msgid "Dotpay customer ID"
 msgstr "Dotpay customer ID"
 
-#: ../Gateway/Dotpay.php:112
+#: ../Gateway/Dotpay.php:113
 msgid ""
 "ID number is a 6-digit string after # in a \"Shop\" line. You can find it at "
 "the Dotpay panel in Settings in the top bar."
@@ -122,11 +136,11 @@ msgstr ""
 "ID number is a 6-digit string after # in a \"Shop\" line. You can find it at "
 "the Dotpay panel in Settings in the top bar."
 
-#: ../Gateway/Dotpay.php:117
+#: ../Gateway/Dotpay.php:118
 msgid "Dotpay customer PIN"
 msgstr "Dotpay customer PIN"
 
-#: ../Gateway/Dotpay.php:121
+#: ../Gateway/Dotpay.php:122
 msgid ""
 "PIN number is a minimum 16 and maximum 32 alphanumeric characters. You can "
 "find it at the Dotpay panel in Settings in the top bar."
@@ -134,11 +148,11 @@ msgstr ""
 "PIN number is a minimum 16 and maximum 32 alphanumeric characters. You can "
 "find it at the Dotpay panel in Settings in the top bar."
 
-#: ../Gateway/Dotpay.php:126
+#: ../Gateway/Dotpay.php:127
 msgid "Testing environment"
 msgstr "Testing environment"
 
-#: ../Gateway/Dotpay.php:127
+#: ../Gateway/Dotpay.php:128
 msgid ""
 "Only payment simulation - required Dotpay test account: <a href=\"https://"
 "ssl.dotpay.pl/test_seller/test/registration/?affilate_id=woocommerce\" class="
@@ -150,43 +164,43 @@ msgstr ""
 "\"hide-if-no-js page-title-action\"  target=\"_blank\" title=\"Dotpay test "
 "account registration\">registration</a>"
 
-#: ../Gateway/Dotpay.php:133
+#: ../Gateway/Dotpay.php:134
 msgid "Separate Dotpay account for currencies (EUR, USD or GBP)"
 msgstr "Separate Dotpay account for currencies (EUR, USD or GBP)"
 
-#: ../Gateway/Dotpay.php:142
+#: ../Gateway/Dotpay.php:143
 msgid "Dotpay customer ID2 (for second account)"
 msgstr "Dotpay customer ID2 (for second account)"
 
-#: ../Gateway/Dotpay.php:150
+#: ../Gateway/Dotpay.php:151
 msgid "Dotpay customer PIN2 (for second account)"
 msgstr "Dotpay customer PIN2 (for second account)"
 
-#: ../Gateway/Dotpay.php:158
+#: ../Gateway/Dotpay.php:159
 msgid "Channel visible only for currencies"
 msgstr "Channel visible only for currencies"
 
-#: ../Gateway/Dotpay.php:162 ../Gateway/Dotpay.php:170
+#: ../Gateway/Dotpay.php:163 ../Gateway/Dotpay.php:171
 msgid "Leave it blank or enter a currency separated by commas eg. (EUR, GBP)."
 msgstr "Leave it blank or enter a currency separated by commas eg. (EUR, GBP)."
 
-#: ../Gateway/Dotpay.php:167
-msgid "Currencies for disable main method"
-msgstr "Currencies for disable main method"
+#: ../Gateway/Dotpay.php:168
+msgid "Currencies that disable main method"
+msgstr "Currencies that disable main method"
 
-#: ../Gateway/Dotpay.php:175
+#: ../Gateway/Dotpay.php:176
 msgid "Credit cards"
 msgstr "Credit cards"
 
-#: ../Gateway/Dotpay.php:179 ../Gateway/Dotpay.php:204
+#: ../Gateway/Dotpay.php:180 ../Gateway/Dotpay.php:205
 msgid "Show separately payment channel in a shop."
 msgstr "Show separately payment channel in a shop."
 
-#: ../Gateway/Dotpay.php:189
+#: ../Gateway/Dotpay.php:190
 msgid "Number of credit card channel"
 msgstr "Number of credit card channel"
 
-#: ../Gateway/Dotpay.php:193
+#: ../Gateway/Dotpay.php:194
 msgid ""
 "The default card channel number for the Dotpay account is 248. Leave this "
 "number if everything works for you."
@@ -194,23 +208,23 @@ msgstr ""
 "The default card channel number for the Dotpay account is 248. Leave this "
 "number if everything works for you."
 
-#: ../Gateway/Dotpay.php:195
+#: ../Gateway/Dotpay.php:196
 msgid " eq. 248"
 msgstr " eq. 248"
 
-#: ../Gateway/Dotpay.php:200
+#: ../Gateway/Dotpay.php:201
 msgid "One Click for credit card"
 msgstr "One Click for credit card"
 
-#: ../Gateway/Dotpay.php:210
+#: ../Gateway/Dotpay.php:211
 msgid "Requires Dotpay API username and password (enter below)."
 msgstr "Requires Dotpay API username and password (enter below)."
 
-#: ../Gateway/Dotpay.php:215
+#: ../Gateway/Dotpay.php:216
 msgid "Username API"
 msgstr "Username API"
 
-#: ../Gateway/Dotpay.php:218 ../Gateway/Dotpay.php:226
+#: ../Gateway/Dotpay.php:219 ../Gateway/Dotpay.php:227
 msgid ""
 "Leave this field empty if you do not use One Click and if you do not want to "
 "present the payment instructions on the shop page for semi-automatic "
@@ -220,75 +234,127 @@ msgstr ""
 "present the payment instructions on the shop page for semi-automatic "
 "channels. Data for access to the Dotpay administration panel."
 
-#: ../Gateway/Dotpay.php:223
+#: ../Gateway/Dotpay.php:224
 msgid "Password API"
 msgstr "Password API"
 
-#: ../Gateway/Dotpay.php:231
+#: ../Gateway/Dotpay.php:232
 msgid "MasterPass"
 msgstr "MasterPass"
 
-#: ../Gateway/Dotpay.php:240
+#: ../Gateway/Dotpay.php:241
 msgid "BLIK"
 msgstr "BLIK"
 
-#: ../Gateway/Dotpay.php:247
+#: ../Gateway/Dotpay.php:248
 msgid "Widget"
 msgstr "Widget"
 
-#: ../Gateway/Dotpay.php:249
+#: ../Gateway/Dotpay.php:250
 msgid "Display payment channels in a shop"
 msgstr "Display payment channels in a shop"
+
+#: ../Gateway/Dotpay.php:255
+msgid "Toggle channel names in widget view"
+msgstr "Toggle channel names in widget view"
+
+#: ../Gateway/Dotpay.php:257
+msgid "Display payment channels names in widget"
+msgstr "Display payment channels names in widget"
+
+#: ../Gateway/Dotpay.php:292
+msgid " - "
+msgstr " - "
+
+#: ../Gateway/Dotpay.php:295
+msgid "Choose what kind of delivery describes this shipping method"
+msgstr "Choose what kind of delivery describes this shipping method"
+
+#: ../Gateway/Dotpay.php:299
+msgid "-"
+msgstr "-"
+
+#: ../Gateway/Dotpay.php:300
+msgid "Courier"
+msgstr "Courier"
+
+#: ../Gateway/Dotpay.php:301
+msgid "Poczta Polska"
+msgstr "Poczta Polska"
+
+#: ../Gateway/Dotpay.php:302
+msgid "Pickup point"
+msgstr "Pickup point"
+
+#: ../Gateway/Dotpay.php:303
+msgid "Paczkomat"
+msgstr "Paczkomat"
+
+#: ../Gateway/Dotpay.php:304
+msgid "Paczka w Ruchu"
+msgstr "Paczka w Ruchu"
+
+#: ../Gateway/Dotpay.php:305
+msgid "Local pickup"
+msgstr "Local pickup"
 
 #: ../Gateway/Gateway.php:70
 msgid "DOTPAY PAYMENT"
 msgstr "DOTPAY PAYMENT"
 
-#: ../Gateway/Gateway.php:174 ../templates/check_status.phtml:116
+#: ../Gateway/Gateway.php:172 ../templates/check_status.phtml:116
 msgid "Order not found"
 msgstr "Order not found"
 
-#: ../Gateway/Gateway.php:447
+#: ../Gateway/Gateway.php:491
 msgid "Exceeded expiration date of the generated payment link."
 msgstr "Exceeded expiration date of the generated payment link."
 
-#: ../Gateway/Gateway.php:450
+#: ../Gateway/Gateway.php:494
 msgid "Selected payment channel is unknown."
 msgstr "Selected payment channel is unknown."
 
-#: ../Gateway/Gateway.php:453
+#: ../Gateway/Gateway.php:497
 msgid "Selected channel payment is desabled."
 msgstr "Selected channel payment is desabled."
 
-#: ../Gateway/Gateway.php:456
+#: ../Gateway/Gateway.php:500
 msgid "Account is disabled."
 msgstr "Account is disabled."
 
-#: ../Gateway/Gateway.php:459
+#: ../Gateway/Gateway.php:503
 msgid "Seller account is inactive."
 msgstr "Seller account is inactive."
 
-#: ../Gateway/Gateway.php:462
+#: ../Gateway/Gateway.php:506
 msgid "Amount is too low."
 msgstr "Amount is too low."
 
-#: ../Gateway/Gateway.php:465
+#: ../Gateway/Gateway.php:509
 msgid "Amount is too high."
 msgstr "Amount is too high."
 
-#: ../Gateway/Gateway.php:468
+#: ../Gateway/Gateway.php:512
 msgid "Data format is bad."
 msgstr "Data format is bad."
 
-#: ../Gateway/Gateway.php:471
+#: ../Gateway/Gateway.php:515
 msgid "Request has been modified during transmission."
 msgstr "Request has been modified during transmission."
 
-#: ../Gateway/Gateway.php:474
+#: ../Gateway/Gateway.php:518
 msgid "There were not given all request parameters."
 msgstr "There were not given all request parameters."
 
-#: ../Gateway/Gateway.php:477
+#: ../Gateway/Gateway.php:521
+msgid ""
+"Account settings in Dotpay require the seller to have SSL certificate "
+"enabled on his website."
+msgstr ""
+"Account settings in Dotpay require the seller to have SSL certificate "
+"enabled on his website."
+
+#: ../Gateway/Gateway.php:524
 msgid ""
 "There was an unidentified error. Please contact to your seller and give him "
 "the order number."
@@ -296,35 +362,35 @@ msgstr ""
 "There was an unidentified error. Please contact to your seller and give him "
 "the order number."
 
-#: ../Gateway/Gateway.php:505 ../Gateway/OneClick.php:123
+#: ../Gateway/Gateway.php:552 ../Gateway/OneClick.php:124
 msgid "Please accept all agreements"
 msgstr "Please accept all agreements"
 
-#: ../Gateway/Gateway.php:597
+#: ../Gateway/Gateway.php:649
 msgid "Dotpay send notification"
 msgstr "Dotpay send notification"
 
-#: ../Gateway/Gateway.php:597
+#: ../Gateway/Gateway.php:649
 msgid "transaction number:"
 msgstr "transaction number:"
 
-#: ../Gateway/Gateway.php:597
+#: ../Gateway/Gateway.php:649
 msgid "payment channel:"
 msgstr "payment channel:"
 
-#: ../Gateway/Gateway.php:601
+#: ../Gateway/Gateway.php:653
 msgid "paid - processing"
 msgstr "paid - processing"
 
-#: ../Gateway/Gateway.php:601
+#: ../Gateway/Gateway.php:653
 msgid "paid - completed (virtual product)"
 msgstr "paid - completed (virtual product)"
 
-#: ../Gateway/Gateway.php:608
+#: ../Gateway/Gateway.php:660
 msgid "cancelled"
 msgstr "cancelled"
 
-#: ../Gateway/Gateway.php:611
+#: ../Gateway/Gateway.php:663
 msgid "processing"
 msgstr "processing"
 
@@ -336,7 +402,7 @@ msgstr "MasterPass via Dotpay"
 msgid "One Click via Dotpay"
 msgstr "One Click via Dotpay"
 
-#: ../Gateway/OneClick.php:119
+#: ../Gateway/OneClick.php:120
 msgid "Please select One Click option"
 msgstr "Please select One Click option"
 
@@ -344,28 +410,24 @@ msgstr "Please select One Click option"
 msgid "Credit Cards (currencies) via Dotpay"
 msgstr "Credit Cards (currencies) via Dotpay"
 
-#: ../Gateway/Transfer.php:36
-msgid "Transfer and cash channels"
-msgstr "Transfer and cash channels"
-
-#: ../Gateway/Transfer.php:84
+#: ../Gateway/Transfer.php:73
 msgid "Payment can not be created"
 msgstr "Payment can not be created"
 
-#: ../Gateway/Transfer.php:86
+#: ../Gateway/Transfer.php:75
 msgid "Payment not exist"
 msgstr "Payment not exist"
 
-#: ../woocommerce-dotpay.php:37
+#: ../woocommerce-dotpay.php:39
 msgid "Warning! WooCommerce Dotpay Gateway requires PHP"
 msgstr "Warning! WooCommerce Dotpay Gateway requires PHP"
 
-#: ../woocommerce-dotpay.php:37 ../woocommerce-dotpay.php:49
-#: ../woocommerce-dotpay.php:106 ../woocommerce-dotpay.php:110
+#: ../woocommerce-dotpay.php:39 ../woocommerce-dotpay.php:51
+#: ../woocommerce-dotpay.php:110 ../woocommerce-dotpay.php:114
 msgid "Currently in use"
 msgstr "Currently in use"
 
-#: ../woocommerce-dotpay.php:49
+#: ../woocommerce-dotpay.php:51
 msgid ""
 "Attention! WooCommerce Dotpay Gateway to function properly requires "
 "Woocommerce"
@@ -373,7 +435,7 @@ msgstr ""
 "Attention! WooCommerce Dotpay Gateway to function properly requires "
 "Woocommerce"
 
-#: ../woocommerce-dotpay.php:105
+#: ../woocommerce-dotpay.php:109
 msgid ""
 "Attention! There is a temporary problem with checking information about "
 "latest version of the Dotpay payment module"
@@ -381,7 +443,7 @@ msgstr ""
 "Attention! There is a temporary problem with checking information about "
 "latest version of the Dotpay payment module"
 
-#: ../woocommerce-dotpay.php:107
+#: ../woocommerce-dotpay.php:111
 msgid ""
 "You can check manually and download latest version and upgrade from this "
 "address:"
@@ -389,35 +451,35 @@ msgstr ""
 "You can check manually and download latest version and upgrade from this "
 "address:"
 
-#: ../woocommerce-dotpay.php:107
+#: ../woocommerce-dotpay.php:111
 msgid "check if there is a new version of Dotpay payment plugin"
 msgstr "check if there is a new version of Dotpay payment plugin"
 
-#: ../woocommerce-dotpay.php:107
+#: ../woocommerce-dotpay.php:111
 msgid "WooCommerce Dotpay payment module"
 msgstr "WooCommerce Dotpay payment module"
 
-#: ../woocommerce-dotpay.php:110
+#: ../woocommerce-dotpay.php:114
 msgid "Attention! A new version of the Dotpay payment module is available:"
 msgstr "Attention! A new version of the Dotpay payment module is available:"
 
-#: ../woocommerce-dotpay.php:111
+#: ../woocommerce-dotpay.php:115
 msgid "Download latest version and upgrade manually this:"
 msgstr "Download latest version and upgrade manually this:"
 
-#: ../woocommerce-dotpay.php:111
+#: ../woocommerce-dotpay.php:115
 msgid "Upgrade WooCommerce Dotpay Gateway"
 msgstr "Upgrade WooCommerce Dotpay Gateway"
 
-#: ../woocommerce-dotpay.php:181
+#: ../woocommerce-dotpay.php:197
 msgid "My saved credit cards"
 msgstr "My saved credit cards"
 
-#: ../woocommerce-dotpay.php:183
+#: ../woocommerce-dotpay.php:199
 msgid "Checking payment status..."
 msgstr "Checking payment status..."
 
-#: ../woocommerce-dotpay.php:185
+#: ../woocommerce-dotpay.php:201
 msgid "Details of your payment"
 msgstr "Details of your payment"
 
@@ -426,12 +488,12 @@ msgid "BLIK code"
 msgstr "BLIK code"
 
 #: ../form/blik.phtml:10 ../form/cc.phtml:2 ../form/mp.phtml:2
-#: ../form/oc.phtml:46 ../form/pv.phtml:2 ../form/standard.phtml:66
+#: ../form/oc.phtml:46 ../form/pv.phtml:2 ../form/standard.phtml:56
 msgid "Attention!"
 msgstr "Attention!"
 
 #: ../form/blik.phtml:10 ../form/cc.phtml:2 ../form/mp.phtml:2
-#: ../form/oc.phtml:46 ../form/pv.phtml:2 ../form/standard.phtml:66
+#: ../form/oc.phtml:46 ../form/pv.phtml:2 ../form/standard.phtml:56
 msgid "Test mode is activated. This is just a payment simulation."
 msgstr "Test mode is activated. This is just a payment simulation."
 
@@ -451,77 +513,13 @@ msgstr ""
 "I agree to repeated loading bill my credit card for the payment One-Click by "
 "way of purchase of goods or services offered by the store."
 
-#: ../form/standard.phtml:30
+#: ../form/standard.phtml:28
 msgid "To select different channel click the above icon again"
 msgstr "To select different channel click the above icon again"
 
 #: ../form/tc.phtml:2
 msgid "Choose one of the payment methods above."
 msgstr "Choose one of the payment methods above."
-
-#: ../templates/admin_header.phtml:2
-msgid "Dotpay.pl website"
-msgstr "Dotpay.pl website"
-
-#: ../templates/admin_header.phtml:3
-msgid ""
-"In response to the market's needs Dotpay has been delivering innovative "
-"Internet payment services providing the widest e-commerce solution offer for "
-"years. The domain is money transfers between a buyer and a merchant within a "
-"complex service based on counselling and additional security. Within an "
-"offer of Internet payments Dotpay offers over 140 payment channels "
-"including: mobile payments, instalments, cash, e-wallets, transfers and "
-"credit card payments."
-msgstr ""
-"In response to the market's needs Dotpay has been delivering innovative "
-"Internet payment services providing the widest e-commerce solution offer for "
-"years. The domain is money transfers between a buyer and a merchant within a "
-"complex service based on counselling and additional security. Within an "
-"offer of Internet payments Dotpay offers over 140 payment channels "
-"including: mobile payments, instalments, cash, e-wallets, transfers and "
-"credit card payments."
-
-#: ../templates/admin_header.phtml:4
-msgid "Getting started instructions"
-msgstr "Getting started instructions"
-
-#: ../templates/admin_header.phtml:7
-msgid ""
-"Thanks to Dotpay payment module the only activities needed for integration "
-"are: ID and PIN numbers and URLC confirmation configuration."
-msgstr ""
-"Thanks to Dotpay payment module the only activities needed for integration "
-"are: ID and PIN numbers and URLC confirmation configuration."
-
-#: ../templates/admin_header.phtml:8
-msgid ""
-"ID and PIN can be found in Dotpay panel in Settings in the top bar. ID "
-"number is a 6-digit string after # in a \"Shop\" line."
-msgstr ""
-"ID and PIN can be found in Dotpay panel in Settings in the top bar. ID "
-"number is a 6-digit string after # in a \"Shop\" line."
-
-#: ../templates/admin_header.phtml:9
-msgid ""
-"Only thing You have to do is log in to the Dotpay user panel and untick "
-"\"Block external URLC\" option in Settings -> Notifications -> Urlc "
-"configuration -> Edit."
-msgstr ""
-"Only thing You have to do is log in to the Dotpay user panel and untick "
-"\"Block external URLC\" option in Settings -> Notifications -> Urlc "
-"configuration -> Edit."
-
-#: ../templates/admin_header.phtml:14
-msgid "Module configuration"
-msgstr "Module configuration"
-
-#: ../templates/admin_header.phtml:14
-msgid "Account registration in Dotpay"
-msgstr "Account registration in Dotpay"
-
-#: ../templates/admin_header.phtml:14
-msgid "Dotpay Home Page"
-msgstr "Dotpay Home Page"
 
 #: ../templates/check_status.phtml:101
 msgid "Payment status: completed"
@@ -539,7 +537,7 @@ msgstr "Payment was rejected."
 msgid "The order number:"
 msgstr "The order number:"
 
-#: ../templates/check_status.phtml:107 ../templates/check_status.phtml:173
+#: ../templates/check_status.phtml:107 ../templates/check_status.phtml:172
 msgid "Payment Error"
 msgstr "Payment Error"
 
@@ -551,17 +549,17 @@ msgstr "try to pay again for this order"
 msgid "Status payment check error"
 msgstr "The order number:"
 
-#: ../templates/check_status.phtml:162
+#: ../templates/check_status.phtml:161
 msgid ""
 "Payment wait for confirmation by Dotpay... It make take up to 2 minutes."
 msgstr ""
 "Payment wait for confirmation by Dotpay... It make take up to 2 minutes."
 
-#: ../templates/check_status.phtml:173
+#: ../templates/check_status.phtml:172
 msgid "Timeout of waiting for confirmation of payment"
 msgstr "Timeout of waiting for confirmation of payment"
 
-#: ../templates/check_status.phtml:176
+#: ../templates/check_status.phtml:175
 msgid ""
 "When transaction will be confirmed we will notify you on email. If payment "
 "will not be confirmed, please contact with shop owner. "
@@ -569,15 +567,15 @@ msgstr ""
 "When transaction will be confirmed we will notify you on email. If payment "
 "will not be confirmed, please contact with shop owner. "
 
-#: ../templates/check_status.phtml:176
+#: ../templates/check_status.phtml:175
 msgid "And give him the order number:"
 msgstr "And give him the order number:"
 
-#: ../templates/check_status.phtml:186
+#: ../templates/check_status.phtml:185
 msgid "Error"
 msgstr "Error"
 
-#: ../templates/check_status.phtml:193
+#: ../templates/check_status.phtml:192
 msgid "You can go to your account page"
 msgstr "You can go to your account page"
 
@@ -654,6 +652,64 @@ msgstr ""
 "Not following the above procedure (e.g. changing the amount or payment "
 "title) will make your payment not handled automatically, and therefore "
 "lengthen finalization time of the transaction."
+
+#~ msgid "Transfer and cash channels"
+#~ msgstr "Transfer and cash channels"
+
+#~ msgid "Dotpay.pl website"
+#~ msgstr "Dotpay.pl website"
+
+#~ msgid ""
+#~ "In response to the market's needs Dotpay has been delivering innovative "
+#~ "Internet payment services providing the widest e-commerce solution offer "
+#~ "for years. The domain is money transfers between a buyer and a merchant "
+#~ "within a complex service based on counselling and additional security. "
+#~ "Within an offer of Internet payments Dotpay offers over 140 payment "
+#~ "channels including: mobile payments, instalments, cash, e-wallets, "
+#~ "transfers and credit card payments."
+#~ msgstr ""
+#~ "In response to the market's needs Dotpay has been delivering innovative "
+#~ "Internet payment services providing the widest e-commerce solution offer "
+#~ "for years. The domain is money transfers between a buyer and a merchant "
+#~ "within a complex service based on counselling and additional security. "
+#~ "Within an offer of Internet payments Dotpay offers over 140 payment "
+#~ "channels including: mobile payments, instalments, cash, e-wallets, "
+#~ "transfers and credit card payments."
+
+#~ msgid "Getting started instructions"
+#~ msgstr "Getting started instructions"
+
+#~ msgid ""
+#~ "Thanks to Dotpay payment module the only activities needed for "
+#~ "integration are: ID and PIN numbers and URLC confirmation configuration."
+#~ msgstr ""
+#~ "Thanks to Dotpay payment module the only activities needed for "
+#~ "integration are: ID and PIN numbers and URLC confirmation configuration."
+
+#~ msgid ""
+#~ "ID and PIN can be found in Dotpay panel in Settings in the top bar. ID "
+#~ "number is a 6-digit string after # in a \"Shop\" line."
+#~ msgstr ""
+#~ "ID and PIN can be found in Dotpay panel in Settings in the top bar. ID "
+#~ "number is a 6-digit string after # in a \"Shop\" line."
+
+#~ msgid ""
+#~ "Only thing You have to do is log in to the Dotpay user panel and untick "
+#~ "\"Block external URLC\" option in Settings -> Notifications -> Urlc "
+#~ "configuration -> Edit."
+#~ msgstr ""
+#~ "Only thing You have to do is log in to the Dotpay user panel and untick "
+#~ "\"Block external URLC\" option in Settings -> Notifications -> Urlc "
+#~ "configuration -> Edit."
+
+#~ msgid "Module configuration"
+#~ msgstr "Module configuration"
+
+#~ msgid "Account registration in Dotpay"
+#~ msgstr "Account registration in Dotpay"
+
+#~ msgid "Dotpay Home Page"
+#~ msgstr "Dotpay Home Page"
 
 #~ msgid ""
 #~ "Leave this field empty if you do not use One Click and if you do not want "

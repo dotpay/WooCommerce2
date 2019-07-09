@@ -36,6 +36,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $this->title = 'Dotpay';
         parent::__construct();
         $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
+        $this->method_description = __(' Online payment', 'dotpay-payment-gateway');
         $this->addActions();
     }
     
@@ -98,7 +99,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 
         $this->form_fields = array(
             'enabled' => array(
-                'title' => __('Enable', 'dotpay-payment-gateway'),
+                'title' => __('Enable', 'dotpay-payment-gateway').' <img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/dotpay.png'.'" style="vertical-align: text-bottom" alt="Dotpay">',
                 'label' => '<strong style="color: #881920; font-size: 1.4em;">'.__('You can enable Dotpay payments', 'dotpay-payment-gateway').'</strong>',
                 'type' => 'checkbox',
                 'default' => 'yes',
@@ -164,9 +165,9 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'dontview_currency' => array(
-                'title' => __('Currencies for disable main method', 'dotpay-payment-gateway'),
+                'title' => __('Currencies that disable main method', 'dotpay-payment-gateway'),
                 'type' => 'text',
-                'default' => 'EUR,USD,GBP',
+                'default' => '',
                 'description' => __('Leave it blank or enter a currency separated by commas eg. (EUR, GBP).', 'dotpay-payment-gateway'),
                 'desc_tip' => true,
             ),
@@ -248,8 +249,33 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'type' => 'checkbox',
                 'label' => __('Display payment channels in a shop', 'dotpay-payment-gateway'),
                 'default' => 'yes',
+                'class' => 'widget_show',
+            ),
+            'channel_name_show' => array(
+                'title' => __('Toggle channel names in widget view', 'dotpay-payment-gateway'),
+                'type' => 'checkbox',
+                'label' => __('Display payment channels names in widget', 'dotpay-payment-gateway'),
+                'default' => 'no',
+                'class' => 'widget_channel_names',
             ),
         );
+
+	    $zones = WC_Shipping_Zones::get_zones();
+
+        foreach($zones as $zone)
+	    {
+	    	foreach($zone['shipping_methods'] as $method)
+		    {
+			    $this->form_fields["shipping_mapping_" . $method->instance_id] = $this->getMappingFieldForShippingMethod($zone['zone_name'], $method->title);
+		    }
+	    }
+
+        $zone0 = WC_Shipping_Zones::get_zone(0);
+
+		foreach($zone0->get_shipping_methods() as $method)
+		{
+			$this->form_fields["shipping_mapping_" . $method->instance_id] = $this->getMappingFieldForShippingMethod($zone0->get_zone_name(), $method->title);
+		}
     }
     
     /**
@@ -258,6 +284,27 @@ class Gateway_Dotpay extends Gateway_Gateway {
      */
     protected function isEnabled() {
         return parent::isEnabled() && $this->isMainChannelEnabled();
+    }
+
+    private function getMappingFieldForShippingMethod($zoneName, $methodTitle)
+    {
+    	return array(
+		    'title'       => __( $zoneName . " - " . $methodTitle, 'dotpay-payment-gateway'),
+		    'type'        => 'select',
+		    'class'       => 'wc-enhanced-select',
+		    'description' => __( 'Choose what kind of delivery describes this shipping method', 'dotpay-payment-gateway' ),
+		    'default'     => '',
+		    'desc_tip'    => true,
+		    'options'     => array(
+			    ''          => __( '-', 'dotpay-payment-gateway' ),
+			    'COURIER'          => __( 'Courier', 'dotpay-payment-gateway' ),
+			    'POCZTA_POLSKA'          => __( 'Poczta Polska', 'dotpay-payment-gateway' ),
+			    'PICKUP_POINT'          => __( 'Pickup point', 'dotpay-payment-gateway' ),
+			    'PACZKOMAT'          => __( 'Paczkomat', 'dotpay-payment-gateway' ),
+			    'PACZKA_W_RUCHU'          => __( 'Paczka w Ruchu', 'dotpay-payment-gateway' ),
+			    'PICKUP_SHOP'          => __( 'Local pickup', 'dotpay-payment-gateway' ),
+		    ),
+	    );
     }
     
     /**

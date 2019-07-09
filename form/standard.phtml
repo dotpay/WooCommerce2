@@ -12,6 +12,7 @@
         widgetFormContainerClass: 'my-form-widget-container',
         offlineChannel: 'mark',
         offlineChannelTooltip: true,
+		channelNameVisibility: '<?php echo $this->getChannelNameVisiblity(); ?>',
         disabledChannels: [<?php echo $this->getDisabledChannelsList(); ?>],
         host: '<?php echo $this->getPaymentChannelsUrl(); ?>'
     };
@@ -22,34 +23,23 @@
         setTimeout(function(){
              jQuery('.channel-container').on('click', function () {
 				 jQuery('.channels-wrapper').css('text-align','center');
-				 //presenting selected channel
                  jQuery('.selected').clone().insertBefore('.dotpay-channels-selection').addClass('cloned');	
-				 //hiding the list of channels
                  jQuery('.dotpay-channels-selection').slideUp('600', 'swing');
-				 //add text info about channel selection				 
 				 jQuery('<?php echo "<br><p style=\"font-size:1.2em;text-align:center;color:#1515c4;padding:20px;border-radius:3px \"> <strong>".__('To select different channel click the above icon again', 'dotpay-payment-gateway')."</strong></p>"; ?>').insertAfter('.cloned').addClass('channelSelect');
-				 //remove copies of accidental click
 				 jQuery('.channelSelect').not(':last').remove();
-				 //remove copies of accidental click
 				 jQuery('.cloned').not(':last').remove();
              });}, 1200);
 
 		//showing all, when deselecting previous
         setTimeout(function() {
              jQuery('.dotpay-channels').on('click', '.cloned', function(){
-					//presenting the list of channels
                     jQuery('.dotpay-channels-selection').slideDown('600','swing');	
-					//hiding selection, removing clone
                     jQuery('.cloned').toggle().remove();
-					//removing the channel selection
 					jQuery('.selected').removeClass('selected');
-					//removing text
 					jQuery('.channelSelect').remove();
-					//scroll to top of channel selection
 					jQuery('html, body').animate({
 						scrollTop: (jQuery('#payment_method_dotpay').offset().top -100)
 					}, 'fast');
-					//reset css of wrapper
 					jQuery('.channels-wrapper').css('text-align','left');
 
                  });
