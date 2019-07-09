@@ -85,9 +85,9 @@ if (typeof jQuery != "undefined") {
     isenambledDotpaymodule(jQuery('.dotpay_module_enable'));
 
     // module setup: validate ID
-    jQuery("#woocommerce_dotpay_id").attr("pattern", "[0-9]{5,8}");
+    jQuery("#woocommerce_dotpay_id").attr("pattern", "[0-9]{5,6}");
     jQuery("#woocommerce_dotpay_id").attr("title", "Dozwolone tylko cyfry (6 cyfr)");
-    jQuery("#woocommerce_dotpay_id").attr("maxlength", "8");
+    jQuery("#woocommerce_dotpay_id").attr("maxlength", "6");
     jQuery("#woocommerce_dotpay_id").prop("placeholder", "np. 123456");
 
     jQuery("#woocommerce_dotpay_id").bind('keyup paste keydown', function(e) {
@@ -105,9 +105,9 @@ if (typeof jQuery != "undefined") {
     		});
 
     //  module setup: validatte ID2
-    jQuery("#woocommerce_dotpay_id2").attr("pattern", "[0-9]{5,8}");
+    jQuery("#woocommerce_dotpay_id2").attr("pattern", "[0-9]{5,6}");
     jQuery("#woocommerce_dotpay_id2").attr("title", "Dozwolone tylko cyfry (6 cyfr)");
-    jQuery("#woocommerce_dotpay_id2").attr("maxlength", "8");
+    jQuery("#woocommerce_dotpay_id2").attr("maxlength", "6");
     jQuery("#woocommerce_dotpay_id2").prop("placeholder", "np. 123456");
 
     jQuery("#woocommerce_dotpay_id2").bind('keyup paste keydown', function(e) {
@@ -140,7 +140,8 @@ if (typeof jQuery != "undefined") {
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_ccPV_show"]'));
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_test"]'));
     jQuery("<br><hr style='height: 3px; background: #c5ccd6;'>").insertAfter(jQuery('label[for="woocommerce_dotpay_enabled"]'));
-
+    jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><p style='font-weight: bold;'>Dostępne metody wysyłki</p><p>&nbsp;</p><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_shipping_mapping_1"]'));
+    jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><p style='font-weight: bold;'>Dodatkowe ustawienia dla płatności odroczonych</p><p class='description'>Wymagana dodatkowa Umowa w celu uruchomienia kanałów płatności obsługujących tę formę płatności.</p><br>").insertBefore(jQuery('select#woocommerce_dotpay_shipping_mapping_1'));
 
 
     //  jQuery("#woocommerce_dotpay_dontview_currency").attr("pattern", "^(([A-Z]{3})\\s?,?\\s?)+");
@@ -149,6 +150,9 @@ if (typeof jQuery != "undefined") {
 
     jQuery('label[for="woocommerce_dotpay_id"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_pin"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
+    jQuery('label[for="woocommerce_dotpay_ccPV_currency"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
+
+    jQuery('label[for^="woocommerce_dotpay_shipping_mapping_"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_dontview_currency"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_credit_card_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_oneclick_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");

@@ -117,6 +117,15 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         return $this->get_option('id');
     }
 
+	/**
+	 * Return delivery type for specific shipping
+	 * @return int
+	 */
+	public function getShippingMapping($id)
+	{
+		return $this->get_option('shipping_mapping_'.$id);
+	}
+
     /**
      * Return seller pin
      * @return string
@@ -521,7 +530,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
     /**
      * Return customer street and house number
-     * @return string
+     * @return array
      */
     public function getStreetAndStreetN1()
     {
@@ -560,6 +569,104 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             'street_n1' => $building_numberRO
         );
     }
+
+	/**
+	 * Return customer shipping city
+	 * @return string
+	 */
+	public function getShippingCity()
+	{
+		$order = $this->getOrder();
+		if (method_exists($order, 'get_shipping_city')) {
+			$city = esc_attr($order->get_shipping_city());
+		} else {
+			$city = esc_attr($order->shipping_city);
+		}
+		//allowed only: letters, digits, spaces, symbols _-.,'
+		$city = preg_replace('/[^.\w \'_-]/u', '', $city);
+		$city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
+
+		return $city1;
+	}
+
+	/**
+	 * Return customer shipping postcode
+	 * @return string
+	 */
+	public function getShippingPostcode()
+	{
+		$order = $this->getOrder();
+		if (method_exists($order, 'get_shipping_postcode')) {
+			$postcode = esc_attr($order->get_shipping_postcode());
+		} else {
+			$postcode = esc_attr($order->shipping_postcode);
+		}
+		if (empty($postcode)) {
+			return $postcode;
+		}
+		if (preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && strtolower($this->getShippingCountry()) == 'pl') {
+			$postcode = str_replace('-', '', $postcode);
+			$postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
+		}
+		return $postcode;
+	}
+
+	/**
+	 * Return customer shipping country
+	 * @return string
+	 */
+	public function getShippingCountry()
+	{
+		$order = $this->getOrder();
+		if (method_exists($order, 'get_shipping_country')) {
+			$country = $order->get_shipping_country();
+		} else {
+			$country = $order->shipping_country;
+		}
+		return esc_attr(strtoupper($country));
+	}
+
+	/**
+	 * Return customer shipping street and house number
+	 * @return array
+	 */
+	public function getShippingStreetAndStreetN1()
+	{
+		$order = $this->getOrder();
+		if (method_exists($order, 'get_shipping_address_1')) {
+			$street = esc_attr($order->get_shipping_address_1());
+		} else {
+			$street = esc_attr($order->shipping_address_1);
+		}
+		//allowed only: letters, digits, spaces, symbols _-.,'
+		$street = preg_replace('/[^.\w \'_-]/u', '', $street);
+		$street1 = html_entity_decode($street, ENT_QUOTES, 'UTF-8');
+
+		if (method_exists($order, 'get_shipping_address_2')) {
+			$street_n1 = esc_attr($order->get_shipping_address_2());
+		} else {
+			$street_n1 = esc_attr($order->shipping_address_2);
+		}
+
+		if (empty($street_n1)) {
+			preg_match("/\s[\w\d\/_\-]{0,30}$/", $street1, $matches);
+			if (count($matches) > 0) {
+				$street_n1 = trim($matches[0]);
+				$street1 = str_replace($matches[0], '', $street1);
+			}
+		}
+
+		if (!empty($street_n1)) {
+			$building_numberRO = $street_n1;
+		} else {
+			$building_numberRO = " ";  //this field may not be blank in register order
+		}
+
+		return array(
+			'street' => $street1,
+			'street_n1' => $building_numberRO
+		);
+	}
 
     /**
      * Return array of languages that are accepted by Dotpay

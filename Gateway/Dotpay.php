@@ -259,6 +259,23 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'class' => 'widget_channel_names',
             ),
         );
+
+	    $zones = WC_Shipping_Zones::get_zones();
+
+        foreach($zones as $zone)
+	    {
+	    	foreach($zone['shipping_methods'] as $method)
+		    {
+			    $this->form_fields["shipping_mapping_" . $method->instance_id] = $this->getMappingFieldForShippingMethod($zone['zone_name'], $method->title);
+		    }
+	    }
+
+        $zone0 = WC_Shipping_Zones::get_zone(0);
+
+		foreach($zone0->get_shipping_methods() as $method)
+		{
+			$this->form_fields["shipping_mapping_" . $method->instance_id] = $this->getMappingFieldForShippingMethod($zone0->get_zone_name(), $method->title);
+		}
     }
     
     /**
@@ -267,6 +284,27 @@ class Gateway_Dotpay extends Gateway_Gateway {
      */
     protected function isEnabled() {
         return parent::isEnabled() && $this->isMainChannelEnabled();
+    }
+
+    private function getMappingFieldForShippingMethod($zoneName, $methodTitle)
+    {
+    	return array(
+		    'title'       => __( $zoneName . " - " . $methodTitle, 'dotpay-payment-gateway'),
+		    'type'        => 'select',
+		    'class'       => 'wc-enhanced-select',
+		    'description' => __( 'Choose what kind of delivery describes this shipping method', 'dotpay-payment-gateway' ),
+		    'default'     => '',
+		    'desc_tip'    => true,
+		    'options'     => array(
+			    ''          => __( '-', 'dotpay-payment-gateway' ),
+			    'COURIER'          => __( 'Courier', 'dotpay-payment-gateway' ),
+			    'POCZTA_POLSKA'          => __( 'Poczta Polska', 'dotpay-payment-gateway' ),
+			    'PICKUP_POINT'          => __( 'Pickup point', 'dotpay-payment-gateway' ),
+			    'PACZKOMAT'          => __( 'Paczkomat', 'dotpay-payment-gateway' ),
+			    'PACZKA_W_RUCHU'          => __( 'Paczka w Ruchu', 'dotpay-payment-gateway' ),
+			    'PICKUP_SHOP'          => __( 'Local pickup', 'dotpay-payment-gateway' ),
+		    ),
+	    );
     }
     
     /**

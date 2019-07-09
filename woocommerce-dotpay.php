@@ -10,7 +10,7 @@
   Text Domain: dotpay-payment-gateway
   WC requires at least: 3.2.0
   WC tested up to: 3.6.1
- */ 
+ */
 
 if (!defined('ABSPATH')) {
     exit;

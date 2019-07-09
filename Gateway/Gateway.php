@@ -196,7 +196,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'postcode' => $this->getPostcode(),
             'country' => $this->getCountry(),
 			'personal_data' => 1,
-            'bylaw' => 1
+            'bylaw' => 1,
+	        'customer' => $this->getCustomerBase64()
         );
     }
 
@@ -210,6 +211,54 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $data['chk'] = $this->generateCHK($this->getSellerId(), $this->getSellerPin(), $data);
         return $data;
     }
+
+	/**
+	 * Returns data to 'customer' parameter
+	 * @return string encoded base64
+	 */
+	public function getCustomerBase64() {
+
+		$customer = array (
+			"payer" => array(
+				"first_name" => $this->getFirstname(),
+				"last_name" => $this->getLastname(),
+				"email" => $this->getEmail(),
+				"phone" => $this->getPhone()
+			),
+			"order" => array(
+				"delivery_address" => array(
+
+					"city" => $this->getShippingCity(),
+					"street" => $this->getShippingStreetAndStreetN1()['street'],
+					"building_number" => $this->getShippingStreetAndStreetN1()['street_n1'],
+					"postcode" => $this->getShippingPostcode(),
+					"country" => $this->getShippingCountry()
+				)
+			)
+		);
+
+		if($user = $this->getOrder()->get_user()) {
+
+			$customer["registered_since"] = date("Y-m-d", strtotime($user->get('user_registered')));
+			$customer["order_count"] = wc_get_customer_order_count($user->ID);
+        }
+
+        if ($this->getSelectedCarrierMethodGroup() != "") {
+            $customer["order"]["delivery_type"] = $this->getSelectedCarrierMethodGroup();
+        }
+        
+
+		$customer_base64 = base64_encode(json_encode($customer, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+		
+		return $customer_base64;
+	}
+
+	protected function getSelectedCarrierMethodGroup()
+	{
+		$methods = $this->getOrder()->get_shipping_methods();
+		$method = array_pop($methods);
+		return $this->getShippingMapping($method) ? $this->getShippingMapping($method->get_instance_id()) : "";
+	}
 
     /**
      * Check, if channel is in channels groups
@@ -420,7 +469,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         (isset($ParametersArray['credit_card_customer_id']) ? $ParametersArray['credit_card_customer_id'] : null).
         (isset($ParametersArray['credit_card_id']) ? $ParametersArray['credit_card_id'] : null).
         (isset($ParametersArray['blik_code']) ? $ParametersArray['blik_code'] : null).
-        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null);
+        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null).
+	    (isset($ParametersArray['customer']) ? $ParametersArray['customer'] : null);
 
         return hash('sha256',$ChkParametersChain);
     }
@@ -471,6 +521,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 case 'REQUIRED_PARAMS_NOT_FOUND':
                     $this->message = __('There were not given all request parameters.', 'dotpay-payment-gateway');
                     break;
+                case 'URLC_INVALID':
+                    $this->message = __('Account settings in Dotpay require the seller to have SSL certificate enabled on his website.', 'dotpay-payment-gateway');
+                    break; 
                 default:
                     $this->message = __('There was an unidentified error. Please contact to your seller and give him the order number.', 'dotpay-payment-gateway');
             }
@@ -683,11 +736,11 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->getParam('email').
         $this->getParam('p_info').
         $this->getParam('p_email').
+        $this->getParam('credit_card_issuer_identification_number').
         $this->getParam('credit_card_masked_number').
         $this->getParam('credit_card_expiration_year').
         $this->getParam('credit_card_expiration_month').
         $this->getParam('credit_card_brand_codename').
-        $this->getParam('credit_card_issuer_identification_number').
         $this->getParam('credit_card_brand_code').
         $this->getParam('credit_card_unique_identifier').
         $this->getParam('credit_card_id').
