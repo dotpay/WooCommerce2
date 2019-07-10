@@ -685,7 +685,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             'cs',
             'ru',
             'hu',
-            'ro'
+            'ro',
+            'uk'
         );
     }
 
