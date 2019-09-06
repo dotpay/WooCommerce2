@@ -65,7 +65,7 @@ var requirejs, require, define;
      * @param {String} name the relative name
      * @param {String} baseName a real name that the name arg is relative
      * to.
-     * @returns {String} normalized name 
+     * @returns {String} normalized name
      */
     function normalize(name, baseName) {
         var nameParts, nameSegment, mapValue, foundMap, lastIndex,
@@ -107,9 +107,9 @@ var requirejs, require, define;
                             //correctly to disk. Otherwise, there is likely
                             //no path mapping for a path starting with '..'.
                             //This can still fail, but catches the most reasonable
-                            //uses of .. 
+                            //uses of ..
 
-// 
+//
 
                             break;
                         } else if (i > 0) {
@@ -10979,9 +10979,9 @@ define('widgetsCommon',['jquery', 'xhr', 'config'], function ($, xhr, config) {
 					case 'FormWidget':
 						var tooltipMessage = this.setTooltip(value.not_online_message);
 						if (config.widget.channelNameVisibility == 1) {
-							return `<div class='channel-container ${channelNotOnlineClass}'> ${tooltipMessage} <div class='image-container'><img src='${value.logo}' alt='${value.name}' title='${value.name}'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='channel-input'/></div><div class='label-container'><label for='${value.id}'> ${value.name}</label></div></div>`;
+							return `<div class='channel-container ${channelNotOnlineClass}'> ${tooltipMessage} <div class='image-container'><img src='${value.logo}' alt='${value.name}' title='${value.name} (${value.group_name})'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='channel-input'/></div><div class='label-container'><label for='${value.id}'> ${value.name}</label></div></div>`;
 						} else {
-							return `<div class='channel-container ${channelNotOnlineClass}'> ${tooltipMessage} <div class='image-container only-dotpay-logo'><img src='${value.logo}' alt='${value.name}' title='${value.name}'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='channel-input'/></div></div>`;
+							return `<div class='channel-container ${channelNotOnlineClass}'> ${tooltipMessage} <div class='image-container only-dotpay-logo'><img src='${value.logo}' alt='${value.name} (${value.group_name})' title='${value.name} (${value.group_name})'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='channel-input'/></div></div>`;
 						}
 						break;
 					case 'selectWidget':
@@ -11038,31 +11038,37 @@ define('widgetsCommon',['jquery', 'xhr', 'config'], function ($, xhr, config) {
             var convertedGroupsNames = [];
 
             $.each(channelGroups, function (key, value){
-                switch(value) {
-                    case 'K':
-                        convertedGroupsNames.push('credit_cards');
-                    break;
-                    case 'G':
-                        convertedGroupsNames.push('cash');
-                    break;
-                    case 'T':
-                        convertedGroupsNames.push('fast_transfers');
-                    break;
-                    case 'R':
-                        convertedGroupsNames.push('installment');
-                    break;
-                    case 'I':
-                        convertedGroupsNames.push('mobile_transfers');
-                    break;
-                    case 'W':
-                        convertedGroupsNames.push('purses');
-                    break;
-                    case 'R':
-                        convertedGroupsNames.push('transfers');
-                    break;
-                    default:
-                        convertedGroupsNames = channelGroups;
-                }
+              switch(value) {
+                  case 'K':
+                      convertedGroupsNames.push('credit_cards');
+                  break;
+                  case 'G':
+                      convertedGroupsNames.push('cash');
+                  break;
+                  case 'T':
+                      convertedGroupsNames.push('fast_transfers');
+                  break;
+                  case 'R':
+                      convertedGroupsNames.push('installment');
+                  break;
+                  case 'M':
+                      convertedGroupsNames.push('mobile_transfers');
+                  break;
+                  case 'W':
+                      convertedGroupsNames.push('purses');
+                  break;
+                  case 'P':
+                      convertedGroupsNames.push('transfers');
+                  break;
+                  case 'O':
+                      convertedGroupsNames.push('posponed_payments');
+                  break;
+                  case 'I':
+                      convertedGroupsNames.push('other');
+                  break;
+                  default:
+                      convertedGroupsNames = channelGroups;
+              }
             });
 
             return convertedGroupsNames;
@@ -11164,7 +11170,7 @@ define('formWidget',['jquery', 'xhr', 'config', 'widgetsCommon', 'errorHandler']
                     'channel':$_dp('.channel-input', this).val()
                 });
             });
-            
+
             $_dp('.'+config.widget.widgetClass).click(function(e){
                 e.preventDefault();
             });

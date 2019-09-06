@@ -104,6 +104,26 @@ if (typeof jQuery != "undefined") {
 				});
     		});
 
+        //only capital letters and commas allowed: currences
+        jQuery('input#woocommerce_dotpay_dontview_currency').bind('keyup blur', function () {
+                    $(this).val($(this).val().replace(/[^A-Z,]/g, ''))
+                });
+
+      //remove spaces from api username input
+      jQuery("input#woocommerce_dotpay_api_username").bind('keyup paste keydown', function(e) {
+      			jQuery(this).val(function(_, v){
+      					return v.replace(/\s+/g, '');
+          				});
+      		});
+
+          //remove spaces from api password input
+      jQuery("input#woocommerce_dotpay_api_password").bind('keyup paste keydown', function(e) {
+      			jQuery(this).val(function(_, v){
+      					return v.replace(/\s+/g, '');
+          				});
+      		});
+
+
     //  module setup: validatte ID2
     jQuery("#woocommerce_dotpay_id2").attr("pattern", "[0-9]{5,6}");
     jQuery("#woocommerce_dotpay_id2").attr("title", "Dozwolone tylko cyfry (6 cyfr)");

@@ -34,13 +34,13 @@ abstract class Dotpay_RegisterOrder {
      * @var DotpayController Controller object
      */
     public static $payment;
-    
+
     /**
      *
      * @var string Target url for Register Order
      */
     private static $target = "payment_api/v1/register_order/";
-    
+
     /**
      * Initialize Register Order mechanism
      * @param DotpayController $parent Owner of the object API.
@@ -48,7 +48,7 @@ abstract class Dotpay_RegisterOrder {
     public static function init(Dotpay_Payment $payment = NULL) {
         self::$payment = $payment;
     }
-    
+
     /**
      * Create register order, if it not exist
      * @param type $channelId Channel identifier
@@ -61,7 +61,7 @@ abstract class Dotpay_RegisterOrder {
         }
         return NULL;
     }
-    
+
     /**
      * Create request without checking conditions
      * @param array $data
@@ -80,24 +80,26 @@ abstract class Dotpay_RegisterOrder {
                  ->addOption(CURLOPT_POSTFIELDS, $data)
                  ->addOption(CURLOPT_HTTPHEADER, array(
                     'Accept: application/json; indent=4',
-                    'content-type: application/json'));
+                    'content-type: application/json',
+                    'User-Agent: DotpayWooCommerce'
+                ));
             $resultJson = $curl->exec();
             $resultStatus = $curl->getInfo();
         } catch (Exception $exc) {
             $resultJson = false;
         }
-        
+
         if($curl) {
             $curl->close();
         }
-        
+
         if(false !== $resultJson && $resultStatus['http_code'] == 201) {
             return json_decode($resultJson, true);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Check, if order id from control field is completed
      * @param int $control Order id from control field

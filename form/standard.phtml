@@ -1,11 +1,11 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<?php if($this->isWidgetEnabled()): ?>
+<?php if($this->isWidgetEnabled() && $this->isMainChannelEnabled()): ?>
 <style>
     <?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>
 <script type="text/javascript">
     var dotpayWidgetConfig = {
-        sellerAccountId: <?php echo $this->getSellerId(); ?>,
+        sellerAccountId: '<?php echo $this->getSellerId(); ?>',
         amount: '<?php if($this->getAmountForWidget() > 0) {echo $this->getAmountForWidget();}else{ echo '100.00';} ?>',
         currency: '<?php echo $this->getCurrency(); ?>',
         lang: '<?php echo $this->getPaymentLang(); ?>',
@@ -23,7 +23,7 @@
         setTimeout(function(){
              jQuery('.channel-container').on('click', function () {
 				 jQuery('.channels-wrapper').css('text-align','center');
-                 jQuery('.selected').clone().insertBefore('.dotpay-channels-selection').addClass('cloned');	
+                 jQuery('.selected').clone().insertBefore('.dotpay-channels-selection').addClass('cloned');
                  jQuery('.dotpay-channels-selection').slideUp('600', 'swing');
 				 jQuery('<?php echo "<br><p style=\"font-size:1.2em;text-align:center;color:#1515c4;padding:20px;border-radius:3px \"> <strong>".__('To select different channel click the above icon again', 'dotpay-payment-gateway')."</strong></p>"; ?>').insertAfter('.cloned').addClass('channelSelect');
 				 jQuery('.channelSelect').not(':last').remove();
@@ -33,7 +33,7 @@
 		//showing all, when deselecting previous
         setTimeout(function() {
              jQuery('.dotpay-channels').on('click', '.cloned', function(){
-                    jQuery('.dotpay-channels-selection').slideDown('600','swing');	
+                    jQuery('.dotpay-channels-selection').slideDown('600','swing');
                     jQuery('.cloned').toggle().remove();
 					jQuery('.selected').removeClass('selected');
 					jQuery('.channelSelect').remove();
@@ -53,6 +53,12 @@
 <script id="dotpay-payment-script" src="<?php echo $this->getResourcePath(); ?>js/payment_widget.js"></script>
 <p class="my-form-widget-container"></p>
 <?php endif; ?>
+<?php if($this->isMainChannelEnabled() != true): ?>
+<script type="text/javascript">
+    if (jQuery != undefined) {
+        jQuery('li.payment_method_dotpay').hide();
+    };
+</script>
+<?php endif; ?>
 <?php if((bool)$this->isTestMode()) echo "<p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."<br></p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
-
