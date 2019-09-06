@@ -33,7 +33,7 @@ class Dotpay_Page {
     private $name = '';
     private $id = NULL;
     private $guid = '';
-    
+
     /**
      * Load page, if will the parameter given
      * @param string $name name of page
@@ -50,7 +50,8 @@ class Dotpay_Page {
             $this->guid = $post->guid;
         }
     }
-    
+
+
     /**
      * Return page title
      * @return string
@@ -58,7 +59,7 @@ class Dotpay_Page {
     function getTitle() {
         return $this->title;
     }
-    
+
     /**
      * Return page name
      * @return string
@@ -74,7 +75,7 @@ class Dotpay_Page {
     function getId() {
         return $this->id;
     }
-    
+
     /**
      * Return page guid
      * @return string
@@ -82,7 +83,7 @@ class Dotpay_Page {
     function getGuid() {
         return $this->guid;
     }
-    
+
     /**
      * Set page name
      * @param string $name page name
@@ -128,8 +129,8 @@ class Dotpay_Page {
      * @global type $wpdb WPDB object
      */
     public function add() {
-        global $wpdb;      
-        
+        global $wpdb;
+
         delete_option('dotpay_'.$this->name.'_title');
         add_option('dotpay_'.$this->name.'_title', $this->title, '', 'yes');
 
@@ -156,7 +157,7 @@ class Dotpay_Page {
         delete_option('dotpay_'.$this->name.'_id');
         add_option('dotpay_'.$this->name.'_id', $pageId);
     }
-    
+
     /**
      * Remove page
      * @global type $wpdb WPDB object
@@ -170,15 +171,16 @@ class Dotpay_Page {
             delete_option('dotpay_'.$this->name.'_id');
         }
     }
-    
+
     /**
      * Return page url
      * @return string
      */
     public function getUrl() {
+        
         return get_permalink($this->id);
     }
-    
+
     /**
      * Return page id based on page name
      * @param type $name page name

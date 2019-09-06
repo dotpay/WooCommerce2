@@ -39,7 +39,7 @@ class Gateway_PV extends Gateway_Gateway {
         $this->method_description = __('All Dotpay settings can be adjusted', 'dotpay-payment-gateway').sprintf('<a href="%s"> ', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=dotpay' ) ).__('here', 'dotpay-payment-gateway').'</a>.';
         $this->addActions();
     }
-    
+
     /**
      * Return channel id
      * @return int
@@ -47,7 +47,7 @@ class Gateway_PV extends Gateway_Gateway {
     protected function getChannel() {
         return self::$pvChannel;
     }
-    
+
     /**
      * Return seller id
      * @return int
@@ -55,7 +55,7 @@ class Gateway_PV extends Gateway_Gateway {
     public function getSellerId() {
         return $this->get_option('id2');
     }
-    
+
     /**
      * Return seller pin
      * @return string
@@ -63,21 +63,21 @@ class Gateway_PV extends Gateway_Gateway {
     protected function getSellerPin() {
         return $this->get_option('pin2');
     }
-    
+
     /**
      * Return data for payments form
      * @return array
      */
     protected function getDataForm() {
         $hiddenFields = parent::getDataForm();
-        
+
         $hiddenFields['channel'] = $this->getChannel();
-        $hiddenFields['ch_lock'] = 1;
+        $hiddenFields['ch_lock'] = 0;
         $hiddenFields['type'] = 4;
-        
+
         return $hiddenFields;
     }
-    
+
     /**
      * Return url to icon file
      * @return string
@@ -85,7 +85,7 @@ class Gateway_PV extends Gateway_Gateway {
     protected function getIcon() {
         return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/pv.png';
     }
-    
+
     /**
      * Return flag, if this channel is enabled
      * @return bool

@@ -38,8 +38,9 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
         $this->method_description = __(' Online payment', 'dotpay-payment-gateway');
         $this->addActions();
+
     }
-    
+
     /**
      * Return data for payments form
      * @return array
@@ -48,16 +49,16 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $hiddenFields = parent::getDataForm();
         if($this->isWidgetEnabled()) {
             $hiddenFields['channel'] = $this->getChannel();
-            $hiddenFields['ch_lock'] = 1;
+            $hiddenFields['ch_lock'] = 0;
             $hiddenFields['type'] = 4;
         }
         return $hiddenFields;
     }
-    
+
     public function getFormPath() {
         return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/standard.phtml';
     }
-    
+
     /**
      * Return url to icon file
      * @return string
@@ -65,9 +66,9 @@ class Gateway_Dotpay extends Gateway_Gateway {
     protected function getIcon() {
         return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/dotpay.png';
     }
-    
+
     public function validate_fields() {
-        if(empty($_POST['channel'])&&$this->isWidgetEnabled()) {
+        if(empty($_POST['channel']) && $this->isWidgetEnabled()) {
             wc_add_notice( __('You must select a payment channel', 'dotpay-payment-gateway') , 'error' );
             return false;
         } else if(!parent::validate_fields()) {
@@ -78,7 +79,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 		}
 		return true;
     }
-    
+
     public function init_form_fields() {
         $nameArrayMasterPass = array(
             __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
@@ -196,7 +197,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 				'placeholder' => __(' eq. 248','dotpay-payment-gateway'),
                 'class' => 'cc_option',
             ),
-			
+
             'oneclick_show' => array(
                 'title' => __('One Click for credit card', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="One Click Credit Cards" width="83" height="25">',
                 'type' => 'checkbox',
@@ -211,7 +212,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 						  __('Requires Dotpay API username and password (enter below).', 'dotpay-payment-gateway').'</strong>',
                 'default' => 'no',
             ),
-            
+
             'api_username' => array(
                 'title' => __('Username API', 'dotpay-payment-gateway'),
                 'type' => 'text',
@@ -219,7 +220,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 				'description' => __('Leave this field empty if you do not use One Click and if you do not want to present the payment instructions on the shop page for semi-automatic channels. Data for access to the Dotpay administration panel.', 'dotpay-payment-gateway'),
                 'desc_tip' => true,
             ),
-            
+
             'api_password' => array(
                 'title' => __('Password API', 'dotpay-payment-gateway'),
                 'type' => 'password',
@@ -277,7 +278,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 			$this->form_fields["shipping_mapping_" . $method->instance_id] = $this->getMappingFieldForShippingMethod($zone0->get_zone_name(), $method->title);
 		}
     }
-    
+
     /**
      * Return flag, if this channel is enabled
      * @return bool
@@ -306,7 +307,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 		    ),
 	    );
     }
-    
+
     /**
      * Return list of channels, enabled as independent channel and blocked on widget
      * @return array

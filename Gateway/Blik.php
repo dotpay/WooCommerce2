@@ -39,7 +39,7 @@ class Gateway_Blik extends Gateway_Gateway {
         $this->method_description = __('All Dotpay settings can be adjusted', 'dotpay-payment-gateway').sprintf('<a href="%s"> ', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=dotpay' ) ).__('here', 'dotpay-payment-gateway').'</a>.';
         $this->addActions();
     }
-    
+
     /**
      * Return channel id
      * @return int
@@ -47,23 +47,23 @@ class Gateway_Blik extends Gateway_Gateway {
     protected function getChannel() {
         return self::$blikChannel;
     }
-    
+
     /**
      * Return data for payments form
      * @return array
      */
     protected function getDataForm() {
         $hiddenFields = parent::getDataForm();
-        
+
         if(!$this->isTestMode())
             $hiddenFields['blik_code'] = $this->getBlikCode();
         $hiddenFields['channel'] = self::$blikChannel;
-        $hiddenFields['ch_lock'] = 1;
+        $hiddenFields['ch_lock'] = 0;
         $hiddenFields['type'] = 4;
-        
+
         return $hiddenFields;
     }
-    
+
     /**
      * Return url to icon file
      * @return string
@@ -71,7 +71,7 @@ class Gateway_Blik extends Gateway_Gateway {
     protected function getIcon() {
         return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/BLIK.png';
     }
-    
+
     /**
      * Return flag, if this channel is enabled
      * @return bool
@@ -79,7 +79,7 @@ class Gateway_Blik extends Gateway_Gateway {
     protected function isEnabled() {
         return parent::isEnabled() && $this->isBlikEnabled();
     }
-    
+
     /**
      * Validate fields before creation of order
      * @return boolean
@@ -94,7 +94,7 @@ class Gateway_Blik extends Gateway_Gateway {
         }
         return false;
     }
-    
+
     /**
      * Save BLIK code in a session
      * @param string $blikCode BLIK code
@@ -102,7 +102,7 @@ class Gateway_Blik extends Gateway_Gateway {
     private function setBlikCode($blikCode) {
         $_SESSION['blik_code'] = $blikCode;
     }
-    
+
     /**
      * Return BLIK code from session and forget it
      * @return string

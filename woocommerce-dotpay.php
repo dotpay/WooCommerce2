@@ -1,16 +1,33 @@
 <?php
 
-/* 
-  Plugin Name: WooCommerce Dotpay Gateway
-  Plugin URI: https://github.com/dotpay/WooCommerce2
-  Description: Fast and secure Dotpay payment gateway for WooCommerce
-  Version: 3.2.4
-  Author: Dotpay (tech@dotpay.pl)
-  Author URI: mailto:tech@dotpay.pl
-  Text Domain: dotpay-payment-gateway
-  WC requires at least: 3.2.0
-  WC tested up to: 3.6.1
+/**
+  * @wordpress-plugin
+  * Plugin Name: WooCommerce Dotpay Gateway
+  * Version: 3.2.5
+  * Plugin URI: https://github.com/dotpay/WooCommerce2
+  * Description: Fast and secure Dotpay payment gateway for WooCommerce
+  * Author: Dotpay (tech@dotpay.pl)
+  * Author URI: https://github.com/dotpay/WooCommerce2
+  * Text Domain: woocommerce-dotpay
+  * Domain Path: /langs/
+  * License:     (AFL 3.0)
+  *
+  * WC requires at least: 3.2.0
+  * WC tested up to: 3.6.1
+  *
+  * NOTICE OF LICENSE
+  *
+  * This source file is subject to the Academic Free License (AFL 3.0)
+  * that is bundled with this package in the file LICENSE.txt.
+  * It is also available through the world-wide-web at this URL:
+  * http://opensource.org/licenses/afl-3.0.php
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  *
  */
+
 
 if (!defined('ABSPATH')) {
     exit;
@@ -24,7 +41,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.2.4';
+		$thisVersionModule = '3.2.5';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -55,6 +72,17 @@ if (!defined('ABSPATH')) {
 	}
 
 add_action( 'admin_notices' , 'Check_WC_compare_for_Dotpay' );
+
+
+// Add settings link on plugin page
+function wc_dotpay_settings_link($links) {
+    $settings_link = '<a href="admin.php?page=wc-settings&tab=checkout&section=dotpay">'.__('Settings').'</a>';
+    array_unshift($links, $settings_link);
+    return $links;
+  }
+
+  $plugin = plugin_basename(__FILE__);
+  add_filter("plugin_action_links_$plugin", 'wc_dotpay_settings_link' );
 
 
 /**
@@ -91,14 +119,14 @@ add_action( 'admin_notices' , 'Check_WC_compare_for_Dotpay' );
  					'code_response' => $response_code['http_code']
  				);
  }
-/* 
+/*
  *  Dotpay Module version compare
  */
        if (!version_compare($thisVersionModule, getLatestVersionDotpayModule()['version'], $operator) ) {
            add_action( "admin_notices", "noticeDotModule" );
        }
 
-/* 
+/*
  *  notice to upgrade Dotpay module
  */
        function noticeDotModule()
@@ -271,7 +299,7 @@ function wc_dotpay_gateway_content($content) {
 			default:
 				return $content;
 		}
-  } 
+  }
 }
 
 /**

@@ -32,8 +32,6 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 {
     // Dotpay IP address
     const DOTPAY_IP = '195.150.9.37';
-    // Local IP address
-    const LOCAL_IP = '127.0.0.1';
     // Office Dotpay IP address
     const OFFICE_IP = '77.79.195.34';
     // Dotpay URL
@@ -47,7 +45,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.2.4';
+    const MODULE_VERSION = '3.2.5';
 
 
     public static $ocChannel = 248;
@@ -62,6 +60,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
     private $orderObject = null;
     private $orderId = null;
+
 
 
     /**
@@ -849,7 +848,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     public function getChannelName($id)
     {
 
-        $resultJson = $this->getDotpayChannels('1000');
+        $resultJson = $this->getDotpayChannels('333');
         if (false !== $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
@@ -868,24 +867,41 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
      * Return path to file with payment form
      * @return string
      */
-    public function getFormPath()
-    {
-        return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/' . str_replace('Dotpay_', '', $this->id) . '.phtml';
-    }
+     public function getFormPath()
+     {
+         if(str_replace('Dotpay_', '', $this->id) == "dotpay"){
+             $methodname = "standard";
+         }else {
+             $methodname = str_replace('Dotpay_', '', $this->id);
+         }
 
-    public function getFullFormPath()
-    {
-        return $_SERVER['HTTP_ORIGIN'] . WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/' . str_replace('Dotpay_', '', $this->id) . '.phtml';
-    }
+         return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/' . $methodname . '.phtml';
+     }
 
-    /**
-     * Return path to template dir
-     * @return string
-     */
-    public function getTemplatesPath()
-    {
-        return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'templates/';
-    }
+
+     public function getFullFormPath()
+     {
+         if(str_replace('Dotpay_', '', $this->id) == "dotpay"){
+             $methodname = "standard";
+         }else {
+             $methodname = str_replace('Dotpay_', '', $this->id);
+         }
+
+         return $_SERVER['HTTP_ORIGIN'] . WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/' . $methodname . '.phtml';
+     }
+
+
+
+       /**
+        * Return path to template dir
+        * @return string
+        */
+       public function getTemplatesPath()
+       {
+           return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'templates/';
+       }
+
+
 
     /**
      * Return path to resource dir
@@ -977,7 +993,12 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     private function getLegacyOrderId($orderObject)
     {
         if (method_exists($orderObject, 'get_id')) {
-            return $orderObject->get_id();
+            if ((null !== $orderObject->get_order_number() || !empty($orderObject->get_order_number()) || is_string($orderObject->get_order_number())) && $orderObject->get_order_number() <> $orderObject->get_id() ) {
+                return '#'.$orderObject->get_order_number().'/'.$orderObject->get_id();
+            } else{
+                return $orderObject->get_id();
+            }
+
         } else {
             return $orderObject->id;
         }
