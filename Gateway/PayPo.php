@@ -26,16 +26,16 @@
 */
 
 /**
- * PV gateway channel
+ * PayPo gateway channel
  */
-class Gateway_PV extends Gateway_Gateway {
+class Gateway_PayPo extends Gateway_Gateway {
     /**
      * Prepare gateway
      */
     public function __construct() {
-        $this->title = __('Credit Cards <small>(currencies)</small>', 'dotpay-payment-gateway');
+        $this->title = __('PayPo <small>(postponed payments)</small>', 'dotpay-payment-gateway');;
         parent::__construct();
-        $this->id = 'Dotpay_pv';
+        $this->id = 'Dotpay_paypo';
         $this->method_description = __('All Dotpay settings can be adjusted', 'dotpay-payment-gateway').sprintf('<a href="%s"> ', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=dotpay' ) ).__('here', 'dotpay-payment-gateway').'</a>.';
         $this->addActions();
     }
@@ -45,23 +45,11 @@ class Gateway_PV extends Gateway_Gateway {
      * @return int
      */
     protected function getChannel() {
-        return self::$pvChannel;
-    }
-
-    /**
-     * Return seller id
-     * @return int
-     */
-    public function getSellerId() {
-        return $this->get_option('id2');
-    }
-
-    /**
-     * Return seller pin
-     * @return string
-     */
-    protected function getSellerPin() {
-        return $this->get_option('pin2');
+        if($this->isTestMode()) {
+            return 95;
+        } else {
+            return self::$paypoChannel;
+        }
     }
 
     /**
@@ -74,6 +62,7 @@ class Gateway_PV extends Gateway_Gateway {
         $hiddenFields['channel'] = $this->getChannel();
         $hiddenFields['ch_lock'] = 0;
         $hiddenFields['type'] = 4;
+        $hiddenFields['postcode'] = $this->getPostcode($hiddenFields['postcode']);
 
         return $hiddenFields;
     }
@@ -83,7 +72,7 @@ class Gateway_PV extends Gateway_Gateway {
      * @return string
      */
     protected function getIcon() {
-        return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/pv.png';
+        return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/PayPo.png';
     }
 
     /**
@@ -91,6 +80,6 @@ class Gateway_PV extends Gateway_Gateway {
      * @return bool
      */
     protected function isEnabled() {
-        return parent::isEnabled() && $this->isCcPVEnabled();
+        return parent::isEnabled() && $this->isPayPoEnabled();
     }
 }

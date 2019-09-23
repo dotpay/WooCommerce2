@@ -33,7 +33,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
      * Prepare gateway
      */
     public function __construct() {
-        $this->title = 'Dotpay';
+        $this->title = __('Dotpay <small>(fast payment)</small>', 'dotpay-payment-gateway');
         parent::__construct();
         $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
         $this->method_description = __(' Online payment', 'dotpay-payment-gateway');
@@ -84,6 +84,13 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $nameArrayMasterPass = array(
             __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
             __('Payment with a credit card by MasterPass', 'dotpay-payment-gateway').
+            '<p class="description">'.__('Needed separate agreement.', 'dotpay-payment-gateway').'<br>'.
+			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
+               'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
+        );
+        $nameArrayPayPo = array(
+            __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
+            __('Payment with a postponed method by <a href="https://www.dotpay.pl/en/payment-methods/deferred-payments/paypo/" target="_blank" title="Postponed payments – PayPo">PayPo</a>', 'dotpay-payment-gateway').
             '<p class="description">'.__('Needed separate agreement.', 'dotpay-payment-gateway').'<br>'.
 			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
                'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
@@ -174,7 +181,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'credit_card_show' => array(
-                'title' => __('Credit cards', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="Credit Cards" width="83" height="25">',
+                'title' => __('Credit cards', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="Credit Cards" width="83" height="25" style="margin-top: 10px;">',
                 'type' => 'checkbox',
 				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
 				'desc_tip' => true,
@@ -199,7 +206,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'oneclick_show' => array(
-                'title' => __('One Click for credit card', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="One Click Credit Cards" width="83" height="25">',
+                'title' => __('One Click for credit card', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="One Click Credit Cards" width="83" height="25" style="margin-top: 10px;">',
                 'type' => 'checkbox',
 				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
 				'desc_tip' => true,
@@ -230,7 +237,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'masterpass_show' => array(
-                'title' => __('MasterPass', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/MasterPass.png'.'" alt="MasterPass" width="83" height="25">',
+                'title' => __('MasterPass', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/MasterPass.png'.'" alt="MasterPass" width="100" height="30" style="margin-top: 10px;">',
                 'type' => 'checkbox',
 				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
 				'desc_tip' => true,
@@ -239,26 +246,36 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'blik_show' => array(
-                'title' => __('BLIK', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/BLIK.png'.'" alt="BLIK" width="63" height="25">',
+                'title' => __('BLIK', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/BLIK.png'.'" alt="BLIK" width="82" height="40" style="margin-top: 10px;">',
                 'type' => 'checkbox',
                 'label' => implode(' ', $nameArrayBLIK),
                 'default' => 'no',
             ),
 
             'channels_show' => array(
-                'title' => __('Widget', 'dotpay-payment-gateway'),
+                'title' => __('Widget (display payment channel in a shop)', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
-                'label' => __('Display payment channels in a shop', 'dotpay-payment-gateway'),
+                'label' => __('Display payment channels in the store available for the account', 'dotpay-payment-gateway'),
                 'default' => 'yes',
                 'class' => 'widget_show',
             ),
             'channel_name_show' => array(
                 'title' => __('Toggle channel names in widget view', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
-                'label' => __('Display payment channels names in widget', 'dotpay-payment-gateway'),
+                'label' => __('Display payment channels names in widget (recommends: no)', 'dotpay-payment-gateway'),
                 'default' => 'no',
                 'class' => 'widget_channel_names',
             ),
+
+            'paypo_show' => array(
+                'title' => __('PayPo - postponed payments', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/PayPo.png'.'" alt="PayPo" width="77" height="50" style="margin-top: 10px;">',
+                'type' => 'checkbox',
+				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
+				'desc_tip' => true,
+                'label' => implode(' ', $nameArrayPayPo),
+                'default' => 'no',
+            ),
+
         );
 
 	    $zones = WC_Shipping_Zones::get_zones();
@@ -323,6 +340,8 @@ class Gateway_Dotpay extends Gateway_Gateway {
             $dChannels[] = $this->getCCnumber();
         if($this->isMasterPassEnabled())
             $dChannels[] = self::$mpChannel;
+        if($this->isPayPoEnabled())
+            $dChannels[] = self::$paypoChannel;
         if($this->isBlikEnabled())
             $dChannels[] = self::$blikChannel;
         return implode(',', $dChannels);

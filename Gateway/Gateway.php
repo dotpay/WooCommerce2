@@ -383,6 +383,20 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     }
 
     /**
+     * Return flag, if PayPo is enabled
+     * @return boolean
+     */
+    protected function isPayPoEnabled() {
+        $result = false;
+        if ('yes' === $this->get_option('paypo_show')) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+
+    /**
      * Return flag, if Credit card PV is enabled
      * @return boolean
      */
@@ -494,7 +508,13 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         (isset($ParametersArray['credit_card_id']) ? $ParametersArray['credit_card_id'] : null).
         (isset($ParametersArray['blik_code']) ? $ParametersArray['blik_code'] : null).
         (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null).
-	    (isset($ParametersArray['customer']) ? $ParametersArray['customer'] : null);
+        (isset($ParametersArray['ignore_last_payment_channel']) ? $ParametersArray['ignore_last_payment_channel'] : null).
+        (isset($ParametersArray['credit_card_security_code_required']) ? $ParametersArray['credit_card_security_code_required'] : null).
+        (isset($ParametersArray['credit_card_operation_type']) ? $ParametersArray['credit_card_operation_type'] : null).
+        (isset($ParametersArray['credit_card_avs']) ? $ParametersArray['credit_card_avs'] : null).
+        (isset($ParametersArray['credit_card_threeds']) ? $ParametersArray['credit_card_threeds'] : null).
+        (isset($ParametersArray['customer']) ? $ParametersArray['customer'] : null).
+        (isset($ParametersArray['gp_token']) ? $ParametersArray['gp_token'] : null);
 
         return hash('sha256',$ChkParametersChain);
     }
@@ -606,7 +626,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     public function confirmPayment() {
         global $wp_version, $woocommerce;
-        if($this->getClientIp() == self::OFFICE_IP && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET') {
+        if(($_SERVER["REMOTE_ADDR"] == self::OFFICE_IP || $this->getClientIp() == self::OFFICE_IP) && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET') {
             $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
             $dotpayGateways = '';
             $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -642,8 +662,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             );
         }
 
-        if (!($this->getClientIp() == self::DOTPAY_IP || $this->getClientIp() == self::OFFICE_IP)) {
-            die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true).")");
+
+        if ($_SERVER["REMOTE_ADDR"]  != self::DOTPAY_IP || $this->getClientIp() != self::DOTPAY_IP) {
+            die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].")");
         }
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) != 'POST') {
@@ -778,7 +799,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->getParam('credit_card_id').
         $this->getParam('channel').
         $this->getParam('channel_country').
-        $this->getParam('geoip_country');
+        $this->getParam('geoip_country').
+        $this->getParam('payer_bank_account_name').
+        $this->getParam('payer_bank_account').
+        $this->getParam('payer_transfer_title');
 
         return ($this->getParam('signature') === hash('sha256', $signature));
     }

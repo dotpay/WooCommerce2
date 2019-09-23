@@ -154,6 +154,7 @@ if (typeof jQuery != "undefined") {
     jQuery("<hr style='height: 3px; background: #439c91;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_credit_card_show"]'));
     jQuery("<hr style='height: 3px; background: #439c91;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_masterpass_show"]'));
     jQuery("<hr style='height: 3px; background: #439c91;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_blik_show"]'));
+    jQuery("<hr style='height: 3px; background: #439c91;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_paypo_show"]'));
     jQuery("<hr style='height: 3px; background: #439c91;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_channels_show"]'));
 
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('#woocommerce_dotpay_dontview_currency'));
@@ -179,6 +180,7 @@ if (typeof jQuery != "undefined") {
     jQuery('label[for="woocommerce_dotpay_api_username"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_api_password"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_masterpass_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
+    jQuery('label[for="woocommerce_dotpay_paypo_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
 
     jQuery('p:contains("Online payment")').remove();
     jQuery('p:contains("Płatności online")').remove();

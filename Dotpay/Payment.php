@@ -45,7 +45,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.2.5';
+    const MODULE_VERSION = '3.2.6';
 
 
     public static $ocChannel = 248;
@@ -54,6 +54,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     public static $blikChannel = 73;
     public static $transferChannel = 11;
     public static $mpChannel = 71;
+    public static $paypoChannel = 95;
 
 
 
@@ -143,6 +144,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             'Gateway_Blik',
             'Gateway_Transfer',
             'Gateway_MasterPass',
+            'Gateway_PayPo',
             'Gateway_Dotpay'
         );
     }
@@ -167,6 +169,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
                 return 'Gateway_CC';
             case self::$mpChannel:
                 return 'Gateway_MasterPass';
+            case self::$paypoChannel:
+                return 'Gateway_PayPo';
             default:
                 return 'Gateway_Dotpay';
         }
