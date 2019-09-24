@@ -630,7 +630,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
             $dotpayGateways = '';
             $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-			$curlvalues=curl_version();
+			$curlvalues = curl_version();
             foreach(self::getDotpayChannelsList() as $channel) {
                 $gateway = new $channel();
                 $dotpayGateways .= $gateway->id.': '.$this->checkIfEnabled($gateway)."<br />";
@@ -663,7 +663,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
 
 
-        if ($_SERVER["REMOTE_ADDR"]  != self::DOTPAY_IP || $this->getClientIp() != self::DOTPAY_IP) {
+        if ($_SERVER["REMOTE_ADDR"]  != self::DOTPAY_IP && $this->getClientIp() != self::DOTPAY_IP) {
             die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].")");
         }
 
