@@ -45,7 +45,7 @@ abstract class Dotpay_RegisterOrder {
      * Initialize Register Order mechanism
      * @param DotpayController $parent Owner of the object API.
      */
-    public static function init(Dotpay_Payment $payment = NULL) {
+    public static function init(Dotpay_Payment $payment = null) {
         self::$payment = $payment;
     }
 
@@ -56,10 +56,10 @@ abstract class Dotpay_RegisterOrder {
      */
     public static function create($channelId) {
         $data = str_replace('\\/', '/', json_encode(self::prepareData($channelId), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-        if(!self::checkIfCompletedControlExist(self::$payment->getControl(), $channelId)) {
+        if(!self::checkIfCompletedControlExist(self::$payment->getControl('full'), $channelId)) {
             return self::createRequest($data);
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class Dotpay_RegisterOrder {
                  ->addOption(CURLOPT_POSTFIELDS, $data)
                  ->addOption(CURLOPT_HTTPHEADER, array(
                     'Accept: application/json; indent=4',
-                    'content-type: application/json',
+                    'Content-type: application/json; charset=utf-8',
                     'User-Agent: DotpayWooCommerce'
                 ));
             $resultJson = $curl->exec();
@@ -93,7 +93,7 @@ abstract class Dotpay_RegisterOrder {
             $curl->close();
         }
 
-        if(false !== $resultJson && $resultStatus['http_code'] == 201) {
+        if(false != $resultJson && $resultStatus['http_code'] == 201) {
             return json_decode($resultJson, true);
         }
 

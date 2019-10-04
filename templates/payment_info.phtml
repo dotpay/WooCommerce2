@@ -16,7 +16,7 @@
             <p id="instruction-content"><?php echo __('To pay by cash you need login to your bank system and make a money transfer, entering the following data:', 'dotpay-payment-gateway'); ?></p>
         </div>
         <div class="col-md-6">
-            <?php if($this->getBankAccount()!=NULL): ?>
+            <?php if($this->getBankAccount()!=null): ?>
             <label clas="row">
                 <?php echo __('Account number', 'dotpay-payment-gateway'); ?>
                 <input type="text" class="important" id="iban" value="<?php echo $this->getBankAccount(); ?>" />

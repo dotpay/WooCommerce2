@@ -31,7 +31,7 @@
 class Dotpay_SellerApi {
     private $_baseurl;
     private $_test;
-    
+
     /**
      * Constructor of this class
      * @param type $url base url for API server
@@ -39,7 +39,7 @@ class Dotpay_SellerApi {
     public function __construct($url) {
         $this->_baseurl = $url;
     }
-    
+
     /**
      * Return infos about credit card
      * @param string $username
@@ -50,10 +50,10 @@ class Dotpay_SellerApi {
     public function getCreditCardInfo($username, $password, $number) {
         $payment = $this->getPaymentByNumber($username, $password, $number);
         if($payment->payment_method->channel_id!=248)
-            return NULL;
+            return null;
         return $payment->payment_method->credit_card;
     }
-    
+
     /**
      * Check, if username and password are right
      * @param string $username
@@ -75,7 +75,7 @@ class Dotpay_SellerApi {
         $curl->close();
         return ($info['http_code']>=200 && $info['http_code']<300);
     }
-    
+
     /**
      * Return ifnos about payment
      * @param string $username
@@ -94,7 +94,7 @@ class Dotpay_SellerApi {
         $curl->close();
         return $response;
     }
-    
+
     /**
      * Return infos about payment
      * @param string $username
@@ -114,11 +114,11 @@ class Dotpay_SellerApi {
         if(!isset($response->results) || !is_array($response))
             return array();
         foreach ($response->results as $key => $value)
-            if(strcmp($value->control,$orderId)!==0)
+            if(strcmp($value->control,$orderId)!=0)
                 unset($response->results[$key]);
         return $response->results;
     }
-    
+
     /**
      * Return path for payment API
      * @return string
@@ -136,6 +136,11 @@ class Dotpay_SellerApi {
              ->addOption(CURLOPT_SSL_VERIFYHOST, 2)
              ->addOption(CURLOPT_RETURNTRANSFER, 1)
              ->addOption(CURLOPT_TIMEOUT, 100)
+             ->addOption(CURLOPT_HTTPHEADER, array(
+                           'Accept: application/json; indent=4',
+                           'Content-type: application/json; charset=utf-8',
+                           'User-Agent: DotpayWooCommerce'
+                         ))
              ->addOption(CURLOPT_CUSTOMREQUEST, "GET");
     }
 }

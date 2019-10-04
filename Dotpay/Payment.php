@@ -45,7 +45,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.2.6';
+    const MODULE_VERSION = '3.2.7';
 
 
     public static $ocChannel = 248;
@@ -93,7 +93,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     public function getChannelNameVisiblity()
     {
         $result = 0;
-        if ('yes' === $this->get_option('channel_name_show')) {
+        if ('yes' == $this->get_option('channel_name_show')) {
             $result = true;
         }
         return $result;
@@ -183,7 +183,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     public function isTestMode()
     {
         $result = false;
-        if ('yes' === $this->get_option('test')) {
+        if ('yes' == $this->get_option('test')) {
             $result = true;
         }
 
@@ -603,15 +603,28 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 			$postcode = esc_attr($order->get_shipping_postcode());
 		} else {
 			$postcode = esc_attr($order->shipping_postcode);
-		}
-		if (empty($postcode)) {
-			return $postcode;
-		}
-		if (preg_match('/^\d{2}\-\d{3}$/', $postcode) == 0 && strtolower($this->getShippingCountry()) == 'pl') {
-			$postcode = str_replace('-', '', $postcode);
-			$postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
-		}
-		return $postcode;
+        }
+
+        $postcode1 = trim(str_replace(' ', '', $postcode));
+        $postcode1 = str_replace('-', '', $postcode);
+
+		if (empty($postcode1)) {
+			return null;
+        }
+
+        if (preg_match('/^\d{3,10}$/', $postcode1) == 0)
+	    {
+			    return null;
+		}else{
+
+            if (preg_match('/^\d{2}\-\d{3}$/', $postcode1) == 0 && strtolower($this->getShippingCountry()) == 'pl') {
+                $postcode1 = str_replace('-', '', $postcode1);
+                $postcode1 = substr($postcode1, 0, 2) . '-' . substr($postcode1, 2, 3);
+            }
+
+        return $postcode1;
+
+        }
 	}
 
 	/**
@@ -771,6 +784,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
          * curl
          */
         try {
+
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_HEADER, false);
@@ -778,7 +792,14 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             curl_setopt($ch, CURLOPT_URL, $curl_url);
             curl_setopt($ch, CURLOPT_REFERER, $curl_url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                                'Accept: application/json; indent=4',
+                                'Content-type: application/json; charset=utf-8',
+                                'User-Agent: DotpayWooCommerce-channels'
+                              ));
             $resultJson = curl_exec($ch);
+
         } catch (Exception $exc) {
             $resultJson = false;
         }
@@ -798,7 +819,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     public function getChannelData($id)
     {
         $resultJson = $this->getDotpayChannels($this->getOrderAmount());
-        if (false !== $resultJson) {
+        if (false != $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
                 foreach ($result['channels'] as $channel) {
@@ -824,7 +845,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
         $resultJson = $this->getDotpayChannels($amount);
 
-        if (false !== $resultJson) {
+        if (false != $resultJson) {
             $result = json_decode($resultJson, true);
 
             if (isset($result['forms']) && is_array($result['forms'])) {
@@ -853,7 +874,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     {
 
         $resultJson = $this->getDotpayChannels('333');
-        if (false !== $resultJson) {
+        if (false != $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
                 foreach ($result['channels'] as $channel) {
@@ -997,7 +1018,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     private function getLegacyOrderId($orderObject)
     {
         if (method_exists($orderObject, 'get_id')) {
-            if ((null !== $orderObject->get_order_number() || !empty($orderObject->get_order_number()) || is_string($orderObject->get_order_number())) && $orderObject->get_order_number() <> $orderObject->get_id() ) {
+            if ((null != $orderObject->get_order_number() || !empty($orderObject->get_order_number()) || is_string($orderObject->get_order_number())) && $orderObject->get_order_number() <> $orderObject->get_id() ) {
                 return '#'.$orderObject->get_order_number().'/'.$orderObject->get_id();
             } else{
                 return $orderObject->get_id();

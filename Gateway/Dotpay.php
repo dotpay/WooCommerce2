@@ -33,7 +33,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
      * Prepare gateway
      */
     public function __construct() {
-        $this->title = __('Dotpay <small>(fast payment)</small>', 'dotpay-payment-gateway');
+        $this->title = __('Dotpay (fast payment)', 'dotpay-payment-gateway');
         parent::__construct();
         $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
         $this->method_description = __(' Online payment', 'dotpay-payment-gateway');

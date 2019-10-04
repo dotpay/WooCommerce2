@@ -3,7 +3,7 @@
 /**
   * @wordpress-plugin
   * Plugin Name: WooCommerce Dotpay Gateway
-  * Version: 3.2.6
+  * Version: 3.2.7
   * Plugin URI: https://github.com/dotpay/WooCommerce2
   * Description: Fast and secure Dotpay payment gateway for WooCommerce
   * Author: Dotpay (tech@dotpay.pl)
@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.2.6';
+		$thisVersionModule = '3.2.7';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -94,7 +94,7 @@ function wc_dotpay_settings_link($links) {
  		$ch = curl_init();
  		curl_setopt_array($ch, array(
  			CURLOPT_URL => 'https://api.github.com/repos/dotpay/WooCommerce2/releases/latest',
- 		    CURLOPT_USERAGENT => 'WoocommerceDotpayModule/'.$thisVersionModule,
+ 		  CURLOPT_USERAGENT => 'WoocommerceDotpayModule/'.$thisVersionModule,
  			CURLOPT_RETURNTRANSFER => 1,
  			CURLOPT_HTTPHEADER => array('Accept: application/vnd.github.v3+json','User-Agent: DotpayPluginForWoocommerce'),
  			CURLOPT_TIMEOUT => 1000,
@@ -147,11 +147,11 @@ function wc_dotpay_settings_link($links) {
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__);
 
 function is_session_started() {
-    if ( php_sapi_name() !== 'cli' ) {
+    if ( php_sapi_name() != 'cli' ) {
         if ( version_compare(phpversion(), '5.6', '>=') ) {
-            return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
+            return session_status() == PHP_SESSION_ACTIVE ? TRUE : FALSE;
         } else {
-            return session_id() === '' ? FALSE : TRUE;
+            return session_id() == '' ? FALSE : TRUE;
         }
     }
     return FALSE;
@@ -181,7 +181,7 @@ function init_woocommerce_dotpay_session_start() {
 }
 
 function init_woocommerce_dotpay_session_end() {
-    if (is_session_started() !== FALSE) {
+    if (is_session_started() != FALSE) {
         session_destroy();
     }
 }
@@ -205,7 +205,7 @@ return true;
 }
 
 
-if (woocommerce_is_active() !== FALSE) {
+if (woocommerce_is_active() != FALSE) {
     load_plugin_textdomain('dotpay-payment-gateway', false, dirname(plugin_basename(__FILE__)) . '/langs/');
 
     add_action('init', 'init_woocommerce_dotpay');

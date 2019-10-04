@@ -64,12 +64,12 @@ class Gateway_Transfer extends Gateway_Gateway {
      */
     public function getInformationPage() {
         $instruction = $this->processPayment();
-        if($instruction!=null && $instruction->getInstructionId()!==NULL) {
+        if($instruction!=null && $instruction->getInstructionId()!= null) {
             return $instruction->getPage();
         }
         $this->forgetChannel();
         $this->forgetOrder();
-        if ($instruction === false){
+        if ($instruction == false){
             return __('Payment can not be created', 'dotpay-payment-gateway');
         }
         return __('Payment not exist', 'dotpay-payment-gateway');
@@ -82,19 +82,19 @@ class Gateway_Transfer extends Gateway_Gateway {
     private function processPayment() {
         if(isset($_GET['order_id'])) {
             $orderId = (int)$_GET['order_id'];
-        } else if($this->getOrder() !== null && $this->getOrder()->get_id() !== null) {
+        } else if($this->getOrder() != null && $this->getOrder()->get_id() != null) {
             $orderId = $this->getOrder()->get_id();
         } else {
-            return NULL;
+            return null;
         }
         Dotpay_RegisterOrder::init($this);
         $payment = Dotpay_RegisterOrder::create($this->getChannel());
-        if($payment === NULL) {
+        if($payment == null) {
             $instruction = Dotpay_Instruction::getByOrderId($orderId);
-            if (!$instruction === NULL) {
-                return NULL;
+            if (!$instruction == null) {
+                return null;
             }
-        } else if($payment === false) {
+        } else if($payment == false) {
             return false;
         } else {
             if($this->isChannelInGroup($payment['operation']['payment_method']['channel_id'], array(self::cashGroup))) {

@@ -92,7 +92,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @return string
      */
     protected function getAdminSettingsLogo() {
-        $dotpay_logo_lang = ($this->getPaymentLang() === 'pl')?'pl':'en';
+        $dotpay_logo_lang = ($this->getPaymentLang() == 'pl')?'pl':'en';
         return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/Dotpay_logo_desc_'.$dotpay_logo_lang .'.png';
     }
 
@@ -196,8 +196,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             $url_return = $this->dotpay_install_missing_pages();
         }
 
+
         $streetData = $this->getStreetAndStreetN1();
-        return array(
+        $dotPostForm = array(
             'id' => $this->getSellerId(),
             'control' => $this->getControl('full'),
             'p_info' => $this->getPinfo(),
@@ -220,9 +221,17 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'postcode' => $this->getPostcode(),
             'country' => $this->getCountry(),
             'personal_data' => 1,
-            'bylaw' => 1,
-            'customer' => $this->getCustomerBase64()
+            'bylaw' => 1
         );
+
+
+        if($this->getShippingCity() !="" && $this->getShippingStreetAndStreetN1()['street'] && $this->getShippingPostcode() && $this->getShippingCountry())
+           {
+            $dotPostForm["customer"] = $this->getCustomerBase64();
+           }
+
+           return $dotPostForm;
+
     }
 
     /**
@@ -246,8 +255,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 			"payer" => array(
 				"first_name" => $this->getFirstname(),
 				"last_name" => $this->getLastname(),
-				"email" => $this->getEmail(),
-				"phone" => $this->getPhone()
+				"email" => $this->getEmail()
 			),
 			"order" => array(
 				"delivery_address" => array(
@@ -266,6 +274,11 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 			$customer["registered_since"] = date("Y-m-d", strtotime($user->get('user_registered')));
 			$customer["order_count"] = wc_get_customer_order_count($user->ID);
         }
+
+        if ($this->getPhone() != "") {
+            $customer["payer"]["phone"] = $this->getPhone();
+        }
+
 
         if ($this->getSelectedCarrierMethodGroup() != "") {
             $customer["order"]["delivery_type"] = $this->getSelectedCarrierMethodGroup();
@@ -292,7 +305,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     public function isChannelInGroup($channelId, array $groups) {
         $resultJson = $this->getDotpayChannels($this->getOrderAmount());
-        if(false !== $resultJson) {
+        if(false != $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
                 foreach ($result['channels'] as $channel) {
@@ -311,7 +324,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function isEnabled() {
         $result = false;
-        if ('yes' === $this->get_option('enabled')) {
+        if ('yes' == $this->get_option('enabled')) {
             $result = true;
         }
 
@@ -324,7 +337,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function getAdminPromptClass() {
         $result = 'error';
-        if ('yes' === $this->get_option('enabled')) {
+        if ('yes' == $this->get_option('enabled')) {
             $result = 'updated';
         }
 
@@ -349,7 +362,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function isWidgetEnabled() {
         $result = false;
-        if ('yes' === $this->get_option('channels_show')) {
+        if ('yes' == $this->get_option('channels_show')) {
             $result = true;
         }
 
@@ -362,7 +375,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function isOneClickEnabled() {
         $result = false;
-        if ('yes' === $this->get_option('oneclick_show')) {
+        if ('yes' == $this->get_option('oneclick_show')) {
             $result = true;
         }
 
@@ -375,7 +388,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function isMasterPassEnabled() {
         $result = false;
-        if ('yes' === $this->get_option('masterpass_show')) {
+        if ('yes' == $this->get_option('masterpass_show')) {
             $result = true;
         }
 
@@ -388,7 +401,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function isPayPoEnabled() {
         $result = false;
-        if ('yes' === $this->get_option('paypo_show')) {
+        if ('yes' == $this->get_option('paypo_show')) {
             $result = true;
         }
 
@@ -402,7 +415,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function isCcPVEnabled() {
         $result = true;
-        if ('no' === $this->get_option('ccPV_show')) {
+        if ('no' == $this->get_option('ccPV_show')) {
             $result = false;
         }
         if(!$this->isDotSelectedCurrency($this->get_option('ccPV_currency'))) {
@@ -418,7 +431,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function isBlikEnabled() {
         $result = false;
-        if ('yes' === $this->get_option('blik_show')) {
+        if ('yes' == $this->get_option('blik_show')) {
             $result = true;
         }
         if($this->getCurrency() != 'PLN') {
@@ -434,7 +447,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function isCreditCardEnabled() {
         $result = false;
-        if ('yes' === $this->get_option('credit_card_show')) {
+        if ('yes' == $this->get_option('credit_card_show')) {
             $result = true;
         }
 
@@ -532,8 +545,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @return string
      */
     public function getStatusPage() {
-        $this->message = NULL;
-        if($this->getParam('error_code')!==false) {
+        $this->message = null;
+        if($this->getParam('error_code')!=false) {
             switch($this->getParam('error_code')) {
                 case 'PAYMENT_EXPIRED':
                     $this->message = __('Exceeded expiration date of the generated payment link.', 'dotpay-payment-gateway');
@@ -690,7 +703,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $controlNr = trim(str_replace('#', '', $controlNr));
 
         $order = new WC_Order($controlNr);
-        if (!$order && $order->get_id() === NULL && $order->get_order_number() === NULL) {
+        if (!$order && $order->get_id() == null && $order->get_order_number() == null) {
             die('FAIL ORDER: not exist');
         }
 
@@ -699,8 +712,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 
         $status = $this->getParam('operation_status');
         $operationNR = $this->getParam('operation_number');
-		$chNR = $this->getParam('channel');
-		$chDataNR = $this->getChannelName($chNR);
+        $chNR = $this->getParam('channel');
+        $chDataNR = $this->getChannelName($chNR);
         $PaymentChannelName = $chDataNR['name'];
         $PaymentChannelLogo= $chDataNR['logo'];
         $note = __("Dotpay send notification", 'dotpay-payment-gateway') . ": <br><span style=\"color: #4b5074; font-style: italic;\">".__("transaction number:", 'dotpay-payment-gateway') ." <span style=\"font-weight: bold;\">".$operationNR."</span>, <br>". __("payment channel:", 'dotpay-payment-gateway')." <span style=\"font-weight: bold;\">".$PaymentChannelName."</span> /<span style=\"font-weight: bold;\">".$chNR."</span>/</span><br><img src=\"".$PaymentChannelLogo."\" width=\"100px\" height=\"50px\" alt=\"".$PaymentChannelName."\"> <br><span style=\"font-weight: bold; \">status</span>: ";
@@ -804,7 +817,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->getParam('payer_bank_account').
         $this->getParam('payer_transfer_title');
 
-        return ($this->getParam('signature') === hash('sha256', $signature));
+        return ($this->getParam('signature') == hash('sha256', $signature));
     }
 
     /**
@@ -815,7 +828,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $currencyOrder = $order->get_currency();
         $currencyResponse = $this->getParam('operation_original_currency');
 
-        if ($currencyOrder !== $currencyResponse) {
+        if ($currencyOrder != $currencyResponse) {
             die('FAIL CURRENCY');
         }
     }
@@ -829,7 +842,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $amountOrder = sprintf("%01.2f", $amount);
         $amountResponse = $this->getParam('operation_original_amount');
 
-        if ($amountOrder !== $amountResponse) {
+        if ($amountOrder != $amountResponse) {
             die('FAIL AMOUNT');
         }
     }

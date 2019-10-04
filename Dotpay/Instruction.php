@@ -34,7 +34,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     const DOTPAY_NAME = 'Dotpay sp. z o.o.';
     const DOTPAY_STREET = 'Wielicka 28B';
     const DOTPAY_CITY = '30-552 Kraków';
-    
+
     private $instructionId;
     private $orderId;
     private $number;
@@ -52,7 +52,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getInstructionId() {
         return $this->instructionId;
     }
-    
+
     /**
      * Return order id
      * @return int
@@ -60,7 +60,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getOrderId() {
         return $this->orderId;
     }
-    
+
     /**
      * Return instruction number
      * @return string
@@ -68,7 +68,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getNumber() {
         return $this->number;
     }
-    
+
     /**
      * Return instruction hash
      * @return string
@@ -76,7 +76,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getHash() {
         return $this->hash;
     }
-    
+
     /**
      * Return flag, if instruction applies to cash method
      * @return bool
@@ -84,7 +84,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function isCash() {
         return $this->isCash;
     }
-    
+
     /**
      * Return bank account, if instruction applies to transfer method
      * @return string|null
@@ -92,7 +92,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getBankAccount() {
         return $this->bankAccount;
     }
-    
+
     /**
      * Return amount
      * @return float
@@ -100,7 +100,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getAmount() {
         return $this->amount;
     }
-    
+
     /**
      * Return currency
      * @return string
@@ -108,7 +108,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getCurrency() {
         return $this->currency;
     }
-    
+
     /**
      * Return payment channel id
      * @return int
@@ -116,7 +116,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getChannel() {
         return $this->channel;
     }
-    
+
     /**
      * Set instruction id
      * @param int $instructionId instruction id
@@ -126,7 +126,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->instructionId = $instructionId;
         return $this;
     }
-    
+
     /**
      * Set order id
      * @param int $orderId order id
@@ -136,7 +136,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->orderId = $orderId;
         return $this;
     }
-    
+
     /**
      * Set instruction number
      * @param string $number instruction number
@@ -146,7 +146,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->number = $number;
         return $this;
     }
-    
+
     /**
      * Set instruction hash
      * @param string $hash instruction hash
@@ -156,7 +156,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->hash = $hash;
         return $this;
     }
-    
+
     /**
      * Set true, if payment channel belongs to cash group
      * @param bool $cash cash flag
@@ -166,7 +166,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->isCash = $cash;
         return $this;
     }
-    
+
     /**
      * Set bank account number
      * @param string $bankAccount bank account number
@@ -176,7 +176,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->bankAccount = $bankAccount;
         return $this;
     }
-    
+
     /**
      * Set amount
      * @param float $amount amount
@@ -186,7 +186,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->amount = $amount;
         return $this;
     }
-    
+
     /**
      * Set currency
      * @param string $currency currency
@@ -206,7 +206,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->channel = $channel;
         return $this;
     }
-    
+
     /**
      * Return recipient name
      * @return string
@@ -214,7 +214,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getRecipient() {
         return self::DOTPAY_NAME;
     }
-    
+
     /**
      * Return street of recipient
      * @return string
@@ -222,7 +222,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getStreet() {
         return self::DOTPAY_STREET;
     }
-    
+
     /**
      * Return city of recipient
      * @return string
@@ -230,7 +230,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getCity() {
         return self::DOTPAY_CITY;
     }
-    
+
     /**
      * Return translated command for instruction button
      * @return string
@@ -264,7 +264,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
     }
-    
+
     /**
      * Remove table
      * @global type $wpdb WPDB object
@@ -275,7 +275,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         $wpdb->query( $sql );
     }
-    
+
     /**
      * Return payment instruction by order id
      * @global type $wpdb WPDB object
@@ -286,7 +286,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         global $wpdb;
         $result = $wpdb->get_results('
             SELECT instruction_id as id
-            FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.'` 
+            FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.'`
             WHERE order_id = '.(int)$orderId
         );
         if(!is_array($result)) {
@@ -294,7 +294,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         }
         return new Dotpay_Instruction($result[count($result)-1]->id);
     }
-    
+
     /**
      * Return instruction hash from payment
      * @param array $payment payment
@@ -304,7 +304,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $parts = explode('/',$payment['instruction']['instruction_url']);
         return $parts[count($parts)-2];
     }
-    
+
     /**
      * Return url to bank site
      * @return string
@@ -317,7 +317,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         }
         return $html->getElementById('channel_container_')->firstChild()->getAttribute('href');
     }
-    
+
     /**
      * Return url to pdf payment instruction
      * @return string
@@ -325,7 +325,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getPdfUrl() {
         return $this->getPaymentUrl().'instruction/pdf/'.$this->number.'/'.$this->hash.'/';
     }
-    
+
     /**
      * Return url to the payment instruction on Dotpay server
      * @return string
@@ -333,7 +333,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     protected function buildInstructionUrl() {
         return $this->getPaymentUrl().'instruction/'.$this->number.'/'.$this->hash.'/';
     }
-    
+
     /**
      * Save changes in model to the database
      * @global type $wpdb WPDB object
@@ -343,10 +343,10 @@ class Dotpay_Instruction extends Dotpay_Payment {
         global $wpdb;
         $existedCard = $wpdb->get_row( 'SELECT * FROM '.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.' WHERE instruction_id = '.(int)$this->instructionId);
         if(empty($existedCard)) {
-            $wpdb->insert( 
-                $wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME, 
-                array( 
-                    'order_id' => $this->orderId, 
+            $wpdb->insert(
+                $wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME,
+                array(
+                    'order_id' => $this->orderId,
                     'number' => $this->number,
                     'hash' => $this->hash,
                     'is_cash' => $this->isCash,
@@ -354,9 +354,9 @@ class Dotpay_Instruction extends Dotpay_Payment {
                     'amount' => $this->amount,
                     'currency' => $this->currency,
                     'channel' => $this->channel
-                ), 
-                array( 
-                    '%d', 
+                ),
+                array(
+                    '%d',
                     '%s',
                     '%s',
                     '%s',
@@ -364,13 +364,13 @@ class Dotpay_Instruction extends Dotpay_Payment {
                     '%s',
                     '%s',
                     '%d'
-                ) 
+                )
             );
         } else {
-            $wpdb->insert( 
-                $wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME, 
-                array( 
-                    'order_id' => $this->orderId, 
+            $wpdb->insert(
+                $wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME,
+                array(
+                    'order_id' => $this->orderId,
                     'number' => $this->number,
                     'hash' => $this->hash,
                     'is_cash' => $this->isCash,
@@ -380,8 +380,8 @@ class Dotpay_Instruction extends Dotpay_Payment {
                     'channel' => $this->channel
                 ),
                 array('instruction_id' => $this->instructionId),
-                array( 
-                    '%d', 
+                array(
+                    '%d',
                     '%s',
                     '%s',
                     '%s',
@@ -397,7 +397,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->instructionId = $instruction->instruction_id;
         return true;
     }
-    
+
     /**
      * Prepare instruction object
      * @global type $wpdb WPDB object
@@ -409,12 +409,12 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->has_fields = true;
         $this->init_settings();
         global $wpdb;
-        if($id===NULL) {
+        if($id == null) {
             return;
         }
         $result = $wpdb->get_row('
-            SELECT * 
-            FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.'` 
+            SELECT *
+            FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.'`
             WHERE instruction_id = '.(int)$id
         );
         if(empty($result)) {
@@ -438,7 +438,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $chData = $this->getChannelData($this->getChannel());
         return $chData['logo'];
     }
-    
+
     /**
      * Return content of page with payment instruction
      * @return string
@@ -446,7 +446,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getPage() {
         return $this->render('payment_info.phtml');
     }
-    
+
     /**
      * Return url to bank site or pdf payment instruction
      * @return string

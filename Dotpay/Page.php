@@ -31,19 +31,19 @@
 class Dotpay_Page {
     private $title = '';
     private $name = '';
-    private $id = NULL;
+    private $id = null;
     private $guid = '';
 
     /**
      * Load page, if will the parameter given
      * @param string $name name of page
      */
-    public function __construct($name = NULL) {
+    public function __construct($name = null) {
         if(empty($name))
             return;
         $this->name = $name;
         $post = get_post(get_option('dotpay_'.$this->name.'_id'));
-        if($post != NULL) {
+        if($post != null) {
             $this->id = $post->ID;
             $this->name = $name;
             $this->title = $post->post_title;
@@ -177,7 +177,7 @@ class Dotpay_Page {
      * @return string
      */
     public function getUrl() {
-        
+
         return get_permalink($this->id);
     }
 

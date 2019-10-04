@@ -35,7 +35,7 @@ class Gateway_OneClick extends Gateway_Gateway {
     public function __construct() {
         parent::__construct();
         $this->id = 'Dotpay_oc';
-        $this->title = __('One Click <small>(credit card)</small>', 'dotpay-payment-gateway');
+        $this->title = __('One Click (credit card)', 'dotpay-payment-gateway');
         $this->method_description = __('All Dotpay settings can be adjusted', 'dotpay-payment-gateway').sprintf('<a href="%s"> ', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=dotpay' ) ).__('here', 'dotpay-payment-gateway').'</a>.';
         $this->addActions();
         add_action('woocommerce_api_'.strtolower($this->id).'_rmcard', array($this, 'removeCard'));
@@ -151,7 +151,7 @@ class Gateway_OneClick extends Gateway_Gateway {
 
     if($cc && is_object($cc) && $cc->cc_id)
 			{
-				if($cc->cc_id !== NULL && $cc->card_id == NULL) {
+				if($cc->cc_id != null && $cc->card_id == null) {
 					$sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
 					$ccInfo = $sellerApi->getCreditCardInfo(
 																$this->getApiUsername(),

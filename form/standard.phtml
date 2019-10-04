@@ -12,7 +12,7 @@
         widgetFormContainerClass: 'my-form-widget-container',
         offlineChannel: 'mark',
         offlineChannelTooltip: true,
-		channelNameVisibility: '<?php echo $this->getChannelNameVisiblity(); ?>',
+		    channelNameVisibility: '<?php echo $this->getChannelNameVisiblity(); ?>',
         disabledChannels: [<?php echo $this->getDisabledChannelsList(); ?>],
         host: '<?php echo $this->getPaymentChannelsUrl(); ?>'
     };
@@ -62,3 +62,12 @@
 <?php endif; ?>
 <?php if((bool)$this->isTestMode()) echo "<p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."<br></p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
+<script type="text/javascript">
+//change description style in payment method
+jQuery(document).ready(function(){
+    jQuery('label[for^=payment_method_dotpay i]').html(function(i, h){
+        return h.replace(/\(([^\)]+)\)/, "<small>( $1 )</small>");
+    });
+
+});
+</script>
