@@ -776,10 +776,11 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $dotpay_lang = $this->getPaymentLang();
 
         $curl_url = "{$dotpay_url}";
-        $curl_url .= "?currency={$payment_currency}";
-        $curl_url .= "&id={$dotpay_id}";
+        $curl_url .= "?id={$dotpay_id}";
         $curl_url .= "&amount={$order_amount}";
+        $curl_url .= "&currency={$payment_currency}";
         $curl_url .= "&lang={$dotpay_lang}";
+        $curl_url .= "&format=json";
         /**
          * curl
          */
