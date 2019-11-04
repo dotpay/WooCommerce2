@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2019-10-01 10:26+0200\n"
-"PO-Revision-Date: 2019-10-01 10:29+0200\n"
+"POT-Creation-Date: 2019-11-04 16:44+0100\n"
+"PO-Revision-Date: 2019-11-04 16:44+0100\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: pl_PL\n"
@@ -82,24 +82,25 @@ msgstr "Płatności kartą płatniczą z wykorzystaniem MasterPass"
 
 #: ../Gateway/Dotpay.php:87 ../Gateway/Dotpay.php:94 ../Gateway/Dotpay.php:186
 #: ../Gateway/Dotpay.php:189 ../Gateway/Dotpay.php:211
-#: ../Gateway/Dotpay.php:214 ../Gateway/Dotpay.php:242
-#: ../Gateway/Dotpay.php:273
+#: ../Gateway/Dotpay.php:214 ../Gateway/Dotpay.php:247
+#: ../Gateway/Dotpay.php:278
 msgid "Needed separate agreement."
 msgstr "Do uruchomienia wymagana osobna Umowa."
 
 #: ../Gateway/Dotpay.php:88 ../Gateway/Dotpay.php:95 ../Gateway/Dotpay.php:190
-#: ../Gateway/Dotpay.php:215
+#: ../Gateway/Dotpay.php:215 ../Gateway/Dotpay.php:233
+#: ../Gateway/Dotpay.php:236
 msgid "Contact Dotpay customer service before using this option"
 msgstr ""
 "Proszę skontaktować się z Biurem Obsługi Klienta przed użyciem tej opcji"
 
 #: ../Gateway/Dotpay.php:89 ../Gateway/Dotpay.php:96 ../Gateway/Dotpay.php:192
-#: ../Gateway/Dotpay.php:217
+#: ../Gateway/Dotpay.php:217 ../Gateway/Dotpay.php:235
 msgid "Dotpay customer service"
 msgstr "Biuro Obsługi Klienta"
 
 #: ../Gateway/Dotpay.php:89 ../Gateway/Dotpay.php:96 ../Gateway/Dotpay.php:193
-#: ../Gateway/Dotpay.php:218
+#: ../Gateway/Dotpay.php:218 ../Gateway/Dotpay.php:237
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -245,7 +246,7 @@ msgstr ""
 msgid "Username API"
 msgstr "Nazwa użytkownika API"
 
-#: ../Gateway/Dotpay.php:227 ../Gateway/Dotpay.php:235
+#: ../Gateway/Dotpay.php:227 ../Gateway/Dotpay.php:240
 msgid ""
 "Leave this field empty if you do not use One Click and if you do not want to "
 "present the payment instructions on the shop page for semi-automatic "
@@ -259,70 +260,74 @@ msgstr ""
 msgid "Password API"
 msgstr "Hasło API"
 
-#: ../Gateway/Dotpay.php:240
+#: ../Gateway/Dotpay.php:237
+msgid "Required additional permissions for the user API."
+msgstr "Wymagane dodatkowe uprawnienia dla podanego użytkownika API."
+
+#: ../Gateway/Dotpay.php:245
 msgid "MasterPass"
 msgstr "MasterPass"
 
-#: ../Gateway/Dotpay.php:249
+#: ../Gateway/Dotpay.php:254
 msgid "BLIK"
 msgstr "BLIK"
 
-#: ../Gateway/Dotpay.php:256
+#: ../Gateway/Dotpay.php:261
 msgid "Widget (display payment channel in a shop)"
 msgstr "Pokaż wszystkie kanały płatności w sklepie (Widżet)"
 
-#: ../Gateway/Dotpay.php:258
+#: ../Gateway/Dotpay.php:263
 msgid "Display payment channels in the store available for the account"
 msgstr ""
 "Prezentuje listę kanałów płatności, umożliwiając bezpośredni wybór właściwej "
 "metody płatności w sklepie"
 
-#: ../Gateway/Dotpay.php:263
+#: ../Gateway/Dotpay.php:268
 msgid "Toggle channel names in widget view"
 msgstr "Widoczność nazw kanałów w widżecie"
 
-#: ../Gateway/Dotpay.php:265
+#: ../Gateway/Dotpay.php:270
 msgid "Display payment channels names in widget (recommends: no)"
 msgstr ""
 "Pokaż nazwę kanału pod jego logotypem na liście kanałów (zalecamy: nie)"
 
-#: ../Gateway/Dotpay.php:271
+#: ../Gateway/Dotpay.php:276
 msgid "PayPo - postponed payments"
 msgstr "PayPo - płatności odroczone"
 
-#: ../Gateway/Dotpay.php:310
+#: ../Gateway/Dotpay.php:315
 msgid " - "
 msgstr " - "
 
-#: ../Gateway/Dotpay.php:313
+#: ../Gateway/Dotpay.php:318
 msgid "Choose what kind of delivery describes this shipping method"
 msgstr "Wybierz rodzaj dostawy opisujący tę metodę wysyłki"
 
-#: ../Gateway/Dotpay.php:317
+#: ../Gateway/Dotpay.php:322
 msgid "-"
 msgstr "-"
 
-#: ../Gateway/Dotpay.php:318
+#: ../Gateway/Dotpay.php:323
 msgid "Courier"
 msgstr "kurier"
 
-#: ../Gateway/Dotpay.php:319
+#: ../Gateway/Dotpay.php:324
 msgid "Poczta Polska"
 msgstr "Poczta Polska"
 
-#: ../Gateway/Dotpay.php:320
+#: ../Gateway/Dotpay.php:325
 msgid "Pickup point"
 msgstr "dostawa do punktu (np. UPS Access point, DHL Parcel Shop)"
 
-#: ../Gateway/Dotpay.php:321
+#: ../Gateway/Dotpay.php:326
 msgid "Paczkomat"
 msgstr "paczkomat"
 
-#: ../Gateway/Dotpay.php:322
+#: ../Gateway/Dotpay.php:327
 msgid "Paczka w Ruchu"
 msgstr "paczka w ruchu"
 
-#: ../Gateway/Dotpay.php:323
+#: ../Gateway/Dotpay.php:328
 msgid "Local pickup"
 msgstr "odbiór w sklepie (click&collect)"
 
@@ -394,31 +399,31 @@ msgstr ""
 msgid "Please accept all agreements"
 msgstr "Proszę zaakceptować wszystkie wymagane zgody"
 
-#: ../Gateway/Gateway.php:719
+#: ../Gateway/Gateway.php:721
 msgid "Dotpay send notification"
 msgstr "Dotpay dostarczył notyfikację"
 
-#: ../Gateway/Gateway.php:719
+#: ../Gateway/Gateway.php:721
 msgid "transaction number:"
 msgstr "numer transakcji:"
 
-#: ../Gateway/Gateway.php:719
+#: ../Gateway/Gateway.php:721
 msgid "payment channel:"
 msgstr "kanał płatniczy:"
 
-#: ../Gateway/Gateway.php:723
+#: ../Gateway/Gateway.php:725
 msgid "paid - processing"
 msgstr "opłacone - przetwarzane"
 
-#: ../Gateway/Gateway.php:723
+#: ../Gateway/Gateway.php:725
 msgid "paid - completed (virtual product)"
 msgstr "opłacone - zrealizowane (produkt wirtualny)"
 
-#: ../Gateway/Gateway.php:730
+#: ../Gateway/Gateway.php:732
 msgid "cancelled"
 msgstr "anulowano"
 
-#: ../Gateway/Gateway.php:733
+#: ../Gateway/Gateway.php:735
 msgid "processing"
 msgstr "przetwarzanie"
 
@@ -442,11 +447,11 @@ msgstr "Karty płatnicze (płatność w walucie)"
 msgid "PayPo (deferred payments)"
 msgstr "PayPo (płatności odroczone)"
 
-#: ../Gateway/Transfer.php:73
+#: ../Gateway/Transfer.php:71 ../Gateway/Transfer.php:85
 msgid "Payment can not be created"
 msgstr "Płatność nie może zostać utworzona"
 
-#: ../Gateway/Transfer.php:75
+#: ../Gateway/Transfer.php:87
 msgid "Payment not exist"
 msgstr "Płatność nie istnieje"
 

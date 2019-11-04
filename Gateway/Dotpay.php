@@ -229,7 +229,10 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'api_password' => array(
-                'title' => __('Password API', 'dotpay-payment-gateway'),
+                'title' => __('Password API', 'dotpay-payment-gateway').'<br><br><em>'.
+                __('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').
+              ' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '. __('Dotpay customer service', 'dotpay-payment-gateway').'">: '.
+              __('Contact', 'dotpay-payment-gateway', 'dotpay-payment-gateway').'</a>. '.__('Required additional permissions for the user API.','dotpay-payment-gateway').'</em>',
                 'type' => 'password',
                 'default' => '',
                 'description' => __('Leave this field empty if you do not use One Click and if you do not want to present the payment instructions on the shop page for semi-automatic channels. Data for access to the Dotpay administration panel.', 'dotpay-payment-gateway'),
