@@ -299,8 +299,8 @@ function wc_dotpay_gateway_content($content) {
 			default:
 				return $content;
 		}
-  }
-  return $content;
+	}
+	return $content;
 }
 
 /**
