@@ -92,7 +92,6 @@ abstract class Dotpay_RegisterOrder {
         if($curl) {
             $curl->close();
         }
-
         if(false != $resultJson && $resultStatus['http_code'] == 201) {
             return json_decode($resultJson, true);
         }

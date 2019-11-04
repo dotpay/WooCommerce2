@@ -300,6 +300,7 @@ function wc_dotpay_gateway_content($content) {
 				return $content;
 		}
   }
+  return $content;
 }
 
 /**

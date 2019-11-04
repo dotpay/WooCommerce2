@@ -17,33 +17,33 @@
         </div>
         <div class="col-md-6">
             <?php if($this->getBankAccount()!=null): ?>
-            <label clas="row">
+            <label class="row">
                 <?php echo __('Account number', 'dotpay-payment-gateway'); ?>
                 <input type="text" class="important" id="iban" value="<?php echo $this->getBankAccount(); ?>" />
             </label>
             <?php endif; ?>
-            <label clas="row">
+            <label class="row">
                 <?php echo __('Amount of payment', 'dotpay-payment-gateway'); ?>
                 <div class="input-group">
                     <input type="text" class="important col-md-10" id="amount" value="<?php echo $this->getAmount(); ?>" aria-describedby="transfer-currency">
                     <span class="input-group-addon col-md-2" id="transfer-currency"><?php echo $this->getCurrency(); ?></span>
                 </div>
             </label>
-            <label clas="row">
+            <label class="row">
                 <?php echo __('Title of payment', 'dotpay-payment-gateway'); ?>
                 <input type="text" class="important" id="payment-title" value="<?php echo $this->getNumber(); ?>" />
             </label>
         </div>
         <div class="col-md-6">
-            <label clas="row">
+            <label class="row">
                 <?php echo __('Name of recipient', 'dotpay-payment-gateway'); ?>
                 <input type="text" class="important" id="recipient" value="<?php echo $this->getRecipient(); ?>" />
             </label>
-            <label clas="row">
+            <label class="row">
                 <?php echo __('Street', 'dotpay-payment-gateway'); ?>
                 <input type="text" class="important" id="street" value="<?php echo $this->getStreet(); ?>" />
             </label>
-            <label clas="row">
+            <label class="row">
                 <?php echo __('Post code and city', 'dotpay-payment-gateway'); ?>
                 <input type="text" class="important" id="post-code-city" value="<?php echo $this->getCity(); ?>" />
             </label>

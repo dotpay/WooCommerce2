@@ -63,12 +63,24 @@ class Gateway_Transfer extends Gateway_Gateway {
      * @return string
      */
     public function getInformationPage() {
-        $instruction = $this->processPayment();
+	    if(isset($_GET['order_id'])) {
+		    $orderId = (int)$_GET['order_id'];
+	    } else if($this->getOrder() != null && $this->getOrder()->get_id() != null) {
+		    $orderId = $this->getOrder()->get_id();
+	    } else {
+		    return __('Payment can not be created', 'dotpay-payment-gateway');
+	    }
+	    $instruction = Dotpay_Instruction::getByOrderId($orderId);
+    	if(null === $instruction->getInstructionId()) {
+		    $instruction = $this->processPayment();
+	    }
+
         if($instruction!=null && $instruction->getInstructionId()!= null) {
-            return $instruction->getPage();
+	        $page = $instruction->getPage();
+            return $page;
         }
-        $this->forgetChannel();
-        $this->forgetOrder();
+	    $this->forgetChannel();
+	    $this->forgetOrder();
         if ($instruction == false){
             return __('Payment can not be created', 'dotpay-payment-gateway');
         }

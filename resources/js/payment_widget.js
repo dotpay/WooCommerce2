@@ -11125,11 +11125,11 @@ define('widgetsCommon',['jquery', 'xhr', 'config'], function ($, xhr, config) {
                 apiChannelsOrder = config.widget.channelsOrder,
                 self = this;
 
-            apiChannelGroups ? allChannels = this.enableChannelGroups(apiChannelGroups, allChannels) : allChannels
+            apiChannelGroups ? allChannels = this.enableChannelGroups(apiChannelGroups, allChannels) : allChannels;
 
-            apiDisabledChannels ? allChannels = this.disableChannels(apiDisabledChannels, allChannels) : allChannels
+            apiDisabledChannels ? allChannels = this.disableChannels(apiDisabledChannels, allChannels) : allChannels;
 
-            apiChannel ? allChannels = this.enableChannel(apiChannel, allChannels) : allChannels
+            apiChannel ? allChannels = this.enableChannel(apiChannel, allChannels) : allChannels;
 
             apiChannelsOrder ? channelsToRender = this.sortChannels(apiChannelsOrder, allChannels, widgetId) :
                 $.each(allChannels, function (key, value){

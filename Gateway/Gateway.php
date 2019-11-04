@@ -669,9 +669,11 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 "<br>  - is_plugin_active_for_network: ".(bool)is_plugin_active_for_network('woocommerce/woocommerce.php').
 				"<br><br /> --- Dotpay API data: --- ".
 				"<br>  - Dotpay username: ".$this->getApiUsername().
-				"<br>  - correct API auth data: ".$sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword()).
+                "<br>  - correct API auth data: ".$sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword()).
+                "<br>  - URL return: ".$this->getUrl().
                 "<br><br /> --- Dotpay channels: --- <br />".$dotpayGateways.
                 "<br /> --- Shop channels: --- <br />".$shopGateways
+
             );
         }
 

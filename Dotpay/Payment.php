@@ -405,6 +405,26 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     }
 
 
+/**
+    	 * checks and crops the size of a string
+    	 * the $special parameter means an estimate of how many urlencode characters can be used in a given field
+    	 * e.q. 'ż' (1 char) -> '%C5%BC' (6 chars)
+    	 * replacing removing double or more special characters that appear side by side by space from: firstname, lastname, city, street, p_info...
+    	 */
+    	public function encoded_substrParams($string, $from, $to, $special=0)
+    		{
+    			$string2 = preg_replace('/(\s{2,}|\.{2,}|@{2,}|\-{2,}|\/{3,} | \'{2,}|\"{2,}|_{2,})/', ' ', $string);
+    			$s = html_entity_decode($string2, ENT_QUOTES, 'UTF-8');
+    			$sub = mb_substr($s, $from, $to,'UTF-8');
+    			$sum = strlen(urlencode($sub));
+    			if($sum  > $to)
+    				{
+    					$newsize = $to - $special;
+    					$sub = mb_substr($s, $from, $newsize,'UTF-8');
+    				}
+    			return trim($sub);
+    		}
+
 
     /**
      * Return customer firstname
@@ -422,7 +442,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $firstName = preg_replace('/[^\w _-]/u', '', $firstName);
         $firstName1 = html_entity_decode($firstName, ENT_QUOTES, 'UTF-8');
 
-        return $firstName1;
+        
+        $NewPersonName1 = preg_replace('/[^\p{L}0-9\s\-_]/u',' ',$firstName1);
+        return $this->encoded_substrParams($NewPersonName1,0,50,24);
     }
 
     /**
@@ -440,7 +462,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         //allowed only: letters, digits, spaces, symbols _-.,'
         $lastName = preg_replace('/[^\w _-]/u', '', $lastName);
         $lastName1 = html_entity_decode($lastName, ENT_QUOTES, 'UTF-8');
-        return $lastName1;
+        
+        $NewPersonName2 = preg_replace('/[^\p{L}0-9\s\-_]/u',' ',$lastName1);
+        return $this->encoded_substrParams($NewPersonName2,0,50,24);
     }
 
     /**
@@ -472,7 +496,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         }
         $phone = str_replace(' ', '', $phone);
         $phone = str_replace('+', '', $phone);
-        return $phone;
+        
+        $NewPhone1 = preg_replace('/[^\+\s0-9\-_]/','',$phone);
+      	return $this->encoded_substrParams($NewPhone1,0,20,6);
     }
 
     /**
@@ -491,7 +517,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $city = preg_replace('/[^.\w \'_-]/u', '', $city);
         $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
 
-        return $city1;
+        return $this->encoded_substrParams($city1,0,50,24);
+        
     }
 
     /**
@@ -513,7 +540,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             $postcode = str_replace('-', '', $postcode);
             $postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
         }
-        return $postcode;
+        
+        $NewPostcode1 = preg_replace('/[^\d\w\s\-]/','',$postcode);
+        return $this->encoded_substrParams($NewPostcode1,0,20,6);
+       
     }
 
     /**
@@ -559,17 +589,24 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
                 $street_n1 = trim($matches[0]);
                 $street1 = str_replace($matches[0], '', $street1);
             }
+        } else{
+            
+            //allowed only: letters, digits, spaces, symbols _-/'
+            $NewStreet_n1a = preg_replace('/[^\p{L}0-9\s\-_\/]/u',' ',$street_n1);
+
+
+            if (!empty($NewStreet_n1a)) {
+                $building_numberRO = $NewStreet_n1a;
+            } else {
+                $building_numberRO = "0";  //this field may not be blank in register order
+            }
+
         }
 
-        if (!empty($street_n1)) {
-            $building_numberRO = $street_n1;
-        } else {
-            $building_numberRO = " ";  //this field may not be blank in register order
-        }
 
         return array(
-            'street' => $street1,
-            'street_n1' => $building_numberRO
+            'street' => $this->encoded_substrParams($street1,0,100,50),
+            'street_n1' => $this->encoded_substrParams($building_numberRO,0,30,24)
         );
     }
 
@@ -587,9 +624,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 		}
 		//allowed only: letters, digits, spaces, symbols _-.,'
 		$city = preg_replace('/[^.\w \'_-]/u', '', $city);
-		$city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
-
-		return $city1;
+        $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
+        
+        return $this->encoded_substrParams($city1,0,50,24);
 	}
 
 	/**
@@ -622,7 +659,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
                 $postcode1 = substr($postcode1, 0, 2) . '-' . substr($postcode1, 2, 3);
             }
 
-        return $postcode1;
+        
+        $NewPostcode1 = preg_replace('/[^\d\w\s\-]/','',$postcode1);
+        
+        return $this->encoded_substrParams($NewPostcode1,0,20,6);
 
         }
 	}
@@ -732,7 +772,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     /**
      *
      * @param float $amount
-     * @return float
+     * @return string
      */
     public function getFormatAmount($amount)
     {
@@ -766,13 +806,21 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
      */
     public function getDotpayChannels($amount)
     {
+		$this->logme($amount);
+		if($amount == 0)
+		{
+			return false;
+		}
         $dotpay_url = $this->getPaymentChannelsUrl();
         $payment_currency = $this->getCurrency();
 
         $dotpay_id = $this->get_option('id');
 
         $order_amount = $this->getFormatAmount($amount);
-
+	    if(!empty($_SESSION['dotpay_payment_channels_cache'][$order_amount]))
+	    {
+	    	return $_SESSION['dotpay_payment_channels_cache'][$order_amount];
+	    }
         $dotpay_lang = $this->getPaymentLang();
 
         $curl_url = "{$dotpay_url}";
@@ -807,6 +855,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
         if ($ch) {
             curl_close($ch);
+        }
+        if($resultJson !== false) {
+
+	        $_SESSION['dotpay_payment_channels_cache'][$order_amount] = $resultJson;
         }
 
         return $resultJson;
@@ -873,7 +925,6 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
     public function getChannelName($id)
     {
-
         $resultJson = $this->getDotpayChannels('333');
         if (false != $resultJson) {
             $result = json_decode($resultJson, true);
@@ -1028,5 +1079,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         } else {
             return $orderObject->id;
         }
+    }
+
+    public function logme($log)
+    {
+	    file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
     }
 }

@@ -427,7 +427,7 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->isCash = $result->is_cash;
         $this->number = $result->number;
         $this->orderId = $result->order_id;
-        $this->bankAccount = $result->bank_account_number;
+        $this->bankAccount = $result->bank_account;
         $this->instructionId = $result->instruction_id;
     }
     /**
