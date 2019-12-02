@@ -58,8 +58,8 @@ class Gateway_Blik extends Gateway_Gateway {
         if(!$this->isTestMode())
             $hiddenFields['blik_code'] = $this->getBlikCode();
         $hiddenFields['channel'] = self::$blikChannel;
-        $hiddenFields['ch_lock'] = 0;
-        $hiddenFields['type'] = 4;
+        $hiddenFields['ch_lock'] = '0';
+        $hiddenFields['type'] = '4';
 
         return $hiddenFields;
     }

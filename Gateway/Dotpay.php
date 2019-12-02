@@ -49,8 +49,8 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $hiddenFields = parent::getDataForm();
         if($this->isWidgetEnabled()) {
             $hiddenFields['channel'] = $this->getChannel();
-            $hiddenFields['ch_lock'] = 0;
-            $hiddenFields['type'] = 4;
+            $hiddenFields['ch_lock'] = '0';
+            $hiddenFields['type'] = '4';
         }
         return $hiddenFields;
     }

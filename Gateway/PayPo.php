@@ -60,8 +60,8 @@ class Gateway_PayPo extends Gateway_Gateway {
         $hiddenFields = parent::getDataForm();
 
         $hiddenFields['channel'] = $this->getChannel();
-        $hiddenFields['ch_lock'] = 0;
-        $hiddenFields['type'] = 4;
+        $hiddenFields['ch_lock'] = '0';
+        $hiddenFields['type'] = '4';
         $hiddenFields['postcode'] = $this->getPostcode($hiddenFields['postcode']);
 
         return $hiddenFields;

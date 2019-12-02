@@ -45,16 +45,16 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.2.7';
+    const MODULE_VERSION = '3.2.8a';
 
 
-    public static $ocChannel = 248;
-    public static $pvChannel = 248;
-    public static $ccChannel = 248; // or 246
-    public static $blikChannel = 73;
-    public static $transferChannel = 11;
-    public static $mpChannel = 71;
-    public static $paypoChannel = 95;
+    public static $ocChannel = '248';
+    public static $pvChannel = '248';
+    public static $ccChannel = '248'; // or 246
+    public static $blikChannel = '73';
+    public static $transferChannel = '11';
+    public static $mpChannel = '71';
+    public static $paypoChannel = '95';
 
 
 
@@ -442,7 +442,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $firstName = preg_replace('/[^\w _-]/u', '', $firstName);
         $firstName1 = html_entity_decode($firstName, ENT_QUOTES, 'UTF-8');
 
-        
+
         $NewPersonName1 = preg_replace('/[^\p{L}0-9\s\-_]/u',' ',$firstName1);
         return $this->encoded_substrParams($NewPersonName1,0,50,24);
     }
@@ -462,7 +462,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         //allowed only: letters, digits, spaces, symbols _-.,'
         $lastName = preg_replace('/[^\w _-]/u', '', $lastName);
         $lastName1 = html_entity_decode($lastName, ENT_QUOTES, 'UTF-8');
-        
+
         $NewPersonName2 = preg_replace('/[^\p{L}0-9\s\-_]/u',' ',$lastName1);
         return $this->encoded_substrParams($NewPersonName2,0,50,24);
     }
@@ -496,7 +496,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         }
         $phone = str_replace(' ', '', $phone);
         $phone = str_replace('+', '', $phone);
-        
+
         $NewPhone1 = preg_replace('/[^\+\s0-9\-_]/','',$phone);
       	return $this->encoded_substrParams($NewPhone1,0,20,6);
     }
@@ -518,7 +518,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
 
         return $this->encoded_substrParams($city1,0,50,24);
-        
+
     }
 
     /**
@@ -540,10 +540,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             $postcode = str_replace('-', '', $postcode);
             $postcode = substr($postcode, 0, 2) . '-' . substr($postcode, 2, 3);
         }
-        
+
         $NewPostcode1 = preg_replace('/[^\d\w\s\-]/','',$postcode);
         return $this->encoded_substrParams($NewPostcode1,0,20,6);
-       
+
     }
 
     /**
@@ -590,7 +590,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
                 $street1 = str_replace($matches[0], '', $street1);
             }
         } else{
-            
+
             //allowed only: letters, digits, spaces, symbols _-/'
             $NewStreet_n1a = preg_replace('/[^\p{L}0-9\s\-_\/]/u',' ',$street_n1);
 
@@ -625,7 +625,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 		//allowed only: letters, digits, spaces, symbols _-.,'
 		$city = preg_replace('/[^.\w \'_-]/u', '', $city);
         $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
-        
+
         return $this->encoded_substrParams($city1,0,50,24);
 	}
 
@@ -659,9 +659,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
                 $postcode1 = substr($postcode1, 0, 2) . '-' . substr($postcode1, 2, 3);
             }
 
-        
+
         $NewPostcode1 = preg_replace('/[^\d\w\s\-]/','',$postcode1);
-        
+
         return $this->encoded_substrParams($NewPostcode1,0,20,6);
 
         }

@@ -209,8 +209,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'url' => $this->getUrl(),
             'urlc' => $this->getUrlC(),
             'api_version' => $this->getApiVersion(),
-            'type' => 0,
-            'ch_lock' => 0,
+            'type' => '0',
+            'ch_lock' => '0',
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'email' => $this->getEmail(),
@@ -220,8 +220,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'city' => $this->getCity(),
             'postcode' => $this->getPostcode(),
             'country' => $this->getCountry(),
-            'personal_data' => 1,
-            'bylaw' => 1
+            'personal_data' => '1',
+            'bylaw' => '1'
         );
 
 

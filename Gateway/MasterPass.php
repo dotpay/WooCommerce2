@@ -46,7 +46,7 @@ class Gateway_MasterPass extends Gateway_Gateway {
      */
     protected function getChannel() {
         if($this->isTestMode()) {
-            return 71; //or 248 (cc)
+            return '71'; //or 248 (cc)
         } else {
             return self::$mpChannel;
         }
@@ -60,8 +60,8 @@ class Gateway_MasterPass extends Gateway_Gateway {
         $hiddenFields = parent::getDataForm();
 
         $hiddenFields['channel'] = $this->getChannel();
-        $hiddenFields['ch_lock'] = 0;
-        $hiddenFields['type'] = 4;
+        $hiddenFields['ch_lock'] = '0';
+        $hiddenFields['type'] = '4';
         $hiddenFields['postcode'] = $this->getPostcode($hiddenFields['postcode']);
 
         return $hiddenFields;
