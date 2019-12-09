@@ -58,7 +58,7 @@ class Gateway_Blik extends Gateway_Gateway {
         if(!$this->isTestMode())
             $hiddenFields['blik_code'] = $this->getBlikCode();
         $hiddenFields['channel'] = self::$blikChannel;
-        $hiddenFields['ch_lock'] = '0';
+        //$hiddenFields['ch_lock'] = '0';
         $hiddenFields['type'] = '4';
 
         return $hiddenFields;
@@ -108,8 +108,14 @@ class Gateway_Blik extends Gateway_Gateway {
      * @return string
      */
     private function getBlikCode() {
-        $blikCode = $_SESSION['blik_code'];
-        unset($_SESSION['blik_code']);
+
+        $blikCode = '';
+                
+        if(isset($_SESSION['blik_code']))
+        {
+            $blikCode = $_SESSION['blik_code'];
+            unset($_SESSION['blik_code']);
+        }
         return $blikCode;
     }
 }

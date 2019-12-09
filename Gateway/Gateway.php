@@ -210,7 +210,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'urlc' => $this->getUrlC(),
             'api_version' => $this->getApiVersion(),
             'type' => '0',
-            'ch_lock' => '0',
+          //  'ch_lock' => '0',
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'email' => $this->getEmail(),
