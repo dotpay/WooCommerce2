@@ -9,7 +9,7 @@
         <?php $formData = $this->getHiddenFields(); ?>
         <form method="POST" class="dotpay-form" action="<?php echo $this->getPaymentUrl(); ?>">
             <?php foreach($formData as $name => $value): ?>
-            <input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>" />
+            <input type="hidden" name="<?php echo (string)$name; ?>" value="<?php echo (string)$value; ?>" />
             <?php endforeach; ?>
         </form>
     </body>
