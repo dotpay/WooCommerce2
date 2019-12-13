@@ -568,6 +568,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     public function getStreetAndStreetN1()
     {
         $order = $this->getOrder();
+        $street1 = '';
+        $building_numberRO = '';
+
         if (method_exists($order, 'get_billing_address_1')) {
             $street = esc_attr($order->get_billing_address_1());
         } else {
@@ -806,7 +809,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
      */
     public function getDotpayChannels($amount)
     {
-		$this->logme($amount);
+		//$this->logme($amount);
 		if($amount == 0)
 		{
 			return false;
@@ -1081,8 +1084,10 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         }
     }
 
-    public function logme($log)
+//only for developers
+    /*public function logme($log)
     {
 	    file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
     }
+*/
 }
