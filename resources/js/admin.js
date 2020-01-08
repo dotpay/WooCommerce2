@@ -62,7 +62,7 @@ function isenambledDotpaymodule(obj) {
 
 
 
-if (typeof jQuery != "undefined") {
+if (typeof jQuery != 'undefined') {
   var dotpayModules = ['blik', 'mp', 'oc', 'pv', 'tc'];
   jQuery(document).ready(function() {
     var regExpToRemove = new RegExp("Dotpay_");

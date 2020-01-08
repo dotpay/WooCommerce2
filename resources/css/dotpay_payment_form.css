@@ -57,3 +57,24 @@ select.oc_main_element {
   display: block !important;
 }
 
+li.wc_payment_method.payment_method_Dotpay_blik label img {
+	max-height: 33px;
+}
+li.wc_payment_method.payment_method_Dotpay_oc label img {
+    max-height: 35px;
+}
+li.wc_payment_method.payment_method_dotpay label img {
+    max-height: 35px;
+}
+li.wc_payment_method.payment_method_Dotpay_pv label img {
+    max-height: 35px;
+}
+li.wc_payment_method.payment_method_Dotpay_cc label img {
+    max-height: 35px;
+}
+li.wc_payment_method.payment_method_Dotpay_mp label img {
+    max-height: 35px;
+}
+li.wc_payment_method.payment_method_Dotpay_paypo label img {
+    max-height: 35px;
+}

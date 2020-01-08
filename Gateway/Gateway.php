@@ -210,7 +210,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'urlc' => $this->getUrlC(),
             'api_version' => $this->getApiVersion(),
             'type' => '0',
-          //  'ch_lock' => '0',
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'email' => $this->getEmail(),
@@ -225,7 +224,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         );
 
 
-        if($this->getShippingCity() !="" && $this->getShippingStreetAndStreetN1()['street'] && $this->getShippingPostcode() && $this->getShippingCountry())
+        if( null != $this->getCustomerBase64())
            {
             $dotPostForm["customer"] = $this->getCustomerBase64();
            }
@@ -251,43 +250,56 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 	 */
 	public function getCustomerBase64() {
 
-		$customer = array (
-			"payer" => array(
-				"first_name" => $this->getFirstname(),
-				"last_name" => $this->getLastname(),
-				"email" => $this->getEmail()
-			),
-			"order" => array(
-				"delivery_address" => array(
 
-					"city" => $this->getShippingCity(),
-					"street" => $this->getShippingStreetAndStreetN1()['street'],
-					"building_number" => $this->getShippingStreetAndStreetN1()['street_n1'],
-					"postcode" => $this->getShippingPostcode(),
-					"country" => $this->getShippingCountry()
-				)
-			)
-		);
 
-		if($user = $this->getOrder()->get_user()) {
+        if ($this->getFirstname() != "" && $this->getLastname() != "" && $this->getEmail() != "" && $this->getShippingCity() != "" && $this->getShippingStreetAndStreetN1()['street'] != "" && $this->getShippingStreetAndStreetN1()['street_n1'] && $this->getShippingPostcode())
+        {
 
-			$customer["registered_since"] = date("Y-m-d", strtotime($user->get('user_registered')));
-			$customer["order_count"] = wc_get_customer_order_count($user->ID);
+            $customer = array (
+                "payer" => array(
+                    "first_name" => $this->getFirstname(),
+                    "last_name" => $this->getLastname(),
+                    "email" => $this->getEmail()
+                ),
+                "order" => array(
+                    "delivery_address" => array(
+    
+                        "city" => $this->getShippingCity(),
+                        "street" => $this->getShippingStreetAndStreetN1()['street'],
+                        "building_number" => $this->getShippingStreetAndStreetN1()['street_n1'],
+                        "postcode" => $this->getShippingPostcode(),
+                        "country" => $this->getShippingCountry()
+                    )
+                )
+            );
+
+            if($user = $this->getOrder()->get_user()) {
+
+                $customer["registered_since"] = date("Y-m-d", strtotime($user->get('user_registered')));
+                $customer["order_count"] = wc_get_customer_order_count($user->ID);
+            }
+    
+            if ($this->getPhone() != "") {
+                $customer["payer"]["phone"] = $this->getPhone();
+            }
+    
+    
+            if ($this->getSelectedCarrierMethodGroup() != "") {
+                $customer["order"]["delivery_type"] = $this->getSelectedCarrierMethodGroup();
+            }
+    
+    
+            $customer_base64 = base64_encode(json_encode($customer, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+
+            return $customer_base64;
+
+        } else {
+
+            return null;
         }
 
-        if ($this->getPhone() != "") {
-            $customer["payer"]["phone"] = $this->getPhone();
-        }
-
-
-        if ($this->getSelectedCarrierMethodGroup() != "") {
-            $customer["order"]["delivery_type"] = $this->getSelectedCarrierMethodGroup();
-        }
-
-
-		$customer_base64 = base64_encode(json_encode($customer, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-
-		return $customer_base64;
+		
 	}
 
 	protected function getSelectedCarrierMethodGroup()
