@@ -49,7 +49,6 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $hiddenFields = parent::getDataForm();
         if($this->isWidgetEnabled()) {
             $hiddenFields['channel'] = $this->getChannel();
-            //$hiddenFields['ch_lock'] = '0';
             $hiddenFields['type'] = '4';
         }
         return $hiddenFields;
@@ -68,15 +67,19 @@ class Gateway_Dotpay extends Gateway_Gateway {
     }
 
     public function validate_fields() {
-        if(empty($_POST['channel']) && $this->isWidgetEnabled()) {
-            wc_add_notice( __('You must select a payment channel', 'dotpay-payment-gateway') , 'error' );
-            return false;
-        } else if(!parent::validate_fields()) {
-            return false;
-		}
-		if(!empty($_POST['channel'])){
-			$this->setChannel($_POST['channel']);
-		}
+
+        $dp_channel = "";
+
+        if(!empty($_POST['channel'])) {
+            $dp_channel = $_POST['channel'];
+        }else if (!isset($_POST['channel']) && empty((int)$_POST['channel']) && isset($_SESSION['dotpay_payment_channel'])) {
+            $dp_channel = $_SESSION['dotpay_payment_channel'];
+        } else {
+        $dp_channel = "";
+        }
+		
+		$this->setChannel($dp_channel);
+	
 		return true;
     }
 

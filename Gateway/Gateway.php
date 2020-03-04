@@ -141,8 +141,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $this->setOrderId($order_id);
 
         $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
+        
         if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup)) &&
-           $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword())) {
+           $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword())) 
+        {
             $gateway = new Gateway_Transfer();
             $redirectUrl = $gateway->generateWcApiUrl('form');
         } else {
@@ -184,7 +186,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @return array
      */
     protected function getDataForm() {
-        global $file_prefix;
+        global $file_prefix, $woocommerce;
         if (function_exists('wp_cache_clean_cache')) {
             wp_cache_clean_cache($file_prefix, true);
         }
@@ -196,8 +198,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             $url_return = $this->dotpay_install_missing_pages();
         }
 
-
         $streetData = $this->getStreetAndStreetN1();
+
         $dotPostForm = array(
             'id' => $this->getSellerId(),
             'control' => $this->getControl('full'),
@@ -219,6 +221,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'city' => $this->getCity(),
             'postcode' => $this->getPostcode(),
             'country' => $this->getCountry(),
+            'ignore_last_payment_channel' => 1,
             'personal_data' => '1',
             'bylaw' => '1'
         );

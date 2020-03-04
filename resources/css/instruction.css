@@ -6,7 +6,7 @@
     background-color: #fbfbfb;
     border: 1px solid #ddd;
     border-radius: 15px;
-    padding: 30px;
+    padding: 40px;
     min-width: 99%;
 }
 
@@ -34,6 +34,7 @@
     font-size: 1.1em;
     margin: 15px 0px 20px;
     line-height: 28px;
+    font-weight: bold;
 }
 
 #instruction .input-group {
@@ -100,7 +101,15 @@
     background-color: #e1f6ff;
     color: #003380;
     border: 1px solid #7cb6ff;
-    padding: 3px;
+    padding: 8px;
+}
+
+#instruction .alert-alert {
+    background-color: #ffeded;
+    color: #800012;
+    border: 1px solid #d55a5a;
+    padding: 8px;
+    text-align: center;
 }
 
 #iban,#amount,#payment-title,#recipient,#street,#post-code-city {

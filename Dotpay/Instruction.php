@@ -38,12 +38,14 @@ class Dotpay_Instruction extends Dotpay_Payment {
     private $instructionId;
     private $orderId;
     private $number;
+    private $titlep;
     private $hash;
     private $isCash;
     private $bankAccount;
     private $amount;
     private $currency;
     private $channel;
+    private $RecipientName;
 
     /**
      * Return instruction id
@@ -70,6 +72,14 @@ class Dotpay_Instruction extends Dotpay_Payment {
     }
 
     /**
+     * Return instruction title
+     * @return string
+     */
+    public function getTitlep() {
+        return $this->titlep;
+    }
+
+    /**
      * Return instruction hash
      * @return string
      */
@@ -92,6 +102,16 @@ class Dotpay_Instruction extends Dotpay_Payment {
     public function getBankAccount() {
         return $this->bankAccount;
     }
+
+   /**
+     * Return bank account, if instruction applies to transfer method
+     * @return string|null
+     */
+    public function getRecipientName() {
+        return $this->RecipientName;
+    }
+    
+
 
     /**
      * Return amount
@@ -148,6 +168,16 @@ class Dotpay_Instruction extends Dotpay_Payment {
     }
 
     /**
+     * Set instruction title
+     * @param string &titlep instruction title
+     * @return \Dotpay_Instruction
+     */
+    public function setTitlep($titlep) {
+        $this->titlep = $titlep;
+        return $this;
+    }
+
+    /**
      * Set instruction hash
      * @param string $hash instruction hash
      * @return \Dotpay_Instruction
@@ -176,6 +206,18 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->bankAccount = $bankAccount;
         return $this;
     }
+
+    /**
+     * Set bank account recipient name
+     * @param string $bankAccount bank account recipient name
+     * @return \Dotpay_Instruction
+     */
+    public function setRecipientName($recipientName) {
+        $this->RecipientName = $recipientName;
+        return $this;
+    }
+
+    
 
     /**
      * Set amount
@@ -253,17 +295,51 @@ class Dotpay_Instruction extends Dotpay_Payment {
                     `instruction_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
                     `order_id` INT UNSIGNED NOT NULL,
                     `number` varchar(64) NOT NULL,
-                    `hash` varchar(128) NOT NULL,
+                    `titlep` varchar(128) NOT NULL,
+                    `hash` varchar(64) NOT NULL,
                     `is_cash` TINYINT NOT NULL,
                     `bank_account` VARCHAR(64),
                     `amount` decimal(10,2) NOT NULL,
                     `currency` varchar(3) NOT NULL,
                     `channel` INT UNSIGNED NOT NULL,
+                    `name` varchar(128) NOT NULL,
                     PRIMARY KEY (`instruction_id`)
                 ) DEFAULT CHARSET=utf8;';
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
+        
+       
+     
+            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+            dbDelta( $sql );
+            		
+			/*@ Add name and titlep columns if not exist */
+			$dbname = $wpdb->dbname;
+
+			$marks_table_name = $wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME;
+
+			 // for column 'titlep'	
+			 $is_status_col1 = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '".$marks_table_name."' AND `TABLE_SCHEMA` = '".$dbname."' AND `COLUMN_NAME` = 'titlep'"  );
+
+            if( empty($is_status_col1) )
+            {
+				$add_status_column1 = "ALTER TABLE `".$marks_table_name."` ADD `titlep` VARCHAR(128) NOT NULL AFTER `number`; ";
+				$wpdb->query( $add_status_column1 );
+
+            }
+
+			
+			// for column 'name' 
+			$is_status_col2 = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '".$marks_table_name."' AND `TABLE_SCHEMA` = '".$dbname."' AND `COLUMN_NAME` = 'name'"  );
+
+            if( empty($is_status_col2) )
+            {
+				$add_status_column2 = "ALTER TABLE `".$marks_table_name."` ADD `name` VARCHAR(128) NOT NULL AFTER `channel`; ";
+				$wpdb->query( $add_status_column2 );
+            }
+			
+			
     }
+
 
     /**
      * Remove table
@@ -289,10 +365,13 @@ class Dotpay_Instruction extends Dotpay_Payment {
             FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.'`
             WHERE order_id = '.(int)$orderId
         );
-        if(!is_array($result)) {
-            return NULL;
+
+        // if (!is_array($result)) {
+		if(!is_array($result)  || count($result) <1) {
+            return null;
         }
-        return new Dotpay_Instruction($result[count($result)-1]->id);
+            return new Dotpay_Instruction($result[count($result)-1]->id);          
+  
     }
 
     /**
@@ -347,13 +426,15 @@ class Dotpay_Instruction extends Dotpay_Payment {
                 $wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME,
                 array(
                     'order_id' => $this->orderId,
-                    'number' => $this->number,
+                    'number' => substr($this->number,0,64),
+                    'titlep' => substr($this->titlep,0,128),
                     'hash' => $this->hash,
                     'is_cash' => $this->isCash,
                     'bank_account' => $this->bankAccount,
                     'amount' => $this->amount,
                     'currency' => $this->currency,
-                    'channel' => $this->channel
+                    'channel' => $this->channel,
+                    'name' => substr($this->RecipientName,0,128)
                 ),
                 array(
                     '%d',
@@ -363,7 +444,9 @@ class Dotpay_Instruction extends Dotpay_Payment {
                     '%s',
                     '%s',
                     '%s',
-                    '%d'
+                    '%s',
+                    '%d',
+                    '%s'
                 )
             );
         } else {
@@ -371,13 +454,15 @@ class Dotpay_Instruction extends Dotpay_Payment {
                 $wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME,
                 array(
                     'order_id' => $this->orderId,
-                    'number' => $this->number,
+                    'number' => substr($this->number,0,64),
+                    'titlep' => substr($this->titlep,0,128),
                     'hash' => $this->hash,
                     'is_cash' => $this->isCash,
                     'bank_account' => $this->bankAccount,
                     'amount' => $this->amount,
                     'currency' => $this->currency,
-                    'channel' => $this->channel
+                    'channel' => $this->channel,
+                    'name' => substr($this->RecipientName,0,128)
                 ),
                 array('instruction_id' => $this->instructionId),
                 array(
@@ -388,7 +473,9 @@ class Dotpay_Instruction extends Dotpay_Payment {
                     '%s',
                     '%s',
                     '%s',
-                    '%d'
+                    '%s',
+                    '%d',
+                    '%s'
                 ),
                 array('%d')
             );
@@ -426,9 +513,11 @@ class Dotpay_Instruction extends Dotpay_Payment {
         $this->hash = $result->hash;
         $this->isCash = $result->is_cash;
         $this->number = $result->number;
+        $this->titlep = $result->titlep;
         $this->orderId = $result->order_id;
         $this->bankAccount = $result->bank_account;
         $this->instructionId = $result->instruction_id;
+        $this->RecipientName = $result->name;
     }
     /**
      * Return path to the image with channel logo

@@ -69,22 +69,42 @@ class Gateway_Transfer extends Gateway_Gateway {
 		    $orderId = $this->getOrder()->get_id();
 	    } else {
 		    return __('Payment can not be created', 'dotpay-payment-gateway');
-	    }
-	    $instruction = Dotpay_Instruction::getByOrderId($orderId);
-    	if(null === $instruction->getInstructionId()) {
-		    $instruction = $this->processPayment();
-	    }
-
-        if($instruction!=null && $instruction->getInstructionId()!= null) {
-	        $page = $instruction->getPage();
-            return $page;
         }
+
+        global $wpdb;
+        $result = $wpdb->get_results('
+            SELECT instruction_id as id
+            FROM `'.$wpdb->prefix.DOTPAY_GATEWAY_INSTRUCTIONS_TAB_NAME.'`
+            WHERE order_id = '.(int)$orderId
+            
+        );
+     
+        if(!is_array($result)  || count($result) <1) {
+           // $instruction = null;
+            $instruction = $this->processPayment();
+            
+            if($instruction ==null && $instruction->getInstructionId()== null) 
+            {
+                return __('Payment can not be created', 'dotpay-payment-gateway');
+            }
+            
+        }else {
+            $instruction = Dotpay_Instruction::getByOrderId($orderId);
+        }
+
+        if($instruction !=null && $instruction->getInstructionId()!= null) {
+            $page = $instruction->getPage();
+            
+
+            return $page;
+        } else {
+            return __('Payment not exist', 'dotpay-payment-gateway');
+        }
+
 	    $this->forgetChannel();
 	    $this->forgetOrder();
-        if ($instruction == false){
-            return __('Payment can not be created', 'dotpay-payment-gateway');
-        }
-        return __('Payment not exist', 'dotpay-payment-gateway');
+
+
     }
 
     /**
@@ -124,9 +144,14 @@ class Gateway_Transfer extends Gateway_Gateway {
             $instruction->setChannel($payment['operation']['payment_method']['channel_id']);
             if(isset($payment['instruction']['recipient'])) {
                 $instruction->setBankAccount($payment['instruction']['recipient']['bank_account_number']);
+                $instruction->setRecipientName($payment['instruction']['recipient']['name']);
+                $instruction->setTitlep($payment['instruction']['title']);
+            }else{
+            $instruction->setTitlep($payment['operation']['number']);
             }
             $instruction->save();
         }
         return $instruction;
     }
+
 }

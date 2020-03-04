@@ -45,7 +45,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.2.9';
+    const MODULE_VERSION = '3.3.0';
 
 
     public static $ocChannel = '248';
@@ -444,7 +444,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
 
         $NewPersonName1 = preg_replace('/[^\p{L}0-9\s\-_]/u',' ',$firstName1);
-        return $this->encoded_substrParams($NewPersonName1,0,50,24);
+        return $this->encoded_substrParams($NewPersonName1,0,49,24);
     }
 
     /**
@@ -464,7 +464,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $lastName1 = html_entity_decode($lastName, ENT_QUOTES, 'UTF-8');
 
         $NewPersonName2 = preg_replace('/[^\p{L}0-9\s\-_]/u',' ',$lastName1);
-        return $this->encoded_substrParams($NewPersonName2,0,50,24);
+        return $this->encoded_substrParams($NewPersonName2,0,49,24);
     }
 
     /**
@@ -498,7 +498,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $phone = str_replace('+', '', $phone);
 
         $NewPhone1 = preg_replace('/[^\+\s0-9\-_]/','',$phone);
-      	return $this->encoded_substrParams($NewPhone1,0,20,6);
+      	return $this->encoded_substrParams($NewPhone1,0,19,6);
     }
 
     /**
@@ -517,7 +517,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $city = preg_replace('/[^.\w \'_-]/u', '', $city);
         $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
 
-        return $this->encoded_substrParams($city1,0,50,24);
+        return $this->encoded_substrParams($city1,0,49,24);
 
     }
 
@@ -542,7 +542,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         }
 
         $NewPostcode1 = preg_replace('/[^\d\w\s\-]/','',$postcode);
-        return $this->encoded_substrParams($NewPostcode1,0,20,6);
+        return $this->encoded_substrParams($NewPostcode1,0,19,6);
 
     }
 
@@ -587,11 +587,19 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         }
 
         if (empty($street_n1)) {
+
             preg_match("/\s[\w\d\/_\-]{0,30}$/", $street1, $matches);
+            
             if (count($matches) > 0) {
                 $street_n1 = trim($matches[0]);
                 $street1 = str_replace($matches[0], '', $street1);
+            }else {
+                 $street_n1 = "0";
+                 $street1 = trim($street1);
             }
+          
+            $building_numberRO = preg_replace('/[^\p{L}0-9\s\-_\/]/u',' ',$street_n1);
+         
         } else{
 
             //allowed only: letters, digits, spaces, symbols _-/'
@@ -608,8 +616,8 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
 
         return array(
-            'street' => $this->encoded_substrParams($street1,0,100,50),
-            'street_n1' => $this->encoded_substrParams($building_numberRO,0,30,24)
+            'street' => $this->encoded_substrParams($street1,0,99,50),
+            'street_n1' => $this->encoded_substrParams($building_numberRO,0,29,24)
         );
     }
 
@@ -629,7 +637,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 		$city = preg_replace('/[^.\w \'_-]/u', '', $city);
         $city1 = html_entity_decode($city, ENT_QUOTES, 'UTF-8');
 
-        return $this->encoded_substrParams($city1,0,50,24);
+        return $this->encoded_substrParams($city1,0,49,24);
 	}
 
 	/**
@@ -665,7 +673,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
         $NewPostcode1 = preg_replace('/[^\d\w\s\-]/','',$postcode1);
 
-        return $this->encoded_substrParams($NewPostcode1,0,20,6);
+        return $this->encoded_substrParams($NewPostcode1,0,19,6);
 
         }
 	}
@@ -701,29 +709,44 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 		$street = preg_replace('/[^.\w \'_-]/u', '', $street);
 		$street1 = html_entity_decode($street, ENT_QUOTES, 'UTF-8');
 
-		if (method_exists($order, 'get_shipping_address_2')) {
+        if (method_exists($order, 'get_shipping_address_2')) 
+        {
 			$street_n1 = esc_attr($order->get_shipping_address_2());
 		} else {
 			$street_n1 = esc_attr($order->shipping_address_2);
 		}
 
-		if (empty($street_n1)) {
+        if (empty($street_n1)) 
+        {
+
 			preg_match("/\s[\w\d\/_\-]{0,30}$/", $street1, $matches);
-			if (count($matches) > 0) {
+            
+            if (count($matches) > 0) {
 				$street_n1 = trim($matches[0]);
 				$street1 = str_replace($matches[0], '', $street1);
-			}
-		}
+			} else {
+                $street_n1 = "0";
+                $street1 = trim($street1);
+            }
 
-		if (!empty($street_n1)) {
-			$building_numberRO = $street_n1;
-		} else {
-			$building_numberRO = " ";  //this field may not be blank in register order
-		}
+            $building_numberRO = preg_replace('/[^\p{L}0-9\s\-_\/]/u',' ',$street_n1);
+        
+        } else {
+
+
+            $NewStreet_n1a = preg_replace('/[^\p{L}0-9\s\-_\/]/u',' ',$street_n1);
+
+            if (!empty($NewStreet_n1a)) {
+            $building_numberRO = $NewStreet_n1a;
+            }else{
+            $building_numberRO = "0";
+            }
+
+}
 
 		return array(
-          'street' => $this->encoded_substrParams($street1,0,100,50),
-          'street_n1' => $this->encoded_substrParams($building_numberRO,0,30,24)
+          'street' => $this->encoded_substrParams($street1,0,99,50),
+          'street_n1' => $this->encoded_substrParams($building_numberRO,0,29,24)
 		);
 	}
 
@@ -745,7 +768,9 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
             'ru',
             'hu',
             'ro',
-            'uk'
+            'uk',
+            'lt',
+            'lv'
         );
     }
 

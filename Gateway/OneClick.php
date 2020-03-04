@@ -79,7 +79,7 @@ class Gateway_OneClick extends Gateway_Gateway {
         $hiddenFields['ch_lock'] = 1;
         $hiddenFields['type'] = 4;
 
-        if($_SESSION['dotpay_form_oc_type'] == 'choose') {
+        if(isset($_SESSION['dotpay_form_oc_type']) && $_SESSION['dotpay_form_oc_type'] == 'choose') {
             $card = Dotpay_Card::getCardById($_SESSION['dotpay_form_saved_card']);
             $hiddenFields['credit_card_id'] = $card->card_id;
             $hash = $card->hash;

@@ -21,7 +21,12 @@
 <section id="instruction">
     <div class="row">
         <div class="col-xs-12">
+        <?php if($this->getChannel() == 11) { ?>
+            <p id="instruction-content"><?php echo __('To complete the payment you have to make a money transfer giving the following data:', 'dotpay-payment-gateway'); ?></p>
+        <?php } else { ?>
             <p id="instruction-content"><?php echo __('To pay by cash you need login to your bank system and make a money transfer, entering the following data:', 'dotpay-payment-gateway'); ?></p>
+            <?php } ?>
+
         </div>
         <div class="col-md-6">
             <?php if($this->getBankAccount()!=null): ?>
@@ -39,13 +44,13 @@
             </label>
             <label class="row">
                 <?php echo __('Title of payment', 'dotpay-payment-gateway'); ?>
-                <input type="text" class="important" id="payment-title" value="<?php echo $this->getNumber(); ?>" />
+                <input type="text" class="important" id="payment-title" value="<?php echo $this->getTitlep(); ?>" />
             </label>
         </div>
         <div class="col-md-6">
             <label class="row">
                 <?php echo __('Name of recipient', 'dotpay-payment-gateway'); ?>
-                <input type="text" class="important" id="recipient" value="<?php echo $this->getRecipient(); ?>" />
+                <input type="text" class="important" id="recipient" value="<?php if(trim($this->getRecipientName()) !== ""){ echo $this->getRecipientName();}else{ echo $this->getRecipient();} ?>" />
             </label>
             <label class="row">
                 <?php echo __('Street', 'dotpay-payment-gateway'); ?>
@@ -59,6 +64,11 @@
     </div>
     <div class="row">
         <section id="payment-form" class="col-xs-12">
+        <?php if($this->getChannel() == 11) { ?>
+            <p id="instruction-content"><?php echo __('In order to pay by cash (e.g. via post office or bank outpost) you may download the payment form:', 'dotpay-payment-gateway'); ?></p>
+        
+        <?php } ?>
+
             <div id="blankiet-download-form">
                 <div id="channel_container_confirm">
                     <a href="<?php echo $this->getAddress(); ?>" target="_blank" title="<?php echo $this->getCommand(); ?>">
@@ -71,7 +81,14 @@
             </div>
         </section>
         <div class="col-xs-12">
+
+        <?php if($this->getChannel() == 11) { ?>
+            <p class="alert alert-alert"><?php echo __('WARNING! This data can be use only for a regular bank transfer. Use of this data in a VAT split payment transfer will not result as an effective payment.', 'dotpay-payment-gateway'); ?></p>
+        <?php } else { ?>
             <p class="alert alert-info"><?php echo __('Not following the above procedure (e.g. changing the amount or payment title) will make your payment not handled automatically, and therefore lengthen finalization time of the transaction.', 'dotpay-payment-gateway'); ?></p>
+            <?php } ?>
+
+
         </div>
     </div>
 </section>
