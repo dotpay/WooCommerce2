@@ -71,10 +71,10 @@
 <?php include(__DIR__.'/agreements.phtml'); ?>
 <script type="text/javascript">
 //change description style in payment method
-jQuery(document).ready(function(){
-    jQuery('label[for^=payment_method_dotpay i]').html(function(i, h){
-        return h.replace(/\(([^\)]+)\)/, "<small>( $1 )</small>");
-    });
+    jQuery(document).ready(function(){
+            jQuery("label[for='payment_method_dotpay'], label[for*='payment_method_Dotpay']").html(function(i, h){
+            return h.replace(/\(([^\)]+)\)/, "<small>( $1 )</small>");
+        });
 
-});
+    });
 </script>
