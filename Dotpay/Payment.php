@@ -45,7 +45,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.3.1';
+    const MODULE_VERSION = '3.4.0';
 
 
     public static $ocChannel = '248';
@@ -58,10 +58,70 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
 
 
-
     private $orderObject = null;
     private $orderId = null;
 
+
+	/**
+     * Returns correct SERVER NAME or HOSTNAME
+     * @return string
+     */
+    public function getHost()
+    {
+
+		$possibleHostSources = array('HTTP_X_FORWARDED_HOST', 'HTTP_HOST', 'SERVER_NAME', 'SERVER_ADDR');
+		$sourceTransformations = array(
+			"HTTP_X_FORWARDED_HOST" => function($value) {
+				$elements = explode(',', $value);
+				return trim(end($elements));
+			}
+		);
+		$host = '';
+		foreach ($possibleHostSources as $source)
+		{
+			if (!empty($host)) break;
+			if (empty($_SERVER[$source])) continue;
+			$host = $_SERVER[$source];
+			if (array_key_exists($source, $sourceTransformations))
+			{
+				$host = $sourceTransformations[$source]($host);
+			}
+		}
+
+		// Remove port number from host
+		$host = preg_replace('/:\d+$/', '', $host);
+
+		return trim($host);
+
+    }
+
+	 /**
+	 * The validator checks if the given URL address is correct.
+	 */
+	public function validateHostname($value)
+    {
+        return (bool) preg_match('/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,10}$/', $value);
+    }
+
+
+     /**
+     * Return real HOSTNAME this server
+     * @return string
+     */   
+    public function realHostName() 
+    {
+        $server_name = '';
+
+        if ($this->validateHostname($this->getHost()))
+        {
+            $server_name = $this->getHost();
+        } else {
+            $server_name = "HOSTNAME";
+        }
+
+        return $server_name;
+
+    }
 
 
     /**
@@ -191,6 +251,22 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     }
 
     /**
+     * Return flag, if shop ID is correct pattern
+     * @return boolean
+     */
+    public function isIDshopCorrectPattern()
+    {
+        $result = false;
+        if (preg_match("/^\d{6}$/", trim($this->get_option('id')))) { 
+            $result = true;
+        }
+
+        return $result;
+    }
+
+
+
+    /**
      * Return url to Dotpay payment server
      * @return string
      */
@@ -213,7 +289,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     {
         $order = $this->getOrder();
         if ($full == 'full') {
-            return $this->getLegacyOrderId($order) . '|domain:' . $_SERVER['SERVER_NAME'] . '|WC-module:' . self::MODULE_VERSION;
+            return $this->getLegacyOrderId($order) . '|domain:' . $this->realHostName() . '|WC-module:' . self::MODULE_VERSION;
         } else {
             return $this->getLegacyOrderId($order);
         }
@@ -225,7 +301,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
      */
     public function getPinfo()
     {
-        return __('Shop - ', 'dotpay-payment-gateway') . $_SERVER['HTTP_HOST'];
+        return __('Shop - ', 'dotpay-payment-gateway') . $this->realHostName();
     }
 
     /**
@@ -275,13 +351,69 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         return get_woocommerce_currency();
     }
 
+
+
+
+/**
+ *  Return the product's title. For products this is the product name.
+ * @return array
+ */
+
+public function CartProductName(){
+
+    global $woocommerce;
+    $items = $woocommerce->cart->get_cart();
+    $product_title = array();
+        foreach($items as $item => $values) { 
+            $_product =  wc_get_product( $values['data']->get_id() );
+            $product_title[] = $_product->get_title(); 
+        }
+        
+
+        return  $product_title;
+
+} 
+
+
+/**
+ * Return  Product name for only 1 product in the cart
+ * @return string
+ */
+public function getProductName()
+{
+    $name = "";
+
+    if(is_array($this->CartProductName()))
+    {
+        if(count($this->CartProductName()) == 1 && isset($this->CartProductName()[0])) {
+            
+            $name_1 = esc_attr($this->CartProductName()[0]);
+            $name_2 = preg_replace('/[^\p{L}0-9\s\-_\/\(){}\.;]/u','',$name_1);
+            $name_3 = html_entity_decode($name_2, ENT_QUOTES, 'UTF-8');
+
+            $name = " - ( ".$this->encoded_substrParams($name_3,0,90,60) ." )";
+
+        } else {
+            $name = "";
+        }
+    }else {
+        $name = "";
+    }
+
+    return $name;
+
+}
+
+
     /**
      * Return payment description
      * @return string
      */
     public function getDescription()
-    {
-        return __('Order ID: ', 'dotpay-payment-gateway') . esc_attr($this->getLegacyOrderId($this->getOrder()));
+    {   
+        $description = __('Order ID: ', 'dotpay-payment-gateway') . esc_attr($this->getLegacyOrderId($this->getOrder())).$this->getProductName();
+
+        return $description;
     }
 
     /**
@@ -834,15 +966,16 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
      */
     public function getDotpayChannels($amount)
     {
-		//$this->logme($amount);
-		if($amount == 0)
+        //$this->logme($amount);
+        $dotpay_id = $this->get_option('id');
+
+		if($amount == 0 || preg_match('/^\d{6}$/', trim($dotpay_id)) == 0)
 		{
 			return false;
-		}
+        }
+        
         $dotpay_url = $this->getPaymentChannelsUrl();
         $payment_currency = $this->getCurrency();
-
-        $dotpay_id = $this->get_option('id');
 
         $order_amount = $this->getFormatAmount($amount);
 	    if(!empty($_SESSION['dotpay_payment_channels_cache'][$order_amount]))
@@ -945,6 +1078,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         return $resultStr;
     }
 
+
     /**
      * Returns channel name
      * @param type $id channel id
@@ -1039,6 +1173,18 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         $_SESSION['dotpay_payment_order_id'] = $orderId;
     }
 
+        /**
+     * Persist one product name
+     * @param int $productName - name of 1 product
+     */
+    protected function setOneProductName($productName)
+    {
+        $_SESSION['dotpay_payment_one_product_name'] = $productName;
+    }
+
+
+    
+
     /**
      * Return order object with last order
      * @return WC_Order
@@ -1062,6 +1208,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     protected function forgetOrder()
     {
         unset($_SESSION['dotpay_payment_order_id']);
+        unset($_SESSION['dotpay_payment_one_product_name']); 
         $this->orderObject = null;
         $this->orderId = null;
     }
@@ -1109,10 +1256,12 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
         }
     }
 
+
+/*
 //only for developers
-    /*public function logme($log)
+   public function logme($log)
     {
-	    file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
+	    file_put_contents('./log_'.date("j.n.Y").'.txt', date("H:i:s")."\n".$log."\n", FILE_APPEND);
     }
 */
 }

@@ -60,6 +60,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     const transferGroup = 'transfers';
 
+
+
     /**
      * Prepare gateway
      */
@@ -139,6 +141,10 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $order = new WC_Order($order_id);
         $woocommerce->cart->empty_cart();
         $this->setOrderId($order_id);
+        
+        if (isset($_SESSION['dotpay_payment_one_product_name'])) {
+            $this->setOneProductName($_SESSION['dotpay_payment_one_product_name']);
+        }
 
         $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
         
@@ -194,8 +200,16 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             die(__('Order not found', 'dotpay-payment-gateway'));
         }
         $this->setOrderId($_SESSION['dotpay_payment_order_id']);
+
         if(trim($this->getUrl()) == null){
             $url_return = $this->dotpay_install_missing_pages();
+        }
+
+        if (isset($_SESSION['dotpay_payment_one_product_name']) && $this->isProductNameTitleEnabled() == true) {
+            $this->setOneProductName($_SESSION['dotpay_payment_one_product_name']);
+            $new_description = $this->getDescription().$_SESSION['dotpay_payment_one_product_name'];
+        }else{
+            $new_description = $this->getDescription();
         }
 
         $streetData = $this->getStreetAndStreetN1();
@@ -206,7 +220,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'p_info' => $this->getPinfo(),
             'amount' => $this->getOrderAmount(),
             'currency' => $this->getCurrency(),
-            'description' => $this->getDescription(),
+            'description' => $new_description,
             'lang' => $this->getPaymentLang(),
             'url' => $this->getUrl(),
             'urlc' => $this->getUrlC(),
@@ -243,6 +257,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function getHiddenFields() {
         $data = $this->getDataForm();
         $this->forgetChannel();
+        $this->forgetProductName();
         $data['chk'] = $this->generateCHK($this->getSellerId(), $this->getSellerPin(), $data);
         return $data;
     }
@@ -384,6 +399,21 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         return $result;
     }
 
+
+        /**
+     * Return flag, if  product name in payment title enabled
+     * @return boolean
+     */
+    protected function isProductNameTitleEnabled() {
+        $result = false;
+        if ('yes' == $this->get_option('productname')) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+
     /**
      * Return flag, if One Click is enabled
      * @return boolean
@@ -410,19 +440,24 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         return $result;
     }
 
+
+
     /**
      * Return flag, if PayPo is enabled
      * @return boolean
      */
-    protected function isPayPoEnabled() {
+    protected function isPayPoEnabled($cartAmountTotal=0) {
+
         $result = false;
-        if ('yes' == $this->get_option('paypo_show')) {
+
+        if ('yes' == $this->get_option('paypo_show') ) {    
             $result = true;
         }
 
         return $result;
     }
 
+   
 
     /**
      * Return flag, if Credit card PV is enabled
@@ -800,39 +835,43 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         return $this->isEnabled();
     }
 
-    protected function checkConfirmSign() {
-        $signature = $this->getSellerPin().$this->getSellerId().
-        $this->getParam('operation_number').
-        $this->getParam('operation_type').
-        $this->getParam('operation_status').
-        $this->getParam('operation_amount').
-        $this->getParam('operation_currency').
-        $this->getParam('operation_withdrawal_amount').
-        $this->getParam('operation_commission_amount').
-        $this->getParam('is_completed').
-        $this->getParam('operation_original_amount').
-        $this->getParam('operation_original_currency').
-        $this->getParam('operation_datetime').
-        $this->getParam('operation_related_number').
-        $this->getParam('control').
-        $this->getParam('description').
-        $this->getParam('email').
-        $this->getParam('p_info').
-        $this->getParam('p_email').
-        $this->getParam('credit_card_issuer_identification_number').
-        $this->getParam('credit_card_masked_number').
-        $this->getParam('credit_card_expiration_year').
-        $this->getParam('credit_card_expiration_month').
-        $this->getParam('credit_card_brand_codename').
-        $this->getParam('credit_card_brand_code').
-        $this->getParam('credit_card_unique_identifier').
-        $this->getParam('credit_card_id').
-        $this->getParam('channel').
-        $this->getParam('channel_country').
-        $this->getParam('geoip_country').
-        $this->getParam('payer_bank_account_name').
-        $this->getParam('payer_bank_account').
-        $this->getParam('payer_transfer_title');
+    protected function checkConfirmSign() 
+    {
+       $signature = $this->getSellerPin().$this->getSellerId().
+                    $this->getParam('operation_number').
+                    $this->getParam('operation_type').
+                    $this->getParam('operation_status').
+                    $this->getParam('operation_amount').
+                    $this->getParam('operation_currency').
+                    $this->getParam('operation_withdrawal_amount').
+                    $this->getParam('operation_commission_amount').
+                    $this->getParam('is_completed').
+                    $this->getParam('operation_original_amount').
+                    $this->getParam('operation_original_currency').
+                    $this->getParam('operation_datetime').
+                    $this->getParam('operation_related_number').
+                    $this->getParam('control').
+                    $this->getParam('description').
+                    $this->getParam('email').
+                    $this->getParam('p_info').
+                    $this->getParam('p_email').
+                    $this->getParam('credit_card_issuer_identification_number').
+                    $this->getParam('credit_card_masked_number').
+                    $this->getParam('credit_card_expiration_year').
+                    $this->getParam('credit_card_expiration_month').
+                    $this->getParam('credit_card_brand_codename').
+                    $this->getParam('credit_card_brand_code').
+                    $this->getParam('credit_card_unique_identifier').
+                    $this->getParam('credit_card_id').
+                    $this->getParam('channel').
+                    $this->getParam('channel_country').
+                    $this->getParam('geoip_country').
+                    $this->getParam('payer_bank_account_name').
+                    $this->getParam('payer_bank_account').
+                    $this->getParam('payer_transfer_title').
+                    $this->getParam('blik_voucher_pin').
+                    $this->getParam('blik_voucher_amount').
+                    $this->getParam('blik_voucher_amount_used');
 
         return ($this->getParam('signature') == hash('sha256', $signature));
     }
@@ -895,4 +934,13 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     protected function forgetChannel() {
         unset($_SESSION['dotpay_payment_channel']);
     }
+
+        /**
+     * Forget product name
+     */
+    protected function forgetProductName() {
+        unset($_SESSION['dotpay_payment_one_product_name']);
+    }
+
+
 }

@@ -3,7 +3,7 @@
 /**
   * @wordpress-plugin
   * Plugin Name: WooCommerce Dotpay Gateway
-  * Version: 3.3.1
+  * Version: 3.4.0
   * Plugin URI: https://github.com/dotpay/WooCommerce2
   * Description: Fast and secure Dotpay payment gateway for WooCommerce
   * Author: Dotpay (tech@dotpay.pl)
@@ -13,7 +13,7 @@
   * License:     (AFL 3.0)
   *
   * WC requires at least: 3.2.0
-  * WC tested up to: 3.6.1
+  * WC tested up to: 3.6.1 -> 4.1.0
   *
   * NOTICE OF LICENSE
   *
@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.3.1';
+		$thisVersionModule = '3.4.0';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -119,10 +119,15 @@ function wc_dotpay_settings_link($links) {
  					'code_response' => $response_code['http_code']
  				);
  }
+
+
+$git_latest_version_plugin = getLatestVersionDotpayModule();
+
+
 /*
  *  Dotpay Module version compare
  */
-       if (!version_compare($thisVersionModule, getLatestVersionDotpayModule()['version'], $operator) ) {
+       if (!version_compare($thisVersionModule, $git_latest_version_plugin['version'], $operator) ) {
            add_action( "admin_notices", "noticeDotModule" );
        }
 
@@ -131,17 +136,23 @@ function wc_dotpay_settings_link($links) {
  */
        function noticeDotModule()
        {
-       		global $thisVersionModule, $operator;
+               global $thisVersionModule, $git_latest_version_plugin;
+               
 
-			if(getLatestVersionDotpayModule()['code_response'] != 200){
-				 print '<br><br><div class="notice is-dismissible notice-warning notice-alt"><p>'.__('Attention! There is a temporary problem with checking information about latest version of the Dotpay payment module','dotpay-payment-gateway').' (error: '.getLatestVersionDotpayModule()['code_response'].').
-				 <br>'.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Dotpay Gateway v'.$thisVersionModule.'</b>
-                 <br>'.__('You can check manually and download latest version and upgrade from this address:','dotpay-payment-gateway').' <a href="https://github.com/dotpay/WooCommerce2/releases/latest" title="'.__('check if there is a new version of Dotpay payment plugin','dotpay-payment-gateway').'" target="_blank">'.__('WooCommerce Dotpay payment module','dotpay-payment-gateway').'</a></p></div>';
-			}else{
-				print '<br><br><div class="update-message notice inline notice-warning notice-alt"><p>
-				'.__('Attention! A new version of the Dotpay payment module is available:','dotpay-payment-gateway').' '.getLatestVersionDotpayModule()['version'].'. '.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Dotpay Gateway v'.$thisVersionModule.'</b>
-				<br><b>'.__('Download latest version and upgrade manually this:','dotpay-payment-gateway').' <a href="'.getLatestVersionDotpayModule()['url'].'" class="update-link" aria-label="'.__('Upgrade WooCommerce Dotpay Gateway','dotpay-payment-gateway').'">'.getLatestVersionDotpayModule()['version'].'</b></a></p></div>';
-			}
+                    $git_code_response = $git_latest_version_plugin['code_response'];
+                    $dp_module_new_version_git = $git_latest_version_plugin['version'];
+                    $dp_module_git_url = $git_latest_version_plugin['url'];
+
+
+                    if($git_code_response != 200){
+                        print '<br><br><div class="notice is-dismissible notice-warning notice-alt"><p>'.__('Attention! There is a temporary problem with checking information about latest version of the Dotpay payment module','dotpay-payment-gateway').' (error: '.$git_code_response.').
+                        <br>'.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Dotpay Gateway v'.$thisVersionModule.'</b>
+                        <br>'.__('You can check manually and download latest version and upgrade from this address:','dotpay-payment-gateway').' <a href="https://github.com/dotpay/WooCommerce2/releases/latest" title="'.__('check if there is a new version of Dotpay payment plugin','dotpay-payment-gateway').'" target="_blank">'.__('WooCommerce Dotpay payment module','dotpay-payment-gateway').'</a></p></div>';
+                    }else{
+                        print '<br><br><div class="update-message notice inline notice-warning notice-alt"><p>
+                        '.__('Attention! A new version of the Dotpay payment module is available:','dotpay-payment-gateway').' '.$dp_module_new_version_git.'. '.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Dotpay Gateway v'.$thisVersionModule.'</b>
+                        <br><b>'.__('Download latest version and upgrade manually this:','dotpay-payment-gateway').' <a href="'.$dp_module_git_url.'" class="update-link" aria-label="'.__('Upgrade WooCommerce Dotpay Gateway','dotpay-payment-gateway').'">'.$dp_module_new_version_git.'</b></a></p></div>';
+                    }
 	   }
 
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__);

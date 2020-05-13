@@ -1,3 +1,17 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <?php if((bool)$this->isTestMode()) echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
+<script type = "text/javascript" >
+    if (typeof jQuery != 'undefined') {
+        jQuery(document).ready(function () {
+
+            
+                var CartAmountTotal = <?php echo $this->getAmountForWidget() ; ?>;
+                if (CartAmountTotal < 40 || CartAmountTotal > 1000) {
+                    console.log('PayPo channel: disabled -> wrong amount (not in range 40 - 1000): ' + CartAmountTotal);
+                    jQuery('ul > .payment_method_Dotpay_paypo').remove();
+                }
+            });
+    };
+
+ </script>       

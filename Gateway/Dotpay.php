@@ -48,12 +48,19 @@ class Gateway_Dotpay extends Gateway_Gateway {
     protected function getDataForm() {
         $hiddenFields = parent::getDataForm();
         if($this->isWidgetEnabled()) {
-            $hiddenFields['channel'] = $this->getChannel();
-            $hiddenFields['type'] = '4';
+            $channel = trim($this->getChannel());
+            if($channel == "" || $channel == 0){
+                $hiddenFields['type'] = '4';
+            }else{
+                $hiddenFields['channel'] = (int)$this->getChannel();
+                $hiddenFields['type'] = '4';
+            }
+
         }
         return $hiddenFields;
     }
 
+    
     public function getFormPath() {
         return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/standard.phtml';
     }
@@ -140,7 +147,12 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'type' => 'checkbox',
                 'default' => 'yes'
             ),
-
+            'productname' => array(
+                'title' => __('Show product name in payment title', 'dotpay-payment-gateway'),
+                'label' => __('If there is only one product in the cart - show its name in the transaction description.', 'dotpay-payment-gateway'),
+                'type' => 'checkbox',
+                'default' => 'yes'
+            ),
             'ccPV_show' => array(
                 'title' => '<span style="color: #0073AA;">'.__('Separate Dotpay account for currencies (EUR, USD or GBP)', 'dotpay-payment-gateway').'</span>',
                 'type' => 'checkbox',
@@ -336,6 +348,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
      * @return array
      */
     protected function getDisabledChannelsList() {
+
         $dChannels = array();
         if($this->isOneClickEnabled())
             $dChannels[] = self::$ocChannel;

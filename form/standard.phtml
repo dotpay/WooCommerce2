@@ -1,49 +1,84 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<?php if($this->isWidgetEnabled() && $this->isMainChannelEnabled()): ?>
+<?php if((bool)$this->isWidgetEnabled() && $this->isMainChannelEnabled() && (bool)$this->isIDshopCorrectPattern() ): ?>
 <style>
     <?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>
+<div id="dp_additional_info"></div>
 <script type="text/javascript">
+        //check if browser supported apple pay
+        function isSupportedApplePay() {
+                return window.ApplePaySession && ApplePaySession.canMakePayments()
+            }
+				if (!isSupportedApplePay()) {
+                    //alert('APPLE PAY NOT SUPPORTED');
+                    var channel_apple = 262; //number of channel apple pay in Dotpay
+                }else {
+                    var channel_apple = '';
+                }
+
     var dotpayWidgetConfig = {
         sellerAccountId: '<?php echo $this->getSellerId(); ?>',
         amount: '<?php if($this->getAmountForWidget() > 0) {echo $this->getAmountForWidget();}else{ echo '100.00';} ?>',
         currency: '<?php echo $this->getCurrency(); ?>',
         lang: '<?php echo $this->getPaymentLang(); ?>',
-        widgetFormContainerClass: 'my-form-widget-container',
+        widgetFormContainerClass: 'dotpay-form-widget-container',
         offlineChannel: 'mark',
         offlineChannelTooltip: true,
-		    channelNameVisibility: '<?php echo $this->getChannelNameVisiblity(); ?>',
+		channelNameVisibility: '<?php echo $this->getChannelNameVisiblity(); ?>',
         disabledChannels: [<?php echo $this->getDisabledChannelsList(); ?>],
         host: '<?php echo $this->getPaymentChannelsUrl(); ?>'
     };
 
+    dotpayWidgetConfig.disabledChannels.push(channel_apple);
+
+   var dp_empty_channel = '<?php echo "<ul class=\"woocommerce-error\" role=\"alert\" id=\"dotpay_empty_channel\"><li data-id=\"dotpay_empty_channel\"><strong>". __('No payment channel selected!', 'dotpay-payment-gateway'). "</strong><br>". __('You must select one of the available payment channels to continue payment.', 'dotpay-payment-gateway'). "</li></ul>"; ?>';
+   
+   var dp_no_channels = '<?php echo "<p style=\"font-size:1em;text-align:center;color:#2f2f97;padding:20px;border-radius:3px \" class=\"Nochannels\"><strong>".__('There are no payment methods available in this area.', 'dotpay-payment-gateway')."<br>".__('You will be able to choose the payment method after being redirected to the Dotpay payment operator.', 'dotpay-payment-gateway')."</strong><br><small>".__('Or choose a different payment method.', 'dotpay-payment-gateway')."</small></p>"; ?>';
+
 	//make the widget show only chosen payment channel
 	//showing selected
     if (typeof jQuery != 'undefined') {
+
         setTimeout(function(){
              jQuery('.channel-container').on('click', function () {
 				 jQuery('.channels-wrapper').css('text-align','center');
-                 jQuery('.selected').clone().insertBefore('.dotpay-channels-selection').addClass('cloned');
+                 jQuery('.selected').clone().insertBefore('.dotpay-channels-selection').addClass('dp_cloned');
                  jQuery('.dotpay-channels-selection').slideUp('600', 'swing');
-				 jQuery('<?php echo "<br><p style=\"font-size:1.2em;text-align:center;color:#1515c4;padding:20px;border-radius:3px \"> <strong>".__('To select different channel click the above icon again', 'dotpay-payment-gateway')."</strong></p>"; ?>').insertAfter('.cloned').addClass('channelSelect');
-				 jQuery('.channelSelect').not(':last').remove();
-				 jQuery('.cloned').not(':last').remove();
+                 jQuery('<?php echo "<br><p style=\"font-size:1.2em;text-align:center;color:#2f2f97;padding:20px;border-radius:3px \"> <strong>".__('To select different channel click the above icon again', 'dotpay-payment-gateway')."</strong></p>"; ?>').insertAfter('.dp_cloned').addClass('channelSelect');
+                 jQuery('<?php echo "<p style=\"font-size:1.2em;text-align:center;color:#3a3a3a;padding:20px; \"> <strong>".__('Selected', 'dotpay-payment-gateway') ; ?>: <span style=\"color:#881920;\">' + jQuery('div.channel-container.selected.dp_cloned > div.image-container > img').attr("title") + '</span></strong></p>').insertBefore('.dp_cloned').addClass('channelSelectTXT');
+                 jQuery('.channelSelect').not(':last').remove();
+                 jQuery('.channelSelectTXT').not(':last').remove();
+                 jQuery('.dp_cloned').not(':last').remove();
+                 jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+                 jQuery('#dotpay_empty_channel').remove();
+                 console.log('selected: ' + jQuery('div.channel-container.selected.dp_cloned > div.image-container > img').attr("title"));
+
              });}, 1200);
 
 		//showing all, when deselecting previous
         setTimeout(function() {
-             jQuery('.dotpay-channels').on('click', '.cloned', function(){
+             jQuery('.dotpay-channels').on('click', '.dp_cloned', function(){
                     jQuery('.dotpay-channels-selection').slideDown('600','swing');
-                    jQuery('.cloned').toggle().remove();
+                    jQuery('.dp_cloned').toggle().remove();
 					jQuery('.selected').removeClass('selected');
-					jQuery('.channelSelect').remove();
+                    jQuery('.channelSelect').remove();
+                    jQuery('.channelSelectTXT').remove();
 					jQuery('html, body').animate({
 						scrollTop: (jQuery('#payment_method_dotpay').offset().top -100)
 					}, 'fast');
 					jQuery('.channels-wrapper').css('text-align','left');
+                    if(jQuery('div.channel-container.selected.dp_cloned').length < 1) {
+                    jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', true);
+                    console.log('waiting for payment channel selection');
 
+                        if (jQuery('#dotpay_empty_channel').length < 1){
+                        jQuery( "button[name='woocommerce_checkout_place_order']" ).before(dp_empty_channel);
+                        };
+                    };
                  });
         }, 1200);
+        jQuery('.dotpay-channels-selection').not(':last').remove();
+        jQuery('#dotpay_empty_channel').not(':last').remove();             
 
 	}else{
       console.log("\n -------------------------------------------------------------------------------------\n");  	
@@ -52,13 +87,12 @@
 	  console.log("%cOtherwise the Dotpay plugin may not work properly!", "color: red; font-size: 1rem;font-weight: bold;");
 	  console.log("\n -------------------------------------------------------------------------------------\n"); 
     }
-    
-
 
 </script>
+
 <link href="<?php echo $this->getResourcePath(); ?>css/payment_widget.min.css" rel="stylesheet">
-<script id="dotpay-payment-script" src="<?php echo $this->getResourcePath(); ?>js/payment_widget.js"></script>
-<p class="my-form-widget-container"></p>
+<script id="dotpay-payment-script" src="<?php echo $this->getResourcePath(); ?>js/payment_widget.min.js"></script>
+<p class="dotpay-form-widget-container"></p>
 <?php endif; ?>
 <?php if($this->isMainChannelEnabled() != true): ?>
 <script type="text/javascript">
@@ -67,14 +101,88 @@
     };
 </script>
 <?php endif; ?>
-<?php if((bool)$this->isTestMode()) echo "<p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."<br></p>"; ?>
-<?php include(__DIR__.'/agreements.phtml'); ?>
-<script type="text/javascript">
-//change description style in payment method
-    jQuery(document).ready(function(){
-            jQuery("label[for='payment_method_dotpay'], label[for*='payment_method_Dotpay']").html(function(i, h){
-            return h.replace(/\(([^\)]+)\)/, "<small>( $1 )</small>");
-        });
 
-    });
-</script>
+<?php 
+    if((bool)$this->isTestMode() && (bool)$this->isIDshopCorrectPattern()) 
+    {
+        echo "<p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."<br></p>"; 
+    }
+
+    if((bool)$this->isIDshopCorrectPattern()) {    
+        include(__DIR__.'/agreements.phtml');
+    } else {
+        echo "<p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>sentiment_very_dissatisfied</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Incorrect module configuration! Invalid shop ID.', 'dotpay-payment-gateway')."<br></p>"; 
+    }
+?>
+<script type = "text/javascript" >
+    //change description style in payment method
+    jQuery(document).ready(function () {
+            jQuery("label[for='payment_method_dotpay'], label[for*='payment_method_Dotpay']").html(function (i, h) {
+                return h.replace(/\(([^\)]+)\)/, "<small>( $1 )</small>");
+            });
+            var selected_payment_method = jQuery("ul.wc_payment_methods input[type=radio]:checked").val();
+
+            if (selected_payment_method == 'dotpay') {
+                //console.log("dotpay method is clicked");
+                jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+                jQuery("button[name='woocommerce_checkout_place_order']").before(dp_empty_channel);
+                console.log('waiting for payment channel selection');
+
+                  jQuery('p.Nochannels').remove();
+
+                if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 0) {
+                    jQuery('#dp_additional_info').html(dp_no_channels);
+                   
+                    jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+                    jQuery('#dotpay_empty_channel').remove();
+                    jQuery('div.payment_box.payment_method_dotpay > div.dotpay_agreements_container').hide();
+
+                }else{
+                    jQuery('.dotpay_agreements_container').show();
+                }
+
+            }
+            jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
+                    if (this.checked) {
+                        if (this.value == 'dotpay') {
+                            jQuery('p.Nochannels').remove();
+
+                            if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 0) {
+                                jQuery('#dp_additional_info').html(dp_no_channels);
+                                jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+                                jQuery('#dotpay_empty_channel').remove();
+                                jQuery('div.payment_box.payment_method_dotpay > div.dotpay_agreements_container').hide();
+                            } else {
+
+                                jQuery('.dotpay_agreements_container').show();
+
+                                if (jQuery('div.channel-container.selected.dp_cloned').length < 1) {
+                                    jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+                                    jQuery("button[name='woocommerce_checkout_place_order']").before(dp_empty_channel);
+                                    console.log('waiting for payment channel selection');
+
+                                } else {
+                                    jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+                                    jQuery('#dotpay_empty_channel').remove();
+                                }
+                                console.log('selected payment method: ' + this.value);
+                                // when only 1 channel available, select it automatically
+
+                                if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 1) {
+                                    jQuery('div.dotpay-channels-selection > div.channel-container').trigger('click');
+                                    console.log('the only available channel is selected');
+                                }
+                            }
+
+                        }
+                    }
+                    
+                });
+
+            });
+
+        </script>
+
+<?php
+    $this->setOneProductName($this->getProductName());
+?>

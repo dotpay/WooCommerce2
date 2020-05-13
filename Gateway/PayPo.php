@@ -80,6 +80,18 @@ class Gateway_PayPo extends Gateway_Gateway {
      * @return bool
      */
     protected function isEnabled() {
+       
+       // global $woocommerce;  
+       // $cartAmountTotal =  $this->getAmountForWidget();
+
+           /**
+            *  The minimum and maximum payment amount form PayPo channel
+            */
+         //  $paypo_amount_min = 40;
+         //  $paypo_amount_max = 1000;
+        
+        //return parent::isEnabled() && $this->isPayPoEnabled() && in_array((int)$cartAmountTotal, range($paypo_amount_min, $paypo_amount_max), true);
         return parent::isEnabled() && $this->isPayPoEnabled();
     }
+    
 }

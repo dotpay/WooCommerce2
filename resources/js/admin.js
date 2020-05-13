@@ -160,6 +160,7 @@ if (typeof jQuery != 'undefined') {
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('#woocommerce_dotpay_dontview_currency'));
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_ccPV_show"]'));
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_test"]'));
+    jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertAfter(jQuery('label[for="woocommerce_dotpay_test"]'));
     jQuery("<br><hr style='height: 3px; background: #c5ccd6;'>").insertAfter(jQuery('label[for="woocommerce_dotpay_enabled"]'));
     jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><p style='font-weight: bold;'>Dostępne metody wysyłki</p><p>&nbsp;</p><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_shipping_mapping_1"]'));
     jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><p style='font-weight: bold;'>Dodatkowe ustawienia dla płatności odroczonych</p><p class='description'>Wymagana dodatkowa Umowa w celu uruchomienia kanałów płatności obsługujących tę formę płatności.</p><br>").insertBefore(jQuery('select#woocommerce_dotpay_shipping_mapping_1'));
