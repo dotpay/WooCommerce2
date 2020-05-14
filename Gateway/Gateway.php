@@ -745,14 +745,25 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         }
 
 
-        $controlNr1 = explode('|', (string)$this->getParam('control'));
-        $controlNr2 = explode('/id:', (string)$controlNr1[0]);
-        if(count($controlNr2) >1) {
-            $controlNr = $controlNr2[1];
-        }else{
-            $controlNr = $controlNr2[0];
+        $reg_control = '/\/id:(\d+)\|domain:/m';
+        preg_match_all($reg_control, (string)$this->getParam('control'), $matches_control, PREG_SET_ORDER, 0);
+
+        if(count($matches_control) == 1 && (isset($matches_control[0][1]) && (int)$matches_control[0][1] >0)){
+    
+            $controlNr =  (int)$matches_control[0][1];
+        }else {
+
+            $controlNr1 = explode('|', (string)$this->getParam('control'));
+            $controlNr2 = explode('/id:', (string)$controlNr1[0]);
+            if(count($controlNr2) >1) {
+                $controlNr = $controlNr2[1];
+            }else{
+                $controlNr = $controlNr2[0];
+            }
+            
         }
-        $controlNr = trim(str_replace('#', '', $controlNr));
+
+        $controlNr = (int)trim(str_replace('#', '', $controlNr));
 
         $order = new WC_Order($controlNr);
         if (!$order && $order->get_id() == null && $order->get_order_number() == null) {
