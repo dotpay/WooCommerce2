@@ -1246,7 +1246,7 @@ public function getProductName()
     {
         if (method_exists($orderObject, 'get_id')) {
             if ((null != $orderObject->get_order_number() || !empty($orderObject->get_order_number()) || is_string($orderObject->get_order_number())) && $orderObject->get_order_number() <> $orderObject->get_id() ) {
-                return '#'.$orderObject->get_order_number().'/'.$orderObject->get_id();
+                return '#'.$orderObject->get_order_number().'/id:'.$orderObject->get_id();
             } else{
                 return $orderObject->get_id();
             }

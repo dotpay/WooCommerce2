@@ -746,7 +746,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 
 
         $controlNr1 = explode('|', (string)$this->getParam('control'));
-        $controlNr2 = explode('/', (string)$controlNr1[0]);
+        $controlNr2 = explode('/id:', (string)$controlNr1[0]);
         if(count($controlNr2) >1) {
             $controlNr = $controlNr2[1];
         }else{
