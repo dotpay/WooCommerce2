@@ -1,4 +1,9 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script type="text/javascript">
+	var dp_empty_channel = '<?php echo "<ul class=\"woocommerce-error\" role=\"alert\" id=\"dotpay_empty_channel\"><li data-id=\"dotpay_empty_channel\"><strong>". __('No payment channel selected!', 'dotpay-payment-gateway'). "</strong><br>". __('You must select one of the available payment channels to continue payment.', 'dotpay-payment-gateway'). "</li></ul>"; ?>';
+   
+	var dp_no_channels = '<?php echo "<p style=\"font-size:1em;text-align:center;color:#2f2f97;padding:20px;border-radius:3px \" class=\"Nochannels\"><strong>".__('There are no payment methods available in this area.', 'dotpay-payment-gateway')."<br>".__('You will be able to choose the payment method after being redirected to the Dotpay payment operator.', 'dotpay-payment-gateway')."</strong><br><small>".__('Or choose a different payment method.', 'dotpay-payment-gateway')."</small></p>"; ?>';
+</script>
 <?php if((bool)$this->isWidgetEnabled() && $this->isMainChannelEnabled() && (bool)$this->isIDshopCorrectPattern() ): ?>
 <style>
     <?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
@@ -30,10 +35,6 @@
     };
 
     dotpayWidgetConfig.disabledChannels.push(channel_apple);
-
-   var dp_empty_channel = '<?php echo "<ul class=\"woocommerce-error\" role=\"alert\" id=\"dotpay_empty_channel\"><li data-id=\"dotpay_empty_channel\"><strong>". __('No payment channel selected!', 'dotpay-payment-gateway'). "</strong><br>". __('You must select one of the available payment channels to continue payment.', 'dotpay-payment-gateway'). "</li></ul>"; ?>';
-   
-   var dp_no_channels = '<?php echo "<p style=\"font-size:1em;text-align:center;color:#2f2f97;padding:20px;border-radius:3px \" class=\"Nochannels\"><strong>".__('There are no payment methods available in this area.', 'dotpay-payment-gateway')."<br>".__('You will be able to choose the payment method after being redirected to the Dotpay payment operator.', 'dotpay-payment-gateway')."</strong><br><small>".__('Or choose a different payment method.', 'dotpay-payment-gateway')."</small></p>"; ?>';
 
 	//make the widget show only chosen payment channel
 	//showing selected
