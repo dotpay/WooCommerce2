@@ -1,3 +1,117 @@
+<?php
+
+if($this->getAmountForWidget() > 0) {$amountforchannelsmp = $this->getAmountForWidget();}else{ $amountforchannelsmp = '100.00';} 
+
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelsmp)) || !in_array(self::$mpChannel,$this->CheckChannelEnable(0,$amountforchannelsmp))){
+	?>
+	<script type = "text/javascript" >
+		console.log('%c<?php echo "Masterpass (".self::$mpChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+		
+		jQueryDotpayCodeMP = function(){
+			if (typeof jQuery != 'undefined') {
+				jQuery(document).ready(function () {
+					jQuery('li.payment_method_Dotpay_mp').remove();					
+				});
+			};	
+		};				
+	
+	</script>  
+<?php
+
+}else{
+
+ $CheckMPEnabled = $this->CheckChannelDisable(self::$mpChannel);
+
+ $getdatamp = $this->getDotpayChannels($amountforchannelsmp);
+
+ if(isset($CheckMPEnabled['is_disable']) && (string)$CheckMPEnabled['is_disable'] == 'true')
+ {	
+	$MPmessage = $CheckMPEnabled['disable_message'];
+	 ?>
+		<script type = "text/javascript" >
+            console.log('%c<?php echo "Masterpass (".self::$mpChannel."): channel is disabled for this order: ".$MPmessage.". This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+			
+			jQueryDotpayCodeMP = function(){
+			    if (typeof jQuery != 'undefined') {
+					jQuery(document).ready(function () {
+						jQuery('li.payment_method_Dotpay_mp').remove();					
+					});
+				};	
+			};				
+		
+		</script>  
+<?php
+ } else if (isset($getdatamp) && !empty($getdatamp) && (int)$CheckMPEnabled['id'] == "") {
+?>
+    <script type = "text/javascript">
+    console.log('%c<?php echo "Masterpass (".self::$mpChannel."): channel not available for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+    
+    jQueryDotpayCodeMP = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {
+                jQuery('li.payment_method_Dotpay_mp').remove();					
+            });
+        };	
+    };				
+</script>
+
+<?php
+
+ } else {
+
+ ?>	 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <?php if((bool)$this->isTestMode()) echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
+
+<script type = "text/javascript" >
+
+    jQueryEnableButtonMP = function(){
+        jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+        jQuery('#dotpay_empty_channel').remove();
+        jQuery('p.Nochannels').hide();
+    };
+
+    jQueryDotpayCodeMP = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {          
+                if(jQuery('input#payment_method_Dotpay_mp').is(':checked')) { 
+                    console.log('%cMasterpass method via Dotpay is checked','background: #cfcfcf; color: green;');
+                    jQueryEnableButtonMP();
+		        }
+            });
+
+            jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
+                    if (this.checked) {
+                        if (this.value == 'Dotpay_mp') {                           
+                            console.log('%cMasterpass method via Dotpay is checked manually','background: #cfcfcf; color: green;');
+                            jQueryEnableButtonMP();
+                        };
+                    };
+            });
+        };
+    };
+ </script>   
+ 
+<?php	 
+ }
+ }// check if exist channel to order
+ ?>
+<script type = "text/javascript" >
+    if(window.jQuery){
+        jQueryDotpayCodeMP();
+
+    } else{   
+        var script = document.createElement('script'); 
+        document.head.appendChild(script);  
+        script.type = 'text/javascript';
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js";
+
+        script.onload = jQueryDotpayCodeMP;
+    }
+ </script>
+<?php
+        if (null == WC()->session->get('dotpay_payment_one_product_name')) {
+			$this->setOneProductName($this->getProductName());
+        }   
+?>

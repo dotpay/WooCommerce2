@@ -13,6 +13,8 @@
 	}
 </style>
 <script type="text/javascript">
+
+jQueryDotpayOCManage = function(){
     if (typeof jQuery != 'undefined') {
         jQuery(document).ready(function(){
             jQuery('.dotpay_remove_card').on('click', function()
@@ -49,6 +51,8 @@
 	  console.log("%cOtherwise the Dotpay plugin may not work properly!", "color: red; font-size: 1rem;font-weight: bold;");
 	  console.log("\n -------------------------------------------------------------------------------------\n"); 
     }
+    
+}
 </script>
 <table class="dotpay_manage_cards">
     <tr>
@@ -76,3 +80,16 @@
 	</tr>
 	<?php } ?>
 </table>
+<script type = "text/javascript" >
+    if(window.jQuery){
+        jQueryDotpayOCManage();
+
+    } else{   
+        var script = document.createElement('script'); 
+        document.head.appendChild(script);  
+        script.type = 'text/javascript';
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js";
+
+        script.onload = jQueryDotpayOCManage;
+    }
+ </script> 

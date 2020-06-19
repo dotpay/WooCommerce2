@@ -87,10 +87,16 @@
     .gicons {
       font-size: 36px;
     }
+    #dp_countdown{
+      color: #97191d;
+      font-size: 0.8em;
+    }
 </style>
 <script type="text/javascript">
-    var dotpayCheckStatusTimeout = 2;//in minutes
+
+   var dotpayCheckStatusTimeout = 2;//in minutes
     function dotpayCheckStatus(interval) {
+        
         jQuery.ajax({
             "url":"<?php echo $this->generateWcApiUrl('status'); ?>",
             "method":"POST",
@@ -104,7 +110,7 @@
                         break;
                     case '-1':
                         clearAlerts();
-                        createAlert('error', '<?php echo __('Payment was rejected.', 'dotpay-payment-gateway'); if(isset($_SESSION['dotpay_payment_order_id'])) {echo  ' '.__('The order number:', 'dotpay-payment-gateway').' '.$_SESSION['dotpay_payment_order_id'].'.';}?>', '<?php echo __('Payment Error', 'dotpay-payment-gateway'); ?>');
+                        createAlert('error', '<?php echo __('Payment was rejected.', 'dotpay-payment-gateway'); if(null !== WC()->session->get('dotpay_payment_order_id')) {echo  ' '.__('The order number:', 'dotpay-payment-gateway').' '.WC()->session->get('dotpay_payment_order_id').'.';}?>', '<?php echo __('Payment Error', 'dotpay-payment-gateway'); ?>');
                         jQuery('.return-to-my-account').show();
                         jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>thumb_down</i> " );
                         jQuery( "div.dotpay-alert > p.alertDot" ).append( "<br><br><a href='<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>orders'> <?php echo __('try to pay again for this order', 'dotpay-payment-gateway'); ?></a>" );
@@ -150,16 +156,50 @@
     }
 </script>
 <?php if($this->message == null): ?>
-<div class="loading"></div>
+
 <script>
+jQueryDotpayCheckStatus = function(){
+
     if (typeof jQuery != 'undefined') {
         var dotpayCheckStatusInterval = 5000;
         var dotpayCheckStatusLimit = dotpayCheckStatusTimeout*60000/dotpayCheckStatusInterval;
         jQuery(document).ready(function(){
             var blocked = false;
             var counter = 0;
+
+            console.log('%cpending payment status...','background: #cfcfcf; color: darkviolet;');
             createAlert('info', '<?php echo __('Payment wait for confirmation by Dotpay... It make take up to 2 minutes.', 'dotpay-payment-gateway');?>');
-          jQuery( "p.alertDot" ).prepend( "<i class='material-icons' style='font-size: 48px; font-weight: bold;'>help_outline</i><br><br>" );
+            jQuery( "p.alertDot" ).prepend( "<span class='loading'></span><br><code id='dp_countdown'></code><br><br><i class='material-icons' style='font-size: 48px; font-weight: bold;'>help_outline</i><br>" );
+            
+
+            var now1 = new Date().getTime();
+            var countDownDate = new Date(now1 + 1000*120).getTime();
+
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+                    
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                var dp_countdownEl = document.getElementById("dp_countdown");
+
+                // Output the result
+                if(dp_countdownEl){
+                    dp_countdownEl.innerHTML = minutes + "m " + seconds + "s ";
+                    
+                    // If the count down is over, write some text 
+                    if (distance < 0) {
+                        clearInterval(x);
+                        dp_countdownEl.innerHTML = '<?php echo __('The confirmation payment has timed out!', 'dotpay-payment-gateway'); ?>';
+                    }
+                }
+
+            }, 1000);
+
+
             var interval = setInterval(function(){
                 if(blocked)
                     return true;
@@ -169,33 +209,55 @@
                     blocked = true;
                     stopWaiting(interval);
                     clearAlerts();
-                    createAlert('error', '<?php echo __('Timeout of waiting for confirmation of payment', 'dotpay-payment-gateway'); ?>', '<?php echo __('Payment Error', 'dotpay-payment-gateway'); ?>');
+                    createAlert('error', '<?php echo __('Timeout of waiting for confirmation of payment', 'dotpay-payment-gateway'); ?>', '<?php echo __('Problem with confirming your payment', 'dotpay-payment-gateway'); ?>');
                     jQuery('.return-to-my-account').show();
                     jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>timer_off</i> " );
-                    jQuery( "div.dotpay-alert > p.alertDot" ).append( "<br><br><em><?php echo __('When transaction will be confirmed we will notify you on email. If payment will not be confirmed, please contact with shop owner. ', 'dotpay-payment-gateway'); if(isset($_SESSION['dotpay_payment_order_id'])) {echo  '<br>'.__('And give him the order number:', 'dotpay-payment-gateway').' <b>'.$_SESSION['dotpay_payment_order_id'].'</b>';}?></em>" );
+                    jQuery( "div.dotpay-alert > p.alertDot" ).append( "<br><br><em><?php echo __('When transaction will be confirmed we will notify you on email. If payment will not be confirmed, please contact with shop owner. ', 'dotpay-payment-gateway'); if(null !== WC()->session->get('dotpay_payment_order_id')) {echo  '<br>'.__('And give him the order number:', 'dotpay-payment-gateway').' <b>'.WC()->session->get('dotpay_payment_order_id').'</b>';}?></em>" );
                 }
+
             }, 5000);
         });
-    } else {
+    } else{
       console.log("\n -------------------------------------------------------------------------------------\n");  	
       console.log("%cWarning!","color:red;font-family:system-ui;font-size:3rem;-webkit-text-stroke: 1px black;font-weight:bold;");
 	  console.log("\n%cLoad jQuery first in your template! Then Dotpay plugin.", "background: red; color: yellow; font-size: 1.2rem");
 	  console.log("%cOtherwise the Dotpay plugin may not work properly!", "color: red; font-size: 1rem;font-weight: bold;");
 	  console.log("\n -------------------------------------------------------------------------------------\n"); 
-
     }
+} 
+
 </script>
 <?php else: ?>
 <script>
+jQueryDotpayCheckStatus = function(){
     if (typeof jQuery != 'undefined') {
         jQuery(document).ready(function(){
             createAlert('error', '<?php echo $this->message; ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
             jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>warning</i> " );
         });
+    }else{
+      console.log("\n -------------------------------------------------------------------------------------\n");  	
+      console.log("%cWarning!","color:red;font-family:system-ui;font-size:3rem;-webkit-text-stroke: 1px black;font-weight:bold;");
+	  console.log("\n%cLoad jQuery first in your template! Then Dotpay plugin.", "background: red; color: yellow; font-size: 1.2rem");
+	  console.log("%cOtherwise the Dotpay plugin may not work properly!", "color: red; font-size: 1rem;font-weight: bold;");
+	  console.log("\n -------------------------------------------------------------------------------------\n"); 
     }
-
+}
 
 </script>
 <?php endif; ?>
 <div id="dotpay-alert-container" style=" margin-left: 10px;margin-right: 10px; text-align: center; margin-bottom: 10px;"></div>
 <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="return-to-my-account"><?php echo __('You can go to your account page', 'dotpay-payment-gateway'); ?></a>
+
+<script type = "text/javascript" >
+    if(window.jQuery){
+        jQueryDotpayCheckStatus();
+    } else{   
+        var script = document.createElement('script'); 
+        document.head.appendChild(script);  
+        script.type = 'text/javascript';
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js";
+
+        script.onload = jQueryDotpayCheckStatus;
+    }
+ </script> 

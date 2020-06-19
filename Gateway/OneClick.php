@@ -78,19 +78,23 @@ class Gateway_OneClick extends Gateway_Gateway {
         $hiddenFields['channel'] = $this->getChannel();
         $hiddenFields['ch_lock'] = 1;
         $hiddenFields['type'] = 4;
+        if(!$this->is_session_started()) {
+            session_start();
+         }
 
-        if(isset($_SESSION['dotpay_form_oc_type']) && $_SESSION['dotpay_form_oc_type'] == 'choose') {
-            $card = Dotpay_Card::getCardById($_SESSION['dotpay_form_saved_card']);
+        if(null !== WC()->session->get('dotpay_form_oc_type') && WC()->session->get('dotpay_form_oc_type') == 'choose') {    
+            $card = Dotpay_Card::getCardById(WC()->session->get('dotpay_form_saved_card'));
             $hiddenFields['credit_card_id'] = $card->card_id;
             $hash = $card->hash;
-            unset($_SESSION['dotpay_form_saved_card']);
+
+            WC()->session->__unset( 'dotpay_form_saved_card' );
         } else {
             $hiddenFields['credit_card_store'] = '1';
             // $hash = Dotpay_Card::addCard($this->getCurrentUserId(), $this->getOrder()->id);
             $hash = Dotpay_Card::addCard($this->getCurrentUserId(), $this->getOrder()->get_id());
         }
         $hiddenFields['credit_card_customer_id'] = $hash;
-        unset($_SESSION['dotpay_form_oc_type']);
+        WC()->session->__unset( 'dotpay_form_oc_type' );
         return $hiddenFields;
     }
 
@@ -125,9 +129,9 @@ class Gateway_OneClick extends Gateway_Gateway {
             return false;
         }
 
-        $_SESSION['dotpay_form_oc_type'] = $_POST['oc_type'];
+        WC()->session->set('dotpay_form_oc_type',$_POST['oc_type']);
         if($_POST['oc_type'] == 'choose') {
-            $_SESSION['dotpay_form_saved_card'] = $_POST['saved_card'];
+            WC()->session->set('dotpay_form_saved_card',$_POST['saved_card']);
         }
         return true;
     }
@@ -167,5 +171,6 @@ class Gateway_OneClick extends Gateway_Gateway {
 
         return true;
     }
+
 
 }

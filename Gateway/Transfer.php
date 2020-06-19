@@ -68,6 +68,8 @@ class Gateway_Transfer extends Gateway_Gateway {
 	    } else if($this->getOrder() != null && $this->getOrder()->get_id() != null) {
 		    $orderId = $this->getOrder()->get_id();
 	    } else {
+            $cart_data = WC()->session;
+            $items = WC()->cart->get_cart();
 		    return __('Payment can not be created', 'dotpay-payment-gateway');
         }
 

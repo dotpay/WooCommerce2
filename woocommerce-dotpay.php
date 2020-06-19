@@ -3,7 +3,7 @@
 /**
   * @wordpress-plugin
   * Plugin Name: WooCommerce Dotpay Gateway
-  * Version: 3.4.0
+  * Version: 3.5.0
   * Plugin URI: https://github.com/dotpay/WooCommerce2
   * Description: Fast and secure Dotpay payment gateway for WooCommerce
   * Author: Dotpay (tech@dotpay.pl)
@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.4.0';
+		$thisVersionModule = '3.5.0';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -157,20 +157,6 @@ $git_latest_version_plugin = getLatestVersionDotpayModule();
 
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__);
 
-function is_session_started() {
-    if ( php_sapi_name() != 'cli' ) {
-        if ( version_compare(phpversion(), '5.6', '>=') ) {
-            return session_status() == PHP_SESSION_ACTIVE ? TRUE : FALSE;
-        } else {
-            return session_id() == '' ? FALSE : TRUE;
-        }
-    }
-    return FALSE;
-}
-
-if(!is_session_started()) {
-    session_start();
-}
 
 function woocommerce_dotpay_autoload($className){
     $filename = plugin_dir_path(__FILE__).str_replace('_', '/', $className).'.php';
@@ -181,21 +167,17 @@ function woocommerce_dotpay_autoload($className){
 
 spl_autoload_register('woocommerce_dotpay_autoload');
 
-function init_woocommerce_dotpay() {
-
-}
-
-function init_woocommerce_dotpay_session_start() {
-    if(!session_id()) {
-        session_start();
+function is_session_started1() {
+    if ( php_sapi_name() != 'cli' ) {
+        if ( version_compare(phpversion(), '5.6', '>=') ) {
+            return session_status() == PHP_SESSION_ACTIVE ? TRUE : FALSE;
+        } else {
+            return session_id() == '' ? FALSE : TRUE;
+        }
     }
+    return FALSE;
 }
 
-function init_woocommerce_dotpay_session_end() {
-    if (is_session_started() != FALSE) {
-        session_destroy();
-    }
-}
 
 function dotpay_admin_enqueue_scripts($hook) {
     if($hook != 'woocommerce_page_wc-settings') {
@@ -219,10 +201,6 @@ return true;
 if (woocommerce_is_active() != FALSE) {
     load_plugin_textdomain('dotpay-payment-gateway', false, dirname(plugin_basename(__FILE__)) . '/langs/');
 
-    add_action('init', 'init_woocommerce_dotpay');
-    add_action('init', 'init_woocommerce_dotpay_session_start');
-    add_action('wp_logout', 'init_woocommerce_dotpay_session_end');
-    add_action('wp_login', 'init_woocommerce_dotpay_session_end');
 
     function add_dotpay_payment_class($methods) {
         return array_merge($methods, Dotpay_Payment::getDotpayChannelsList());
@@ -292,6 +270,8 @@ add_filter('get_pages','wc_dotpay_gateway_hide_pages');
 add_filter('wp_get_nav_menu_items','wc_dotpay_gateway_hide_pages');
 
 add_filter('the_content','wc_dotpay_gateway_content');
+
+
 
 function wc_dotpay_gateway_content($content) {
     global $wp_query;

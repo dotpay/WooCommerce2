@@ -49,9 +49,13 @@ class Dotpay_SellerApi {
      */
     public function getCreditCardInfo($username, $password, $number) {
         $payment = $this->getPaymentByNumber($username, $password, $number);
-        if($payment->payment_method->channel_id!=248)
+        if((int)$payment->payment_method->channel_id != 248 ) {
             return null;
-        return $payment->payment_method->credit_card;
+        }else{
+            return $payment->payment_method->credit_card;
+        }
+            
+        
     }
 
     /**
@@ -65,7 +69,7 @@ class Dotpay_SellerApi {
         if (empty($username) && empty($password)) {
             return null;
         }
-        $url = $this->_baseurl.$this->getDotPaymentApi()."payments/";
+        $url = $this->_baseurl.$this->getDotPaymentApi()."accounts/";
         $curl = new Dotpay_Curl();
         $curl->addOption(CURLOPT_URL, $url)
              ->addOption(CURLOPT_USERPWD, $username.':'.$password);
@@ -143,4 +147,5 @@ class Dotpay_SellerApi {
                          ))
              ->addOption(CURLOPT_CUSTOMREQUEST, "GET");
     }
+
 }

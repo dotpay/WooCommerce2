@@ -1,3 +1,117 @@
+<?php
+
+if($this->getAmountForWidget() > 0) {$amountforchannelspv = $this->getAmountForWidget();}else{ $amountforchannelspv = '100.00';} 
+
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelspv)) || !in_array(self::$pvChannel,$this->CheckChannelEnable(0,$amountforchannelspv))){
+	?>
+	<script type = "text/javascript" >
+		console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+		
+		jQueryDotpayCodePV = function(){
+			if (typeof jQuery != 'undefined') {
+				jQuery(document).ready(function () {
+					jQuery('li.payment_method_Dotpay_pv').remove();					
+				});
+			};	
+		};				
+	
+	</script>  
+<?php
+
+}else{
+ $CheckPVEnabled = $this->CheckChannelDisable(self::$pvChannel);
+
+ $getdatapv = $this->getDotpayChannels($amountforchannelspv);
+
+ if(isset($CheckPVEnabled['is_disable']) && (string)$CheckPVEnabled['is_disable'] == 'true')
+ {	
+	$PVmessage = $CheckPVEnabled['disable_message'];
+	 ?>
+		<script type = "text/javascript" >
+            console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel is disabled for this order: ".$PVmessage.". This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+			
+			jQueryDotpayCodePV = function(){
+			    if (typeof jQuery != 'undefined') {
+					jQuery(document).ready(function () {
+						jQuery('li.payment_method_Dotpay_pv').hide();					
+					});
+				};	
+			};				
+		
+		</script>  
+<?php
+ } else if (isset($getdatapv) && !empty($getdatapv) && (int)$CheckPVEnabled['id'] == "") {
+?>
+    <script type = "text/javascript">
+    console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel not available for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+    
+    jQueryDotpayCodePV = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {
+                jQuery('li.payment_method_Dotpay_pv').hide();					
+            });
+        };	
+    };				
+</script>
+
+<?php
+
+ } else {
+
+ ?>	 
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<?php if((bool)$this->isTestMode()) echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
+<?php if((bool)$this->isTestMode()) { echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; } ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
+
+<script type = "text/javascript" >
+
+    jQueryEnableButtonPV = function(){
+        jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+        jQuery('#dotpay_empty_channel').remove();
+        jQuery('p.Nochannels').hide();
+    };
+
+    jQueryDotpayCodePV = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {          
+                if(jQuery('input#payment_method_Dotpay_pv').is(':checked')) { 
+                    console.log('%cCredit Card 2 method via Dotpay is checked','background: #cfcfcf; color: green;');
+                    jQueryEnableButtonPV();
+		        }
+            });
+
+            jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
+                    if (this.checked) {
+                        if (this.value == 'Dotpay_pv') {                           
+                            console.log('%cCredit Card 2 method via Dotpay is checked manually','background: #cfcfcf; color: green;');
+                            jQueryEnableButtonPV();
+                        };
+                    };
+            });
+        };
+    };
+ </script>   
+ 
+<?php	 
+ }
+}// check if exist channel to order
+ ?>
+<script type = "text/javascript" >
+    if(window.jQuery){
+        jQueryDotpayCodePV();
+
+    } else{   
+        var script = document.createElement('script'); 
+        document.head.appendChild(script);  
+        script.type = 'text/javascript';
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js";
+
+        script.onload = jQueryDotpayCodePV;
+    }
+ </script>
+<?php
+        if (null == WC()->session->get('dotpay_payment_one_product_name')) {
+			$this->setOneProductName($this->getProductName());
+        }   
+?>

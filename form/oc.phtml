@@ -1,20 +1,123 @@
+<?php
+
+if($this->getAmountForWidget() > 0) {$amountforchannelsoc = $this->getAmountForWidget();}else{ $amountforchannelsoc = '100.00';} 
+
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelsoc)) || !in_array(self::$ocChannel,$this->CheckChannelEnable(0,$amountforchannelsoc)))
+{
+    //check if order pay (repayment)
+    global $wp;
+    if ( ! empty( $wp->query_vars['order-pay'] ) ) {
+        
+            if ( isset( $_GET['pay_for_order'], $_GET['key'] )) {          
+            ?>
+                    <script type = "text/javascript" >
+                        console.log('%cTry to refreshing available payment methods...', 'background: #cfcfcf; color: blue;');
+                        window.location.reload();
+                    </script>  		
+            <?php             
+            }
+        }
+    }
+
+
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelsoc)) || !in_array(self::$ocChannel,$this->CheckChannelEnable(0,$amountforchannelsoc)))
+{
+	?>
+	<script type = "text/javascript" >
+		console.log('%c<?php echo "Credit Card for One Click (".self::$ocChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+		
+		jQueryDotpayCodeOC = function(){
+			if (typeof jQuery != 'undefined') {
+				jQuery(document).ready(function () {
+					jQuery('li.payment_method_Dotpay_oc').remove();					
+				});
+			};	
+		};				
+	
+	</script>  
+<?php
+
+}else{
+$CheckOCEnabled = $this->CheckChannelDisable(self::$ocChannel);
+
+ $getdataoc = $this->getDotpayChannels($amountforchannelsoc);
+
+ if(isset($CheckOCEnabled['is_disable']) && (string)$CheckOCEnabled['is_disable'] == 'true')
+ {	
+	$PVmessage = $CheckOCEnabled['disable_message'];
+	 ?>
+		<script type = "text/javascript" >
+            console.log('%c<?php echo "Credit Card for One Click (".self::$ocChannel."): channel is disabled for this order: ".$PVmessage.". This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+			
+			jQueryDotpayCodeOC = function(){
+			    if (typeof jQuery != 'undefined') {
+					jQuery(document).ready(function () {
+						jQuery('li.payment_method_Dotpay_oc').remove();					
+					});
+				};	
+			};				
+		
+		</script>  
+<?php
+ } else if (isset($getdataoc) && !empty($getdataoc) && (int)$CheckOCEnabled['id'] == "") {
+?>
+    <script type = "text/javascript">
+    console.log('%c<?php echo "Credit Card for One Click (".self::$ocChannel."): channel not available for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+    
+    jQueryDotpayCodeOC = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {
+                jQuery('li.payment_method_Dotpay_oc').remove();					
+            });
+        };	
+    };				
+</script>
+<?php
+ } else {
+ ?>	
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 	<?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>
 <script type="text/javascript">
+
+jQueryDotpayCodeOC = function(){
+
     if (typeof jQuery != 'undefined') {
-        jQuery(document).ready(function(){
-            if(jQuery('select[name="saved_card"] option').length == 0) {
-                jQuery('.savedCardsContainer').hide();
-                jQuery('input[name="oc_type"]:last').prop('checked', true);
-            } else {
+
+        jQueryEnableButtonOC = function(){
+            jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+            jQuery('#dotpay_empty_channel').remove();
+            jQuery('p.Nochannels').hide();
+         };
+
+
+            jQuery(document).ready(function () {          
+                if(jQuery('input#payment_method_Dotpay_oc').is(':checked')) { 
+                    console.log('%cCredit Card for One Click method via Dotpay is checked','background: #cfcfcf; color: green;');
+                    jQueryEnableButtonOC();
+                }
+                
+                if(jQuery('select[name="saved_card"] option').length == 0) {
+                    jQuery('.savedCardsContainer').hide();
+                     jQuery('input[name="oc_type"]:last').prop('checked', true);
+                 } else {
                 jQuery('input[name="oc_type"]:first').prop('checked', true);
-            }
-            jQuery('input[name="oc_type"]').change(function(){
+                }
+                jQuery('input[name="oc_type"]').change(function(){
                 jQuery('select[name="saved_card"]').attr('disabled', (jQuery(this).val()=='new'));
+                });
             });
-        });
+
+            jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
+                    if (this.checked) {
+                        if (this.value == 'Dotpay_oc') {                           
+                            console.log('%cCredit Card for One Click method via Dotpay is checked manually','background: #cfcfcf; color: green;');
+                            jQueryEnableButtonOC();
+                        };
+                    };
+            });
     }else{
       console.log("\n -------------------------------------------------------------------------------------\n");  	
       console.log("%cWarning!","color:red;font-family:system-ui;font-size:3rem;-webkit-text-stroke: 1px black;font-weight:bold;");
@@ -22,6 +125,7 @@
 	  console.log("%cOtherwise the Dotpay plugin may not work properly!", "color: red; font-size: 1rem;font-weight: bold;");
 	  console.log("\n -------------------------------------------------------------------------------------\n"); 
     }
+}  
 </script>
 <div class="savedCardsContainer">
     <label class="oc_main_element" style="color: #062387;">
@@ -51,3 +155,26 @@
 </label>
 <?php if((bool)$this->isTestMode()) echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
+
+<?php	 
+  }
+}// check if exist channel to order
+ ?>
+<script type = "text/javascript" >
+    if(window.jQuery){
+        jQueryDotpayCodeOC();
+
+    } else{   
+        var script = document.createElement('script'); 
+        document.head.appendChild(script);  
+        script.type = 'text/javascript';
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js";
+
+        script.onload = jQueryDotpayCodeOC;
+    }
+ </script> 
+<?php
+        if (null == WC()->session->get('dotpay_payment_one_product_name')) {
+			$this->setOneProductName($this->getProductName());
+        } 
+?>

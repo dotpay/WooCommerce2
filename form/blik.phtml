@@ -1,11 +1,175 @@
+<?php
+
+if($this->getAmountForWidget() > 0) {$amountforchannelsblik = $this->getAmountForWidget();}else{ $amountforchannelsblik = '100.00';} 
+
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelsblik)) || !in_array(self::$blikChannel,$this->CheckChannelEnable(0,$amountforchannelsblik))){
+	?>
+	<script type = "text/javascript" >
+		console.log('%c<?php echo "BLIK (".self::$blikChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+		
+		jQueryDotpayCodeBLIK = function(){
+			if (typeof jQuery != 'undefined') {
+				jQuery(document).ready(function () {
+					jQuery('li.payment_method_Dotpay_blik').remove();					
+				});
+			};	
+		};				
+	
+	</script>  
+<?php
+
+}else{
+
+ $CheckBlikEnabled = $this->CheckChannelDisable(self::$blikChannel);
+
+ $getdatablik = $this->getDotpayChannels($amountforchannelsblik);
+
+ if(isset($CheckBlikEnabled['is_disable']) && (string)$CheckBlikEnabled['is_disable'] == 'true')
+ {	
+	$Blikmessage = $CheckBlikEnabled['disable_message'];
+	 ?>
+		<script type = "text/javascript" >
+            console.log('%c<?php echo "BLIK (".self::$blikChannel."): channel is disabled for this order: ".$Blikmessage.". This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+			
+			jQueryDotpayCodeBLIK = function(){
+			    if (typeof jQuery != 'undefined') {
+					jQuery(document).ready(function () {
+						jQuery('li.payment_method_Dotpay_blik').remove();					
+					});
+				};	
+			};				
+		
+		</script>  
+<?php
+ } else if (isset($getdatablik) && !empty($getdatablik) && (int)$CheckBlikEnabled['id'] == "") {
+?>
+    <script type = "text/javascript">
+    console.log('%c<?php echo "BLIK (".self::$blikChannel."): channel not available for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+    
+    jQueryDotpayCodeBLIK = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {
+                jQuery('li.payment_method_Dotpay_blik').remove();					
+            });
+        };	
+    };				
+</script>
+
+<?php
+
+ } else {
+
+ ?>	 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 	<?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>
 <div style="text-align: center;">
 	<label style="margin: auto">
-		<input name="blik_code" type="text" placeholder="<?php echo __('BLIK code', 'dotpay-payment-gateway'); ?>" pattern="[0-9]{6}" oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" maxlength="6"/>
+		<input name="blik_code" type="text" placeholder="<?php echo __('BLIK code', 'dotpay-payment-gateway'); ?>" pattern="[0-9]{6}" oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" maxlength="6" id="dp_blikCode"/>
 	</label>
 </div>
 	<?php if((bool)$this->isTestMode()) echo "<br><br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
+
+<script type = "text/javascript" >
+
+	var dp_empty_blik_code = '<?php echo "<ul class=\"woocommerce-error\" role=\"alert\" id=\"dotpay_empty_blik_code\"><li data-id=\"dotpay_empty_blik_code\"><strong>". __('No BLIK code!', 'dotpay-payment-gateway'). "</strong><br>". __('For the selected payment method you must complete the 6-digit BLIK code from your banking application.', 'dotpay-payment-gateway'). "</li></ul>"; ?>';
+
+	jQueryCodeBLIKregex = function(){
+		var $regexblik=/^([0-9]{6})$/;
+		if (jQuery('#dp_blikCode').val().match($regexblik)) {
+			return true;
+		}else{
+			return false;
+		}
+	};
+	
+	jQueryCodeBLIKCheck = function(){
+
+		jQuery('#dp_blikCode').on('keypress keydown keyup',function(){
+             if (!jQueryCodeBLIKregex()) {
+					console.log('%cNo blik code or incomplete','background: #cfcfcf; color: brown;');
+					jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+					if(jQuery('#dotpay_empty_blik_code').length < 1) {
+						jQuery( "button[name='woocommerce_checkout_place_order']" ).before(dp_empty_blik_code);
+					}
+             }
+           else{
+			   console.log('blik code is completed');
+			   jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+			   jQuery('#dotpay_empty_blik_code').remove();
+             }
+
+         });
+	};
+
+    jQueryDotpayCodeBLIK = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {          
+                if(jQuery('input#payment_method_Dotpay_blik').is(':checked')) { 
+                    console.log('%cBLIK method via Dotpay is checked','background: #cfcfcf; color: green;');
+					jQuery('#dotpay_empty_channel').remove();
+        			jQuery('p.Nochannels').hide();
+					jQueryCodeBLIKCheck();
+					if (!jQueryCodeBLIKregex()){
+						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+						if(jQuery('#dotpay_empty_blik_code').length < 1) {
+						jQuery( "button[name='woocommerce_checkout_place_order']" ).before(dp_empty_blik_code);
+					}
+					}else{
+						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+						jQuery('#dotpay_empty_blik_code').remove();
+					}	
+		        }
+            });
+
+            jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
+                    if (this.checked) {
+                        if (this.value == 'Dotpay_blik') {                           
+                            console.log('%cBLIK method via Dotpay is checked manually','background: #cfcfcf; color: green;');
+							jQuery('#dotpay_empty_channel').remove();
+        					jQuery('p.Nochannels').hide();	
+							jQueryCodeBLIKCheck();
+							if (!jQueryCodeBLIKregex()){
+								jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+								if(jQuery('#dotpay_empty_blik_code').length < 1) {
+									jQuery( "button[name='woocommerce_checkout_place_order']" ).before(dp_empty_blik_code);
+								}
+							}else{
+								jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+								jQuery('#dotpay_empty_blik_code').remove();
+							}
+                        } else {
+							jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+							jQuery('#dotpay_empty_blik_code').remove();
+						}
+                    }
+            });
+        };
+    };
+ </script>   
+ 
+<?php	 
+ }
+}// check if exist channel to order
+
+ ?>
+<script type = "text/javascript" >
+    if(window.jQuery){
+        jQueryDotpayCodeBLIK();
+
+    } else{   
+        var script = document.createElement('script'); 
+        document.head.appendChild(script);  
+        script.type = 'text/javascript';
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js";
+
+        script.onload = jQueryDotpayCodeBLIK;
+    }
+ </script>
+<?php
+        if (null == WC()->session->get('dotpay_payment_one_product_name')) {
+			$this->setOneProductName($this->getProductName());
+        }   
+?>

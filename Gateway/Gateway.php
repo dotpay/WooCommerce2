@@ -80,6 +80,19 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     }
 
 
+    public function is_session_started() {
+        if ( php_sapi_name() != 'cli' ) {
+            if ( version_compare(phpversion(), '5.6', '>=') ) {
+                return session_status() == PHP_SESSION_ACTIVE ? TRUE : FALSE;
+            } else {
+                return session_id() == '' ? FALSE : TRUE;
+            }
+        }
+        return FALSE;
+    }
+
+
+
     /**
      * Add actions to API plugin
      */
@@ -142,8 +155,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $woocommerce->cart->empty_cart();
         $this->setOrderId($order_id);
         
-        if (isset($_SESSION['dotpay_payment_one_product_name'])) {
-            $this->setOneProductName($_SESSION['dotpay_payment_one_product_name']);
+        if (null !== WC()->session->get('dotpay_payment_one_product_name')) {
+            $this->setOneProductName(WC()->session->get('dotpay_payment_one_product_name'));
         }
 
         $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
@@ -193,21 +206,25 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function getDataForm() {
         global $file_prefix, $woocommerce;
+        if(!$this->is_session_started()) {
+            session_start();
+         }
         if (function_exists('wp_cache_clean_cache')) {
             wp_cache_clean_cache($file_prefix, true);
         }
-        if(empty($_SESSION['dotpay_payment_order_id'])) {
+        if(empty(WC()->session->get('dotpay_payment_order_id'))) {
             die(__('Order not found', 'dotpay-payment-gateway'));
         }
-        $this->setOrderId($_SESSION['dotpay_payment_order_id']);
+
+        $this->setOrderId(WC()->session->get('dotpay_payment_order_id'));
 
         if(trim($this->getUrl()) == null){
             $url_return = $this->dotpay_install_missing_pages();
         }
 
-        if (isset($_SESSION['dotpay_payment_one_product_name']) && $this->isProductNameTitleEnabled() == true) {
-            $this->setOneProductName($_SESSION['dotpay_payment_one_product_name']);
-            $new_description = $this->getDescription().$_SESSION['dotpay_payment_one_product_name'];
+        if (null !== WC()->session->get('dotpay_payment_one_product_name') && $this->isProductNameTitleEnabled() == true) {
+            $this->setOneProductName(WC()->session->get('dotpay_payment_one_product_name'));
+            $new_description = $this->getDescription().WC()->session->get('dotpay_payment_one_product_name');
         }else{
             $new_description = $this->getDescription();
         }
@@ -896,7 +913,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $currencyResponse = $this->getParam('operation_original_currency');
 
         if ($currencyOrder != $currencyResponse) {
-            die('FAIL CURRENCY');
+            die('FAIL CURRENCY (org: '.$currencyOrder.' <> notif: '.$currencyResponse.')');
         }
     }
 
@@ -905,12 +922,13 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @param WC_Order $order order object
      */
     protected function checkAmount($order) {
-        $amount = $this->getFormatAmount(round($order->get_total(), 2));
-        $amountOrder = sprintf("%01.2f", $amount);
+       // $amount = $this->getFormatAmount(round($order->get_total(), 2));
+       // $amountOrder = sprintf("%01.2f", $amount);
+        $amountOrder = $this->normalizeDecimalAmount($order->get_total());
         $amountResponse = $this->getParam('operation_original_amount');
 
         if ($amountOrder != $amountResponse) {
-            die('FAIL AMOUNT');
+            die('FAIL AMOUNT (org: '.$amountOrder.' <> notif: '.$amountResponse.')');
         }
     }
 
@@ -923,7 +941,8 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @param int $channel channel id
      */
     protected function setChannel($channel) {
-        $_SESSION['dotpay_payment_channel'] = (int)$channel;
+
+        WC()->session->set('dotpay_payment_channel',(int)$channel);
     }
 
     /**
@@ -931,8 +950,9 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * @return int/null
      */
     protected function getChannel() {
-        if(isset($_SESSION['dotpay_payment_channel'])) {
-            $channel = $_SESSION['dotpay_payment_channel'];
+
+        if(null !== WC()->session->get('dotpay_payment_channel')) {    
+            $channel = WC()->session->get('dotpay_payment_channel');
         } else {
             $channel = null;
         }
@@ -943,14 +963,14 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      * Forget channel id
      */
     protected function forgetChannel() {
-        unset($_SESSION['dotpay_payment_channel']);
+        WC()->session->__unset( 'dotpay_payment_channel' );
     }
 
         /**
      * Forget product name
      */
     protected function forgetProductName() {
-        unset($_SESSION['dotpay_payment_one_product_name']);
+        WC()->session->__unset( 'dotpay_payment_one_product_name' );
     }
 
 

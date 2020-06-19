@@ -40,6 +40,7 @@ class Gateway_Blik extends Gateway_Gateway {
         $this->addActions();
     }
 
+
     /**
      * Return channel id
      * @return int
@@ -100,7 +101,8 @@ class Gateway_Blik extends Gateway_Gateway {
      * @param string $blikCode BLIK code
      */
     private function setBlikCode($blikCode) {
-        $_SESSION['blik_code'] = $blikCode;
+
+        WC()->session->set('blik_code',$blikCode);
     }
 
     /**
@@ -111,10 +113,10 @@ class Gateway_Blik extends Gateway_Gateway {
 
         $blikCode = '';
                 
-        if(isset($_SESSION['blik_code']))
+        if(null !== WC()->session->get('blik_code'))
         {
-            $blikCode = $_SESSION['blik_code'];
-            unset($_SESSION['blik_code']);
+            $blikCode = WC()->session->get('blik_code');
+            WC()->session->__unset( 'blik_code' );
         }
         return $blikCode;
     }

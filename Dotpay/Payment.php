@@ -45,7 +45,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.4.0';
+    const MODULE_VERSION = '3.5.0';
 
 
     public static $ocChannel = '248';
@@ -329,13 +329,17 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
      */
     public function getAmountForWidget()
     {
+        $session_total_amount = WC()->session->get('cart_totals')['total'];
         $orderPay = get_query_var('order-pay');
         $order = $this->getOrder();
         $id = $this->getLegacyOrderId($order);
         if ($id == null && !empty($orderPay)) {
             $this->setOrderId(get_query_var('order-pay'));
         }
-        if ($id != null) {
+        if( $session_total_amount && $session_total_amount >0){
+            return $this->normalizeDecimalAmount($session_total_amount);
+        }
+        elseif ($id != null) {
             return $this->getOrderAmount();
         } else {
             return $this->getCartAmount();
@@ -374,6 +378,20 @@ public function CartProductName(){
 
 } 
 
+/**
+ * Return  Product formatted name for only 1 product in the cart
+ * @return string
+ */
+public function FormattItemName($name_1) {
+    $name_2 = preg_replace('/[^\p{L}0-9\s\-_\/\(){}\.;]/u','',$name_1);
+    $name_3 = html_entity_decode($name_2, ENT_QUOTES, 'UTF-8');
+    $name3 = str_replace('times;','x',$name_3 );
+
+    $name = " - ( ".$this->encoded_substrParams($name3,0,90,60) ." )";
+    
+    return $name;
+}
+
 
 /**
  * Return  Product name for only 1 product in the cart
@@ -383,15 +401,35 @@ public function getProductName()
 {
     $name = "";
 
+    // Loop though shipping packages
+    foreach ( WC()->shipping->get_packages() as $key => $package ) {
+        // Loop through Shipping rates
+        foreach($package['rates'] as $rate_id => $rate ){
+            $Items[] = $rate->get_meta_data();
+        }
+    }  
+    if(isset($Items) && !empty($Items[0]['Pozycje'])) {             
+        $Items_shipping = $Items[0]['Pozycje']; 
+    } else if(isset($Items) && !empty($Items[0]['Items'])) {
+        $Items_shipping = $Items[0]['Items']; 
+    }else {
+        $Items_shipping = null;
+    }
+    
+if( null !== $Items_shipping){
+    $Items_shipping_array = explode(',',$Items_shipping);
+    $Items_shipping_first = $Items_shipping_array[0];
+
+    $name = $this->FormattItemName($Items_shipping_first);
+
+}else{
+
     if(is_array($this->CartProductName()))
     {
         if(count($this->CartProductName()) == 1 && isset($this->CartProductName()[0])) {
             
             $name_1 = esc_attr($this->CartProductName()[0]);
-            $name_2 = preg_replace('/[^\p{L}0-9\s\-_\/\(){}\.;]/u','',$name_1);
-            $name_3 = html_entity_decode($name_2, ENT_QUOTES, 'UTF-8');
-
-            $name = " - ( ".$this->encoded_substrParams($name_3,0,90,60) ." )";
+            $name = $this->FormattItemName($name_1);
 
         } else {
             $name = "";
@@ -400,8 +438,8 @@ public function getProductName()
         $name = "";
     }
 
+}
     return $name;
-
 }
 
 
@@ -939,6 +977,28 @@ public function getProductName()
         return number_format(preg_replace('/[^0-9.]/', '', str_replace(',', '.', $amount)), 2, '.', '');
     }
 
+
+
+    /**
+     * Convert original amount using a dot as a decimal place regardless of the locale.
+     * @param float $amount
+     * @return string
+     * 
+     */
+
+    public function normalizeDecimalAmount($val, int $precision = 2): string
+    {
+        $input = str_replace(' ', '', $val);
+        $number = str_replace(',', '.', $input);
+        if (strpos($number, '.')) {
+            $groups = explode('.', str_replace(',', '.', $number));
+            $lastGroup = array_pop($groups);
+            $number = implode('', $groups) . '.' . $lastGroup;
+        }
+        return bcadd($number, 0, $precision);
+    }
+
+
     /**
      * Check, if currently currency is exist in the prameter
      * @param string $allow_currency_form list of currencies
@@ -959,69 +1019,81 @@ public function getProductName()
         return $result;
     }
 
+
+
+
+
     /**
      * Return Dotpay channels, which are availaible for the given amount as a parameter
      * @param float $amount amount
      * @return boolean
      */
-    public function getDotpayChannels($amount)
+    public function getDotpayChannels($amount,$refresh=false)
     {
-        //$this->logme($amount);
         $dotpay_id = $this->get_option('id');
 
 		if($amount == 0 || preg_match('/^\d{6}$/', trim($dotpay_id)) == 0)
 		{
-			return false;
-        }
+		    $resultJson = false;
+        }else{
+            $dotpay_url = $this->getPaymentChannelsUrl();
+            $payment_currency = $this->getCurrency();
+    
+            $order_amount = $this->getFormatAmount($amount);
+
+            if(!empty(WC()->session->get('dotpay_payment_channels_cache_'.$order_amount)) && $refresh == false)
+            {
+                $resultJson = WC()->session->get('dotpay_payment_channels_cache_'.$order_amount);
+                
+            }else{
+
+                $dotpay_lang = $this->getPaymentLang();
+
+                $curl_url = "{$dotpay_url}";
+                $curl_url .= "?id={$dotpay_id}";
+                $curl_url .= "&amount={$order_amount}";
+                $curl_url .= "&currency={$payment_currency}";
+                $curl_url .= "&lang={$dotpay_lang}";
+                $curl_url .= "&format=json";
+                /**
+                 * curl
+                 */
+                try {
         
-        $dotpay_url = $this->getPaymentChannelsUrl();
-        $payment_currency = $this->getCurrency();
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch, CURLOPT_HEADER, false);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    curl_setopt($ch, CURLOPT_URL, $curl_url);
+                    curl_setopt($ch, CURLOPT_REFERER, $curl_url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                                        'Accept: application/json; indent=4',
+                                        'Content-type: application/json; charset=utf-8',
+                                        'User-Agent: DotpayWooCommerce-channels'
+                                      ));
+                    $resultJson = curl_exec($ch);
+        
+                } catch (Exception $exc) {
+                    $resultJson = false;
+                }
+        
+                if ($ch) {
+                    curl_close($ch);
+                }
+                if($resultJson !== false) {
 
-        $order_amount = $this->getFormatAmount($amount);
-	    if(!empty($_SESSION['dotpay_payment_channels_cache'][$order_amount]))
-	    {
-	    	return $_SESSION['dotpay_payment_channels_cache'][$order_amount];
-	    }
-        $dotpay_lang = $this->getPaymentLang();
+                    WC()->session->set('dotpay_payment_channels_cache_'.$order_amount, $resultJson);
 
-        $curl_url = "{$dotpay_url}";
-        $curl_url .= "?id={$dotpay_id}";
-        $curl_url .= "&amount={$order_amount}";
-        $curl_url .= "&currency={$payment_currency}";
-        $curl_url .= "&lang={$dotpay_lang}";
-        $curl_url .= "&format=json";
-        /**
-         * curl
-         */
-        try {
+                }else{
+                    $resultJson = false;
+                }
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_URL, $curl_url);
-            curl_setopt($ch, CURLOPT_REFERER, $curl_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 100);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                'Accept: application/json; indent=4',
-                                'Content-type: application/json; charset=utf-8',
-                                'User-Agent: DotpayWooCommerce-channels'
-                              ));
-            $resultJson = curl_exec($ch);
-
-        } catch (Exception $exc) {
-            $resultJson = false;
+            }
+            
         }
-
-        if ($ch) {
-            curl_close($ch);
-        }
-        if($resultJson !== false) {
-
-	        $_SESSION['dotpay_payment_channels_cache'][$order_amount] = $resultJson;
-        }
-
+ 
         return $resultJson;
     }
 
@@ -1032,7 +1104,7 @@ public function getProductName()
      */
     public function getChannelData($id)
     {
-        $resultJson = $this->getDotpayChannels($this->getOrderAmount());
+        $resultJson = $this->getDotpayChannels($this->getAmountForWidget());
         if (false != $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
@@ -1087,7 +1159,7 @@ public function getProductName()
 
     public function getChannelName($id)
     {
-        $resultJson = $this->getDotpayChannels('333');
+        $resultJson = $this->getDotpayChannels('333',false);
         if (false != $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
@@ -1099,6 +1171,95 @@ public function getProductName()
             }
         }
         return false;
+    }
+
+
+    /**
+     * Returns info, check channel: is_disable and disable_message, count available channels
+     * @param type $id channel id
+     * @return array|false
+     */
+
+    public function CheckChannelDisable($id)
+    {
+        if($this->getAmountForWidget() > 0) { $amountforchannels = $this->getAmountForWidget();}else{ $amountforchannels = '100.00';} 
+        
+        $getdata = $this->getDotpayChannels($amountforchannels,false);
+
+		if( isset($getdata) && !empty($getdata) )
+			{
+				
+			$session_channels = array($getdata);
+			$resultJson = $session_channels[0];
+			$result = json_decode($resultJson, true);
+
+            if (isset($result['channels']) && is_array($result['channels'])) {
+                foreach ($result['channels'] as $channel) {
+                    if (isset($channel['id']) && $channel['id'] == $id) {
+						
+						if (isset($channel['disable_message'])) {
+							
+							$disabled_message = $channel['disable_message'];
+						}else{ 
+						 	$disabled_message = "";
+						}
+				return array(
+							'is_disable' => strtolower($channel['is_disable']),
+							'disable_message' => $disabled_message,
+							'id' => $id,
+							'amount' => $amountforchannels
+							);
+						}
+                }
+            }else{
+				 return false;
+			}
+				
+			}else {
+				
+				 return false;
+			}
+       
+    }
+
+    /**
+     * Returns count available channels for order
+     * @return num|Array|false
+     */
+
+    public function CheckChannelEnable($count=1,$amountforchannels='100.00',$refresh=false)
+    {
+	
+        $getdata = $this->getDotpayChannels($amountforchannels,$refresh);
+
+		if( isset($getdata) && !empty($getdata) )
+			{
+            $session_channels = array($getdata);
+			$resultJson = $session_channels[0];
+			$result = json_decode($resultJson, true);
+			
+			$channels = array();
+			
+            if (isset($result['channels']) && is_array($result['channels'])) {
+                foreach ($result['channels'] as $channel) {
+                     if (isset($channel['is_disable']) && (strtolower($channel['is_disable']) === 'false')) {
+						$channels[] = $channel['id'];
+						}
+                }
+                if($count == 1){
+                    return count($channels);
+                }else {
+                    return $channels;
+                }
+				
+            }else{
+				 return false;
+			}
+				
+			}else {
+				
+				 return false;
+			}   
     }
 
 
@@ -1168,9 +1329,9 @@ public function getProductName()
      * @param int $orderId order id
      */
     protected function setOrderId($orderId)
-    {
+    {   
         $this->orderId = $orderId;
-        $_SESSION['dotpay_payment_order_id'] = $orderId;
+        WC()->session->set( 'dotpay_payment_order_id', $orderId );
     }
 
         /**
@@ -1179,7 +1340,7 @@ public function getProductName()
      */
     protected function setOneProductName($productName)
     {
-        $_SESSION['dotpay_payment_one_product_name'] = $productName;
+        WC()->session->set('dotpay_payment_one_product_name',$productName);
     }
 
 
@@ -1191,10 +1352,12 @@ public function getProductName()
      */
     protected function getOrder()
     {
+
         if ($this->orderObject == null || $this->getLegacyOrderId($this->orderObject) == null) {
             if ($this->orderId == null) {
-                if (isset($_SESSION['dotpay_payment_order_id'])) {
-                    $this->orderId = $_SESSION['dotpay_payment_order_id'];
+                 $get_id_session = WC()->session->get('dotpay_payment_order_id');
+                if (isset($get_id_session)) {
+                    $this->orderId = WC()->session->get('dotpay_payment_order_id');
                 }
             }
             $this->orderObject = new WC_Order($this->orderId);
@@ -1207,8 +1370,10 @@ public function getProductName()
      */
     protected function forgetOrder()
     {
-        unset($_SESSION['dotpay_payment_order_id']);
-        unset($_SESSION['dotpay_payment_one_product_name']); 
+       WC()->session->__unset( 'dotpay_payment_order_id' );
+       WC()->session->__unset( 'dotpay_payment_one_product_name' );
+
+
         $this->orderObject = null;
         $this->orderId = null;
     }

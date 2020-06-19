@@ -38,7 +38,6 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
         $this->method_description = __(' Online payment', 'dotpay-payment-gateway');
         $this->addActions();
-
     }
 
     /**
@@ -48,6 +47,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
     protected function getDataForm() {
         $hiddenFields = parent::getDataForm();
         if($this->isWidgetEnabled()) {
+
             $channel = trim($this->getChannel());
             if($channel == "" || $channel == 0){
                 $hiddenFields['type'] = '4';
@@ -60,7 +60,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
         return $hiddenFields;
     }
 
-    
+
     public function getFormPath() {
         return WOOCOMMERCE_DOTPAY_GATEWAY_DIR . 'form/standard.phtml';
     }
@@ -79,8 +79,8 @@ class Gateway_Dotpay extends Gateway_Gateway {
 
         if(!empty($_POST['channel'])) {
             $dp_channel = $_POST['channel'];
-        }else if (!isset($_POST['channel']) && empty((int)$_POST['channel']) && isset($_SESSION['dotpay_payment_channel'])) {
-            $dp_channel = $_SESSION['dotpay_payment_channel'];
+        }else if (!isset($_POST['channel']) && empty((int)$_POST['channel']) && null !== WC()->session->get('dotpay_payment_channel')) {
+            $dp_channel = WC()->session->get('dotpay_payment_channel');
         } else {
         $dp_channel = "";
         }
@@ -313,6 +313,9 @@ class Gateway_Dotpay extends Gateway_Gateway {
 			$this->form_fields["shipping_mapping_" . $method->instance_id] = $this->getMappingFieldForShippingMethod($zone0->get_zone_name(), $method->title);
 		}
     }
+
+
+    
 
     /**
      * Return flag, if this channel is enabled

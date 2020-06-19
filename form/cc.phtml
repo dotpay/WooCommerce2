@@ -1,3 +1,117 @@
+<?php
+
+if($this->getAmountForWidget() > 0) {$amountforchannelscc = $this->getAmountForWidget();}else{ $amountforchannelscc = '100.00';} 
+
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelscc)) || !in_array(self::$ccChannel,$this->CheckChannelEnable(0,$amountforchannelscc)))
+{
+	?>
+	<script type = "text/javascript" >
+		console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+		
+		jQueryDotpayCodeCC = function(){
+			if (typeof jQuery != 'undefined') {
+				jQuery(document).ready(function () {
+					jQuery('li.payment_method_Dotpay_cc').remove();					
+				});
+			};	
+		};				
+	
+	</script>  
+<?php
+
+}else{
+ $CheckCCEnabled = $this->CheckChannelDisable(self::$ccChannel);
+
+ $getdatacc = $this->getDotpayChannels($amountforchannelscc);
+ 
+ if(isset($CheckCCEnabled['is_disable']) && (string)$CheckCCEnabled['is_disable'] == 'true')
+ {	
+	$CCmessage = $CheckCCEnabled['disable_message'];
+	 ?>
+		<script type = "text/javascript" >
+            console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel is disabled for this order: ".$CCmessage.". This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+			
+			jQueryDotpayCodeCC = function(){
+			    if (typeof jQuery != 'undefined') {
+					jQuery(document).ready(function () {
+						jQuery('li.payment_method_Dotpay_cc').remove();					
+					});
+				};	
+			};				
+		
+		</script>  
+<?php
+ } else if (isset($getdatacc) && !empty($getdatacc) && (int)$CheckCCEnabled['id'] == "") {
+?>
+    <script type = "text/javascript">
+    console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel not available for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+    
+    jQueryDotpayCodeCC = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {
+                jQuery('li.payment_method_Dotpay_cc').remove();					
+            });
+        };	
+    };				
+</script>
+
+<?php
+
+ } else {
+
+ ?>	 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <?php if((bool)$this->isTestMode()) echo "<br><p style=\"font-size:1.0em;text-align:center;background-color:#fff1f0;color:#d85030;border:1px solid rgba(216,80,48,0.3);padding:20px;border-radius:3px \"><strong><i class='material-icons'>notification_important</i> ".__('Attention!', 'dotpay-payment-gateway')."</strong> ".__('Test mode is activated. This is just a payment simulation.', 'dotpay-payment-gateway')."</p>"; ?>
 <?php include(__DIR__.'/agreements.phtml'); ?>
+
+<script type = "text/javascript" >
+
+    jQueryEnableButtonCC = function(){
+        jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+        jQuery('#dotpay_empty_channel').remove();
+        jQuery('p.Nochannels').hide();
+    };
+
+    jQueryDotpayCodeCC = function(){
+        if (typeof jQuery != 'undefined') {
+            jQuery(document).ready(function () {          
+                if(jQuery('input#payment_method_Dotpay_cc').is(':checked')) { 
+                    console.log('%cCredit Card method via Dotpay is checked','background: #cfcfcf; color: green;');
+                    jQueryEnableButtonCC();
+		        }
+            });
+
+            jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
+                    if (this.checked) {
+                        if (this.value == 'Dotpay_cc') {                           
+                            console.log('%cCredit Card method via Dotpay is checked manually','background: #cfcfcf; color: green;');
+                            jQueryEnableButtonCC();
+                        };
+                    };
+            });
+        };
+    };
+ </script>   
+ 
+<?php	 
+ }
+ }// check if exist channel to order
+ ?>
+<script type = "text/javascript" >
+    if(window.jQuery){
+        jQueryDotpayCodeCC();
+
+    } else{   
+        var script = document.createElement('script'); 
+        document.head.appendChild(script);  
+        script.type = 'text/javascript';
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js";
+
+        script.onload = jQueryDotpayCodeCC;
+    }
+ </script>
+<?php
+        if (null == WC()->session->get('dotpay_payment_one_product_name')) {
+			$this->setOneProductName($this->getProductName());
+        }   
+?>
