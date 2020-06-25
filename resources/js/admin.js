@@ -23,6 +23,38 @@
  *
  */
 
+ function checIfLangPL() {
+      var doclang = document.documentElement.lang;
+      var res = doclang.toLowerCase();
+      var n = res.search('pl');
+    if(n >= 0 ) {
+      return true;
+    }else{
+      return false;
+    }
+
+ }
+//check if is polish language in admin panel
+if(checIfLangPL() === true) {
+  var dp_pincheck = "Pin składa się przynajmniej z 16 a maksymalnie z 32 znaków alfanumerycznych!";
+  var dp_allowed = "Dozwolone tylko cyfry (6 cyfr)";
+  var dp_shipping_methods = "Dostępne metody wysyłki";
+  var dp_additional1 = "Dodatkowe ustawienia dla płatności odroczonych";
+  var dp_additional2 = "Wymagana dodatkowa Umowa w celu uruchomienia kanałów płatności obsługujących tę formę płatności.";
+  var dp_currency_leave = "Zostaw pole puste lub podaj walutę w formacie ISO 4217, np: EUR lub EUR,USD";
+  var dp_introduction1 = "Dziękujemy za wybranie Dotpay!";
+  var dp_introduction2 = "Aby poprawnie skonfigurować nasz moduł płatności <a href=\"https://github.com/dotpay/WooCommerce2#instrukcja\" target=\"_new\">sprawdź wcześniej instrukcję</a>.";
+}else {
+  var dp_pincheck = "The pin consists of at least 16 and a maximum of 32 alphanumeric characters!";
+  var dp_allowed = "Only digits allowed (6 digits)";
+  var dp_shipping_methods = "Available shipping methods";
+  var dp_additional1 = "Additional settings for deferred payments";
+  var dp_additional2 = "Additional Agreement required to enable payment channels that support this form of payment.";
+  var dp_currency_leave = "Leave the field blank or enter a currency in ISO 4217 format, e.g. EUR or EUR, USD";
+  var dp_introduction1 = "Thank you for choosing Dotpay!";
+  var dp_introduction2 = "To correctly configure our payment module <a href=\"https://github.com/dotpay/WooCommerce2#instructions\" target=\"_new\">check instructions first</a>.";
+
+}
 
 
 function switchPV(obj) {
@@ -30,7 +62,7 @@ function switchPV(obj) {
     jQuery('.pv_option').parents('tr').fadeIn();
     jQuery("#woocommerce_dotpay_pin2").attr("pattern", "[a-zA-Z0-9]{16,32}");
     jQuery("#woocommerce_dotpay_pin2").prop('required', true);
-    jQuery("#woocommerce_dotpay_pin2").attr("title", "Pin składa się przynajmniej z 16 a maksymalnie z 32 znaków alfanumerycznych!");
+    jQuery("#woocommerce_dotpay_pin2").attr("title", dp_pincheck);
   } else {
     jQuery('.pv_option').parents('tr').fadeOut();
     jQuery("#woocommerce_dotpay_pin2").prop('required', false);
@@ -86,7 +118,7 @@ if (typeof jQuery != 'undefined') {
 
     // module setup: validate ID
     jQuery("#woocommerce_dotpay_id").attr("pattern", "[0-9]{5,6}");
-    jQuery("#woocommerce_dotpay_id").attr("title", "Dozwolone tylko cyfry (6 cyfr)");
+    jQuery("#woocommerce_dotpay_id").attr("title", dp_allowed);
     jQuery("#woocommerce_dotpay_id").attr("maxlength", "6");
     jQuery("#woocommerce_dotpay_id").prop("placeholder", "np. 123456");
 
@@ -126,7 +158,7 @@ if (typeof jQuery != 'undefined') {
 
     //  module setup: validatte ID2
     jQuery("#woocommerce_dotpay_id2").attr("pattern", "[0-9]{5,6}");
-    jQuery("#woocommerce_dotpay_id2").attr("title", "Dozwolone tylko cyfry (6 cyfr)");
+    jQuery("#woocommerce_dotpay_id2").attr("title", dp_allowed);
     jQuery("#woocommerce_dotpay_id2").attr("maxlength", "6");
     jQuery("#woocommerce_dotpay_id2").prop("placeholder", "np. 123456");
 
@@ -139,11 +171,11 @@ if (typeof jQuery != 'undefined') {
 
     // add pattern to configuration inputs
     jQuery("#woocommerce_dotpay_credit_card_channel_number").attr("pattern", "[0-9]{2,4}");
-    jQuery("#woocommerce_dotpay_credit_card_channel_number").attr("title", "Dozwolone tylko cyfry");
+    jQuery("#woocommerce_dotpay_credit_card_channel_number").attr("title", dp_allowed);
 
     jQuery("#woocommerce_dotpay_pin").attr("minlength", "16");
     jQuery("#woocommerce_dotpay_pin").attr("pattern", "[a-zA-Z0-9]{16,32}");
-    jQuery("#woocommerce_dotpay_pin").attr("title", "Pin składa się przynajmniej z 16 a maksymalnie z 32 znaków alfanumerycznych!");
+    jQuery("#woocommerce_dotpay_pin").attr("title", dp_pincheck);
 
 
     // decorate elements for configuration module
@@ -162,13 +194,13 @@ if (typeof jQuery != 'undefined') {
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_test"]'));
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertAfter(jQuery('label[for="woocommerce_dotpay_test"]'));
     jQuery("<br><hr style='height: 3px; background: #c5ccd6;'>").insertAfter(jQuery('label[for="woocommerce_dotpay_enabled"]'));
-    jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><p style='font-weight: bold;'>Dostępne metody wysyłki</p><p>&nbsp;</p><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_shipping_mapping_1"]'));
-    jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><p style='font-weight: bold;'>Dodatkowe ustawienia dla płatności odroczonych</p><p class='description'>Wymagana dodatkowa Umowa w celu uruchomienia kanałów płatności obsługujących tę formę płatności.</p><br>").insertBefore(jQuery('select#woocommerce_dotpay_shipping_mapping_1'));
+    jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><p style='font-weight: bold;'>"+ dp_shipping_methods +"</p><p>&nbsp;</p><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_shipping_mapping_1"]'));
+    jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><p style='font-weight: bold;'>"+ dp_additional1 +"</p><p class='description'>"+ dp_additional2 +"</p><br>").insertBefore(jQuery('select#woocommerce_dotpay_shipping_mapping_1'));
 
 
     //  jQuery("#woocommerce_dotpay_dontview_currency").attr("pattern", "^(([A-Z]{3})\\s?,?\\s?)+");
     jQuery("#woocommerce_dotpay_dontview_currency").attr("pattern", "^(((AED|AFN|ALL|AMD|ANG|AOA|ARS|AUD|AWG|AZN|BAM|BBD|BDT|BGN|BHD|BIF|BMD|BND|BOB|BOV|BRL|BSD|BTN|BWP|BYN|BZD|CAD|CDF|CHE|CHF|CHW|CLF|CLP|CNY|COP|COU|CRC|CUC|CUP|CVE|CZK|DJF|DKK|DOP|DZD|EGP|ERN|ETB|EUR|FJD|FKP|GBP|GEL|GHS|GIP|GMD|GNF|GTQ|GYD|HKD|HNL|HRK|HTG|HUF|IDR|ILS|INR|IQD|IRR|ISK|JMD|JOD|JPY|KES|KGS|KHR|KMF|KPW|KRW|KWD|KYD|KZT|LAK|LBP|LKR|LRD|LSL|LYD|MAD|MDL|MGA|MKD|MMK|MNT|MOP|MRU|MUR|MVR|MWK|MXN|MXV|MYR|MZN|NAD|NGN|NIO|NOK|NPR|NZD|OMR|PAB|PEN|PGK|PHP|PKR|PLN|PYG|QAR|RON|RSD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|SLL|SOS|SRD|SSP|STN|SVC|SYP|SZL|THB|TJS|TMT|TND|TOP|TRY|TTD|TWD|TZS|UAH|UGX|USD|USN|UYI|UYU|UZS|VEF|VND|VUV|WST|XAF|XAG|XAU|XBA|XBB|XBC|XBD|XCD|XDR|XOF|XPD|XPF|XPT|XSU|XTS|XUA|XXX|YER|ZAR|ZMW|ZWL))\\s?,?\\s?)+");
-    jQuery("#woocommerce_dotpay_dontview_currency").attr("title", "Zostaw pole puste lub podaj walutę w formacie ISO 4217, np: EUR lub EUR,USD");
+    jQuery("#woocommerce_dotpay_dontview_currency").attr("title", dp_currency_leave);
 
     jQuery('label[for="woocommerce_dotpay_id"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_pin"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
@@ -182,6 +214,9 @@ if (typeof jQuery != 'undefined') {
     jQuery('label[for="woocommerce_dotpay_api_password"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_masterpass_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_paypo_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
+
+    // added info about manual
+    jQuery('<div class="notice notice-info dotpay-info-notice"><p><strong>'+ dp_introduction1 +'</strong><br> '+ dp_introduction2 +'</p></div>').insertBefore(jQuery('div.wrap.woocommerce > form#mainform table.form-table'));
 
     jQuery('p:contains("Online payment")').remove();
     jQuery('p:contains("Płatności online")').remove();

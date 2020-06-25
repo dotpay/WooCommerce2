@@ -74,14 +74,19 @@ if ($this->isMainChannelEnabled() )
         $disableforwidget = explode(',',$this->getDisabledChannelsList());
         if(is_array($this->CheckChannelEnable(0,$amountforchannels,true))){ 
             $channelsforwidget_real_el = array_diff($this->CheckChannelEnable(0,$amountforchannels), $disableforwidget);           
-                $channelsforwidget_real_count = count($channelsforwidget_real_el);
+            $channelsforwidget_real_count = count($channelsforwidget_real_el);
+            if($channelsforwidget_real_count >0 ){
+                $channelsforwidget_real = $channelsforwidget_real_el[key($channelsforwidget_real_el)];
+            }else{
+                $channelsforwidget_real = '';
+            }
+
         } else { 
             $channelsforwidget_real_el = array();
             $channelsforwidget_real_count = 0;
+
         }
-		
-		$channelsforwidget_real = $channelsforwidget_real_el[key($channelsforwidget_real_el)];
-		
+
 // if channels to widget > 0
 if ($channelsforwidget_real_count > 0 ) {
 
@@ -219,7 +224,7 @@ var dotpayWidgetConfig = {
 
 </script>
 <link href="<?php echo $this->getResourcePath(); ?>css/payment_widget.min.css" rel="stylesheet">
-<script id="dotpay-payment-script" src="<?php echo $this->getResourcePath(); ?>js/payment_widget.min.js"></script>
+<script id="dotpay-payment-script" src="<?php echo $this->getResourcePath(); ?>js/payment_widget.js"></script>
 <style>
     <?php include_once dirname(__FILE__) . '/../resources/css/dotpay_payment_form.css'; ?>
 </style>

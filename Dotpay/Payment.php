@@ -45,7 +45,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.5.0';
+    const MODULE_VERSION = '3.5.1';
 
 
     public static $ocChannel = '248';
@@ -420,7 +420,11 @@ if( null !== $Items_shipping){
     $Items_shipping_array = explode(',',$Items_shipping);
     $Items_shipping_first = $Items_shipping_array[0];
 
-    $name = $this->FormattItemName($Items_shipping_first);
+    if(count($Items_shipping_array) == 1 ){
+        $name = $this->FormattItemName($Items_shipping_first);
+    }else {
+        $name = "";
+    }
 
 }else{
 
