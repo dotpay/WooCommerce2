@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
 "POT-Creation-Date: 2020-06-24 14:50+0200\n"
-"PO-Revision-Date: 2020-06-24 14:50+0200\n"
+"PO-Revision-Date: 2020-07-03 10:37+0200\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: en_US\n"
@@ -57,7 +57,7 @@ msgstr "Credit Cards (Dotpay)"
 
 #: ../Gateway/Dotpay.php:36
 msgid "Dotpay (fast payment)"
-msgstr "Dotpay (fast payment"
+msgstr "Dotpay (fast payment)"
 
 #: ../Gateway/Dotpay.php:38 ../Gateway/Gateway.php:73
 msgid "Fast and secure payment via Dotpay"
@@ -177,13 +177,15 @@ msgstr ""
 
 #: ../Gateway/Dotpay.php:151
 msgid "Show product name in payment title"
-msgstr ""
+msgstr "Show product name in payment title"
 
 #: ../Gateway/Dotpay.php:152
 msgid ""
 "If there is only one product in the cart - show its name in the transaction "
 "description."
 msgstr ""
+"If there is only one product in the cart - show its name in the transaction "
+"description."
 
 #: ../Gateway/Dotpay.php:157
 msgid "Separate Dotpay account for currencies (EUR, USD or GBP)"
@@ -261,7 +263,7 @@ msgstr "Password API"
 
 #: ../Gateway/Dotpay.php:250
 msgid "Required additional permissions for the user API."
-msgstr ""
+msgstr "Required additional permissions for the user API."
 
 #: ../Gateway/Dotpay.php:258
 msgid "MasterPass"
@@ -546,6 +548,8 @@ msgid ""
 "For the selected payment method you must complete the 6-digit BLIK code from "
 "your banking application."
 msgstr ""
+"For the selected payment method you must complete the 6-digit BLIK code from "
+"your banking application."
 
 #: ../form/oc.phtml:133
 msgid "Select your saved card"
@@ -565,7 +569,7 @@ msgstr ""
 
 #: ../form/standard.phtml:15
 msgid "Incorrect module configuration! Invalid shop ID."
-msgstr ""
+msgstr "Incorrect module configuration! Invalid shop ID."
 
 #: ../form/standard.phtml:89 ../form/standard.phtml:107
 msgid "Choose one of the payment channels below:"
@@ -583,7 +587,7 @@ msgstr ""
 
 #: ../form/standard.phtml:133 ../form/standard.phtml:181
 msgid "Selected"
-msgstr ""
+msgstr "Selected"
 
 #: ../form/standard.phtml:179
 msgid "To select different channel click the above icon again"
@@ -595,7 +599,7 @@ msgstr "You chose the fast and secure payments via Dotpay."
 
 #: ../form/standard.phtml:353
 msgid "Continue to choose your payment method on the Dotpay website."
-msgstr ""
+msgstr "Continue to choose your payment method on the Dotpay website."
 
 #: ../form/standard.phtml:353
 msgid "Or choose a different payment method."
@@ -641,7 +645,7 @@ msgstr ""
 
 #: ../templates/check_status.phtml:196
 msgid "The confirmation payment has timed out!"
-msgstr ""
+msgstr "The confirmation payment has timed out!"
 
 #: ../templates/check_status.phtml:212
 msgid "Timeout of waiting for confirmation of payment"
@@ -676,10 +680,12 @@ msgid ""
 "Warning!\\n\\nAre you sure you want to remove the selected card from this "
 "store?\\n"
 msgstr ""
+"Warning!\\n\\nAre you sure you want to remove the selected card from this "
+"store?\\n"
 
 #: ../templates/oc_manage.phtml:34
 msgid "Success! Your card has been successfully removed."
-msgstr ""
+msgstr "Success! Your card has been successfully removed."
 
 #: ../templates/oc_manage.phtml:39
 msgid "You can not remove this credit card"
@@ -754,6 +760,8 @@ msgid ""
 "In order to pay by cash (e.g. via post office or bank outpost) you may "
 "download the payment form:"
 msgstr ""
+"In order to pay by cash (e.g. via post office or bank outpost) you may "
+"download the payment form:"
 
 #: ../templates/payment_info.phtml:76
 msgid "Payment channel logo"
@@ -764,6 +772,8 @@ msgid ""
 "WARNING! This data can be use only for a regular bank transfer. Use of this "
 "data in a VAT split payment transfer will not result as an effective payment."
 msgstr ""
+"WARNING! This data can be use only for a regular bank transfer. Use of this "
+"data in a VAT split payment transfer will not result as an effective payment."
 
 #: ../templates/payment_info.phtml:88
 msgid ""
