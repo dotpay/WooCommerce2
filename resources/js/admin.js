@@ -216,7 +216,12 @@ if (typeof jQuery != 'undefined') {
     jQuery('label[for="woocommerce_dotpay_paypo_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
 
     // added info about manual
-    jQuery('<div class="notice notice-info dotpay-info-notice"><p><strong>'+ dp_introduction1 +'</strong><br> '+ dp_introduction2 +'</p></div>').insertBefore(jQuery('div.wrap.woocommerce > form#mainform table.form-table'));
+    jQuery('#dp_info-notice').remove();
+    
+    if(jQuery('#woocommerce_dotpay_id').length > 0 && jQuery('#dp_info-notice').length < 1)
+    {
+      jQuery('<div class="notice notice-info dotpay-info-notice" id="dp_info-notice"><p><strong>'+ dp_introduction1 +'</strong><br> '+ dp_introduction2 +'</p></div>').insertBefore(jQuery('div.wrap.woocommerce > form#mainform table.form-table'));
+    }
 
     jQuery('p:contains("Online payment")').remove();
     jQuery('p:contains("Płatności online")').remove();
