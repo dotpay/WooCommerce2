@@ -87,8 +87,11 @@ if ($this->isMainChannelEnabled() )
 
         }
 
+
+
 // if channels to widget > 0
-if ($channelsforwidget_real_count > 0 ) {
+if ($channelsforwidget_real_count > 0 ) 
+{
 
 
 echo "<p style=\"font-size:1em;text-align:left;color:#2f2f97;padding:2px;border-radius:3px \" class=\"SelectChennelInfo\"><em>".__('Choose one of the payment channels below:', 'dotpay-payment-gateway')."</em></p>"; 
@@ -140,9 +143,10 @@ var dotpayWidgetConfig = {
                                     jQuery('p.SelectChennelInfo').hide();
                                     jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                     jQuery('#dotpay_empty_channel').remove(); 
-                                    console.log('The only one available channel is selected (channel: <?php echo (int)$channelsforwidget_real; ?>)');
+                                    console.log('The only one available channel is selected (channel: '+jQuery('.dp_channel-input').attr("value")+')');
+                                    
                                          
-                        }, 800);
+                        }, 1000);
 		//	} 
         };
 
@@ -157,6 +161,8 @@ var dotpayWidgetConfig = {
                     jQuery( "button[name='woocommerce_checkout_place_order']" ).before(dp_empty_channel);
                  }
 			}
+
+
 			jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
                    if (this.checked) {
                              if (this.value == 'dotpay') {                           
@@ -285,10 +291,39 @@ if($channelsforwidget_real_count == 1) {
                                             if (this.value == 'dotpay') {                           
                                                 console.log('%cDotpay main method is checked manually.','background: #cfcfcf; color: green;'); 
                                                  jQueryDotpayWidget1channel();
-                                            }          
+                                            } else{
+                                                console.log('Selected another payment method: ' + this.value);
+                                                jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', false);
+                                                jQuery('#dotpay_empty_channel').remove(); 
+                                            }           
                                         }
                                     });
                                 
+                            }else {
+                                jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
+                                    
+                                        if (this.checked) {
+                                            if (this.value == 'dotpay') {   
+                                                if(jQuery('.dp_channel-input').length < 2){
+                                                    console.log('Only one (<?php echo $channelsforwidget_real_count; ?>) channels is available on widget.');
+                                                }else{
+                                                    console.log('Available channels: '+ jQuery('.dp_channel-input').length);
+                                                }
+
+                                                console.log('%cDotpay main method is checked manually.','background: #cfcfcf; color: green;'); 
+                                                if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 1) {
+                                                    jQueryDotpayWidget1channel();
+                                                }
+                                                jQueryDotpayWidgetSelectChannel();
+                                            } else{
+                                                console.log('Selected another payment method: ' + this.value);
+                                                jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', false);
+                                                jQuery('#dotpay_empty_channel').remove(); 
+                                            }         
+                                        }
+                                    });
+                                    jQueryDotpayWidgetSelectChannel();   
+
                             }
                     });
                 }
@@ -305,7 +340,7 @@ if($channelsforwidget_real_count == 1) {
                         jQueryDotpayWidget = function(){
                             if (typeof jQuery != 'undefined') {
                                 jQuery(document).ready(function () {
-                                    jQueryDotpayChangeFont(); 	
+                                    jQueryDotpayChangeFont();  	
                                     console.log('Available channels in widget: <?php echo $channelsforwidget_real_count; ?>');
                                     jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
                                         if (this.checked) {
@@ -315,7 +350,11 @@ if($channelsforwidget_real_count == 1) {
                                                     jQueryDotpayWidget1channel();
                                                 }
                                                 jQueryDotpayWidgetSelectChannel();
-                                            }          
+                                            } else{
+                                                console.log('Selected another payment method: ' + this.value);
+                                                jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', false);
+                                                jQuery('#dotpay_empty_channel').remove(); 
+                                            }         
                                         }
                                     });
                                     jQueryDotpayWidgetSelectChannel();                            
@@ -338,7 +377,7 @@ if($channelsforwidget_real_count == 1) {
 jQueryDotpayWidget = function(){
             if (typeof jQuery != 'undefined') {
                 jQuery(document).ready(function () {
-                    jQueryDotpayChangeFont(); 		
+                    jQueryDotpayChangeFont();               		
                     if (jQuery('div.dotpay-channels-selection > div.channel-container').length < 1) {
                         jQuery('li.payment_method_dotpay').remove();
                         console.log('%cThere are no payment channels available for this widget. This method has been blocked.','background: #c3c3c3; color: brown;');
@@ -351,7 +390,7 @@ jQueryDotpayWidget = function(){
 
          
 
-        } //if channels to widget < 1
+ } //if channels to widget < 1
 
 
     } else {
@@ -388,7 +427,7 @@ jQueryDotpayWidget = function(){
     jQueryDotpayWidget = function(){
         if (typeof jQuery != 'undefined') {
             jQuery(document).ready(function () {
-                jQueryDotpayChangeFont(); 
+                jQueryDotpayChangeFont();
                 jQuery('li.payment_method_dotpay').remove();					
             });
         }	

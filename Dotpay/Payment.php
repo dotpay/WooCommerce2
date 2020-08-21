@@ -45,7 +45,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.5.1.2';
+    const MODULE_VERSION = '3.5.2';
 
 
     public static $ocChannel = '248';
@@ -990,8 +990,9 @@ if( null !== $Items_shipping){
      * 
      */
 
-    public function normalizeDecimalAmount($val, int $precision = 2): string
+    public function normalizeDecimalAmount($val)
     {
+        
         $input = str_replace(' ', '', $val);
         $number = str_replace(',', '.', $input);
         if (strpos($number, '.')) {
@@ -999,7 +1000,7 @@ if( null !== $Items_shipping){
             $lastGroup = array_pop($groups);
             $number = implode('', $groups) . '.' . $lastGroup;
         }
-        return bcadd($number, 0, $precision);
+        return bcadd($number, 0, 2);
     }
 
 
