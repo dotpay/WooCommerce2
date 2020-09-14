@@ -40,6 +40,18 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     const STATUS_COMPLETED_VIRTUAL = 'completed';
 
+    
+    /**
+     * Status of order after double complete payment
+     */
+    const STATUS_DOUBLE_COMPLETED = 'dp_double';
+
+    /**
+     * Status of order after double complete payment for virtual products
+     */
+    const STATUS_DOUBLE_COMPLETED_VIRTUAL = 'dp_double';
+
+    
     /**
      * Status of order after failed payment
      */
@@ -699,6 +711,75 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     }
 
 
+       /* 
+           Get Dotpay transaction number and the set status from the notes saved for the order
+       */
+      public function get_DpTrNumberNote($note,$what)
+      {
+          if($what == 'nr'){
+              $regex = '/<span[^>].* id="dptrnr">(M\d\d\d\d-\d\d\d\d\d)<\/span>/';     
+          }else{
+             // $regex = '/<span[^>].* id="dptrst">([\p{L}a-z\s \–\-\\(\\)]{4,40})<\/span>/u';  
+              $regex = '/<span[^>].* id="dptrst">(.*)<\/span>/u';    
+          }
+      
+          preg_match($regex, $note, $idtrdp);
+          
+          if(isset($idtrdp[1])){
+             $tr_dp = $idtrdp[1];
+          }else{
+               $tr_dp = null;
+          } 
+
+      return $tr_dp;
+      
+      }
+      
+     /*
+      Returns unique Dotpay transaction numbers and the number of positive notifications for each payment (for one order)
+     */
+    
+
+     public function count_Double_Payment($a)
+      {
+         
+      $data = array();
+      
+      for ($i = 0; $i < count($a); $i++) {
+             $b = $this->get_DpTrNumberNote($a[$i],'nr');
+             $c = $this->get_DpTrNumberNote($a[$i],'status');
+            
+             // for english and polish lang (use ASCII translation of this section for it to work well)
+             // if you use a different translation of the Woocommerce administration panel - complete this condition:
+             if(trim($c) == 'paid : processing' || trim($c) == 'paid : completed (virtual product)' || trim($c) == 'oplacone : przetwarzane' || trim($c) == 'oplacone : zrealizowane (produkt wirtualny)')
+              {
+                      $data[] = $b;
+              }
+      }
+      return array_count_values($data);
+         
+      }
+
+ /**
+ * Get all approved WooCommerce order notes.
+ *
+ * @param  int|string $order_id The order ID.
+ * @return array      $notes    The order notes, or an empty array if none.
+ */
+function custom_get_order_notes( $order_id ) {
+    remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
+    $comments = get_comments( array(
+        'post_id' => $order_id,
+        'orderby' => 'comment_ID',
+        'order'   => 'DESC',
+        'approve' => 'approve',
+        'type'    => 'order_note',
+    ) );
+    $notes = wp_list_pluck( $comments, 'comment_content' );
+    add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
+    return $notes;
+}
+
     /**
      * Confirm payment after getting confirmation info from Dotpay
      * @global string $wp_version version of installed instance of WordPress
@@ -787,6 +868,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             die('FAIL ORDER: not exist');
         }
 
+
         $this->checkCurrency($order);
         $this->checkAmount($order);
 
@@ -796,21 +878,66 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $chDataNR = $this->getChannelName($chNR);
         $PaymentChannelName = $chDataNR['name'];
         $PaymentChannelLogo= $chDataNR['logo'];
-        $note = __("Dotpay send notification", 'dotpay-payment-gateway') . ": <br><span style=\"color: #4b5074; font-style: italic;\">".__("transaction number:", 'dotpay-payment-gateway') ." <span style=\"font-weight: bold;\">".$operationNR."</span>, <br>". __("payment channel:", 'dotpay-payment-gateway')." <span style=\"font-weight: bold;\">".$PaymentChannelName."</span> /<span style=\"font-weight: bold;\">".$chNR."</span>/</span><br><img src=\"".$PaymentChannelLogo."\" width=\"100px\" height=\"50px\" alt=\"".$PaymentChannelName."\"> <br><span style=\"font-weight: bold; \">status</span>: ";
+        $note = __("Dotpay send notification", 'dotpay-payment-gateway') . ": <br><span style=\"color: #4b5074; font-style: italic;\" >".__("transaction number:", 'dotpay-payment-gateway') ." <span style=\"font-weight: bold;\" id=\"dptrnr\">".$operationNR."</span>, <br>". __("payment channel:", 'dotpay-payment-gateway')." <span style=\"font-weight: bold;\">".$PaymentChannelName."</span> /<span style=\"font-weight: bold;\">".$chNR."</span>/</span><br><img src=\"".$PaymentChannelLogo."\" width=\"100px\" height=\"50px\" alt=\"".$PaymentChannelName."\"> <br><span style=\"font-weight: bold; \">status</span>: ";
+
+
+        $order_status_note =  $order->needs_processing() ? __('paid : processing', 'dotpay-payment-gateway') :  __('paid : completed (virtual product)', 'dotpay-payment-gateway');
 
         switch ($status) {
+
             case 'completed':
-				$order_status_note =  $order->needs_processing() ? __('paid - processing', 'dotpay-payment-gateway') :  __('paid - completed (virtual product)', 'dotpay-payment-gateway');
-				$order->update_status($order->needs_processing() ? self::STATUS_COMPLETED : self::STATUS_COMPLETED_VIRTUAL, $note.' <span style="color: green; font-weight: bold;">'.$order_status_note.'</span>. <br>');
+
+                $order->add_order_note($note.' <span style="color: green; font-weight: bold;" id=\"dptrst\">'.$order_status_note.'</span>. <br>');
+                $order->save();
+                $order->update_status($order->needs_processing() ? self::STATUS_COMPLETED : self::STATUS_COMPLETED_VIRTUAL);
+                usleep(500000);
+                $count_double_payment1 = count($this->count_Double_Payment($this->custom_get_order_notes($order->get_id())));
+                if($count_double_payment1 >1){
+
+                    $received_notifications = "";
+
+                    foreach($this->count_Double_Payment($this->custom_get_order_notes($order->get_id())) as $key=>$value){
+                       $received_notifications .= $key." -> <span style=\"font-size: 0.8em;color: #5a4d4d;\" >". __('positive notifications:', 'dotpay-payment-gateway')."</span> ".  $value ."\n";
+                    }
+                    
+                    $order->set_status($order->needs_processing() ? self::STATUS_DOUBLE_COMPLETED : self::STATUS_DOUBLE_COMPLETED_VIRTUAL);
+
+                    $order->add_order_note('<span style="color: red; font-weight: bold;" >'.__('DOUBLE PAYMENT !', 'dotpay-payment-gateway').'<br>'.__('for the order no:', 'dotpay-payment-gateway').' '.$order->get_id().': <span style="background-color: yellow; padding: 2px;" >'.$count_double_payment1 .'</span></span><br>'.__('Dotpay registered under numbers:', 'dotpay-payment-gateway').' <br><span style="color: #4b5074; font-weight: bold;" >'.$received_notifications.'<br><hr> '. __('Check the posting for this order in your Dotpay panel - there is a risk that the payer has paid more than 1 time for this order.', 'dotpay-payment-gateway').'</span>');
+                    $order->save();
+                }
+
 
 			    do_action('woocommerce_order_status_pending_to_quote', $order->get_id());
                 do_action('woocommerce_payment_complete', $order->get_id());
                 break;
+            
             case 'rejected':
-                $order->update_status(self::STATUS_REJECTED, $note.' <span style="color: red; font-weight: bold;">'.__('cancelled', 'dotpay-payment-gateway').'</span>. <br>');
+
+                usleep(500000);
+                $count_double_payment2 = count($this->count_Double_Payment($this->custom_get_order_notes($order->get_id())));
+                if($count_double_payment2 <1){
+                    $order->update_status(self::STATUS_REJECTED, $note.' <span style="color: red; font-weight: bold;" id=\"dptrst\">'.__('cancelled', 'dotpay-payment-gateway').'</span>. <br>');
+                }else{
+                    $order->add_order_note($note.' <span style="color: red; font-weight: bold;" id=\"dptrst\">'.__('cancelled', 'dotpay-payment-gateway').'</span>. <br>');
+                    $order->add_order_note('<span style="color: #4b5074; font-size:0.9em;">'.__('A message for: ','dotpay-payment-gateway').' <strong>'.$operationNR.'</strong><br>'.__('The order status has not been changed to', 'dotpay-payment-gateway') .'<span style="color: #db4444; font-weight: bold;" > '.__('cancelled', 'dotpay-payment-gateway').'</span> '.__('because the order has previously been paid for (check previous notes).', 'dotpay-payment-gateway').'<br>'.__('You can also check the accounting for this order in the Dotpay panel.', 'dotpay-payment-gateway').'<br>'.__('So it\'s current status:', 'dotpay-payment-gateway').'<span style="color: green; font-weight: bold;" id=\"dptrst\"> <br>'.$order_status_note.'</span></span>');
+                    $order->save();
+                }
                 break;
+            
             default:
-                $order->update_status(self::STATUS_DEFAULT, $note.'  <span style="color: orange; font-weight: bold;">'.__('processing', 'dotpay-payment-gateway').'</span>. <br>');
+
+            usleep(500000);
+            $count_double_payment3 = count($this->count_Double_Payment($this->custom_get_order_notes($order->get_id())));
+
+            if($count_double_payment3 <1){
+                $order->update_status(self::STATUS_DEFAULT, $note.'  <span style="color: orange; font-weight: bold;" id=\"dptrst\">'.__('processing', 'dotpay-payment-gateway').'</span>. <br>');
+            }else{
+                $order->add_order_note($note.'  <span style="color: orange; font-weight: bold;" id=\"dptrst\">'.__('processing', 'dotpay-payment-gateway').'</span>. <br>');
+                $order->add_order_note('<span style="color: #4b5074; font-size:0.9em;">'.__('A message for: ','dotpay-payment-gateway').' <strong>'.$operationNR.'</strong><br>'.__('The order status has not been changed to', 'dotpay-payment-gateway') .'<span style="color: #997024; font-weight: bold;" > '.__('processing', 'dotpay-payment-gateway').'</span> '.__('because the order has previously been paid for (check previous notes).', 'dotpay-payment-gateway').'<br>'.__('You can also check the accounting for this order in the Dotpay panel.', 'dotpay-payment-gateway').'<br>'.__('So it\'s current status:', 'dotpay-payment-gateway').'<span style="color: green; font-weight: bold;" id=\"dptrst\"> <br>'.$order_status_note.'</span></span>');
+                $order->save();
+
+            }
+
         }
         if($this->postConfirmOrder($order)) {
             die('OK');
@@ -835,6 +962,12 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 $this->forgetOrder();
                 die('1');
 			case self::STATUS_COMPLETED_VIRTUAL:
+                $this->forgetOrder();
+                die('1');
+            case self::STATUS_DOUBLE_COMPLETED:
+                $this->forgetOrder();
+                die('1');
+            case self::STATUS_DOUBLE_COMPLETED_VIRTUAL:
                 $this->forgetOrder();
                 die('1');
             case self::STATUS_REJECTED:
@@ -913,7 +1046,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $currencyResponse = $this->getParam('operation_original_currency');
 
         if ($currencyOrder != $currencyResponse) {
-            die('FAIL CURRENCY (org: '.$currencyOrder.' <> notif: '.$currencyResponse.')');
+            die('FAIL CURRENCY (org: '.$currencyOrder.' <> notific: '.$currencyResponse.')');
         }
     }
 
@@ -928,7 +1061,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $amountResponse = $this->getParam('operation_original_amount');
 
         if ($amountOrder != $amountResponse) {
-            die('FAIL AMOUNT (org: '.$amountOrder.' <> notif: '.$amountResponse.')');
+            die('FAIL AMOUNT (org: '.$amountOrder.' <> notific: '.$amountResponse.')');
         }
     }
 

@@ -168,6 +168,8 @@ jQueryDotpayCheckStatus = function(){
             var counter = 0;
 
             console.log('%cpending payment status...','background: #cfcfcf; color: darkviolet;');
+            console.log('<?php print_r($this->getOrder()->get_status() ); ?>')
+
             createAlert('info', '<?php echo __('Payment wait for confirmation by Dotpay... It make take up to 2 minutes.', 'dotpay-payment-gateway');?>');
             jQuery( "p.alertDot" ).prepend( "<span class='loading'></span><br><code id='dp_countdown'></code><br><br><i class='material-icons' style='font-size: 48px; font-weight: bold;'>help_outline</i><br>" );
             

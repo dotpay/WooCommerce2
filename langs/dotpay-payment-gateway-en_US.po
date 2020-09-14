@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2020-06-24 14:50+0200\n"
-"PO-Revision-Date: 2020-07-03 10:37+0200\n"
+"POT-Creation-Date: 2020-09-11 17:22+0200\n"
+"PO-Revision-Date: 2020-09-11 17:23+0200\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: en_US\n"
@@ -59,7 +59,7 @@ msgstr "Credit Cards (Dotpay)"
 msgid "Dotpay (fast payment)"
 msgstr "Dotpay (fast payment)"
 
-#: ../Gateway/Dotpay.php:38 ../Gateway/Gateway.php:73
+#: ../Gateway/Dotpay.php:38 ../Gateway/Gateway.php:85
 msgid "Fast and secure payment via Dotpay"
 msgstr "Fast and secure payment via Dotpay"
 
@@ -329,55 +329,55 @@ msgstr "Paczka w Ruchu"
 msgid "Local pickup"
 msgstr "Local pickup"
 
-#: ../Gateway/Gateway.php:72
+#: ../Gateway/Gateway.php:84
 msgid "DOTPAY PAYMENT"
 msgstr "DOTPAY PAYMENT"
 
-#: ../Gateway/Gateway.php:216 ../templates/check_status.phtml:122
+#: ../Gateway/Gateway.php:228 ../templates/check_status.phtml:122
 msgid "Order not found"
 msgstr "Order not found"
 
-#: ../Gateway/Gateway.php:619
+#: ../Gateway/Gateway.php:631
 msgid "Exceeded expiration date of the generated payment link."
 msgstr "Exceeded expiration date of the generated payment link."
 
-#: ../Gateway/Gateway.php:622
+#: ../Gateway/Gateway.php:634
 msgid "Selected payment channel is unknown."
 msgstr "Selected payment channel is unknown."
 
-#: ../Gateway/Gateway.php:625
+#: ../Gateway/Gateway.php:637
 msgid "Selected channel payment is desabled."
 msgstr "Selected channel payment is desabled."
 
-#: ../Gateway/Gateway.php:628
+#: ../Gateway/Gateway.php:640
 msgid "Account is disabled."
 msgstr "Account is disabled."
 
-#: ../Gateway/Gateway.php:631
+#: ../Gateway/Gateway.php:643
 msgid "Seller account is inactive."
 msgstr "Seller account is inactive."
 
-#: ../Gateway/Gateway.php:634
+#: ../Gateway/Gateway.php:646
 msgid "Amount is too low."
 msgstr "Amount is too low."
 
-#: ../Gateway/Gateway.php:637
+#: ../Gateway/Gateway.php:649
 msgid "Amount is too high."
 msgstr "Amount is too high."
 
-#: ../Gateway/Gateway.php:640
+#: ../Gateway/Gateway.php:652
 msgid "Data format is bad."
 msgstr "Data format is bad."
 
-#: ../Gateway/Gateway.php:643
+#: ../Gateway/Gateway.php:655
 msgid "Request has been modified during transmission."
 msgstr "Request has been modified during transmission."
 
-#: ../Gateway/Gateway.php:646
+#: ../Gateway/Gateway.php:658
 msgid "There were not given all request parameters."
 msgstr "There were not given all request parameters."
 
-#: ../Gateway/Gateway.php:649
+#: ../Gateway/Gateway.php:661
 msgid ""
 "Account settings in Dotpay require the seller to have SSL certificate "
 "enabled on his website."
@@ -385,7 +385,7 @@ msgstr ""
 "Account settings in Dotpay require the seller to have SSL certificate "
 "enabled on his website."
 
-#: ../Gateway/Gateway.php:652
+#: ../Gateway/Gateway.php:664
 msgid ""
 "There was an unidentified error. Please contact to your seller and give him "
 "the order number."
@@ -393,35 +393,81 @@ msgstr ""
 "There was an unidentified error. Please contact to your seller and give him "
 "the order number."
 
-#: ../Gateway/Gateway.php:680 ../Gateway/OneClick.php:128
+#: ../Gateway/Gateway.php:692 ../Gateway/OneClick.php:128
 msgid "Please accept all agreements"
 msgstr "Please accept all agreements"
 
-#: ../Gateway/Gateway.php:799
+#: ../Gateway/Gateway.php:880
 msgid "Dotpay send notification"
 msgstr "Dotpay send notification"
 
-#: ../Gateway/Gateway.php:799
+#: ../Gateway/Gateway.php:880
 msgid "transaction number:"
 msgstr "transaction number:"
 
-#: ../Gateway/Gateway.php:799
+#: ../Gateway/Gateway.php:880
 msgid "payment channel:"
 msgstr "payment channel:"
 
-#: ../Gateway/Gateway.php:803
-msgid "paid - processing"
-msgstr "paid - processing"
+#: ../Gateway/Gateway.php:883
+msgid "paid : processing"
+msgstr "paid : processing"
 
-#: ../Gateway/Gateway.php:803
-msgid "paid - completed (virtual product)"
-msgstr "paid - completed (virtual product)"
+#: ../Gateway/Gateway.php:883
+msgid "paid : completed (virtual product)"
+msgstr "paid : completed (virtual product)"
 
-#: ../Gateway/Gateway.php:810
+#: ../Gateway/Gateway.php:898
+msgid "positive notifications:"
+msgstr "positive notifications:"
+
+#: ../Gateway/Gateway.php:903
+msgid "DOUBLE PAYMENT !"
+msgstr "DOUBLE PAYMENT !"
+
+#: ../Gateway/Gateway.php:903
+msgid "for the order no:"
+msgstr "for the order no:"
+
+#: ../Gateway/Gateway.php:903
+msgid "Dotpay registered under numbers:"
+msgstr "Dotpay registered under numbers:"
+
+#: ../Gateway/Gateway.php:903
+msgid ""
+"Check the posting for this order in your Dotpay panel - there is a risk that "
+"the payer has paid more than 1 time for this order."
+msgstr ""
+"Check the posting for this order in your Dotpay panel - there is a risk that "
+"the payer has paid more than 1 time for this order."
+
+#: ../Gateway/Gateway.php:915 ../Gateway/Gateway.php:917
+#: ../Gateway/Gateway.php:918
 msgid "cancelled"
 msgstr "cancelled"
 
-#: ../Gateway/Gateway.php:813
+#: ../Gateway/Gateway.php:918 ../Gateway/Gateway.php:929
+msgid "A message for: "
+msgstr "A message for: "
+
+#: ../Gateway/Gateway.php:918 ../Gateway/Gateway.php:929
+msgid "The order status has not been changed to"
+msgstr "The order status has not been changed to"
+
+#: ../Gateway/Gateway.php:918 ../Gateway/Gateway.php:929
+msgid "because the order has previously been paid for (check previous notes)."
+msgstr "because the order has previously been paid for (check previous notes)."
+
+#: ../Gateway/Gateway.php:918 ../Gateway/Gateway.php:929
+msgid "You can also check the accounting for this order in the Dotpay panel."
+msgstr "You can also check the accounting for this order in the Dotpay panel."
+
+#: ../Gateway/Gateway.php:918 ../Gateway/Gateway.php:929
+msgid "So it's current status:"
+msgstr "So it's current status:"
+
+#: ../Gateway/Gateway.php:926 ../Gateway/Gateway.php:928
+#: ../Gateway/Gateway.php:929
 msgid "processing"
 msgstr "processing"
 
@@ -458,7 +504,7 @@ msgid "Warning! WooCommerce Dotpay Gateway requires PHP"
 msgstr "Warning! WooCommerce Dotpay Gateway requires PHP"
 
 #: ../woocommerce-dotpay.php:56 ../woocommerce-dotpay.php:68
-#: ../woocommerce-dotpay.php:149 ../woocommerce-dotpay.php:153
+#: ../woocommerce-dotpay.php:214 ../woocommerce-dotpay.php:218
 msgid "Currently in use"
 msgstr "Currently in use"
 
@@ -470,11 +516,15 @@ msgstr ""
 "Attention! WooCommerce Dotpay Gateway to function properly requires "
 "Woocommerce"
 
-#: ../woocommerce-dotpay.php:79
+#: ../woocommerce-dotpay.php:82 ../woocommerce-dotpay.php:101
+msgid "Duplicate Payment - check!"
+msgstr "Duplicate Payment - check!"
+
+#: ../woocommerce-dotpay.php:144
 msgid "Settings"
 msgstr "Settings"
 
-#: ../woocommerce-dotpay.php:148
+#: ../woocommerce-dotpay.php:213
 msgid ""
 "Attention! There is a temporary problem with checking information about "
 "latest version of the Dotpay payment module"
@@ -482,7 +532,7 @@ msgstr ""
 "Attention! There is a temporary problem with checking information about "
 "latest version of the Dotpay payment module"
 
-#: ../woocommerce-dotpay.php:150
+#: ../woocommerce-dotpay.php:215
 msgid ""
 "You can check manually and download latest version and upgrade from this "
 "address:"
@@ -490,35 +540,35 @@ msgstr ""
 "You can check manually and download latest version and upgrade from this "
 "address:"
 
-#: ../woocommerce-dotpay.php:150
+#: ../woocommerce-dotpay.php:215
 msgid "check if there is a new version of Dotpay payment plugin"
 msgstr "check if there is a new version of Dotpay payment plugin"
 
-#: ../woocommerce-dotpay.php:150
+#: ../woocommerce-dotpay.php:215
 msgid "WooCommerce Dotpay payment module"
 msgstr "WooCommerce Dotpay payment module"
 
-#: ../woocommerce-dotpay.php:153
+#: ../woocommerce-dotpay.php:218
 msgid "Attention! A new version of the Dotpay payment module is available:"
 msgstr "Attention! A new version of the Dotpay payment module is available:"
 
-#: ../woocommerce-dotpay.php:154
+#: ../woocommerce-dotpay.php:219
 msgid "Download latest version and upgrade manually this:"
 msgstr "Download latest version and upgrade manually this:"
 
-#: ../woocommerce-dotpay.php:154
+#: ../woocommerce-dotpay.php:219
 msgid "Upgrade WooCommerce Dotpay Gateway"
 msgstr "Upgrade WooCommerce Dotpay Gateway"
 
-#: ../woocommerce-dotpay.php:214
+#: ../woocommerce-dotpay.php:279
 msgid "My saved credit cards"
 msgstr "My saved credit cards"
 
-#: ../woocommerce-dotpay.php:216
+#: ../woocommerce-dotpay.php:281
 msgid "Checking payment status..."
 msgstr "Checking payment status..."
 
-#: ../woocommerce-dotpay.php:218
+#: ../woocommerce-dotpay.php:283
 msgid "Details of your payment"
 msgstr "Details of your payment"
 
@@ -529,13 +579,13 @@ msgstr "BLIK code"
 #: ../form/blik.phtml:72 ../form/cc.phtml:64 ../form/mp.phtml:64
 #: ../form/oc.phtml:156 ../form/paypo.phtml:61 ../form/pv.phtml:64
 #: ../form/standard.phtml:15 ../form/standard.phtml:18
-#: ../form/standard.phtml:95
+#: ../form/standard.phtml:103
 msgid "Attention!"
 msgstr "Attention!"
 
 #: ../form/blik.phtml:72 ../form/cc.phtml:64 ../form/mp.phtml:64
 #: ../form/oc.phtml:156 ../form/paypo.phtml:61 ../form/pv.phtml:64
-#: ../form/standard.phtml:18 ../form/standard.phtml:95
+#: ../form/standard.phtml:18 ../form/standard.phtml:103
 msgid "Test mode is activated. This is just a payment simulation."
 msgstr "Test mode is activated. This is just a payment simulation."
 
@@ -571,37 +621,37 @@ msgstr ""
 msgid "Incorrect module configuration! Invalid shop ID."
 msgstr "Incorrect module configuration! Invalid shop ID."
 
-#: ../form/standard.phtml:89 ../form/standard.phtml:107
+#: ../form/standard.phtml:97 ../form/standard.phtml:115
 msgid "Choose one of the payment channels below:"
 msgstr "Choose one of the payment channels below:"
 
-#: ../form/standard.phtml:105
+#: ../form/standard.phtml:113
 msgid "No payment channel selected!"
 msgstr "No payment channel selected!"
 
-#: ../form/standard.phtml:105
+#: ../form/standard.phtml:113
 msgid ""
 "You must select one of the available payment channels to continue payment."
 msgstr ""
 "You must select one of the available payment channels to continue payment."
 
-#: ../form/standard.phtml:133 ../form/standard.phtml:181
+#: ../form/standard.phtml:141 ../form/standard.phtml:192
 msgid "Selected"
 msgstr "Selected"
 
-#: ../form/standard.phtml:179
+#: ../form/standard.phtml:190
 msgid "To select different channel click the above icon again"
 msgstr "To select different channel click the above icon again"
 
-#: ../form/standard.phtml:353
+#: ../form/standard.phtml:397
 msgid "You chose the fast and secure payments via Dotpay."
 msgstr "You chose the fast and secure payments via Dotpay."
 
-#: ../form/standard.phtml:353
+#: ../form/standard.phtml:397
 msgid "Continue to choose your payment method on the Dotpay website."
 msgstr "Continue to choose your payment method on the Dotpay website."
 
-#: ../form/standard.phtml:353
+#: ../form/standard.phtml:397
 msgid "Or choose a different payment method."
 msgstr "Or choose a different payment method."
 
@@ -637,25 +687,25 @@ msgstr "try to pay again for this order"
 msgid "Status payment check error"
 msgstr "Status payment check error"
 
-#: ../templates/check_status.phtml:171
+#: ../templates/check_status.phtml:173
 msgid ""
 "Payment wait for confirmation by Dotpay... It make take up to 2 minutes."
 msgstr ""
 "Payment wait for confirmation by Dotpay... It make take up to 2 minutes."
 
-#: ../templates/check_status.phtml:196
+#: ../templates/check_status.phtml:198
 msgid "The confirmation payment has timed out!"
 msgstr "The confirmation payment has timed out!"
 
-#: ../templates/check_status.phtml:212
+#: ../templates/check_status.phtml:214
 msgid "Timeout of waiting for confirmation of payment"
 msgstr "Timeout of waiting for confirmation of payment"
 
-#: ../templates/check_status.phtml:212
+#: ../templates/check_status.phtml:214
 msgid "Problem with confirming your payment"
 msgstr "Problem with confirming your payment"
 
-#: ../templates/check_status.phtml:215
+#: ../templates/check_status.phtml:217
 msgid ""
 "When transaction will be confirmed we will notify you on email. If payment "
 "will not be confirmed, please contact with shop owner. "
@@ -663,15 +713,15 @@ msgstr ""
 "When transaction will be confirmed we will notify you on email. If payment "
 "will not be confirmed, please contact with shop owner. "
 
-#: ../templates/check_status.phtml:215
+#: ../templates/check_status.phtml:217
 msgid "And give him the order number:"
 msgstr "And give him the order number:"
 
-#: ../templates/check_status.phtml:235
+#: ../templates/check_status.phtml:237
 msgid "Error"
 msgstr "Error"
 
-#: ../templates/check_status.phtml:250
+#: ../templates/check_status.phtml:252
 msgid "You can go to your account page"
 msgstr "You can go to your account page"
 

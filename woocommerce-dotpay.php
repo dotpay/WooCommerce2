@@ -3,7 +3,7 @@
 /**
   * @wordpress-plugin
   * Plugin Name: WooCommerce Dotpay Gateway
-  * Version: 3.5.2
+  * Version: 3.5.3
   * Plugin URI: https://github.com/dotpay/WooCommerce2
   * Description: Fast and secure Dotpay payment gateway for WooCommerce
   * Author: Dotpay (tech@dotpay.pl)
@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.5.2';
+		$thisVersionModule = '3.5.3';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -72,6 +72,71 @@ if (!defined('ABSPATH')) {
 	}
 
 add_action( 'admin_notices' , 'Check_WC_compare_for_Dotpay' );
+
+
+
+// Register new status for double payment for the order
+function register_dp_custom_order_statuses() {
+
+    register_post_status('wc-dp_double', array(
+        'label' => __( 'Duplicate Payment - check!', 'dotpay-payment-gateway' ),
+        'public' => true,
+        'exclude_from_search' => false,
+        'show_in_admin_all_list' => true,
+        'show_in_admin_status_list' => true,
+        'label_count' => _n_noop('Duplicate Payment - check! <span class="count">(%s)</span>', 'Duplicate Payment - check! <span class="count">(%s)</span>')
+    ));
+}
+add_action('init', 'register_dp_custom_order_statuses');
+
+
+// Add to list of WC Order statuses
+function add_dp_custom_order_statuses($order_statuses) {
+    $new_order_statuses = array();
+
+    // add new order status after processing
+    foreach ($order_statuses as $key => $status) {
+        $new_order_statuses[$key] = $status;
+        if ('wc-processing' === $key) {
+            $new_order_statuses['wc-dp_double'] = __( 'Duplicate Payment - check!', 'dotpay-payment-gateway' );
+        }
+    }
+    return $new_order_statuses;
+}
+add_filter('wc_order_statuses', 'add_dp_custom_order_statuses');
+
+
+// Admin reports for custom order status
+function wc_reports_get_order_custom_report_data_args( $args ) {
+    $args['order_status'] = array( 'completed', 'processing', 'on-hold', 'dp_double' );
+    return $args;
+};
+
+
+add_filter( 'woocommerce_reports_get_order_report_data_args', 'wc_reports_get_order_custom_report_data_args');
+
+
+// Changing the status color on the order list:
+add_action('admin_head', 'styling_dp_admin_order_list' );
+
+function styling_dp_admin_order_list() {
+    global $pagenow, $post;
+
+    if( $pagenow != 'edit.php') return; // Exit
+    if( get_post_type($post->ID) != 'shop_order' ) return; // Exit
+
+ 
+    $order_status = 'dp_double'; // 
+    ?>
+    <style>
+        .order-status.status-<?php echo sanitize_title( $order_status ); ?> {
+            background: #ff89e5;
+            color: #5f0a37;
+        }
+    </style>
+    <?php
+}
+
 
 
 // Add settings link on plugin page
