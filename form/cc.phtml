@@ -6,7 +6,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelscc)) || !in_array(sel
 {
 	?>
 	<script type = "text/javascript" >
-		console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+		console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel is disabled for this order (id:".$this->get_option('id').", currency: ".$this->getCurrency().", amount: ".$this->getAmountForWidget()."). This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
 		
 		jQueryDotpayCodeCC = function(){
 			if (typeof jQuery != 'undefined') {
@@ -29,7 +29,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelscc)) || !in_array(sel
 	$CCmessage = $CheckCCEnabled['disable_message'];
 	 ?>
 		<script type = "text/javascript" >
-            console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel is disabled for this order: ".$CCmessage.". This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+            console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel is disabled for this order, reason: ".$CCmessage." (id:".$this->get_option('id').", currency: ".$this->getCurrency().", amount: ".$this->getAmountForWidget()."). This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
 			
 			jQueryDotpayCodeCC = function(){
 			    if (typeof jQuery != 'undefined') {
@@ -44,7 +44,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelscc)) || !in_array(sel
  } else if (isset($getdatacc) && !empty($getdatacc) && (int)$CheckCCEnabled['id'] == "") {
 ?>
     <script type = "text/javascript">
-    console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel not available for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+    console.log('%c<?php echo "Credit Card (".self::$ccChannel."): channel not available for this order (id:".$this->get_option('id').", currency: ".$this->getCurrency().", amount: ".$this->getAmountForWidget()."). This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
     
     jQueryDotpayCodeCC = function(){
         if (typeof jQuery != 'undefined') {

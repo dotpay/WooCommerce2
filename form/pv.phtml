@@ -2,10 +2,11 @@
 
 if($this->getAmountForWidget() > 0) {$amountforchannelspv = $this->getAmountForWidget();}else{ $amountforchannelspv = '100.00';} 
 
-if(!is_array($this->CheckChannelEnable(0,$amountforchannelspv)) || !in_array(self::$pvChannel,$this->CheckChannelEnable(0,$amountforchannelspv))){
+
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelspv,false,true)) || !in_array(self::$pvChannel,$this->CheckChannelEnable(0,$amountforchannelspv,false,true))){
 	?>
 	<script type = "text/javascript" >
-		console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+		console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel is disabled for this order (id2:".$this->get_option('id2').", currency: ".$this->getCurrency().", amount: ".$this->getAmountForWidget()."). This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
 		
 		jQueryDotpayCodePV = function(){
 			if (typeof jQuery != 'undefined') {
@@ -19,17 +20,17 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspv)) || !in_array(sel
 <?php
 
 }else{
- $CheckPVEnabled = $this->CheckChannelDisable(self::$pvChannel);
+ $CheckPVEnabled = $this->CheckChannelDisable(self::$pvChannel,true);
 
- $getdatapv = $this->getDotpayChannels($amountforchannelspv);
+ $getdatapv = $this->getDotpayChannels($amountforchannelspv,false,true);
 
  if(isset($CheckPVEnabled['is_disable']) && (string)$CheckPVEnabled['is_disable'] == 'true')
  {	
 	$PVmessage = $CheckPVEnabled['disable_message'];
 	 ?>
 		<script type = "text/javascript" >
-            console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel is disabled for this order: ".$PVmessage.". This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
-			
+            console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel is disabled for this order, reason: ".$PVmessage.", (id2:".$this->get_option('id2').", currency: ".$this->getCurrency().", amount: ".$this->getAmountForWidget()."). This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+    
 			jQueryDotpayCodePV = function(){
 			    if (typeof jQuery != 'undefined') {
 					jQuery(document).ready(function () {
@@ -43,7 +44,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspv)) || !in_array(sel
  } else if (isset($getdatapv) && !empty($getdatapv) && (int)$CheckPVEnabled['id'] == "") {
 ?>
     <script type = "text/javascript">
-    console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel not available for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
+    console.log('%c<?php echo "Credit Card 2 (".self::$pvChannel."): channel not available for this order (id2:".$this->get_option('id2').", currency: ".$this->getCurrency().", amount: ".$this->getAmountForWidget()."). This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
     
     jQueryDotpayCodePV = function(){
         if (typeof jQuery != 'undefined') {
@@ -76,7 +77,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspv)) || !in_array(sel
         if (typeof jQuery != 'undefined') {
             jQuery(document).ready(function () {          
                 if(jQuery('input#payment_method_Dotpay_pv').is(':checked')) { 
-                    console.log('%cCredit Card 2 method via Dotpay is checked','background: #cfcfcf; color: green;');
+                    console.log('%cCredit Card 2 method via Dotpay is checked ','background: #cfcfcf; color: green;');
                     jQueryEnableButtonPV();
 		        }
             });

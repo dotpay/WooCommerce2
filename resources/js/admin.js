@@ -190,6 +190,7 @@ if (typeof jQuery != 'undefined') {
     jQuery("<hr style='height: 3px; background: #439c91;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_channels_show"]'));
 
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('#woocommerce_dotpay_dontview_currency'));
+    jQuery("<br><hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_dontview_currency"]'));
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_ccPV_show"]'));
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertBefore(jQuery('label[for="woocommerce_dotpay_test"]'));
     jQuery("<hr style='height: 3px; background: #c5ccd6;'><br>").insertAfter(jQuery('label[for="woocommerce_dotpay_test"]'));

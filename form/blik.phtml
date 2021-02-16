@@ -2,8 +2,9 @@
 
 if($this->getAmountForWidget() > 0) {$amountforchannelsblik = $this->getAmountForWidget();}else{ $amountforchannelsblik = '100.00';} 
 
-if(!is_array($this->CheckChannelEnable(0,$amountforchannelsblik)) || !in_array(self::$blikChannel,$this->CheckChannelEnable(0,$amountforchannelsblik))){
-	?>
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelsblik,false,false)) || !in_array(self::$blikChannel,$this->CheckChannelEnable(0,$amountforchannelsblik,false,false))){
+
+?>
 	<script type = "text/javascript" >
 		console.log('%c<?php echo "BLIK (".self::$blikChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
 		

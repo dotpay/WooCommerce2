@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  *
@@ -45,7 +44,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.5.3';
+    const MODULE_VERSION = '3.5.4';
 
 
     public static $ocChannel = '248';
@@ -125,6 +124,17 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
 
 
     /**
+     * Return version of this module
+     * @return string
+     */
+    public static function getModuleVersion()
+    {
+        return self::MODULE_VERSION;
+    }
+
+
+
+    /**
      * Return API username
      * @return string
      */
@@ -176,6 +186,16 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     {
         return $this->get_option('id');
     }
+
+    /**
+     * Return seller id for another ID (currency)
+     * @return int
+     */
+    public function getSellerIdPV()
+    {
+        return $this->get_option('id2');
+    }
+
 
 	/**
 	 * Return delivery type for specific shipping
@@ -289,7 +309,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     {
         $order = $this->getOrder();
         if ($full == 'full') {
-            return $this->getLegacyOrderId($order) . '|domain:' . $this->realHostName() . '|WC-module:' . self::MODULE_VERSION;
+            return $this->getLegacyOrderId($order) . '|domain:' . $this->realHostName() . '|WooCommerce module:' . self::MODULE_VERSION;
         } else {
             return $this->getLegacyOrderId($order);
         }
@@ -732,7 +752,14 @@ if( null !== $Items_shipping){
         } else {
             $country = $order->billing_country;
         }
-        return esc_attr(strtoupper($country));
+
+        if (preg_match('/^[a-zA-Z]{2,3}$/', trim($country)) == 0) {
+            $country_check = null;
+         }else{
+            $country_check = trim($country);
+         }
+
+        return esc_attr(strtoupper($country_check));
     }
 
     /**
@@ -863,8 +890,15 @@ if( null !== $Items_shipping){
 			$country = $order->get_shipping_country();
 		} else {
 			$country = $order->shipping_country;
-		}
-		return esc_attr(strtoupper($country));
+		}      
+                
+        if (preg_match('/^[a-zA-Z]{2,3}$/', trim($country)) == 0) {
+            $country_check = null;
+         }else{
+            $country_check = trim($country);
+         }
+
+		return esc_attr(strtoupper($country_check));
 	}
 
 	/**
@@ -1033,9 +1067,13 @@ if( null !== $Items_shipping){
      * @param float $amount amount
      * @return boolean
      */
-    public function getDotpayChannels($amount,$refresh=false)
-    {
-        $dotpay_id = $this->get_option('id');
+    public function getDotpayChannels($amount,$refresh=false,$dp_id2=false)
+    {   
+        if($dp_id2 == false){
+            $dotpay_id = $this->get_option('id');
+        }else{
+            $dotpay_id = $this->get_option('id2');
+        }
 
 		if($amount == 0 || preg_match('/^\d{6}$/', trim($dotpay_id)) == 0)
 		{
@@ -1046,9 +1084,9 @@ if( null !== $Items_shipping){
     
             $order_amount = $this->getFormatAmount($amount);
 
-            if(!empty(WC()->session->get('dotpay_payment_channels_cache_'.$order_amount)) && $refresh == false)
+            if(!empty(WC()->session->get('dotpay_payment_channels_cache_'.$order_amount.'_'.$payment_currency.'_'.$dotpay_id)) && $refresh == false)
             {
-                $resultJson = WC()->session->get('dotpay_payment_channels_cache_'.$order_amount);
+                $resultJson = WC()->session->get('dotpay_payment_channels_cache_'.$order_amount.'_'.$payment_currency.'_'.$dotpay_id);
                 
             }else{
 
@@ -1076,7 +1114,7 @@ if( null !== $Items_shipping){
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                                         'Accept: application/json; indent=4',
                                         'Content-type: application/json; charset=utf-8',
-                                        'User-Agent: DotpayWooCommerce-channels'
+                                        'User-Agent: DotpayWooCommerce-channels id:'.$dotpay_id
                                       ));
                     $resultJson = curl_exec($ch);
         
@@ -1089,7 +1127,7 @@ if( null !== $Items_shipping){
                 }
                 if($resultJson !== false) {
 
-                    WC()->session->set('dotpay_payment_channels_cache_'.$order_amount, $resultJson);
+                    WC()->session->set('dotpay_payment_channels_cache_'.$order_amount.'_'.$payment_currency.'_'.$dotpay_id, $resultJson);
 
                 }else{
                     $resultJson = false;
@@ -1164,7 +1202,7 @@ if( null !== $Items_shipping){
 
     public function getChannelName($id)
     {
-        $resultJson = $this->getDotpayChannels('333',false);
+        $resultJson = $this->getDotpayChannels('333',false,false);
         if (false != $resultJson) {
             $result = json_decode($resultJson, true);
             if (isset($result['channels']) && is_array($result['channels'])) {
@@ -1185,40 +1223,39 @@ if( null !== $Items_shipping){
      * @return array|false
      */
 
-    public function CheckChannelDisable($id)
+    public function CheckChannelDisable($id,$pv=false)
     {
         if($this->getAmountForWidget() > 0) { $amountforchannels = $this->getAmountForWidget();}else{ $amountforchannels = '100.00';} 
         
-        $getdata = $this->getDotpayChannels($amountforchannels,false);
+        $getdata = $this->getDotpayChannels($amountforchannels,false,$pv);
 
 		if( isset($getdata) && !empty($getdata) )
-			{
-				
+			{               
 			$session_channels = array($getdata);
 			$resultJson = $session_channels[0];
 			$result = json_decode($resultJson, true);
 
-            if (isset($result['channels']) && is_array($result['channels'])) {
-                foreach ($result['channels'] as $channel) {
-                    if (isset($channel['id']) && $channel['id'] == $id) {
-						
-						if (isset($channel['disable_message'])) {
-							
-							$disabled_message = $channel['disable_message'];
-						}else{ 
-						 	$disabled_message = "";
-						}
-				return array(
-							'is_disable' => strtolower($channel['is_disable']),
-							'disable_message' => $disabled_message,
-							'id' => $id,
-							'amount' => $amountforchannels
-							);
-						}
+                if (isset($result['channels']) && is_array($result['channels'])) {
+                    foreach ($result['channels'] as $channel) {
+                        if (isset($channel['id']) && $channel['id'] == $id) {
+                            
+                            if (isset($channel['disable_message'])) {
+                                
+                                $disabled_message = $channel['disable_message'];
+                            }else{ 
+                                $disabled_message = "";
+                            }
+                    return array(
+                                'is_disable' => strtolower($channel['is_disable']),
+                                'disable_message' => $disabled_message,
+                                'id' => $id,
+                                'amount' => $amountforchannels
+                                );
+                            }
+                    }
+                }else{
+                    return false;
                 }
-            }else{
-				 return false;
-			}
 				
 			}else {
 				
@@ -1232,34 +1269,36 @@ if( null !== $Items_shipping){
      * @return num|Array|false
      */
 
-    public function CheckChannelEnable($count=1,$amountforchannels='100.00',$refresh=false)
+    public function CheckChannelEnable($count=1,$amountforchannels='100.00',$refresh=false,$dp_id2=false)
     {
-	
-        $getdata = $this->getDotpayChannels($amountforchannels,$refresh);
+        $getdata = $this->getDotpayChannels($amountforchannels,$refresh,$dp_id2);
 
 		if( isset($getdata) && !empty($getdata) )
 			{
-            $session_channels = array($getdata);
-			$resultJson = $session_channels[0];
-			$result = json_decode($resultJson, true);
-			
-			$channels = array();
-			
-            if (isset($result['channels']) && is_array($result['channels'])) {
-                foreach ($result['channels'] as $channel) {
-                     if (isset($channel['is_disable']) && (strtolower($channel['is_disable']) === 'false')) {
-						$channels[] = $channel['id'];
-						}
+            
+                $session_channels = array($getdata);
+                $resultJson = $session_channels[0];
+                $result = json_decode($resultJson, true);
+                
+                $channels = array();
+                
+                if (isset($result['channels']) && is_array($result['channels'])) {
+                    foreach ($result['channels'] as $channel) {
+                        if (isset($channel['is_disable']) && (strtolower($channel['is_disable']) === 'false')) {
+                            $channels[] = $channel['id'];
+                            }
+                    }
+
+                    if($count == 1){
+                        return count($channels);
+                    }else {
+                        return $channels;
+                    }
+                
+
+                }else{
+                    return false;
                 }
-                if($count == 1){
-                    return count($channels);
-                }else {
-                    return $channels;
-                }
-				
-            }else{
-				 return false;
-			}
 				
 			}else {
 				
@@ -1426,12 +1465,4 @@ if( null !== $Items_shipping){
         }
     }
 
-
-/*
-//only for developers
-   public function logme($log)
-    {
-	    file_put_contents('./log_'.date("j.n.Y").'.txt', date("H:i:s")."\n".$log."\n", FILE_APPEND);
-    }
-*/
 }

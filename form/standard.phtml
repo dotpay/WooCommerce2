@@ -7,6 +7,48 @@ jQueryDotpayChangeFont = function(){
                 return h.replace(/\(([^\)]+)\)/, "<small>( $1 )</small>");
             });
 }
+
+//get additional params to 3DS v2
+
+var dp_browser_javascriptenabled = "1";
+    var dp_browser_javaenabled = window.navigator.javaEnabled();
+    var dp_browser_language = window.navigator.language.slice(0,2);
+    var dp_browser_screencolordepth = window.screen.colorDepth;
+    var dp_browser_screenheight = window.screen.height;
+    var dp_browser_screenwidth = window.screen.width;
+    var dp_browser_timezone = new Date().getTimezoneOffset();
+
+
+
+function createCookieDP(name, value, hours) {
+  var expires;
+  if (hours) {
+    var date = new Date();
+    date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+    expires = "; expires=" + date.toGMTString();
+  }
+  else {
+    expires = "";
+  }
+  document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
+}
+
+
+BrowserDetect3DSV2 = function(){
+            jQuery(document).ready(function () {
+
+                createCookieDP("dp_browser_javascriptenabled", dp_browser_javascriptenabled, "3");
+                createCookieDP("dp_browser_javaenabled", dp_browser_javaenabled, "3");
+                createCookieDP("dp_browser_language", dp_browser_language, "3");
+                createCookieDP("dp_browser_screencolordepth", dp_browser_screencolordepth, "3");
+                createCookieDP("dp_browser_screenheight", dp_browser_screenheight, "3");
+                createCookieDP("dp_browser_screenwidth", dp_browser_screenwidth, "3");
+                createCookieDP("dp_browser_timezone", dp_browser_timezone, "3");
+
+            });
+}
+
+
 </script>
 <?php
 
@@ -37,6 +79,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                             console.log('%cIncorrect configuration Dotpay payment module! Invalid shop ID.This method has been blocked.','background: #f7e2e2; color: brown;');
 
                     });
+                    BrowserDetect3DSV2(); 
                 }
             };
         </script>
@@ -247,6 +290,7 @@ if($channelsforwidget_real_count == 1) {
             if (typeof jQuery != 'undefined') {
                 jQuery(document).ready(function () {
                     jQueryDotpayChangeFont();
+                    BrowserDetect3DSV2();
 
                     if(channel_apple != "" && 262 == <?php echo (int)$channelsforwidget_real; ?>) {
                         jQuery('li.payment_method_dotpay').hide();
@@ -280,6 +324,7 @@ if($channelsforwidget_real_count == 1) {
                     if (typeof jQuery != 'undefined') {
                         jQuery(document).ready(function () {
                             jQueryDotpayChangeFont();
+                            BrowserDetect3DSV2();
         
                             if(channel_apple != "" && 262 == <?php echo (int)$channelsforwidget_real; ?>) {
                                 //jQuery('li.payment_method_dotpay').hide();
@@ -340,8 +385,11 @@ if($channelsforwidget_real_count == 1) {
                         jQueryDotpayWidget = function(){
                             if (typeof jQuery != 'undefined') {
                                 jQuery(document).ready(function () {
-                                    jQueryDotpayChangeFont();  	
+                                    jQueryDotpayChangeFont();
+                                    BrowserDetect3DSV2();
+
                                     console.log('Available channels in widget: <?php echo $channelsforwidget_real_count; ?>');
+                                    
                                     jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
                                         if (this.checked) {
                                             if (this.value == 'dotpay') {                           
@@ -377,7 +425,8 @@ if($channelsforwidget_real_count == 1) {
 jQueryDotpayWidget = function(){
             if (typeof jQuery != 'undefined') {
                 jQuery(document).ready(function () {
-                    jQueryDotpayChangeFont();               		
+                    jQueryDotpayChangeFont();
+                    BrowserDetect3DSV2();               		
                     if (jQuery('div.dotpay-channels-selection > div.channel-container').length < 1) {
                         jQuery('li.payment_method_dotpay').remove();
                         console.log('%cThere are no payment channels available for this widget. This method has been blocked.','background: #c3c3c3; color: brown;');
@@ -402,7 +451,8 @@ jQueryDotpayWidget = function(){
         jQueryDotpayWidget = function(){
                     if (typeof jQuery != 'undefined') {
                         jQuery(document).ready(function () {
-                            jQueryDotpayChangeFont(); 		
+                            jQueryDotpayChangeFont();
+                            BrowserDetect3DSV2(); 		
                             if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 0) {
                                     jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                
@@ -428,6 +478,7 @@ jQueryDotpayWidget = function(){
         if (typeof jQuery != 'undefined') {
             jQuery(document).ready(function () {
                 jQueryDotpayChangeFont();
+                BrowserDetect3DSV2();
                 jQuery('li.payment_method_dotpay').remove();					
             });
         }	

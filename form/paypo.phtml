@@ -2,7 +2,8 @@
  
 if($this->getAmountForWidget() > 0) {$amountforchannelspaypo = $this->getAmountForWidget();}else{ $amountforchannelspaypo = '100.00';} 
 
-if(!is_array($this->CheckChannelEnable(0,$amountforchannelspaypo,true)) || !in_array(self::$paypoChannel,$this->CheckChannelEnable(0,$amountforchannelspaypo))){
+
+if(!is_array($this->CheckChannelEnable(0,$amountforchannelspaypo,false,false)) || !in_array(self::$paypoChannel,$this->CheckChannelEnable(0,$amountforchannelspaypo,false,false))){    
 	?>
 	<script type = "text/javascript" >
 		console.log('%c<?php echo "PayPo (".self::$paypoChannel."): channel is disabled for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');
@@ -38,7 +39,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspaypo,true)) || !in_a
 		</script>  
 <?php
 
-} else if (null !== WC()->session->get('dotpay_payment_channels_cache_'.$this->getAmountForWidget()) && !empty(WC()->session->get('dotpay_payment_channels_cache_'.$this->getAmountForWidget()) && (int)$CheckPayPoEnabled['id'] == "")) {
+} else if (null !== WC()->session->get('dotpay_payment_channels_cache_'.$this->getAmountForWidget().'_'.$this->getCurrency().'_'.$this->get_option('id')) && !empty(WC()->session->get('dotpay_payment_channels_cache_'.$this->getAmountForWidget().'_'.$this->getCurrency().'_'.$this->get_option('id')) && (int)$CheckPayPoEnabled['id'] == "")) {
 ?>
     <script type = "text/javascript">
     console.log('%c<?php echo "PayPo (".self::$paypoChannel."): channel not available for this order. This method has been blocked."; ?>', 'background: #cfcfcf; color: brown;');

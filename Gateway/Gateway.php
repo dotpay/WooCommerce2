@@ -258,16 +258,48 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'email' => $this->getEmail(),
-            'phone' => $this->getPhone(),
-            'street' => $streetData['street'],
-            'street_n1' => $streetData['street_n1'],
-            'city' => $this->getCity(),
-            'postcode' => $this->getPostcode(),
-            'country' => $this->getCountry(),
+        //        'phone' => $this->getPhone(),
+        //        'street' => $streetData['street'],
+        //        'street_n1' => $streetData['street_n1'],
+        //        'city' => $this->getCity(),
+        //        'postcode' => $this->getPostcode(),
+        //        'country' => $this->getCountry(),
             'ignore_last_payment_channel' => 1,
             'personal_data' => '1',
             'bylaw' => '1'
         );
+        
+
+            if( null != trim($this->getPhone()))
+                {
+                $dotPostForm["phone"] =$this->getPhone();
+                }
+
+            if( null != trim($streetData['street']))
+                {
+                $dotPostForm["street"] = $streetData['street'];
+                }
+
+            if( null != trim($streetData['street_n1']) || "0" != trim($streetData['street_n1']))
+                {
+                $dotPostForm["street_n1"] = $streetData['street_n1'];
+                }
+
+            if( null != trim($this->getCity()))
+                {
+                $dotPostForm["city"] = $this->getCity();
+                }
+
+            if( null != trim($this->getPostcode()))
+                {
+                $dotPostForm["postcode"] = $this->getPostcode();
+                }
+
+            if( null != trim($this->getPostcode()))
+                {
+                $dotPostForm["country"] = $this->getCountry();
+                }    
+
 
 
         if( null != $this->getCustomerBase64())
@@ -529,7 +561,6 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         if ('yes' == $this->get_option('credit_card_show')) {
             $result = true;
         }
-
         return $result;
     }
 

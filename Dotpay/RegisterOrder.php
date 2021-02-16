@@ -81,7 +81,7 @@ abstract class Dotpay_RegisterOrder {
                  ->addOption(CURLOPT_HTTPHEADER, array(
                     'Accept: application/json; indent=4',
                     'Content-type: application/json; charset=utf-8',
-                    'User-Agent: DotpayWooCommerce'
+                    'User-Agent: DotpayWooCommerce v:'. self::$payment->getModuleVersion().' (id:'.self::$payment->getSellerId().')'
                 ));
             $resultJson = $curl->exec();
             $resultStatus = $curl->getInfo();
@@ -122,7 +122,7 @@ abstract class Dotpay_RegisterOrder {
      */
     private static function prepareData($channelId) {
         $streetData = self::$payment->getStreetAndStreetN1();
-        return array (
+        $Request = array (
             'order' => array (
                 'amount' => self::$payment->getOrderAmount(),
                 'currency' => self::$payment->getCurrency(),
@@ -141,14 +141,7 @@ abstract class Dotpay_RegisterOrder {
             'payer' => array (
                 'first_name' => self::$payment->getFirstname(),
                 'last_name' => self::$payment->getLastname(),
-                'email' => self::$payment->getEmail(),
-                'address' => array(
-                    'street' => $streetData['street'],
-                    'building_number' => $streetData['street_n1'],
-                    'postcode' => self::$payment->getPostcode(),
-                    'city' => self::$payment->getCity(),
-                    'country' => self::$payment->getCountry()
-                )
+                'email' => self::$payment->getEmail()
             ),
 
             'payment_method' => array (
@@ -160,5 +153,47 @@ abstract class Dotpay_RegisterOrder {
             )
 
         );
+
+        if ( null != $streetData['street'] && null != self::$payment->getPostcode() && null != self::$payment->getCity() && null != self::$payment->getCountry() ) 
+        {
+            $Request["payer"]["address"]["street"] = $streetData['street'];
+            $Request["payer"]["address"]["building_number"] = $streetData['street_n1'];
+            $Request["payer"]["address"]["postcode"] = self::$payment->getPostcode();
+            $Request["payer"]["address"]["city"] = self::$payment->getCity();
+            $Request["payer"]["address"]["country"] = self::$payment->getCountry();
+        }
+
+
+                // for PSD2
+                if (isset($_SERVER['HTTP_ACCEPT'])) {
+                    $Request["request_context"]["accept"] = $_SERVER['HTTP_ACCEPT'];
+                }
+                if (isset($_SERVER['HTTP_USER_AGENT'])) {
+                    $Request["request_context"]["useragent"] = $_SERVER['HTTP_USER_AGENT']." DotpayWooCommerce/".self::$payment->getModuleVersion();
+                }
+                if (isset($_SERVER['HTTP_REFERER'])) {
+                    $Request["request_context"]["referer"] = $_SERVER['HTTP_REFERER'];
+                }
+        
+                if(isset( $_COOKIE['dp_browser_javaenabled'] )) {
+                    $Request["request_context"]["browser"]["javaenabled"] = $_COOKIE['dp_browser_javaenabled'];
+                } 
+        
+                if(isset( $_COOKIE['dp_browser_javascriptenabled'] ) && isset( $_COOKIE['dp_browser_language'] ) && isset( $_COOKIE['dp_browser_screencolordepth'] ) && isset( $_COOKIE['dp_browser_screenheight'] ) && isset( $_COOKIE['dp_browser_screenwidth'] ) && isset( $_COOKIE['dp_browser_timezone'] )) 
+                {
+                        
+                        $Request["request_context"]["browser"]["javascriptenabled"] = $_COOKIE['dp_browser_javascriptenabled'];
+                        $Request["request_context"]["browser"]["language"] = $_COOKIE['dp_browser_language'];
+                        $Request["request_context"]["browser"]["screencolordepth"] = $_COOKIE['dp_browser_screencolordepth'];
+                        $Request["request_context"]["browser"]["screenheight"] = $_COOKIE['dp_browser_screenheight'];        
+                        $Request["request_context"]["browser"]["screenwidth"] = $_COOKIE['dp_browser_screenwidth'];
+                        $Request["request_context"]["browser"]["timezone"] = $_COOKIE['dp_browser_timezone'];
+        
+                } 
+        
+        
+        return $Request;
+
+
     }
 }

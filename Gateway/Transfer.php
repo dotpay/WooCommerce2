@@ -63,6 +63,7 @@ class Gateway_Transfer extends Gateway_Gateway {
      * @return string
      */
     public function getInformationPage() {
+
 	    if(isset($_GET['order_id'])) {
 		    $orderId = (int)$_GET['order_id'];
 	    } else if($this->getOrder() != null && $this->getOrder()->get_id() != null) {
@@ -72,7 +73,6 @@ class Gateway_Transfer extends Gateway_Gateway {
             $items = WC()->cart->get_cart();
 		    return __('Payment can not be created', 'dotpay-payment-gateway');
         }
-
         global $wpdb;
         $result = $wpdb->get_results('
             SELECT instruction_id as id
@@ -85,7 +85,7 @@ class Gateway_Transfer extends Gateway_Gateway {
            // $instruction = null;
             $instruction = $this->processPayment();
             
-            if($instruction ==null && $instruction->getInstructionId()== null) 
+            if($instruction == null && $instruction->getInstructionId() == null) 
             {
                 return __('Payment can not be created', 'dotpay-payment-gateway');
             }
@@ -94,7 +94,7 @@ class Gateway_Transfer extends Gateway_Gateway {
             $instruction = Dotpay_Instruction::getByOrderId($orderId);
         }
 
-        if($instruction !=null && $instruction->getInstructionId()!= null) {
+        if($instruction != null && $instruction->getInstructionId() != null) {
             $page = $instruction->getPage();
             
 

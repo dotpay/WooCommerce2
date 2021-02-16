@@ -196,7 +196,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'credit_card_show' => array(
-                'title' => __('Credit cards', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="Credit Cards" width="83" height="25" style="margin-top: 10px;">',
+                'title' => __('Credit cards', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="Credit Cards" width="83" height="29" style="margin-top: 10px;">',
                 'type' => 'checkbox',
 				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
 				'desc_tip' => true,
@@ -221,7 +221,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'oneclick_show' => array(
-                'title' => __('One Click for credit card', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="One Click Credit Cards" width="83" height="25" style="margin-top: 10px;">',
+                'title' => __('One Click for credit card', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/cc.png'.'" alt="One Click Credit Cards" width="83" height="29" style="margin-top: 10px;">',
                 'type' => 'checkbox',
 				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
 				'desc_tip' => true,
@@ -255,7 +255,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'masterpass_show' => array(
-                'title' => __('MasterPass', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/MasterPass.png'.'" alt="MasterPass" width="100" height="30" style="margin-top: 10px;">',
+                'title' => __('MasterPass', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/MasterPass.png'.'" alt="MasterPass" width="62px" height="35px" style="margin-top: 10px;">',
                 'type' => 'checkbox',
 				'description' => __('Needed separate agreement.', 'dotpay-payment-gateway'),
 				'desc_tip' => true,
