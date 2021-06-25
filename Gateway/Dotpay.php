@@ -50,9 +50,32 @@ class Gateway_Dotpay extends Gateway_Gateway {
 
             $channel = trim($this->getChannel());
             if($channel == "" || $channel == 0){
-                $hiddenFields['type'] = '4';
+				
+						$dp_channel_selected = "";
+
+						if(null !== WC()->session->get('dotpay_payment_channel') && WC()->session->get('dotpay_payment_channel') > 0 )
+						{               
+							$dp_channel_selected = (int)WC()->session->get('dotpay_payment_channel');
+
+						}else{
+							if(isset( $_COOKIE['dp_channel_selected']) && (int)$_COOKIE['dp_channel_selected'] > 0 ) 
+							{
+								$dp_channel_selected = (int)$_COOKIE['dp_channel_selected'];
+							}else{
+								$dp_channel_selected = ""; 
+							} 
+
+						}
+				
+					if($dp_channel_selected != ""){
+						$hiddenFields['channel'] = (string)trim($dp_channel_selected);
+						$hiddenFields['type'] = '4';
+						
+					}else{
+						$hiddenFields['type'] = '4';
+					}
             }else{
-                $hiddenFields['channel'] = (int)$this->getChannel();
+                $hiddenFields['channel'] = (string)trim($this->getChannel());
                 $hiddenFields['type'] = '4';
             }
 
@@ -86,7 +109,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
         }
 		
 		$this->setChannel($dp_channel);
-	
+        
 		return true;
     }
 
@@ -95,14 +118,14 @@ class Gateway_Dotpay extends Gateway_Gateway {
             __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
             __('Payment with a credit card by MasterPass', 'dotpay-payment-gateway').
             '<p class="description">'.__('Needed separate agreement.', 'dotpay-payment-gateway').'<br>'.
-			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
+			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="https://www.dotpay.pl/kontakt" target="_blank" '.
                'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
         );
         $nameArrayPayPo = array(
             __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
             __('Payment with a postponed method by <a href="https://www.dotpay.pl/en/payment-methods/deferred-payments/paypo/" target="_blank" title="Postponed payments – PayPo">PayPo</a>', 'dotpay-payment-gateway').
             '<p class="description">'.__('Needed separate agreement.', 'dotpay-payment-gateway').'<br>'.
-			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
+			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="https://www.dotpay.pl/kontakt" target="_blank" '.
                'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
         );
         $nameArrayccPV = array(
@@ -124,7 +147,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 				'class' => 'dotpay_module_enable'
             ),
             'id' => array(
-                'title' => __('Dotpay customer ID', 'dotpay-payment-gateway'),
+                'title' => "🆔 ".__('Dotpay customer ID', 'dotpay-payment-gateway'),
                 'type' => 'text',
 				'css' => 'max-width: 100px; color: #006799; font-size: 16px; border-color: #6ec5ef;',
                 'default' => '',
@@ -133,7 +156,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'pin' => array(
-                'title' => __('Dotpay customer PIN', 'dotpay-payment-gateway'),
+                'title' => "🗝️ ".__('Dotpay customer PIN', 'dotpay-payment-gateway'),
                 'type' => 'text',
 				'css' => 'min-width: 200px; color: #006799; font-size: 16px; border-color: #6ec5ef;',
                 'default' => '',
@@ -142,13 +165,19 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'test' => array(
-                'title' => __('Testing environment', 'dotpay-payment-gateway'),
-                'label' => __('Only payment simulation - required Dotpay test account: <a href="https://ssl.dotpay.pl/test_seller/test/registration/?affilate_id=woocommerce" class="hide-if-no-js page-title-action"  target="_blank" title="Dotpay test account registration">registration</a>', 'dotpay-payment-gateway'),
+                'title' => "🧪 ".__('Testing environment', 'dotpay-payment-gateway'),
+                'label' => __('Only payment simulation - required Dotpay test account: <a href="https://www.dotpay.pl/developer/sandbox/en/?affilate_id=woocommerce" class="hide-if-no-js page-title-action"  target="_blank" title="Dotpay test account registration">registration</a>', 'dotpay-payment-gateway'),
+                'type' => 'checkbox',
+                'default' => 'yes'
+            ),
+            'proxy_server' => array(
+                'title' => "💻 ".__('My server does not use a proxy', 'dotpay-payment-gateway'),
+                'label' => __('By default, we recommend that you set it on (no proxy).', 'dotpay-payment-gateway')."<br>". __('If you are sure otherwise or you have problems receiving confirmations about the completed payment - set it to off.', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'default' => 'yes'
             ),
             'productname' => array(
-                'title' => __('Show product name in payment title', 'dotpay-payment-gateway'),
+                'title' => "📜 ".__('Show product name in payment title', 'dotpay-payment-gateway'),
                 'label' => __('If there is only one product in the cart - show its name in the transaction description.', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'default' => 'yes'
@@ -188,7 +217,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'dontview_currency' => array(
-                'title' => __('Currencies that disable main method', 'dotpay-payment-gateway'),
+                'title' => "🚫 ". __('Currencies that disable main method', 'dotpay-payment-gateway'),
                 'type' => 'text',
                 'default' => '',
                 'description' => __('Leave it blank or enter a currency separated by commas eg. (EUR, GBP).', 'dotpay-payment-gateway'),
@@ -203,7 +232,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'label' => __('Show separately payment channel in a shop.', 'dotpay-payment-gateway').'
 							<br><p class="description">'. __('Needed separate agreement.','dotpay-payment-gateway').'<br>'.
 						  __('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').
-                          ' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
+                          ' <a href="https://www.dotpay.pl/kontakt" target="_blank" '.
                           'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.
 						  __('Contact', 'dotpay-payment-gateway', 'dotpay-payment-gateway').'</a></p>',
                 'default' => 'no',
@@ -228,7 +257,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'label' => __('Show separately payment channel in a shop.', 'dotpay-payment-gateway').'
 							<br><p class="description">'. __('Needed separate agreement.','dotpay-payment-gateway').'<br>'.
 						  __('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').
-                          ' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '.
+                          ' <a href="https://www.dotpay.pl/kontakt" target="_blank" '.
                           'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.
 						  __('Contact', 'dotpay-payment-gateway', 'dotpay-payment-gateway').'</a></p><strong>'.
 						  __('Requires Dotpay API username and password (enter below).', 'dotpay-payment-gateway').'</strong>',
@@ -236,7 +265,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'api_username' => array(
-                'title' => __('Username API', 'dotpay-payment-gateway'),
+                'title' => "👤 ".__('Username API', 'dotpay-payment-gateway')."<br><em>".__('(optional)', 'dotpay-payment-gateway')."</em>",
                 'type' => 'text',
                 'default' => '',
 				'description' => __('Leave this field empty if you do not use One Click and if you do not want to present the payment instructions on the shop page for semi-automatic channels. Data for access to the Dotpay administration panel.', 'dotpay-payment-gateway'),
@@ -244,10 +273,10 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'api_password' => array(
-                'title' => __('Password API', 'dotpay-payment-gateway').'<br><br><em>'.
+                'title' => "🔑 ".__('Password API', 'dotpay-payment-gateway')."<br><em>".__('(optional)', 'dotpay-payment-gateway')."</em><br><br><em>".
                 __('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').
-              ' <a href="http://www.dotpay.pl/kontakt/biuro-obslugi-klienta/" target="_blank" '. __('Dotpay customer service', 'dotpay-payment-gateway').'">: '.
-              __('Contact', 'dotpay-payment-gateway', 'dotpay-payment-gateway').'</a>. '.__('Required additional permissions for the user API.','dotpay-payment-gateway').'</em>',
+              "( <a href=\"https://www.dotpay.pl/kontakt\" target=\"_blank\" title=\"". __('Dotpay customer service', 'dotpay-payment-gateway')."\">".
+              __('Contact', 'dotpay-payment-gateway', 'dotpay-payment-gateway')."</a>). ".__('Required additional permissions for the user API.','dotpay-payment-gateway')."</em>",
                 'type' => 'password',
                 'default' => '',
                 'description' => __('Leave this field empty if you do not use One Click and if you do not want to present the payment instructions on the shop page for semi-automatic channels. Data for access to the Dotpay administration panel.', 'dotpay-payment-gateway'),

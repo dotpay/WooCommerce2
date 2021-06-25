@@ -75,9 +75,9 @@ class Gateway_OneClick extends Gateway_Gateway {
      */
     protected function getDataForm() {
         $hiddenFields = parent::getDataForm();
-        $hiddenFields['channel'] = $this->getChannel();
-        $hiddenFields['ch_lock'] = 1;
-        $hiddenFields['type'] = 4;
+        $hiddenFields['channel'] = (string)trim($this->getChannel());
+        $hiddenFields['ch_lock'] = '1';
+        $hiddenFields['type'] = '4';
         if(!$this->is_session_started()) {
             session_start();
          }

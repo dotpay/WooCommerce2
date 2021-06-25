@@ -44,7 +44,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.5.4';
+    const MODULE_VERSION = '3.6.0';
 
 
     public static $ocChannel = '248';
@@ -278,6 +278,21 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     {
         $result = false;
         if (preg_match("/^\d{6}$/", trim($this->get_option('id')))) { 
+            $result = true;
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Return flag, if proxy server mode is disabled
+     * @return boolean
+     */
+    public function isProxyNotUses()
+    {
+        $result = false;
+        if ('yes' == $this->get_option('proxy_server')) {
             $result = true;
         }
 
@@ -552,7 +567,7 @@ if( null !== $Items_shipping){
      */
     public function getApiVersion()
     {
-        return 'dev';
+        return 'next'; 
     }
 
     /**

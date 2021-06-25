@@ -71,7 +71,7 @@ class Gateway_PV extends Gateway_Gateway {
     protected function getDataForm() {
         $hiddenFields = parent::getDataForm();
 
-        $hiddenFields['channel'] = $this->getChannel();
+        $hiddenFields['channel'] = (string)trim($this->getChannel());
       //  $hiddenFields['ch_lock'] = '0';
         $hiddenFields['type'] = '4';
 

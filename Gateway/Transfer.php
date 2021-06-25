@@ -81,26 +81,31 @@ class Gateway_Transfer extends Gateway_Gateway {
             
         );
      
+        $link_customer_panel = get_permalink( get_option('woocommerce_myaccount_page_id'));
+
         if(!is_array($result)  || count($result) <1) {
            // $instruction = null;
             $instruction = $this->processPayment();
-            
-            if($instruction == null && $instruction->getInstructionId() == null) 
+
+
+            if($instruction == null || $instruction->getInstructionId() == null) 
             {
-                return __('Payment can not be created', 'dotpay-payment-gateway');
+
+
+                return ("<div style=\"border: 1px solid #ec4d51; color: #9e191d;background-color: #ffe9e9;\"><h3 style=\"margin: 20px;color: #c11;\">❗️ ".__('Error occured: Payment can not be created', 'dotpay-payment-gateway').": #".$orderId."</h3><p style=\"text-align: center !important; margin: 24px 24px !important; padding: 10px;\">".__('Contact the seller and inform about the problem or place an order again and select a different payment method.', 'dotpay-payment-gateway')."<br><br><a href=\"".$link_customer_panel."\">".__('You can go to your account page', 'dotpay-payment-gateway')."</a></p></div><br>");
             }
             
         }else {
             $instruction = Dotpay_Instruction::getByOrderId($orderId);
         }
 
-        if($instruction != null && $instruction->getInstructionId() != null) {
+        if($instruction != null || $instruction->getInstructionId() != null) {
             $page = $instruction->getPage();
             
 
             return $page;
         } else {
-            return __('Payment not exist', 'dotpay-payment-gateway');
+            return ("<div style=\"border: 1px solid #ec4d51; color: #9e191d;background-color: #ffe9e9;\"><h3 style=\"margin: 20px;color: #c11;\">❌ ".__('Error occured: Payment not exist', 'dotpay-payment-gateway')."</h3><p style=\"text-align: center !important; margin: 24px 24px !important; padding: 10px;\">".__('Contact the seller and inform about the problem or place an order again and select a different payment method.', 'dotpay-payment-gateway')."<br><br><a href=\"".$link_customer_panel."\">".__('You can go to your account page', 'dotpay-payment-gateway')."</a></p></div><br>");
         }
 
 	    $this->forgetChannel();
@@ -147,12 +152,13 @@ class Gateway_Transfer extends Gateway_Gateway {
             if(isset($payment['instruction']['recipient'])) {
                 $instruction->setBankAccount($payment['instruction']['recipient']['bank_account_number']);
                 $instruction->setRecipientName($payment['instruction']['recipient']['name']);
-                $instruction->setTitlep($payment['instruction']['title']);
+                $instruction->setTitlep(substr($payment['instruction']['title'],0,100));
             }else{
             $instruction->setTitlep($payment['operation']['number']);
             }
             $instruction->save();
         }
+
         return $instruction;
     }
 

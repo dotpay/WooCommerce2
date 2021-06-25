@@ -30,7 +30,7 @@ function createCookieDP(name, value, hours) {
   else {
     expires = "";
   }
-  document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
+  document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/;SameSite=Strict";
 }
 
 
@@ -51,6 +51,9 @@ BrowserDetect3DSV2 = function(){
 
 </script>
 <?php
+
+setcookie ("dp_channel_selected", "", time() - 3600);
+unset($_COOKIE["dp_channel_selected"]);
 
 // check if ID Dotpay is incorrect
 if(!(bool)$this->isIDshopCorrectPattern()) {
@@ -136,6 +139,7 @@ if ($this->isMainChannelEnabled() )
 if ($channelsforwidget_real_count > 0 ) 
 {
 
+setcookie ("dp_channel_selected", "", time() - 3600);
 
 echo "<p style=\"font-size:1em;text-align:left;color:#2f2f97;padding:2px;border-radius:3px \" class=\"SelectChennelInfo\"><em>".__('Choose one of the payment channels below:', 'dotpay-payment-gateway')."</em></p>"; 
 ?>
@@ -177,7 +181,7 @@ var dotpayWidgetConfig = {
     jQueryDotpayWidget1channel = function(){
                // if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 1) {
 					setTimeout(function(){
-                            
+                                    createCookieDP("dp_channel_selected", "", "-1");
                                     jQuery('div.dotpay-channels-selection > div.channel-container').trigger('click');
                                     jQuery('.channels-wrapper').css('text-align','center');
                                     if (jQuery('.channelSelectTXT').length < 1){
@@ -187,6 +191,7 @@ var dotpayWidgetConfig = {
                                     jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                     jQuery('#dotpay_empty_channel').remove(); 
                                     console.log('The only one available channel is selected (channel: '+jQuery('.dp_channel-input').attr("value")+')');
+                                    createCookieDP("dp_channel_selected", jQuery('.dp_channel-input').attr("value"), "0.08");
                                     
                                          
                         }, 1000);
@@ -200,6 +205,7 @@ var dotpayWidgetConfig = {
 			if(jQuery("ul.wc_payment_methods input[type=radio]:checked").val() == 'dotpay') {
              jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', true);
 			 console.log('loaded main Dotpay payment method: waiting for payment channel selection...');
+             createCookieDP("dp_channel_selected", "", "-1");
                 if (jQuery('#dotpay_empty_channel').length < 1){
                     jQuery( "button[name='woocommerce_checkout_place_order']" ).before(dp_empty_channel);
                  }
@@ -240,8 +246,11 @@ var dotpayWidgetConfig = {
                                 jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                 jQuery('#dotpay_empty_channel').remove();
                                 console.log('%cselected: ' + jQuery('div.channel-container.selected.dp_cloned > div.image-container > img').attr("title"), 'background: #cfcfcf; color: blue;');
+                                createCookieDP("dp_channel_selected", jQuery('.dp_channel-input').attr("value"), "0.08");
                                 if (jQuery('p.SelectChennelInfo').length > 0) {
                                         jQuery('p.SelectChennelInfo').hide();  
+                                }else{
+                                    createCookieDP("dp_channel_selected", "", "-1");
                                 }
 
                             });
@@ -258,12 +267,15 @@ var dotpayWidgetConfig = {
                                 jQuery('.channels-wrapper').css('text-align','left');
                                 if( jQuery('div.channel-container.selected.dp_cloned').length < 1){
                                     console.log('1... waiting for payment channel selection');
+                                    createCookieDP("dp_channel_selected", "", "-1");
                                     jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', true);
                                     if (jQuery('div.dotpay-channels-selection > div.channel-container').length > 1) {
-                                        jQuery('p.SelectChennelInfo').show(); 
+                                        jQuery('p.SelectChennelInfo').show();
+                                        createCookieDP("dp_channel_selected", "", "-1"); 
                                     }
                                     if (jQuery('#dotpay_empty_channel').length < 1){
                                             jQuery( "button[name='woocommerce_checkout_place_order']" ).before(dp_empty_channel);
+                                            createCookieDP("dp_channel_selected", "", "-1");
                                     }
                                 }
                             });
@@ -303,6 +315,7 @@ if($channelsforwidget_real_count == 1) {
                                     if (this.value == 'dotpay') {                           
                                         console.log('%cDotpay main method is checked manually.','background: #cfcfcf; color: green;'); 
                                          jQueryDotpayWidget1channel();
+                                         createCookieDP("dp_channel_selected", jQuery('.dp_channel-input').attr("value"), "0.08");
                                     }          
                                 }
                             });                     
@@ -402,6 +415,7 @@ if($channelsforwidget_real_count == 1) {
                                                 console.log('Selected another payment method: ' + this.value);
                                                 jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', false);
                                                 jQuery('#dotpay_empty_channel').remove(); 
+                                                createCookieDP("dp_channel_selected", jQuery('.dp_channel-input').attr("value"), "0.08");
                                             }         
                                         }
                                     });
@@ -457,6 +471,7 @@ jQueryDotpayWidget = function(){
                                     jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                
                                     console.log('%cChannel selection payment only on the Dotpay website after redirection.','background: #cfcfcf; color: brown;');
+                                    createCookieDP("dp_channel_selected", jQuery('.dp_channel-input').attr("value"), "0.08");
                            } 
                         });
                      } 

@@ -42,11 +42,11 @@
 }
 
 #amount {
-    width: 83.33333333% !important;
+    width: 78% !important;
 }
 
 #transfer-currency {
-    width: 16.66666667%;
+    width: 22%;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     border-left: 0;

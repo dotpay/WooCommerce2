@@ -56,9 +56,13 @@ class Gateway_Blik extends Gateway_Gateway {
     protected function getDataForm() {
         $hiddenFields = parent::getDataForm();
 
-        if(!$this->isTestMode())
-            $hiddenFields['blik_code'] = $this->getBlikCode();
-        $hiddenFields['channel'] = self::$blikChannel;
+        //if(!$this->isTestMode()) {
+            // $hiddenFields['blik_code'] = (string)trim($this->getBlikCode());
+       // }
+        
+        $hiddenFields['blik_code'] = (string)trim($this->getBlikCode());
+        
+        $hiddenFields['channel'] = (string)self::$blikChannel;
         //$hiddenFields['ch_lock'] = '0';
         $hiddenFields['type'] = '4';
 
