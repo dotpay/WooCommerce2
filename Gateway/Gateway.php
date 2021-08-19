@@ -174,7 +174,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
         
         if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup)) &&
-           $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword())) 
+           $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword(),$this->getSellerId(),self::MODULE_VERSION ) ) 
         {
             $gateway = new Gateway_Transfer();
             $redirectUrl = $gateway->generateWcApiUrl('form');
@@ -244,20 +244,20 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
         $streetData = $this->getStreetAndStreetN1();
 
         $dotPostForm = array(
-            'id' => $this->getSellerId(),
-            'control' => $this->getControl('full'),
-            'p_info' => $this->getPinfo(),
-            'amount' => $this->getOrderAmount(),
-            'currency' => $this->getCurrency(),
-            'description' => $new_description,
-            'lang' => $this->getPaymentLang(),
-            'url' => $this->getUrl(),
-            'urlc' => $this->getUrlC(),
-            'api_version' => $this->getApiVersion(),
+            'id' => (string) $this->getSellerId(),
+            'control' => (string) $this->getControl('full'),
+            'p_info' => (string) $this->getPinfo(),
+            'amount' => (string) $this->getOrderAmount(),
+            'currency' => (string) $this->getCurrency(),
+            'description' => (string) $new_description,
+            'lang' => (string) $this->getPaymentLang(),
+            'url' => (string) $this->getUrl(),
+            'urlc' => (string) $this->getUrlC(),
+            'api_version' => (string) $this->getApiVersion(),
             'type' => '0',
-            'firstname' => $this->getFirstname(),
-            'lastname' => $this->getLastname(),
-            'email' => $this->getEmail(),
+            'firstname' => (string) $this->getFirstname(),
+            'lastname' => (string) $this->getLastname(),
+            'email' => (string) $this->getEmail(),
             //'ignore_last_payment_channel' => '1',
             'personal_data' => '1',
             'bylaw' => '1'
@@ -266,39 +266,39 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 
             if( null != trim($this->getPhone()))
                 {
-                $dotPostForm["phone"] =$this->getPhone();
+                $dotPostForm["phone"] = (string) $this->getPhone();
                 }
 
             if( null != trim($streetData['street']))
                 {
-                $dotPostForm["street"] = $streetData['street'];
+                $dotPostForm["street"] = (string) $streetData['street'];
                 }
 
             if( null != trim($streetData['street_n1']) || "0" != trim($streetData['street_n1']))
                 {
-                $dotPostForm["street_n1"] = $streetData['street_n1'];
+                $dotPostForm["street_n1"] = (string) $streetData['street_n1'];
                 }
 
             if( null != trim($this->getCity()))
                 {
-                $dotPostForm["city"] = $this->getCity();
+                $dotPostForm["city"] = (string) $this->getCity();
                 }
 
             if( null != trim($this->getPostcode()))
                 {
-                $dotPostForm["postcode"] = $this->getPostcode();
+                $dotPostForm["postcode"] = (string) $this->getPostcode();
                 }
 
             if( null != trim($this->getPostcode()))
                 {
-                $dotPostForm["country"] = $this->getCountry();
+                $dotPostForm["country"] = (string) $this->getCountry();
                 }    
 
 
 
         if( null != $this->getCustomerBase64())
            {
-            $dotPostForm["customer"] = $this->getCustomerBase64();
+            $dotPostForm["customer"] = (string) $this->getCustomerBase64();
            }
 
            return $dotPostForm;
@@ -330,35 +330,35 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 
             $customer = array (
                 "payer" => array(
-                    "first_name" => $this->getFirstname(),
-                    "last_name" => $this->getLastname(),
-                    "email" => $this->getEmail()
+                    "first_name" => (string) $this->getFirstname(),
+                    "last_name" => (string) $this->getLastname(),
+                    "email" => (string) $this->getEmail()
                 ),
                 "order" => array(
                     "delivery_address" => array(
     
-                        "city" => $this->getShippingCity(),
-                        "street" => $this->getShippingStreetAndStreetN1()['street'],
-                        "building_number" => $this->getShippingStreetAndStreetN1()['street_n1'],
-                        "postcode" => $this->getShippingPostcode(),
-                        "country" => $this->getShippingCountry()
+                        "city" => (string) $this->getShippingCity(),
+                        "street" => (string) $this->getShippingStreetAndStreetN1()['street'],
+                        "building_number" => (string) $this->getShippingStreetAndStreetN1()['street_n1'],
+                        "postcode" => (string) $this->getShippingPostcode(),
+                        "country" => (string) $this->getShippingCountry()
                     )
                 )
             );
 
             if($user = $this->getOrder()->get_user()) {
 
-                $customer["registered_since"] = date("Y-m-d", strtotime($user->get('user_registered')));
-                $customer["order_count"] = wc_get_customer_order_count($user->ID);
+                $customer["registered_since"] = (string) date("Y-m-d", strtotime($user->get('user_registered')));
+                $customer["order_count"] = (string) wc_get_customer_order_count($user->ID);
             }
     
             if ($this->getPhone() != "") {
-                $customer["payer"]["phone"] = $this->getPhone();
+                $customer["payer"]["phone"] = (string) $this->getPhone();
             }
     
     
             if ($this->getSelectedCarrierMethodGroup() != "") {
-                $customer["order"]["delivery_type"] = $this->getSelectedCarrierMethodGroup();
+                $customer["order"]["delivery_type"] = (string) $this->getSelectedCarrierMethodGroup();
             }
     
     
@@ -824,13 +824,13 @@ function custom_get_order_notes( $order_id ) {
 
         if($this->isProxyNotUses())
         {
-            if ($_SERVER["REMOTE_ADDR"]  != self::DOTPAY_IP) {
+            if ($this->isAllowedIp($_SERVER["REMOTE_ADDR"], self::DOTPAY_IP_WHITE_LIST) != true) {
                 die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].")");
             }
 
         }else{
             
-            if ($_SERVER["REMOTE_ADDR"]  != self::DOTPAY_IP && $this->getClientIp() != self::DOTPAY_IP) {
+            if (($this->isAllowedIp($_SERVER["REMOTE_ADDR"], self::DOTPAY_IP_WHITE_LIST) != true) && ($this->isAllowedIp($this->getClientIp(), self::DOTPAY_IP_WHITE_LIST) != true) ) {
                 die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].")");
             }
         }

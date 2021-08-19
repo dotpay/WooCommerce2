@@ -29,8 +29,20 @@
  */
 abstract class Dotpay_Payment extends WC_Payment_Gateway
 {
-    // Dotpay IP address
-    const DOTPAY_IP = '195.150.9.37';
+    // Dotpay IP addresses
+
+    const DOTPAY_IP_WHITE_LIST = array(
+                                        '195.150.9.37',
+                                        '91.216.191.181',
+                                        '91.216.191.182',
+                                        '91.216.191.183',
+                                        '91.216.191.184',
+                                        '91.216.191.185',
+                                        '5.252.202.255',
+                                      );
+
+
+
     // Office Dotpay IP address
     const OFFICE_IP = '77.79.195.34';
     // Dotpay URL
@@ -44,7 +56,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.6.0';
+    const MODULE_VERSION = '3.6.1';
 
 
     public static $ocChannel = '248';
@@ -614,7 +626,27 @@ if( null !== $Items_shipping){
     }
 
 
-/**
+    /**
+         * Returns if the given ip is on the given whitelist.
+         *
+         * @param string $ip        The ip to check.
+         * @param array  $whitelist The ip whitelist. An array of strings.
+         *
+         * @return bool
+     */
+       public function isAllowedIp($ip, array $whitelist)
+        {
+            $ip = (string)$ip;
+            if (in_array($ip, $whitelist, true)) {
+                return true;
+            }
+
+            return false;
+        }
+
+
+
+        /**
     	 * checks and crops the size of a string
     	 * the $special parameter means an estimate of how many urlencode characters can be used in a given field
     	 * e.q. 'ż' (1 char) -> '%C5%BC' (6 chars)

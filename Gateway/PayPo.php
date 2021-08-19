@@ -88,7 +88,7 @@ class Gateway_PayPo extends Gateway_Gateway {
             *  The minimum and maximum payment amount form PayPo channel
             */
          //  $paypo_amount_min = 40;
-         //  $paypo_amount_max = 1000;
+         //  $paypo_amount_max = 2000;
         
         //return parent::isEnabled() && $this->isPayPoEnabled() && in_array((int)$cartAmountTotal, range($paypo_amount_min, $paypo_amount_max), true);
         return parent::isEnabled() && $this->isPayPoEnabled();

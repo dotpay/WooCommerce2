@@ -64,7 +64,7 @@ class Dotpay_SellerApi {
      * @param string $password
      * @return boolean
      */
-    public function isAccountRight($username, $password)
+    public function isAccountRight($username, $password, $dp_id=null,$module_v=null)
     {
         if (empty($username) && empty($password)) {
             return null;
@@ -73,7 +73,7 @@ class Dotpay_SellerApi {
         $curl = new Dotpay_Curl();
         $curl->addOption(CURLOPT_URL, $url)
              ->addOption(CURLOPT_USERPWD, $username.':'.$password);
-        $this->setCurlOption($curl);
+        $this->setCurlOption($curl,$dp_id,$module_v);
         $curl->exec();
         $info = $curl->getInfo();
         $curl->close();
@@ -87,13 +87,13 @@ class Dotpay_SellerApi {
      * @param string $number
      * @return \stdClass
      */
-    public function getPaymentByNumber($username, $password, $number)
+    public function getPaymentByNumber($username, $password, $number,$dp_id=null,$module_v=null)
     {
         $url = $this->_baseurl.$this->getDotPaymentApi()."payments/$number/";
         $curl = new Dotpay_Curl();
         $curl->addOption(CURLOPT_URL, $url)
              ->addOption(CURLOPT_USERPWD, $username.':'.$password);
-        $this->setCurlOption($curl);
+        $this->setCurlOption($curl,$dp_id,$module_v);
         $response = json_decode($curl->exec());
         $curl->close();
         return $response;
@@ -106,13 +106,13 @@ class Dotpay_SellerApi {
      * @param int $orderId
      * @return \stdClass
      */
-    public function getPaymentByOrderId($username, $password, $orderId)
+    public function getPaymentByOrderId($username, $password, $orderId, $dp_id='',$dp_module = '')
     {
         $url = $this->_baseurl.$this->getDotPaymentApi().'payments/?control='.$orderId;
         $curl = new Dotpay_Curl();
         $curl->addOption(CURLOPT_URL, $url)
              ->addOption(CURLOPT_USERPWD, $username.':'.$password);
-        $this->setCurlOption($curl);
+        $this->setCurlOption($curl,$dp_id,$dp_module);
         $response = json_decode($curl->exec());
         $curl->close();
         if(!isset($response->results) || !is_array($response))
@@ -128,14 +128,19 @@ class Dotpay_SellerApi {
      * @return string
      */
     private function getDotPaymentApi() {
-        return "api/";
+        return "api/v1/";
     }
 
     /**
      * Set option for cUrl and return cUrl resource
      * @param resource $curl
      */
-    private function setCurlOption($curl) {
+    private function setCurlOption($curl,$dp_id='',$dp_module = '') {
+        if($dp_id){
+            $dotp_id = $dp_id;
+        }else{
+            $dotp_id = 'b.d.';
+        }
         $curl->addOption(CURLOPT_SSL_VERIFYPEER, TRUE)
              ->addOption(CURLOPT_SSL_VERIFYHOST, 2)
              ->addOption(CURLOPT_RETURNTRANSFER, 1)
@@ -143,7 +148,7 @@ class Dotpay_SellerApi {
              ->addOption(CURLOPT_HTTPHEADER, array(
                            'Accept: application/json; indent=4',
                            'Content-type: application/json; charset=utf-8',
-                           'User-Agent: DotpayWooCommerce'
+                           'User-Agent: DotpayWooCommerce v:'. $dp_module.' (id:'.$dotp_id.')'
                          ))
              ->addOption(CURLOPT_CUSTOMREQUEST, "GET");
     }

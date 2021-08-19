@@ -106,9 +106,9 @@ abstract class Dotpay_RegisterOrder {
      */
     private static function checkIfCompletedControlExist($control, $channel) {
         $api = new Dotpay_SellerApi(self::$payment->getSellerApiUrl());
-        $payments = $api->getPaymentByOrderId(self::$payment->getApiUsername(), self::$payment->getApiPassword(), $control);
+        $payments = $api->getPaymentByOrderId(self::$payment->getApiUsername(), self::$payment->getApiPassword(), $control,self::$payment->getSellerId(),self::$payment->getModuleVersion());
         foreach($payments as $payment) {
-            $onePayment = $api->getPaymentByNumber(self::$payment->getApiUsername(), self::$payment->getApiPassword(), $payment->number);
+            $onePayment = $api->getPaymentByNumber(self::$payment->getApiUsername(), self::$payment->getApiPassword(), $payment->number,self::$payment->getSellerId(),self::$payment->getModuleVersion());
             if($onePayment->control == $control && $onePayment->payment_method->channel_id == $channel && $payment->status == 'completed')
                 return true;
         }
