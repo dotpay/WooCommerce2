@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2021-08-17 15:12+0200\n"
-"PO-Revision-Date: 2021-08-17 15:12+0200\n"
+"POT-Creation-Date: 2021-08-20 16:21+0200\n"
+"PO-Revision-Date: 2021-08-20 16:21+0200\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: en_US\n"
@@ -612,28 +612,37 @@ msgstr "Checking payment status..."
 msgid "Details of your payment"
 msgstr "Details of your payment"
 
-#: ../form/blik.phtml:70
+#: ../form/blik.phtml:68
+msgid "Generate a BLIK code in your bank's app"
+msgstr "Generate a BLIK code in your bank's app"
+
+#: ../form/blik.phtml:72
+#| msgid "BLIK code"
+msgid "Enter the BLIK code"
+msgstr "Enter the BLIK code"
+
+#: ../form/blik.phtml:72
 msgid "BLIK code"
 msgstr "BLIK code"
 
-#: ../form/blik.phtml:73 ../form/cc.phtml:64 ../form/mp.phtml:64
+#: ../form/blik.phtml:75 ../form/cc.phtml:64 ../form/mp.phtml:64
 #: ../form/oc.phtml:156 ../form/paypo.phtml:62 ../form/pv.phtml:65
 #: ../form/standard.phtml:60 ../form/standard.phtml:63
 #: ../form/standard.phtml:150
 msgid "Attention!"
 msgstr "Attention!"
 
-#: ../form/blik.phtml:73 ../form/cc.phtml:64 ../form/mp.phtml:64
+#: ../form/blik.phtml:75 ../form/cc.phtml:64 ../form/mp.phtml:64
 #: ../form/oc.phtml:156 ../form/paypo.phtml:62 ../form/pv.phtml:65
 #: ../form/standard.phtml:63 ../form/standard.phtml:150
 msgid "Test mode is activated. This is just a payment simulation."
 msgstr "Test mode is activated. This is just a payment simulation."
 
-#: ../form/blik.phtml:78
+#: ../form/blik.phtml:80
 msgid "No BLIK code!"
 msgstr "No BLIK code!"
 
-#: ../form/blik.phtml:78
+#: ../form/blik.phtml:80
 msgid ""
 "For the selected payment method you must complete the 6-digit BLIK code from "
 "your banking application."
