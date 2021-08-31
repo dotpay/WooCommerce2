@@ -159,7 +159,7 @@ define('xhr',['config', 'errorHandler'], function (config, errorHandler) {
 
 		return {
 			buildURL: function () {
-				return config.request.host + "?id=" + config.request.id + "&amount=" + config.request.amount + "&currency=" + config.request.currency + "&lang=" + config.request.lang + "&format=" + config.request.format;
+				return config.request.host + "?currency=" + config.request.currency + "&amount=" + config.request.amount + "&id=" + config.request.id + "&lang=" + config.request.lang + "&format=" + config.request.format;
 			},
 			parseChannels: function (url, callback) {
 
