@@ -56,7 +56,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.6.1';
+    const MODULE_VERSION = '3.6.2';
 
 
     public static $ocChannel = '248';

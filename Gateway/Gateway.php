@@ -768,20 +768,24 @@ function custom_get_order_notes( $order_id ) {
         global $wp_version, $woocommerce;
 
         $dotpay_office = false;
+        $proxy_desc ='';
 
-        if($this->isProxyNotUses()) {
-            if($_SERVER["REMOTE_ADDR"] == self::OFFICE_IP && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET'){
-                $dotpay_office = true;
-            }else{
-                $dotpay_office = false;
-            }
+        if( (int)$this->isProxyNotUses() == 1) {
+            $clientIp = $_SERVER['REMOTE_ADDR'];
+            $proxy_desc = 'FALSE';
         }else{
-            if(($_SERVER["REMOTE_ADDR"] == self::OFFICE_IP || $this->getClientIp() == self::OFFICE_IP) && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET'){
-                $dotpay_office = true;
-            }else{
-                $dotpay_office = false;
-            }
+            $clientIp = $this->getClientIp();
+            $proxy_desc = 'TRUE';
         }
+
+
+        if( ($clientIp == self::OFFICE_IP) && (strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')) 
+        {
+                $dotpay_office = true;
+        }else{
+                $dotpay_office = false;
+        }
+
 
         if($dotpay_office == true) {
             $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
@@ -809,6 +813,7 @@ function custom_get_order_notes( $order_id ) {
 				"<br>  - ID: ".$this->getSellerId().
                 "<br>  - Test: ".(bool)$this->isTestMode().
                 "<br>  - Proxy server not uses: ".(bool)$this->isProxyNotUses().
+                "<br> - &dollar;_SERVER&lbrack;&apos;REMOTE_ADDR&apos;&rbrack;: ".$_SERVER['REMOTE_ADDR'].
                 "<br>  - currencies_that_block_main:  ".$this->get_option('dontview_currency').
                 "<br>  - is_multisite: ".(bool)is_multisite().
                 "<br>  - is_plugin_active_for_network: ".(bool)is_plugin_active_for_network('woocommerce/woocommerce.php').
@@ -822,29 +827,24 @@ function custom_get_order_notes( $order_id ) {
             );
         }
 
-        if($this->isProxyNotUses())
-        {
-            if ($this->isAllowedIp($_SERVER["REMOTE_ADDR"], self::DOTPAY_IP_WHITE_LIST) != true) {
-                die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].")");
-            }
 
-        }else{
-            
-            if (($this->isAllowedIp($_SERVER["REMOTE_ADDR"], self::DOTPAY_IP_WHITE_LIST) != true) && ($this->isAllowedIp($this->getClientIp(), self::DOTPAY_IP_WHITE_LIST) != true) ) {
-                die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].")");
-            }
+        if (!$this->isAllowedIp($clientIp, self::DOTPAY_IP_WHITE_LIST)) 
+        {
+                die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].", PROXY:".$proxy_desc.")");
         }
 
-
-        if (strtoupper($_SERVER['REQUEST_METHOD']) != 'POST') {
+        if (strtoupper($_SERVER['REQUEST_METHOD']) != 'POST')
+        {
             die("WooCommerce - ERROR (METHOD <> POST)");
         }
 
-        if (!$this->checkConfirmSign()) {
+        if (!$this->checkConfirmSign()) 
+        {
             die("WooCommerce - ERROR SIGN");
         }
 
-        if ($this->getParam('id') != $this->getSellerId()) {
+        if ($this->getParam('id') != $this->getSellerId()) 
+        {
             die("WooCommerce - ERROR ID: ".$this->getSellerId());
         }
 
