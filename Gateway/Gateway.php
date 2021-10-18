@@ -346,13 +346,25 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
                 )
             );
 
-            if($user = $this->getOrder()->get_user()) {
+            if($user = $this->getOrder()->get_user()) 
+            {
 
-                $customer["registered_since"] = (string) date("Y-m-d", strtotime($user->get('user_registered')));
-                $customer["order_count"] = (string) wc_get_customer_order_count($user->ID);
+                $date_user_registered = (string) (trim(date("Y-m-d", strtotime($user->get('user_registered')))));
+
+                $date_registered_pattern = '/^(19|20)\d{2}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/';
+
+                // validate date format    
+                if (!(empty($date_user_registered) || (!preg_match("$date_registered_pattern", $date_user_registered, $m) || (!checkdate($m[2], $m[3], $m[1])))) ) {
+
+                    $customer["registered_since"] = (string) $date_user_registered;
+                    $customer["order_count"] = (string) ((int)wc_get_customer_order_count($user->ID));
+                }
+
+
             }
     
-            if ($this->getPhone() != "") {
+            if ($this->getPhone() != "") 
+            {
                 $customer["payer"]["phone"] = (string) $this->getPhone();
             }
     
