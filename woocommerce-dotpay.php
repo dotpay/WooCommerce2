@@ -3,7 +3,7 @@
 /**
   * @wordpress-plugin
   * Plugin Name: WooCommerce Dotpay Gateway
-  * Version: 3.6.2
+  * Version: 3.6.3
   * Plugin URI: https://github.com/dotpay/WooCommerce2
   * Description: Fast and secure Dotpay payment gateway for WooCommerce
   * Author: Dotpay (tech@dotpay.pl)
@@ -13,7 +13,7 @@
   * License:     (AFL 3.0)
   *
   * WC requires at least: 3.2.0
-  * WC tested up to: 3.6.1 -> 5.7.2
+  * WC tested up to: 3.6.1 -> 6.1.1
   *
   * NOTICE OF LICENSE
   *
@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.6.2';
+		$thisVersionModule = '3.6.3';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -71,7 +71,7 @@ if (!defined('ABSPATH')) {
 				}
 	}
 
-add_action( 'admin_notices' , 'Check_WC_compare_for_Dotpay' );
+add_action( 'admin_notices' , 'Check_WC_compare_for_Dotpay');
 
 
 
@@ -232,6 +232,7 @@ function woocommerce_dotpay_autoload($className){
 
 spl_autoload_register('woocommerce_dotpay_autoload');
 
+
 function is_session_started1() {
     if ( php_sapi_name() != 'cli' ) {
         if ( version_compare(phpversion(), '5.6', '>=') ) {
@@ -250,7 +251,6 @@ function dotpay_admin_enqueue_scripts($hook) {
     }
     wp_enqueue_script( 'admin-script', plugin_dir_url( __FILE__ ) . 'resources/js/admin.js' );
 }
-
 
 function woocommerce_is_active() {
 	if (!function_exists( 'is_plugin_active_for_network'))

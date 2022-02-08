@@ -64,20 +64,50 @@ class Dotpay_SellerApi {
      * @param string $password
      * @return boolean
      */
-    public function isAccountRight($username, $password, $dp_id=null,$module_v=null)
+    public function isAccountRight($username, $password, $dp_id=null,$module_v=null,$check_config=false)
     {
         if (empty($username) && empty($password)) {
             return null;
         }
-        $url = $this->_baseurl.$this->getDotPaymentApi()."accounts/";
+        if((int)$dp_id !=null && $check_config == true){
+            $url = $this->_baseurl.$this->getDotPaymentApi()."accounts/".$dp_id."/";
+        }else{
+            $url = $this->_baseurl.$this->getDotPaymentApi()."accounts/";
+        }
+
         $curl = new Dotpay_Curl();
         $curl->addOption(CURLOPT_URL, $url)
              ->addOption(CURLOPT_USERPWD, $username.':'.$password);
         $this->setCurlOption($curl,$dp_id,$module_v);
-        $curl->exec();
-        $info = $curl->getInfo();
-        $curl->close();
-        return ($info['http_code']>=200 && $info['http_code']<300);
+
+        if((int)$dp_id !=null && $check_config == true){
+
+            $result = $curl->exec();
+            $info = $curl->getInfo();
+            $httpCode = (int)$info['http_code'];
+
+            unset($info);
+            $curl->close();
+            if ($httpCode >= 200 && $httpCode < 300 || $httpCode == 400) {
+                $check_config_account = json_decode($result, true);
+                $config_result = array (
+                                        'urlc' => $check_config_account['config']['urlc'],
+                                        'block_external_urlc' => (string)$check_config_account['config']['block_external_urlc'],
+                                        'pin' => $check_config_account['config']['pin']
+                                        );
+                return $config_result;                          
+            }
+
+        }else{
+
+            $curl->exec();
+            $info = $curl->getInfo();
+            $curl->close();
+            return ($info['http_code']>=200 && $info['http_code']<300);
+
+        }
+
+
     }
 
     /**

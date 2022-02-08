@@ -66,8 +66,44 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelscc)) || !in_array(sel
 
 <script type = "text/javascript" >
 
+
+// check agreements - bylaw
+
+CheckBylawCC = function(){
+		jQuery(document).ready(function(){
+			
+				if(jQuery('li.payment_method_Dotpay_cc > input#payment_method_Dotpay_cc:checked').length >0){
+					jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_cc').change(function(){
+					if(jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_cc').length < 1){
+						console.log('%cSelect first PayPro S.A. Regulations of Payments !','background:red;color:#fff');
+                        jQuery('li.payment_method_Dotpay_cc').find("label#agreements_bylaw").css({"background-color": "#ffeeed", "padding": "3px", "border-style": "solid", "border-width": "1px", "border-color": "#fd0c0c"});
+						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+                        if(jQuery('div#payment div.form-row button#place_order').length > 0){
+	                        jQuery('div#payment div.form-row button#place_order').prop('disabled', true);
+                        }
+					}else{
+						console.log('Payment regulations accepted');
+                        jQuery('li.payment_method_Dotpay_cc').find("label#agreements_bylaw").css({"background-color": "", "padding": "", "border-style": "", "border-width": "0px", "border-color": ""});
+						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+                        if(jQuery('div#payment div.form-row button#place_order').length > 0){
+	                        jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
+                        }
+					}
+				});
+				
+			}
+
+
+			});
+    }
+
+
+
     jQueryEnableButtonCC = function(){
         jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+        if(jQuery('div#payment div.form-row button#place_order').length > 0){
+	        jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
+        }
         jQuery('#dotpay_empty_channel').remove();
         jQuery('p.Nochannels').hide();
     };
@@ -78,6 +114,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelscc)) || !in_array(sel
                 if(jQuery('input#payment_method_Dotpay_cc').is(':checked')) { 
                     console.log('%cCredit Card method via Dotpay is checked','background: #cfcfcf; color: green;');
                     jQueryEnableButtonCC();
+                    CheckBylawCC();
 		        }
             });
 
@@ -86,6 +123,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelscc)) || !in_array(sel
                         if (this.value == 'Dotpay_cc') {                           
                             console.log('%cCredit Card method via Dotpay is checked manually','background: #cfcfcf; color: green;');
                             jQueryEnableButtonCC();
+                            CheckBylawCC();
                         };
                     };
             });

@@ -708,9 +708,8 @@ protected function generateCHK($DotpayPin, $ParametersArray)
       public function get_DpTrNumberNote($note,$what)
       {
           if($what == 'nr'){
-              $regex = '/<span[^>].* id="dptrnr">(M\d\d\d\d-\d\d\d\d\d)<\/span>/';     
+              $regex = '/<span[^>].* id="dptrnr">(M\d{4,6}-\d{5,7})<\/span>/';       
           }else{
-             // $regex = '/<span[^>].* id="dptrst">([\p{L}a-z\s \–\-\\(\\)]{4,40})<\/span>/u';  
               $regex = '/<span[^>].* id="dptrst">(.*)<\/span>/u';    
           }
       
@@ -736,40 +735,57 @@ protected function generateCHK($DotpayPin, $ParametersArray)
          
       $data = array();
       
-      for ($i = 0; $i < count($a); $i++) {
-             $b = $this->get_DpTrNumberNote($a[$i],'nr');
-             $c = $this->get_DpTrNumberNote($a[$i],'status');
-            
-             // for english and polish lang (use ASCII translation of this section for it to work well)
-             // if you use a different translation of the Woocommerce administration panel - complete this condition:
-             if(trim($c) == 'paid : processing' || trim($c) == 'paid : completed (virtual product)' || trim($c) == 'oplacone : przetwarzane' || trim($c) == 'oplacone : zrealizowane (produkt wirtualny)')
-              {
-                      $data[] = $b;
-              }
-      }
-      return array_count_values($data);
+        for ($i = 0; $i < count($a); $i++) {
+                $b = $this->get_DpTrNumberNote($a[$i],'nr');
+                $c = $this->get_DpTrNumberNote($a[$i],'status');
+                
+                // for english and polish lang (use ASCII translation of this section for it to work well)
+                // if you use a different translation of the Woocommerce administration panel - complete this condition:
+                if(trim($c) == 'paid : processing' || trim($c) == 'paid : completed (virtual product)' || trim($c) == 'oplacone : przetwarzane' || trim($c) == 'oplacone : zrealizowane (produkt wirtualny)')
+                {
+                        $data[] = $b;
+                }
+            }
+      
+        //fix for message "Can only count STRING and INTEGER values! "
+        $ar_data = array_replace($data,array_fill_keys(array_keys($data, null),''));
+      
+      return array_count_values($ar_data);
          
       }
 
- /**
- * Get all approved WooCommerce order notes.
- *
- * @param  int|string $order_id The order ID.
- * @return array      $notes    The order notes, or an empty array if none.
- */
-function custom_get_order_notes( $order_id ) {
-    remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
-    $comments = get_comments( array(
-        'post_id' => $order_id,
-        'orderby' => 'comment_ID',
-        'order'   => 'DESC',
-        'approve' => 'approve',
-        'type'    => 'order_note',
-    ) );
-    $notes = wp_list_pluck( $comments, 'comment_content' );
-    add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
-    return $notes;
-}
+    /**
+     * Get all approved WooCommerce order notes.
+     *
+     * @param  int|string $order_id The order ID.
+     * @return array      $notes    The order notes, or an empty array if none.
+     */
+    function custom_get_order_notes( $order_id ) {
+        remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
+        $comments = get_comments( array(
+            'post_id' => $order_id,
+            'orderby' => 'comment_ID',
+            'order'   => 'DESC',
+            'approve' => 'approve',
+            'type'    => 'order_note',
+        ) );
+        $notes = wp_list_pluck( $comments, 'comment_content' );
+        add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
+        return $notes;
+    }
+
+
+    
+    //Remove UTF8 Bom
+
+    public function remove_utf8_bom($text)
+    {
+        $bom = pack('H*','EFBBBF');
+        $text = preg_replace("/^$bom/", '', $text);
+        return $text;
+    }
+
+
 
     /**
      * Confirm payment after getting confirmation info from Dotpay
@@ -780,6 +796,9 @@ function custom_get_order_notes( $order_id ) {
         global $wp_version, $woocommerce;
 
         $dotpay_office = false;
+        $dp_debug_allow = false;
+        $show_time_in_urlc = "";
+
         $proxy_desc ='';
 
         if( (int)$this->isProxyNotUses() == 1) {
@@ -794,12 +813,30 @@ function custom_get_order_notes( $order_id ) {
         if( ($clientIp == self::OFFICE_IP) && (strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')) 
         {
                 $dotpay_office = true;
+                
         }else{
                 $dotpay_office = false;
         }
 
+        if( strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' && isset($_GET['dp_debug']) ){
+            $string_to_hash = 'h:'.$this->realHostName().',id:'.$this->getSellerId().',d:'.date('YmdHi').',p:'.$this->getSellerPin();
+            
+            if(trim($_GET['dp_debug']) == 'time'){
+                $show_time_in_urlc = ", Time: ".date('YmdHi');
+            }
+            $dp_debug_hash = hash('sha256', $string_to_hash);
+            if(trim($_GET['dp_debug']) == $dp_debug_hash){
+                $dp_debug_allow = true;
+            }else{
+                $dp_debug_allow = false;
+            }
 
-        if($dotpay_office == true) {
+        }else{
+            $dp_debug_allow = false;
+        }
+
+
+        if($dotpay_office == true || $dp_debug_allow == true) {
             $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
             $dotpayGateways = '';
             $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -813,6 +850,33 @@ function custom_get_order_notes( $order_id ) {
                 $gateway = new $channel();
                 $shopGateways .= $gateway->id.': '.$this->checkIfEnabled($gateway)."<br />";
             }
+
+            if($sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword())){
+                
+                 $config_account_get = $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword(),$this->getSellerId(),self::MODULE_VERSION,true);
+                 $config_urlc = (string)$config_account_get['urlc'];
+                 $config_block_external_urlc = $config_account_get['block_external_urlc'];
+
+                 if(trim($config_urlc) == "" && (bool)$config_block_external_urlc == 1 ){
+                     $config_external_urlc = 'problem with urlc configuration!';
+                 }else{
+                    $config_external_urlc = "config urlc is correct" ;
+                 }
+
+
+                if((string)$this->getSellerPin() == (string)$config_account_get['pin']) {
+                        $pin_correct = 'correct';
+                }else{
+                        $pin_correct = 'not correct!';
+                }
+
+            } else {
+                 $pin_correct = 'unknown';
+                 $config_external_urlc = "unknown if config urlc is correct" ;
+            
+            }
+
+
             die("WooCommerce Dotpay payment module debug:<br><br>
 			      * Dotpay module ver: ".self::MODULE_VERSION.
                 "<br> * Wordpress ver: ". $wp_version .
@@ -824,6 +888,7 @@ function custom_get_order_notes( $order_id ) {
                 "<br>  - Active: ".(bool)$this->isEnabled().
 				"<br>  - ID: ".$this->getSellerId().
                 "<br>  - Test: ".(bool)$this->isTestMode().
+                "<br>  - Hostname: ".$this->realHostName().
                 "<br>  - Proxy server not uses: ".(bool)$this->isProxyNotUses().
                 "<br> - &dollar;_SERVER&lbrack;&apos;REMOTE_ADDR&apos;&rbrack;: ".$_SERVER['REMOTE_ADDR'].
                 "<br>  - currencies_that_block_main:  ".$this->get_option('dontview_currency').
@@ -832,6 +897,8 @@ function custom_get_order_notes( $order_id ) {
 				"<br><br /> --- Dotpay API data: --- ".
 				"<br>  - Dotpay username: ".$this->getApiUsername().
                 "<br>  - correct API auth data: ".$sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword()).
+                "<br>  - check PIN in API config: ".$pin_correct.
+                "<br>  - check block external urlc in API config:  ".$config_external_urlc.
                 "<br>  - URL return: ".$this->getUrl().
                 "<br><br /> --- Dotpay channels: --- <br />".$dotpayGateways.
                 "<br /> --- Shop channels: --- <br />".$shopGateways
@@ -842,7 +909,7 @@ function custom_get_order_notes( $order_id ) {
 
         if (!$this->isAllowedIp($clientIp, self::DOTPAY_IP_WHITE_LIST)) 
         {
-                die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].", PROXY:".$proxy_desc.")");
+             die("WooCommerce - ERROR (REMOTE ADDRESS: ".$this->getClientIp(true)."/".$_SERVER["REMOTE_ADDR"].", PROXY:".$proxy_desc.$show_time_in_urlc.")");
         }
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) != 'POST')
@@ -958,7 +1025,7 @@ function custom_get_order_notes( $order_id ) {
 
         }
         if($this->postConfirmOrder($order)) {
-            die('OK');
+            die($this->remove_utf8_bom('OK'));
         }
     }
 

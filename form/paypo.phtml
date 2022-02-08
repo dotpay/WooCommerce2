@@ -64,8 +64,43 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspaypo,false,false)) |
 
 <script type = "text/javascript" >
 
+// check agreements - bylaw
+
+CheckBylawPayPo = function(){
+		jQuery(document).ready(function(){
+			
+				if(jQuery('li.payment_method_Dotpay_paypo > input#payment_method_Dotpay_paypo:checked').length >0){
+					jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_paypo').change(function(){
+					if(jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_paypo').length < 1){
+						console.log('%cSelect first PayPro S.A. Regulations of Payments !','background:red;color:#fff');
+                        jQuery('li.payment_method_Dotpay_paypo').find("label#agreements_bylaw").css({"background-color": "#ffeeed", "padding": "3px", "border-style": "solid", "border-width": "1px", "border-color": "#fd0c0c"});
+						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+                        if(jQuery('div#payment div.form-row button#place_order').length > 0){
+	                        jQuery('div#payment div.form-row button#place_order').prop('disabled', true);
+                        }
+					}else{
+						console.log('Payment regulations accepted');
+                        jQuery('li.payment_method_Dotpay_paypo').find("label#agreements_bylaw").css({"background-color": "", "padding": "", "border-style": "", "border-width": "0px", "border-color": ""});
+						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+                        if(jQuery('div#payment div.form-row button#place_order').length > 0){
+	                        jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
+                        }
+					}
+				});
+				
+			}
+
+
+			});
+    }
+
+
+
     jQueryEnableButtonPayPo = function(){
         jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+        if(jQuery('div#payment div.form-row button#place_order').length > 0){
+	        jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
+         }
         jQuery('#dotpay_empty_channel').remove();
         jQuery('p.Nochannels').hide();
     };
@@ -74,7 +109,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspaypo,false,false)) |
         if (typeof jQuery != 'undefined') {
             jQuery(document).ready(function () { 
                 var CartAmountTotal = <?php echo $this->getAmountForWidget() ; ?>;
-                if (CartAmountTotal < 40 || CartAmountTotal > 2000) {
+                if (CartAmountTotal < 10 || CartAmountTotal > 2000) {
                     console.log('%cPayPo channel: disabled -> wrong amount (not in range 40 - 2000): ' + CartAmountTotal,'background: #cfcfcf; color: brown;');
                     jQuery('li.payment_method_Dotpay_paypo').hide();
                 }
@@ -82,6 +117,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspaypo,false,false)) |
                 if(jQuery('input#payment_method_Dotpay_paypo').is(':checked')) { 
                     console.log('%cPayPo method via Dotpay is checked','background: #cfcfcf; color: green;');
                     jQueryEnableButtonPayPo();
+                    CheckBylawPayPo();
 		        }
             });
 
@@ -90,6 +126,7 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspaypo,false,false)) |
                         if (this.value == 'Dotpay_paypo') {                           
                             console.log('%cPayPo method via Dotpay is checked manually','background: #cfcfcf; color: green;');
                             jQueryEnableButtonPayPo();
+                            CheckBylawPayPo();
                         };
                     };
             });

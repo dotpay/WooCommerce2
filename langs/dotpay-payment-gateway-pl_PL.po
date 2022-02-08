@@ -1,19 +1,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2021-08-20 16:22+0200\n"
-"PO-Revision-Date: 2021-08-20 16:22+0200\n"
+"POT-Creation-Date: 2022-02-07 12:30+0100\n"
+"PO-Revision-Date: 2022-02-07 12:30+0100\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
-"X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
@@ -26,11 +26,11 @@ msgstr "Pobierz blankiet"
 msgid "Make a money transfer"
 msgstr "Wykonaj przelew bankowy"
 
-#: ../Dotpay/Payment.php:351
+#: ../Dotpay/Payment.php:359
 msgid "Shop - "
 msgstr "Sklep - "
 
-#: ../Dotpay/Payment.php:503
+#: ../Dotpay/Payment.php:511
 msgid "Order ID: "
 msgstr "Nr zamówienia: "
 
@@ -369,47 +369,47 @@ msgstr "PŁATNOŚCI DOTPAY"
 msgid "Order not found"
 msgstr "Nie znaleziono zamówienia"
 
-#: ../Gateway/Gateway.php:610
+#: ../Gateway/Gateway.php:622
 msgid "Exceeded expiration date of the generated payment link."
 msgstr "Przekroczona data ważności wygenerowanego linku płatności."
 
-#: ../Gateway/Gateway.php:613
+#: ../Gateway/Gateway.php:625
 msgid "Selected payment channel is unknown."
 msgstr "Wybrany kanał płatności jest nieznany."
 
-#: ../Gateway/Gateway.php:616
+#: ../Gateway/Gateway.php:628
 msgid "Selected channel payment is desabled."
 msgstr "Wybrany kanał płatności jest wyłączony."
 
-#: ../Gateway/Gateway.php:619
+#: ../Gateway/Gateway.php:631
 msgid "Account is disabled."
 msgstr "Konto sprzedawcy jest zablokowane."
 
-#: ../Gateway/Gateway.php:622
+#: ../Gateway/Gateway.php:634
 msgid "Seller account is inactive."
 msgstr "Konto sprzedawcy jest nieaktywne."
 
-#: ../Gateway/Gateway.php:625
+#: ../Gateway/Gateway.php:637
 msgid "Amount is too low."
 msgstr "Kwota jest za niska."
 
-#: ../Gateway/Gateway.php:628
+#: ../Gateway/Gateway.php:640
 msgid "Amount is too high."
 msgstr "Kwota jest za wysoka."
 
-#: ../Gateway/Gateway.php:631
+#: ../Gateway/Gateway.php:643
 msgid "Data format is bad."
 msgstr "Błędny format daty."
 
-#: ../Gateway/Gateway.php:634
+#: ../Gateway/Gateway.php:646
 msgid "Request has been modified during transmission."
 msgstr "Podczas transmisji danych do Dotpay nastąpiła manipulacja danymi."
 
-#: ../Gateway/Gateway.php:637
+#: ../Gateway/Gateway.php:649
 msgid "There were not given all request parameters."
 msgstr "Nie zostały przesłane wszystkie wymagane parametry żądania."
 
-#: ../Gateway/Gateway.php:640
+#: ../Gateway/Gateway.php:652
 msgid ""
 "Account settings in Dotpay require the seller to have SSL certificate "
 "enabled on his website."
@@ -417,7 +417,7 @@ msgstr ""
 "Ustawienia konta w Dotpay wymagają by sprzedawca posiadał włączony "
 "certyfikat SSL na swojej stronie."
 
-#: ../Gateway/Gateway.php:643
+#: ../Gateway/Gateway.php:655
 msgid ""
 "There was an unidentified error. Please contact to your seller and give him "
 "the order number."
@@ -425,47 +425,47 @@ msgstr ""
 "Wystąpił nieoczekiwany błąd. Skontaktuj się proszę ze sprzedawcą i podaj mu "
 "numer zamówienia."
 
-#: ../Gateway/Gateway.php:671 ../Gateway/OneClick.php:128
+#: ../Gateway/Gateway.php:683 ../Gateway/OneClick.php:128
 msgid "Please accept all agreements"
 msgstr "Proszę zaakceptować wszystkie wymagane zgody"
 
-#: ../Gateway/Gateway.php:887
+#: ../Gateway/Gateway.php:953
 msgid "Dotpay send notification"
 msgstr "Dotpay dostarczył notyfikację"
 
-#: ../Gateway/Gateway.php:887
+#: ../Gateway/Gateway.php:953
 msgid "transaction number:"
 msgstr "numer transakcji:"
 
-#: ../Gateway/Gateway.php:887
+#: ../Gateway/Gateway.php:953
 msgid "payment channel:"
 msgstr "kanał płatniczy:"
 
-#: ../Gateway/Gateway.php:890
+#: ../Gateway/Gateway.php:956
 msgid "paid : processing"
 msgstr "oplacone : przetwarzane"
 
-#: ../Gateway/Gateway.php:890
+#: ../Gateway/Gateway.php:956
 msgid "paid : completed (virtual product)"
 msgstr "oplacone : zrealizowane (produkt wirtualny)"
 
-#: ../Gateway/Gateway.php:906
+#: ../Gateway/Gateway.php:972
 msgid "positive notifications:"
 msgstr "dostarczona notyfikacja"
 
-#: ../Gateway/Gateway.php:911
+#: ../Gateway/Gateway.php:977
 msgid "DOUBLE PAYMENT !"
 msgstr "POWIELONA PŁATNOŚĆ!"
 
-#: ../Gateway/Gateway.php:911
+#: ../Gateway/Gateway.php:977
 msgid "for the order no:"
 msgstr "dla numeru zamówienia:"
 
-#: ../Gateway/Gateway.php:911
+#: ../Gateway/Gateway.php:977
 msgid "Dotpay registered under numbers:"
 msgstr "Dotpay zarejestrował pod numerami:"
 
-#: ../Gateway/Gateway.php:911
+#: ../Gateway/Gateway.php:977
 msgid ""
 "Check the posting for this order in your Dotpay panel - there is a risk that "
 "the payer has paid more than 1 time for this order."
@@ -473,37 +473,37 @@ msgstr ""
 "Sprawdź w swoim panelu Dotpay księgowanie dla tego zamówienia - istnieje "
 "ryzyko, że płacący zapłacił więcej niż 1 raz za to zamówienie."
 
-#: ../Gateway/Gateway.php:925 ../Gateway/Gateway.php:927
-#: ../Gateway/Gateway.php:928
+#: ../Gateway/Gateway.php:991 ../Gateway/Gateway.php:993
+#: ../Gateway/Gateway.php:994
 msgid "cancelled"
 msgstr "odmowa"
 
-#: ../Gateway/Gateway.php:928 ../Gateway/Gateway.php:942
+#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
 msgid "A message for: "
 msgstr "Wiadomość dotycząca: "
 
-#: ../Gateway/Gateway.php:928 ../Gateway/Gateway.php:942
+#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
 msgid "The order status has not been changed to"
 msgstr "Status tego zamówienia nie został zmieniony na"
 
-#: ../Gateway/Gateway.php:928 ../Gateway/Gateway.php:942
+#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
 msgid "because the order has previously been paid for (check previous notes)."
 msgstr ""
 "ponieważ to zamówienie zostało wcześniej już opłacone (sprawdź poprzednią "
 "notatkę)."
 
-#: ../Gateway/Gateway.php:928 ../Gateway/Gateway.php:942
+#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
 msgid "You can also check the accounting for this order in the Dotpay panel."
 msgstr ""
 "Możesz również sprawdzić księgowanie płatności dla tego zamówienia w panelu "
 "Dotpay. "
 
-#: ../Gateway/Gateway.php:928 ../Gateway/Gateway.php:942
+#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
 msgid "So it's current status:"
 msgstr "Dlatego aktualny status zamówienia to:"
 
-#: ../Gateway/Gateway.php:939 ../Gateway/Gateway.php:941
-#: ../Gateway/Gateway.php:942
+#: ../Gateway/Gateway.php:1005 ../Gateway/Gateway.php:1007
+#: ../Gateway/Gateway.php:1008
 msgid "processing"
 msgstr "przetwarzanie"
 
@@ -640,23 +640,23 @@ msgid "BLIK code"
 msgstr "Kod BLIK"
 
 #: ../form/blik.phtml:75 ../form/cc.phtml:64 ../form/mp.phtml:64
-#: ../form/oc.phtml:156 ../form/paypo.phtml:62 ../form/pv.phtml:65
+#: ../form/oc.phtml:192 ../form/paypo.phtml:62 ../form/pv.phtml:65
 #: ../form/standard.phtml:60 ../form/standard.phtml:63
 #: ../form/standard.phtml:150
 msgid "Attention!"
 msgstr "Uwaga!"
 
 #: ../form/blik.phtml:75 ../form/cc.phtml:64 ../form/mp.phtml:64
-#: ../form/oc.phtml:156 ../form/paypo.phtml:62 ../form/pv.phtml:65
+#: ../form/oc.phtml:192 ../form/paypo.phtml:62 ../form/pv.phtml:65
 #: ../form/standard.phtml:63 ../form/standard.phtml:150
 msgid "Test mode is activated. This is just a payment simulation."
 msgstr "Włączono tryb testowy. To jest jedynie symulacja płatności."
 
-#: ../form/blik.phtml:80
+#: ../form/blik.phtml:114
 msgid "No BLIK code!"
 msgstr "Brak Kodu BLIK"
 
-#: ../form/blik.phtml:80
+#: ../form/blik.phtml:114
 msgid ""
 "For the selected payment method you must complete the 6-digit BLIK code from "
 "your banking application."
@@ -664,15 +664,15 @@ msgstr ""
 "Dla wybranej metody płatności musisz wprowadzić 6-cyfrowy kod BLIK uzyskany "
 "wcześniej w Twojej aplikacji bankowej."
 
-#: ../form/oc.phtml:133
+#: ../form/oc.phtml:169
 msgid "Select your saved card"
 msgstr "Wybierz spośród zapisanych kart"
 
-#: ../form/oc.phtml:143
+#: ../form/oc.phtml:179
 msgid "Register new card"
 msgstr "Zarejestruj nową kartę"
 
-#: ../form/oc.phtml:154
+#: ../form/oc.phtml:190
 msgid ""
 "I agree to repeated loading bill my credit card for the payment One-Click by "
 "way of purchase of goods or services offered by the store."
@@ -685,43 +685,43 @@ msgstr ""
 msgid "Incorrect module configuration! Invalid shop ID."
 msgstr "Niepoprawna konfiguracja modułu! Błędny identyfikator sklepu."
 
-#: ../form/standard.phtml:144 ../form/standard.phtml:162
+#: ../form/standard.phtml:144 ../form/standard.phtml:199
 msgid "Choose one of the payment channels below:"
 msgstr "Wybierz jedną z poniższych metod płatności."
 
-#: ../form/standard.phtml:160
+#: ../form/standard.phtml:197
 msgid "No payment channel selected!"
 msgstr "Nie wybrano kanału płatności!"
 
-#: ../form/standard.phtml:160
+#: ../form/standard.phtml:197
 msgid ""
 "You must select one of the available payment channels to continue payment."
 msgstr ""
 "Musisz wybrać jeden z dostępnych kanałów płatności aby kontynuować płatność."
 
-#: ../form/standard.phtml:188 ../form/standard.phtml:241
+#: ../form/standard.phtml:225 ../form/standard.phtml:301
 msgid "Selected"
 msgstr "Wybrano"
 
-#: ../form/standard.phtml:239
+#: ../form/standard.phtml:299
 msgid "To select different channel click the above icon again"
 msgstr "Aby wybrać inny kanał płatności kliknij powyższą ikonę kanału"
 
-#: ../form/standard.phtml:460
+#: ../form/standard.phtml:572
 msgid "You chose the fast and secure payments via Dotpay."
 msgstr "Wybrałeś szybkie i bezpieczne płatności dzięki Dotpay"
 
-#: ../form/standard.phtml:460
+#: ../form/standard.phtml:572
 msgid "Continue to choose your payment method on the Dotpay website."
 msgstr ""
 "Będziesz mógł kontynuować płatność po wybraniu konkretnej metody płatności "
 "po przekierowaniu na stronę Dotpay."
 
-#: ../form/standard.phtml:460
+#: ../form/standard.phtml:572
 msgid "Or choose a different payment method."
 msgstr "Lub wybierz jedną z innych dostępnych metod."
 
-#: ../form/tc.phtml:2
+#: ../form/tc.phtml:3
 msgid "Choose one of the payment methods above."
 msgstr "Wybierz jedną z powyższych metod."
 
@@ -897,7 +897,7 @@ msgstr ""
 "Państwa płatność nie zostanie obsłużona automatycznie, a tym samym wydłuży "
 "się czas realizacji transakcji."
 
-#: ../templates/redirect_form.phtml:9
+#: ../templates/redirect_form.phtml:11
 msgid "You're being redirected to the payment operator, please wait ..."
 msgstr "Trwa przekierowanie do operatora płatności, proszę czekać ..."
 

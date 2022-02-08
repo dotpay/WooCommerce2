@@ -25,9 +25,9 @@
  */
 
 /**
- * Abstract class of skeleton of Dotpay gateway plugin
+ * / class/ of skeleton of Dotpay gateway plugin
  */
-abstract class Dotpay_Payment extends WC_Payment_Gateway
+class Dotpay_Payment extends WC_Payment_Gateway
 {
     // Dotpay IP addresses
 
@@ -56,7 +56,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.6.2';
+    const MODULE_VERSION = '3.6.3';
 
 
     public static $ocChannel = '248';
@@ -68,9 +68,16 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     public static $paypoChannel = '95';
 
 
-
     private $orderObject = null;
     private $orderId = null;
+
+    public static $api_username;
+
+
+    public function __construct() {
+        $this->api_username = $this->get_option('api_username');
+
+    }
 
 
 	/**
@@ -154,6 +161,7 @@ abstract class Dotpay_Payment extends WC_Payment_Gateway
     {
         return $this->get_option('api_username');
     }
+
 
     /**
      * Return channel number of credit card
