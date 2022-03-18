@@ -776,13 +776,14 @@ protected function generateCHK($DotpayPin, $ParametersArray)
 
 
     
-    //Remove UTF8 Bom
+    //Remove UTF8 Bom, new lines and spaces
 
     public function remove_utf8_bom($text)
     {
         $bom = pack('H*','EFBBBF');
-        $text = preg_replace("/^$bom/", '', $text);
-        return $text;
+        $text = preg_replace("/^$bom/", "", $text);
+        $text2 = preg_replace("/\r|\n|\s/", "", $text);
+        return (trim($text2));
     }
 
 
