@@ -126,7 +126,11 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelsblik,false,false)) ||
 		
 		jQuery('#dp_blikCode').on('keypress keydown keyup',function(){
              if (!jQueryCodeBLIKregex()) {
-					console.log('%cNo blik code or incomplete','background: #cfcfcf; color: brown;');
+					
+				jQuery('input#dp_blikCode').css({"background-color":"#ffc9c9","border-color":"#f22"});
+
+				console.log('%cNo blik code or incomplete','background: #cfcfcf; color: brown;');
+
 
 					if(jQuery( "button[name='woocommerce_checkout_place_order']" ).length > 0) {
 
@@ -148,9 +152,10 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelsblik,false,false)) ||
 					}
 
 
-             }
-           else{
+             }else{
 			   console.log('blik code is completed');
+			   jQuery('input#dp_blikCode').css({"background-color":"#d3f2d2","border-color":"#3a9112"});
+
 			   if(jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_blik').length >0){
 			   		jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
 					   if(jQuery('div#payment div.form-row button#place_order').length > 0){
@@ -162,12 +167,24 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelsblik,false,false)) ||
 
          });
 
-		 setTimeout(function(){ 
+		 setTimeout(function(){
+			 
+					if(!jQueryCodeBLIKregex()){
+
 						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
 						if(jQuery('div#payment div.form-row button#place_order').length > 0){
 	                        	jQuery('div#payment div.form-row button#place_order').prop('disabled', true);
                            }
+
+						jQuery('input#dp_blikCode').css({"background-color":"#ffc9c9","border-color":"#f22"});
 						console.log('First enter the blik code');
+
+					}else{
+						console.log('blik code is ok');
+						jQuery('input#dp_blikCode').css({"background-color":"#d3f2d2","border-color":"#3a9112"});
+					}	
+
+
 					}, 800);
 
 					
