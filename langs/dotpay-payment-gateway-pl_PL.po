@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2022-02-07 12:30+0100\n"
-"PO-Revision-Date: 2022-02-07 12:30+0100\n"
+"POT-Creation-Date: 2022-08-22 15:09+0200\n"
+"PO-Revision-Date: 2022-08-22 15:11+0200\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: pl_PL\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -26,11 +26,11 @@ msgstr "Pobierz blankiet"
 msgid "Make a money transfer"
 msgstr "Wykonaj przelew bankowy"
 
-#: ../Dotpay/Payment.php:359
+#: ../Dotpay/Payment.php:376
 msgid "Shop - "
 msgstr "Sklep - "
 
-#: ../Dotpay/Payment.php:511
+#: ../Dotpay/Payment.php:528
 msgid "Order ID: "
 msgstr "Nr zamówienia: "
 
@@ -79,26 +79,26 @@ msgstr "Płatności kartą płatniczą z wykorzystaniem MasterPass"
 #: ../Gateway/Dotpay.php:120 ../Gateway/Dotpay.php:127
 #: ../Gateway/Dotpay.php:230 ../Gateway/Dotpay.php:233
 #: ../Gateway/Dotpay.php:255 ../Gateway/Dotpay.php:258
-#: ../Gateway/Dotpay.php:289 ../Gateway/Dotpay.php:320
+#: ../Gateway/Dotpay.php:289 ../Gateway/Dotpay.php:328
 msgid "Needed separate agreement."
 msgstr "Do uruchomienia wymagana osobna Umowa."
 
 #: ../Gateway/Dotpay.php:121 ../Gateway/Dotpay.php:128
 #: ../Gateway/Dotpay.php:234 ../Gateway/Dotpay.php:259
-#: ../Gateway/Dotpay.php:277
+#: ../Gateway/Dotpay.php:277 ../Gateway/Dotpay.php:319
 msgid "Contact Dotpay customer service before using this option"
 msgstr ""
 "Proszę skontaktować się z Biurem Obsługi Klienta przed użyciem tej opcji"
 
 #: ../Gateway/Dotpay.php:122 ../Gateway/Dotpay.php:129
 #: ../Gateway/Dotpay.php:236 ../Gateway/Dotpay.php:261
-#: ../Gateway/Dotpay.php:278
+#: ../Gateway/Dotpay.php:278 ../Gateway/Dotpay.php:320
 msgid "Dotpay customer service"
 msgstr "Biuro Obsługi Klienta"
 
 #: ../Gateway/Dotpay.php:122 ../Gateway/Dotpay.php:129
 #: ../Gateway/Dotpay.php:237 ../Gateway/Dotpay.php:262
-#: ../Gateway/Dotpay.php:279
+#: ../Gateway/Dotpay.php:279 ../Gateway/Dotpay.php:321
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -290,7 +290,7 @@ msgstr ""
 msgid "Password API"
 msgstr "Hasło API"
 
-#: ../Gateway/Dotpay.php:279
+#: ../Gateway/Dotpay.php:279 ../Gateway/Dotpay.php:321
 msgid "Required additional permissions for the user API."
 msgstr "Wymagane dodatkowe uprawnienia dla podanego użytkownika API."
 
@@ -321,43 +321,63 @@ msgid "Display payment channels names in widget (recommends: no)"
 msgstr ""
 "Pokaż nazwę kanału pod jego logotypem na liście kanałów (zalecamy: nie)"
 
-#: ../Gateway/Dotpay.php:318
+#: ../Gateway/Dotpay.php:317
+msgid ""
+"Display transfer payment instructions without redirecting to Dotpay site"
+msgstr ""
+"Wyświetl instrukcję płatności przelewu bez przekierowania na stronę Dotpay"
+
+#: ../Gateway/Dotpay.php:319
+msgid ""
+"Show payment instructions for traditional transfers (some payment methods: "
+"cash, online payments) on your website."
+msgstr ""
+"Pokaż na swojej stronie instrukcje płatności dla przelewów tradycyjnych "
+"(niektóre metody płatności: gotówka, płatności tradycyjne - online)."
+
+#: ../Gateway/Dotpay.php:319
+msgid "Requires Dotpay API username and password (enter above)."
+msgstr ""
+"Wymaga podania nazwy użytkownika oraz hasła do Panelu klienta Dotpay "
+"(wprowadź powyżej)"
+
+#: ../Gateway/Dotpay.php:326
 msgid "PayPo - postponed payments"
 msgstr "PayPo - płatności odroczone"
 
-#: ../Gateway/Dotpay.php:360
+#: ../Gateway/Dotpay.php:368
 msgid " - "
 msgstr " - "
 
-#: ../Gateway/Dotpay.php:363
+#: ../Gateway/Dotpay.php:371
 msgid "Choose what kind of delivery describes this shipping method"
 msgstr "Wybierz rodzaj dostawy opisujący tę metodę wysyłki"
 
-#: ../Gateway/Dotpay.php:367
+#: ../Gateway/Dotpay.php:375
 msgid "-"
 msgstr "-"
 
-#: ../Gateway/Dotpay.php:368
+#: ../Gateway/Dotpay.php:376
 msgid "Courier"
 msgstr "kurier"
 
-#: ../Gateway/Dotpay.php:369
+#: ../Gateway/Dotpay.php:377
 msgid "Poczta Polska"
 msgstr "Poczta Polska"
 
-#: ../Gateway/Dotpay.php:370
+#: ../Gateway/Dotpay.php:378
 msgid "Pickup point"
 msgstr "dostawa do punktu (np. UPS Access point, DHL Parcel Shop)"
 
-#: ../Gateway/Dotpay.php:371
+#: ../Gateway/Dotpay.php:379
 msgid "Paczkomat"
 msgstr "paczkomat"
 
-#: ../Gateway/Dotpay.php:372
+#: ../Gateway/Dotpay.php:380
 msgid "Paczka w Ruchu"
 msgstr "paczka w ruchu"
 
-#: ../Gateway/Dotpay.php:373
+#: ../Gateway/Dotpay.php:381
 msgid "Local pickup"
 msgstr "odbiór w sklepie (click&collect)"
 
@@ -429,43 +449,43 @@ msgstr ""
 msgid "Please accept all agreements"
 msgstr "Proszę zaakceptować wszystkie wymagane zgody"
 
-#: ../Gateway/Gateway.php:953
+#: ../Gateway/Gateway.php:967
 msgid "Dotpay send notification"
 msgstr "Dotpay dostarczył notyfikację"
 
-#: ../Gateway/Gateway.php:953
+#: ../Gateway/Gateway.php:967
 msgid "transaction number:"
 msgstr "numer transakcji:"
 
-#: ../Gateway/Gateway.php:953
+#: ../Gateway/Gateway.php:967
 msgid "payment channel:"
 msgstr "kanał płatniczy:"
 
-#: ../Gateway/Gateway.php:956
+#: ../Gateway/Gateway.php:970
 msgid "paid : processing"
 msgstr "oplacone : przetwarzane"
 
-#: ../Gateway/Gateway.php:956
+#: ../Gateway/Gateway.php:970
 msgid "paid : completed (virtual product)"
 msgstr "oplacone : zrealizowane (produkt wirtualny)"
 
-#: ../Gateway/Gateway.php:972
+#: ../Gateway/Gateway.php:986
 msgid "positive notifications:"
 msgstr "dostarczona notyfikacja"
 
-#: ../Gateway/Gateway.php:977
+#: ../Gateway/Gateway.php:991
 msgid "DOUBLE PAYMENT !"
 msgstr "POWIELONA PŁATNOŚĆ!"
 
-#: ../Gateway/Gateway.php:977
+#: ../Gateway/Gateway.php:991
 msgid "for the order no:"
 msgstr "dla numeru zamówienia:"
 
-#: ../Gateway/Gateway.php:977
+#: ../Gateway/Gateway.php:991
 msgid "Dotpay registered under numbers:"
 msgstr "Dotpay zarejestrował pod numerami:"
 
-#: ../Gateway/Gateway.php:977
+#: ../Gateway/Gateway.php:991
 msgid ""
 "Check the posting for this order in your Dotpay panel - there is a risk that "
 "the payer has paid more than 1 time for this order."
@@ -473,37 +493,37 @@ msgstr ""
 "Sprawdź w swoim panelu Dotpay księgowanie dla tego zamówienia - istnieje "
 "ryzyko, że płacący zapłacił więcej niż 1 raz za to zamówienie."
 
-#: ../Gateway/Gateway.php:991 ../Gateway/Gateway.php:993
-#: ../Gateway/Gateway.php:994
+#: ../Gateway/Gateway.php:1005 ../Gateway/Gateway.php:1007
+#: ../Gateway/Gateway.php:1008
 msgid "cancelled"
 msgstr "odmowa"
 
-#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
+#: ../Gateway/Gateway.php:1008 ../Gateway/Gateway.php:1022
 msgid "A message for: "
 msgstr "Wiadomość dotycząca: "
 
-#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
+#: ../Gateway/Gateway.php:1008 ../Gateway/Gateway.php:1022
 msgid "The order status has not been changed to"
 msgstr "Status tego zamówienia nie został zmieniony na"
 
-#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
+#: ../Gateway/Gateway.php:1008 ../Gateway/Gateway.php:1022
 msgid "because the order has previously been paid for (check previous notes)."
 msgstr ""
 "ponieważ to zamówienie zostało wcześniej już opłacone (sprawdź poprzednią "
 "notatkę)."
 
-#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
+#: ../Gateway/Gateway.php:1008 ../Gateway/Gateway.php:1022
 msgid "You can also check the accounting for this order in the Dotpay panel."
 msgstr ""
 "Możesz również sprawdzić księgowanie płatności dla tego zamówienia w panelu "
 "Dotpay. "
 
-#: ../Gateway/Gateway.php:994 ../Gateway/Gateway.php:1008
+#: ../Gateway/Gateway.php:1008 ../Gateway/Gateway.php:1022
 msgid "So it's current status:"
 msgstr "Dlatego aktualny status zamówienia to:"
 
-#: ../Gateway/Gateway.php:1005 ../Gateway/Gateway.php:1007
-#: ../Gateway/Gateway.php:1008
+#: ../Gateway/Gateway.php:1019 ../Gateway/Gateway.php:1021
+#: ../Gateway/Gateway.php:1022
 msgid "processing"
 msgstr "przetwarzanie"
 
@@ -559,7 +579,7 @@ msgstr ""
 "PHP"
 
 #: ../woocommerce-dotpay.php:56 ../woocommerce-dotpay.php:68
-#: ../woocommerce-dotpay.php:214 ../woocommerce-dotpay.php:218
+#: ../woocommerce-dotpay.php:215 ../woocommerce-dotpay.php:219
 msgid "Currently in use"
 msgstr "Aktualnie w użyciu"
 
@@ -575,11 +595,11 @@ msgstr ""
 msgid "Duplicate Payment - check!"
 msgstr "Powielona płatność - sprawdź!"
 
-#: ../woocommerce-dotpay.php:144
+#: ../woocommerce-dotpay.php:145
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: ../woocommerce-dotpay.php:213
+#: ../woocommerce-dotpay.php:214
 msgid ""
 "Attention! There is a temporary problem with checking information about "
 "latest version of the Dotpay payment module"
@@ -587,7 +607,7 @@ msgstr ""
 "Informacja! W tej chwili występuje problem ze sprawdzeniem informacji o "
 "dostępności najnowszej wersji wtyczki płatności Dotpay"
 
-#: ../woocommerce-dotpay.php:215
+#: ../woocommerce-dotpay.php:216
 msgid ""
 "You can check manually and download latest version and upgrade from this "
 "address:"
@@ -595,35 +615,35 @@ msgstr ""
 "Możesz sprawdzić i pobrać wtyczkę ręcznie w celu jej aktualizacji, "
 "korzystając z adresu:"
 
-#: ../woocommerce-dotpay.php:215
+#: ../woocommerce-dotpay.php:216
 msgid "check if there is a new version of Dotpay payment plugin"
 msgstr "sprawdź czy jest dostępna nowa wersja wtyczki płatności Dotpay"
 
-#: ../woocommerce-dotpay.php:215
+#: ../woocommerce-dotpay.php:216
 msgid "WooCommerce Dotpay payment module"
 msgstr "Moduł płatności Dotpay dla Woocommerce"
 
-#: ../woocommerce-dotpay.php:218
+#: ../woocommerce-dotpay.php:219
 msgid "Attention! A new version of the Dotpay payment module is available:"
 msgstr "Uwaga! Jest dostępna nowa wersja modułu płatności Dotpay:"
 
-#: ../woocommerce-dotpay.php:219
+#: ../woocommerce-dotpay.php:220
 msgid "Download latest version and upgrade manually this:"
 msgstr "Pobierz najnowszą wersję wtyczki i zaktualizuj ją ręcznie:"
 
-#: ../woocommerce-dotpay.php:219
+#: ../woocommerce-dotpay.php:220
 msgid "Upgrade WooCommerce Dotpay Gateway"
 msgstr "Aktualizacja wtyczki WooCommerce Dotpay Gateway"
 
-#: ../woocommerce-dotpay.php:279
+#: ../woocommerce-dotpay.php:280
 msgid "My saved credit cards"
 msgstr "Moje zapisane karty"
 
-#: ../woocommerce-dotpay.php:281
+#: ../woocommerce-dotpay.php:282
 msgid "Checking payment status..."
 msgstr "Sprawdzanie statusu płatności..."
 
-#: ../woocommerce-dotpay.php:283
+#: ../woocommerce-dotpay.php:284
 msgid "Details of your payment"
 msgstr "Szczegóły Twojej płatności"
 
@@ -642,13 +662,13 @@ msgstr "Kod BLIK"
 #: ../form/blik.phtml:75 ../form/cc.phtml:64 ../form/mp.phtml:64
 #: ../form/oc.phtml:192 ../form/paypo.phtml:62 ../form/pv.phtml:65
 #: ../form/standard.phtml:60 ../form/standard.phtml:63
-#: ../form/standard.phtml:150
+#: ../form/standard.phtml:157
 msgid "Attention!"
 msgstr "Uwaga!"
 
 #: ../form/blik.phtml:75 ../form/cc.phtml:64 ../form/mp.phtml:64
 #: ../form/oc.phtml:192 ../form/paypo.phtml:62 ../form/pv.phtml:65
-#: ../form/standard.phtml:63 ../form/standard.phtml:150
+#: ../form/standard.phtml:63 ../form/standard.phtml:157
 msgid "Test mode is activated. This is just a payment simulation."
 msgstr "Włączono tryb testowy. To jest jedynie symulacja płatności."
 
@@ -685,39 +705,39 @@ msgstr ""
 msgid "Incorrect module configuration! Invalid shop ID."
 msgstr "Niepoprawna konfiguracja modułu! Błędny identyfikator sklepu."
 
-#: ../form/standard.phtml:144 ../form/standard.phtml:199
+#: ../form/standard.phtml:151 ../form/standard.phtml:206
 msgid "Choose one of the payment channels below:"
 msgstr "Wybierz jedną z poniższych metod płatności."
 
-#: ../form/standard.phtml:197
+#: ../form/standard.phtml:204
 msgid "No payment channel selected!"
 msgstr "Nie wybrano kanału płatności!"
 
-#: ../form/standard.phtml:197
+#: ../form/standard.phtml:204
 msgid ""
 "You must select one of the available payment channels to continue payment."
 msgstr ""
 "Musisz wybrać jeden z dostępnych kanałów płatności aby kontynuować płatność."
 
-#: ../form/standard.phtml:225 ../form/standard.phtml:301
+#: ../form/standard.phtml:232 ../form/standard.phtml:325
 msgid "Selected"
 msgstr "Wybrano"
 
-#: ../form/standard.phtml:299
+#: ../form/standard.phtml:323
 msgid "To select different channel click the above icon again"
 msgstr "Aby wybrać inny kanał płatności kliknij powyższą ikonę kanału"
 
-#: ../form/standard.phtml:572
+#: ../form/standard.phtml:605
 msgid "You chose the fast and secure payments via Dotpay."
 msgstr "Wybrałeś szybkie i bezpieczne płatności dzięki Dotpay"
 
-#: ../form/standard.phtml:572
+#: ../form/standard.phtml:605
 msgid "Continue to choose your payment method on the Dotpay website."
 msgstr ""
 "Będziesz mógł kontynuować płatność po wybraniu konkretnej metody płatności "
 "po przekierowaniu na stronę Dotpay."
 
-#: ../form/standard.phtml:572
+#: ../form/standard.phtml:605
 msgid "Or choose a different payment method."
 msgstr "Lub wybierz jedną z innych dostępnych metod."
 

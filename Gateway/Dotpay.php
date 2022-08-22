@@ -300,20 +300,28 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
 
             'channels_show' => array(
-                'title' => __('Widget (display payment channel in a shop)', 'dotpay-payment-gateway'),
+                'title' => "🖼 ".__('Widget (display payment channel in a shop)', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'label' => __('Display payment channels in the store available for the account', 'dotpay-payment-gateway'),
                 'default' => 'yes',
                 'class' => 'widget_show',
             ),
             'channel_name_show' => array(
-                'title' => __('Toggle channel names in widget view', 'dotpay-payment-gateway'),
+                'title' => "💬 ".__('Toggle channel names in widget view', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'label' => __('Display payment channels names in widget (recommends: no)', 'dotpay-payment-gateway'),
                 'default' => 'no',
                 'class' => 'widget_channel_names',
             ),
-
+            'transfer_instruction' => array(
+                'title' => "📜 ".__('Display transfer payment instructions without redirecting to Dotpay site', 'dotpay-payment-gateway'),
+                'type' => 'checkbox',
+                'label' => __('Show payment instructions for traditional transfers (some payment methods: cash, online payments) on your website.', 'dotpay-payment-gateway')."<br><em><strong>".__('Requires Dotpay API username and password (enter above).', 'dotpay-payment-gateway')."</em></strong><br><br><em id='dp_transfer_instruction_contact'>".__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway')
+                ."( <a href=\"https://www.dotpay.pl/kontakt\" target=\"_blank\" title=\"". __('Dotpay customer service', 'dotpay-payment-gateway')."\">"
+                .__('Contact', 'dotpay-payment-gateway', 'dotpay-payment-gateway')."</a>). ".__('Required additional permissions for the user API.','dotpay-payment-gateway')."</em>",
+                'default' => 'no',
+                'class' => 'dp_transfer_instruction',
+            ),
             'paypo_show' => array(
                 'title' => __('PayPo - postponed payments', 'dotpay-payment-gateway').'<br><img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/PayPo.png'.'" alt="PayPo" width="77" height="50" style="margin-top: 10px;">',
                 'type' => 'checkbox',

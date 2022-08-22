@@ -138,7 +138,10 @@ class Dotpay_SellerApi {
      */
     public function getPaymentByOrderId($username, $password, $orderId, $dp_id='',$dp_module = '')
     {
-        $url = $this->_baseurl.$this->getDotPaymentApi().'payments/?control='.$orderId;
+
+        $orderId_encode = rawurlencode(trim($orderId));
+        $url = $this->_baseurl.$this->getDotPaymentApi().'payments/?control='.$orderId_encode;
+
         $curl = new Dotpay_Curl();
         $curl->addOption(CURLOPT_URL, $url)
              ->addOption(CURLOPT_USERPWD, $username.':'.$password);

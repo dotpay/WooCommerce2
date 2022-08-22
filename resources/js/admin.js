@@ -44,6 +44,7 @@ if(checIfLangPL() === true) {
   var dp_currency_leave = "Zostaw pole puste lub podaj walutę w formacie ISO 4217, np: EUR lub EUR,USD";
   var dp_introduction1 = "Dziękujemy za wybranie Dotpay!";
   var dp_introduction2 = "Aby poprawnie skonfigurować nasz moduł płatności <a href=\"https://github.com/dotpay/WooCommerce2#instrukcja\" target=\"_new\">sprawdź wcześniej instrukcję</a>.";
+  var dp_transer_instruction_txt = "Wymaga wprowadzenia danych: nazwa użytkownika i hasło do Api oraz odpowiednich dodatkowych uprawnień.";
 }else {
   var dp_pincheck = "The pin consists of at least 16 and a maximum of 32 alphanumeric characters!";
   var dp_allowed = "Only digits allowed (6 digits)";
@@ -53,6 +54,7 @@ if(checIfLangPL() === true) {
   var dp_currency_leave = "Leave the field blank or enter a currency in ISO 4217 format, e.g. EUR or EUR, USD";
   var dp_introduction1 = "Thank you for choosing Dotpay!";
   var dp_introduction2 = "To correctly configure our payment module <a href=\"https://github.com/dotpay/WooCommerce2#instructions\" target=\"_new\">check instructions first</a>.";
+  var dp_transer_instruction_txt = "Requires the entry of data: username and password to api and appropriate additional permissions.";
 
 }
 
@@ -146,6 +148,20 @@ if (typeof jQuery != 'undefined') {
       			jQuery(this).val(function(_, v){
       					return v.replace(/\s+/g, '');
           				});
+
+                 if(jQuery("input#woocommerce_dotpay_api_username").val().length > 2 ){
+                    if(jQuery('#dp_alert-notice_transfer').length > 0){
+                      jQuery('#dp_alert-notice_transfer').remove();
+                    }  
+                 } else {
+
+                  if(jQuery('#dp_alert-notice_transfer').length < 1 && jQuery(".dp_transfer_instruction").prop('checked')){
+                    jQuery('<div class="notice notice-error dotpay-error-notice" id="dp_alert-notice_transfer"><p><strong>'+ dp_transer_instruction_txt +'</div>').insertAfter(jQuery('#dp_transfer_instruction_contact'));
+                  }
+
+                 } 
+   
+
       		});
 
           //remove spaces from api password input
@@ -153,6 +169,20 @@ if (typeof jQuery != 'undefined') {
       			jQuery(this).val(function(_, v){
       					return v.replace(/\s+/g, '');
           				});
+
+
+                  if(jQuery("input#woocommerce_dotpay_api_password").val().length > 2 ){
+                    if(jQuery('#dp_alert-notice_transfer').length > 0){
+                      jQuery('#dp_alert-notice_transfer').remove();
+                    }  
+                 } else {
+
+                  if(jQuery('#dp_alert-notice_transfer').length < 1 && jQuery(".dp_transfer_instruction").prop('checked')){
+                    jQuery('<div class="notice notice-error dotpay-error-notice" id="dp_alert-notice_transfer"><p><strong>'+ dp_transer_instruction_txt +'</div>').insertAfter(jQuery('#dp_transfer_instruction_contact'));
+                  }
+
+                 } 
+
       		});
 
 
@@ -216,6 +246,27 @@ if (typeof jQuery != 'undefined') {
     jQuery('label[for="woocommerce_dotpay_api_password"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_masterpass_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
     jQuery('label[for="woocommerce_dotpay_paypo_show"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
+
+
+    jQuery(".dp_transfer_instruction").on('change', function() {
+      if ( (jQuery('#woocommerce_dotpay_api_username').val().length < 3) || (jQuery('#woocommerce_dotpay_api_password').val().length < 3) )
+         {
+          if(jQuery('#dp_alert-notice_transfer').length < 1 && jQuery(".dp_transfer_instruction").prop('checked')){
+              jQuery('<div class="notice notice-error dotpay-error-notice" id="dp_alert-notice_transfer"><p><strong>'+ dp_transer_instruction_txt +'</div>').insertAfter(jQuery('#dp_transfer_instruction_contact'));
+          }
+
+         }
+      
+        if (jQuery(".dp_transfer_instruction").prop('checked') == false ){
+          if(jQuery('#dp_alert-notice_transfer').length > 0){
+            jQuery('#dp_alert-notice_transfer').remove();
+          }
+
+         }   
+         
+   });
+
+
 
     // added info about manual
     jQuery('#dp_info-notice').remove();

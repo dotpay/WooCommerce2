@@ -173,7 +173,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 
         $sellerApi = new Dotpay_SellerApi($this->getSellerApiUrl());
         
-        if($this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup)) &&
+        if($this->isTransferInstruction() && $this->isChannelInGroup($this->getChannel(), array(self::cashGroup, self::transferGroup)) &&
            $sellerApi->isAccountRight($this->getApiUsername(), $this->getApiPassword(),$this->getSellerId(),self::MODULE_VERSION ) ) 
         {
             $gateway = new Gateway_Transfer();

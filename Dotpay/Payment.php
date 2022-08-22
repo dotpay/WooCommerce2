@@ -38,6 +38,7 @@ class Dotpay_Payment extends WC_Payment_Gateway
                                         '91.216.191.183',
                                         '91.216.191.184',
                                         '91.216.191.185',
+                                        '5.252.202.254',
                                         '5.252.202.255',
                                       );
 
@@ -56,7 +57,7 @@ class Dotpay_Payment extends WC_Payment_Gateway
     // STR EMPTY
     const STR_EMPTY = '';
     // Module version
-    const MODULE_VERSION = '3.6.4';
+    const MODULE_VERSION = '3.6.5';
 
 
     public static $ocChannel = '248';
@@ -289,6 +290,22 @@ class Dotpay_Payment extends WC_Payment_Gateway
 
         return $result;
     }
+
+
+    /**
+     * Return flag, if show payment instructions for Transfers method is enabled
+     * @return boolean
+     */
+    public function isTransferInstruction()
+    {
+        $result = false;
+        if ('yes' == $this->get_option('transfer_instruction')) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
 
     /**
      * Return flag, if shop ID is correct pattern

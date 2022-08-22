@@ -3,7 +3,7 @@
 /**
   * @wordpress-plugin
   * Plugin Name: WooCommerce Dotpay Gateway
-  * Version: 3.6.4
+  * Version: 3.6.5
   * Plugin URI: https://github.com/dotpay/WooCommerce2
   * Description: Fast and secure Dotpay payment gateway for WooCommerce
   * Author: Dotpay (tech@dotpay.pl)
@@ -13,7 +13,7 @@
   * License:     (AFL 3.0)
   *
   * WC requires at least: 3.2.0
-  * WC tested up to: 3.6.1 -> 6.2.2
+  * WC tested up to: 3.6.1 -> 6.8.0
   *
   * NOTICE OF LICENSE
   *
@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.6.4';
+		$thisVersionModule = '3.6.5';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
