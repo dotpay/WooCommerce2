@@ -82,6 +82,9 @@
         </section>
         <div class="col-xs-12">
 
+        <?php if($this->isTestMode()) { ?>
+            <p class="alert alert-warning"><?php echo __('WARNING! Test mode is activated. This is just a payment simulation. Do not make a deposit at your bank.', 'dotpay-payment-gateway'); ?></p>
+        <?php } ?>
         <?php if($this->getChannel() == 11) { ?>
             <p class="alert alert-alert"><?php echo __('WARNING! This data can be use only for a regular bank transfer. Use of this data in a VAT split payment transfer will not result as an effective payment.', 'dotpay-payment-gateway'); ?></p>
         <?php } else { ?>

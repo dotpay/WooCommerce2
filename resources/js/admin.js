@@ -43,7 +43,12 @@ if(checIfLangPL() === true) {
   var dp_additional2 = "Wymagana dodatkowa Umowa w celu uruchomienia kanałów płatności obsługujących tę formę płatności.";
   var dp_currency_leave = "Zostaw pole puste lub podaj walutę w formacie ISO 4217, np: EUR lub EUR,USD";
   var dp_introduction1 = "Dziękujemy za wybranie Dotpay!";
-  var dp_introduction2 = "Aby poprawnie skonfigurować nasz moduł płatności <a href=\"https://github.com/dotpay/WooCommerce2#instrukcja\" target=\"_new\">sprawdź wcześniej instrukcję</a>.";
+  var dp_introduction2a = "Wiodący na polskim rynku operatorzy płatności online:";
+  var dp_introduction2b = "i";
+  var dp_introduction2c = "działają teraz wspólnie.";
+  var dp_introduction2d = "Docelową platformą, dzięki której udostępnimy najlepszą możliwą infrastrukturę, produkty oraz usługi będzie serwis Przelewy24.";
+  var dp_introduction2e = "Dlatego też z w tej wersji moduły płatności zauważysz zmiany nazwy oraz logotypów.";
+  var dp_introduction3 = "Aby poprawnie skonfigurować nasz moduł płatności <a href=\"https://github.com/dotpay/WooCommerce2#instrukcja\" target=\"_new\">sprawdź wcześniej instrukcję</a>.";
   var dp_transer_instruction_txt = "Wymaga wprowadzenia danych: nazwa użytkownika i hasło do Api oraz odpowiednich dodatkowych uprawnień.";
 }else {
   var dp_pincheck = "The pin consists of at least 16 and a maximum of 32 alphanumeric characters!";
@@ -53,7 +58,12 @@ if(checIfLangPL() === true) {
   var dp_additional2 = "Additional Agreement required to enable payment channels that support this form of payment.";
   var dp_currency_leave = "Leave the field blank or enter a currency in ISO 4217 format, e.g. EUR or EUR, USD";
   var dp_introduction1 = "Thank you for choosing Dotpay!";
-  var dp_introduction2 = "To correctly configure our payment module <a href=\"https://github.com/dotpay/WooCommerce2#instructions\" target=\"_new\">check instructions first</a>.";
+  var dp_introduction2a = "Leading online payment operators on the Polish market:";
+  var dp_introduction2b = "i";
+  var dp_introduction2c = "now work together.";
+  var dp_introduction2d = "The target platform thanks to which we will provide the best possible infrastructure, products and services will be Przelewy24.";
+  var dp_introduction2e = "Therefore, in this version of the payment module, you will notice changes in the name and logos.";
+  var dp_introduction3 = "To correctly configure our payment module <a href=\"https://github.com/dotpay/WooCommerce2#instructions\" target=\"_new\">check instructions first</a>.";
   var dp_transer_instruction_txt = "Requires the entry of data: username and password to api and appropriate additional permissions.";
 
 }
@@ -70,6 +80,17 @@ function switchPV(obj) {
     jQuery("#woocommerce_dotpay_pin2").prop('required', false);
   }
 }
+
+
+function showSanboxP24Migrated(obj) {
+    if (jQuery(obj).prop('checked')){
+      jQuery('#woocommerce_dotpay_test').parents('tr').fadeOut();
+      jQuery('#woocommerce_dotpay_dproxy_migrated').parents('tr').attr('style', 'border : 0.3rem solid #f0c0c0; border-radius: 12px; background: #e8ffe3;');
+    }else{
+      jQuery('#woocommerce_dotpay_test').parents('tr').fadeIn();
+      jQuery('#woocommerce_dotpay_dproxy_migrated').parents('tr').attr('style', 'border : 0.3rem solid #c0def0; border-radius: 12px; background: #e1f0f2;');
+    }
+  }
 
 function shownumberCHcc(obj) {
   if (jQuery(obj).prop('checked'))
@@ -115,6 +136,13 @@ if (typeof jQuery != 'undefined') {
     jQuery('.widget_show').change(function() {
       showChannelNames(this);
     });
+
+    showSanboxP24Migrated(jQuery('#woocommerce_dotpay_dproxy_migrated'));
+    jQuery('#woocommerce_dotpay_dproxy_migrated').change(function() {
+      showSanboxP24Migrated(this);
+    });
+
+    
 
     isenambledDotpaymodule(jQuery('.dotpay_module_enable'));
 
@@ -231,7 +259,7 @@ if (typeof jQuery != 'undefined') {
 
 
     //  jQuery("#woocommerce_dotpay_dontview_currency").attr("pattern", "^(([A-Z]{3})\\s?,?\\s?)+");
-    jQuery("#woocommerce_dotpay_dontview_currency").attr("pattern", "^(((AED|AFN|ALL|AMD|ANG|AOA|ARS|AUD|AWG|AZN|BAM|BBD|BDT|BGN|BHD|BIF|BMD|BND|BOB|BOV|BRL|BSD|BTN|BWP|BYN|BZD|CAD|CDF|CHE|CHF|CHW|CLF|CLP|CNY|COP|COU|CRC|CUC|CUP|CVE|CZK|DJF|DKK|DOP|DZD|EGP|ERN|ETB|EUR|FJD|FKP|GBP|GEL|GHS|GIP|GMD|GNF|GTQ|GYD|HKD|HNL|HRK|HTG|HUF|IDR|ILS|INR|IQD|IRR|ISK|JMD|JOD|JPY|KES|KGS|KHR|KMF|KPW|KRW|KWD|KYD|KZT|LAK|LBP|LKR|LRD|LSL|LYD|MAD|MDL|MGA|MKD|MMK|MNT|MOP|MRU|MUR|MVR|MWK|MXN|MXV|MYR|MZN|NAD|NGN|NIO|NOK|NPR|NZD|OMR|PAB|PEN|PGK|PHP|PKR|PLN|PYG|QAR|RON|RSD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|SLL|SOS|SRD|SSP|STN|SVC|SYP|SZL|THB|TJS|TMT|TND|TOP|TRY|TTD|TWD|TZS|UAH|UGX|USD|USN|UYI|UYU|UZS|VEF|VND|VUV|WST|XAF|XAG|XAU|XBA|XBB|XBC|XBD|XCD|XDR|XOF|XPD|XPF|XPT|XSU|XTS|XUA|XXX|YER|ZAR|ZMW|ZWL))\\s?,?\\s?)+");
+    jQuery("#woocommerce_dotpay_dontview_currency").attr("pattern", "^(((AED|AFN|ALL|AMD|ANG|AOA|ARS|AUD|AWG|AZN|BAM|BBD|BDT|BGN|BHD|BIF|BMD|BND|BOB|BOV|BRL|BSD|BTN|BWP|BYN|BZD|CAD|CDF|CHE|CHF|CHW|CLF|CLP|CNY|COP|COU|CRC|CUC|CUP|CVE|CZK|DJF|DKK|DOP|DZD|EGP|ERN|ETB|EUR|FJD|FKP|GBP|GEL|GHS|GIP|GMD|GNF|GTQ|GYD|HKD|HNL|HTG|HUF|IDR|ILS|INR|IQD|IRR|ISK|JMD|JOD|JPY|KES|KGS|KHR|KMF|KPW|KRW|KWD|KYD|KZT|LAK|LBP|LKR|LRD|LSL|LYD|MAD|MDL|MGA|MKD|MMK|MNT|MOP|MRU|MUR|MVR|MWK|MXN|MXV|MYR|MZN|NAD|NGN|NIO|NOK|NPR|NZD|OMR|PAB|PEN|PGK|PHP|PKR|PLN|PYG|QAR|RON|RSD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|SLL|SOS|SRD|SSP|STN|SVC|SYP|SZL|THB|TJS|TMT|TND|TOP|TRY|TTD|TWD|TZS|UAH|UGX|USD|USN|UYI|UYU|UZS|VEF|VND|VUV|WST|XAF|XAG|XAU|XBA|XBB|XBC|XBD|XCD|XDR|XOF|XPD|XPF|XPT|XSU|XTS|XUA|XXX|YER|ZAR|ZMW|ZWL))\\s?,?\\s?)+");
     jQuery("#woocommerce_dotpay_dontview_currency").attr("title", dp_currency_leave);
 
     jQuery('label[for="woocommerce_dotpay_id"] > span.woocommerce-help-tip').attr("style", "color: #2aaeed;font-size: 22px;");
@@ -273,7 +301,7 @@ if (typeof jQuery != 'undefined') {
     
     if(jQuery('#woocommerce_dotpay_id').length > 0 && jQuery('#dp_info-notice').length < 1)
     {
-      jQuery('<div class="notice notice-info dotpay-info-notice" id="dp_info-notice"><p><strong>'+ dp_introduction1 +'</strong><br> '+ dp_introduction2 +'</p></div>').insertBefore(jQuery('div.wrap.woocommerce > form#mainform table.form-table'));
+      jQuery('<div class="notice notice-info dotpay-info-notice" id="dp_info-notice"><h2>'+ dp_introduction1 +'</h2><br><p style="color: #1662b3">'+ dp_introduction2a +' <a href="https://www.przelewy24.pl/aktualnosci/kolejny-etap-integracji-przelewy24-i-dotpay-zakonczenie-kwestii-formalnych" target="_blank" title="www.przelewy24.pl"><span style="color: #C51B2A;font-weight: bold;">Przelewy24</span></a> '+ dp_introduction2b +' <a href="http://www.dotpay.pl" target="_blank" title="www.dotpay.pl"><span style="color: #7D1315;font-weight: bold;">Dotpay</span></a> '+ dp_introduction2c +'</p><p style="color: #1662b3">'+ dp_introduction2d +'</p><p style="color: #1662b3;font-weight: bold;">'+ dp_introduction2e +'</p><br> '+ dp_introduction3 +'<br><br></div>').insertBefore(jQuery('div.wrap.woocommerce > form#mainform table.form-table'));
     }
 
     jQuery('p:contains("Online payment")').remove();

@@ -112,6 +112,14 @@
     text-align: center;
 }
 
+#instruction .alert-warning {
+    background-color: #faece0;
+    color: #ee7605;
+    border: 1px solid #e9af81;
+    padding: 8px;
+    text-align: center;
+}
+
 #iban,#amount,#payment-title,#recipient,#street,#post-code-city {
 	padding: 2px !important;
 }

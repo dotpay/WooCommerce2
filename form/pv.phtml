@@ -70,33 +70,86 @@ if(!is_array($this->CheckChannelEnable(0,$amountforchannelspv,false,true)) || !i
 
 // check agreements - bylaw
 
-CheckBylawPayPv = function(){
-		jQuery(document).ready(function(){
-			
-				if(jQuery('li.payment_method_Dotpay_pv > input#payment_method_Dotpay_pv:checked').length >0){
-					jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_pv').change(function(){
-					if(jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_pv').length < 1){
-						console.log('%cSelect first PayPro S.A. Regulations of Payments !','background:red;color:#fff');
-                        jQuery('li.payment_method_Dotpay_pv').find("label#agreements_bylaw").css({"background-color": "#ffeeed", "padding": "3px", "border-style": "solid", "border-width": "1px", "border-color": "#fd0c0c"});
-						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
-                        if(jQuery('div#payment div.form-row button#place_order').length > 0){
-	                        jQuery('div#payment div.form-row button#place_order').prop('disabled', true);
-                        }
-					}else{
-						console.log('Payment regulations accepted');
-                        jQuery('li.payment_method_Dotpay_pv').find("label#agreements_bylaw").css({"background-color": "", "padding": "", "border-style": "", "border-width": "0px", "border-color": ""});
-						jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
-                        if(jQuery('div#payment div.form-row button#place_order').length > 0){
-	                        jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
-                        }
-					}
-				});
-				
-			}
+CheckBylawPvGo = function(){
 
+jQuery(document).ready(function () {
 
-			});
+    if (jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_pv').length < 1) {
+        console.log('%cSelect first PayPro S.A. Regulations of Payments !', 'background:red;color:#fff');
+        jQuery('li.payment_method_Dotpay_pv').find("label#agreements_bylaw").css({
+            "background-color": "#ffeeed",
+            "padding": "3px",
+            "border-style": "solid",
+            "border-width": "1px",
+            "border-color": "#fd0c0c"
+        });
+        jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+        if (jQuery('div#payment div.form-row button#place_order').length > 0) {
+            jQuery('div#payment div.form-row button#place_order').prop('disabled', true);
+        }
+    } else {
+        console.log('PV: Payment regulations accepted');
+        jQuery('li.payment_method_Dotpay_pv').find("label#agreements_bylaw").css({
+            "background-color": "",
+            "padding": "",
+            "border-style": "",
+            "border-width": "0px",
+            "border-color": ""
+        });
+        jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+        if (jQuery('div#payment div.form-row button#place_order').length > 0) {
+            jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
+        }
     }
+
+});
+
+jQuery(function ($) {
+    //$('input#dp_agreements_bylaw').change(function () {
+    $('input#dp_agreements_bylaw').parents('li.payment_method_Dotpay_pv').change(function () {
+        //if ($(this).is(":checked")) {
+        if ($("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_Dotpay_pv').length > 0) {    
+            jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+            console.log('PV: Payment regulations accepted');
+            jQuery('li.payment_method_Dotpay_pv').find("label#agreements_bylaw").css({
+                "background-color": "",
+                "padding": "",
+                "border-style": "",
+                "border-width": "0px",
+                "border-color": ""
+            });
+        } else {
+            console.log('%cPV: Select first PayPro S.A. Regulations of Payments !', 'background:red;color:#fff');
+            jQuery('li.payment_method_Dotpay_pv').find("label#agreements_bylaw").css({
+                "background-color": "#ffeeed",
+                "padding": "3px",
+                "border-style": "solid",
+                "border-width": "1px",
+                "border-color": "#fd0c0c"
+            });
+
+            if (jQuery("button[name='woocommerce_checkout_place_order']").length > 0) {
+                jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
+            } else if (jQuery('div#payment div.form-row button#place_order').length > 0) {
+                jQuery('div#payment div.form-row button#place_order').prop('disabled', true);
+            }
+
+        }
+    });
+});
+
+}
+
+
+CheckBylawPv = function () {
+jQuery(document).ready(function () {
+
+    if (jQuery('li.payment_method_Dotpay_pv > input#payment_method_Dotpay_pv:checked').length > 0) {
+        CheckBylawPvGo();
+    }
+
+});
+}
 
 
     jQueryEnableButtonPV = function(){

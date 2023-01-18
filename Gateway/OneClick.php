@@ -78,9 +78,13 @@ class Gateway_OneClick extends Gateway_Gateway {
         $hiddenFields['channel'] = (string)trim($this->getChannel());
         $hiddenFields['ch_lock'] = '1';
         $hiddenFields['type'] = '4';
-        if(!$this->is_session_started()) {
+        if (!$this->is_session_started()) {
             session_start();
-         }
+            if (!$this->is_session_started()) {
+                session_regenerate_id(true);
+                session_start();
+            }
+        }
 
         if(null !== WC()->session->get('dotpay_form_oc_type') && WC()->session->get('dotpay_form_oc_type') == 'choose') {    
             $card = Dotpay_Card::getCardById(WC()->session->get('dotpay_form_saved_card'));

@@ -77,20 +77,26 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     /**
      * Prepare gateway
      */
-    public function __construct() {
-        $this->id = 'dotpay';
-        $this->icon = $this->getIcon();
-        $this->has_fields = true;
-        $this->method_title = __('DOTPAY PAYMENT', 'dotpay-payment-gateway');
-        $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
+    public function __construct()
+    {
+            $this->id = 'dotpay';
 
+            $this->icon = $this->getIcon();
+            $this->method_title = __('Przelewy24/Dotpay PAYMENT', 'dotpay-payment-gateway');
+            $this->description = __('Fast and secure payment via Przelewy24', 'dotpay-payment-gateway');
 
-        $this->init_form_fields();
-        $this->init_settings();
-        $this->enabled = ($this->isEnabled())?'yes':'no';
+            /* 
+            $this->icon = $this->getIcon();
+            $this->method_title = __('DOTPAY PAYMENT', 'dotpay-payment-gateway');
+            $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
+            */
+
+            $this->has_fields = true;
+            $this->init_form_fields();
+            $this->init_settings();
+            $this->enabled = ($this->isEnabled()) ? 'yes' : 'no';
 
     }
-
 
     public function is_session_started() {
         if ( php_sapi_name() != 'cli' ) {
@@ -218,9 +224,14 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
      */
     protected function getDataForm() {
         global $file_prefix, $woocommerce;
-        if(!$this->is_session_started()) {
+        if (!$this->is_session_started()) {
             session_start();
-         }
+            if (!$this->is_session_started()) {
+                session_regenerate_id(true);
+                session_start();
+
+            }
+        }
         if (function_exists('wp_cache_clean_cache')) {
             wp_cache_clean_cache($file_prefix, true);
         }
@@ -232,6 +243,12 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
 
         if(trim($this->getUrl()) == null){
             $url_return = $this->dotpay_install_missing_pages();
+        }
+
+        if($this->isCheckStatusURLwithIdOrder()){
+            $url_status = $this->getUrl().'?trid='.$this->getOrder()->get_id().'&tl='.time();
+        }else{
+            $url_status = $this->getUrl();
         }
 
         if (null !== WC()->session->get('dotpay_payment_one_product_name') && $this->isProductNameTitleEnabled() == true) {
@@ -251,7 +268,7 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
             'currency' => (string) $this->getCurrency(),
             'description' => (string) $new_description,
             'lang' => (string) $this->getPaymentLang(),
-            'url' => (string) $this->getUrl(),
+            'url' => (string) $url_status,
             'urlc' => (string) $this->getUrlC(),
             'api_version' => (string) $this->getApiVersion(),
             'type' => '0',
@@ -467,7 +484,22 @@ abstract class Gateway_Gateway extends Dotpay_Payment {
     }
 
 
-        /**
+    /**
+     * Checks if this account was migrated from Dotpay to Przelewy24 Api
+     * @return boolean
+     */
+    public function isMigratedtoP24()
+    {
+        $result = false;
+        if ('yes' == $this->get_option('dproxy_migrated')) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+
+    /**
      * Return flag, if  product name in payment title enabled
      * @return boolean
      */
@@ -603,12 +635,13 @@ protected function generateCHK($DotpayPin, $ParametersArray)
 }
 
     /**
-     * Return url to icon file
+     * Return url to icon file for dotpay
      * @return string
      */
     protected function getIcon() {
         return '';
     }
+
 
     /**
      * Return rendered status page HTML
@@ -616,6 +649,11 @@ protected function generateCHK($DotpayPin, $ParametersArray)
      */
     public function getStatusPage() {
         $this->message = null;
+        $order_id = null;
+        $date_created = "";
+        $this->message_orderid = "";
+
+
         if($this->getParam('error_code')!=false) {
             switch($this->getParam('error_code')) {
                 case 'PAYMENT_EXPIRED':
@@ -655,6 +693,59 @@ protected function generateCHK($DotpayPin, $ParametersArray)
                     $this->message = __('There was an unidentified error. Please contact to your seller and give him the order number.', 'dotpay-payment-gateway');
             }
         }
+
+
+
+        if (trim($this->getParam('tl')) != false) 
+        {
+                $TimeOfOrderCreated = strip_tags( (int) wp_unslash( (int)$this->getParam('tl') ) );
+
+
+            if ((int) $this->getParam('trid') != false) {
+                $GetOrderId = strip_tags( (int) wp_unslash( (int)$this->getParam('trid') ) );
+                $check_order = wc_get_order( (int)$GetOrderId );
+                
+                if ($check_order) {
+
+                    $date_created = $check_order->get_date_created()->format('YmdHis'); 
+
+                    //check if the order creation time is shorter than 180 minutes (contractual time) and the payment request creation time is shorter than 180 minutes (contractual time)
+
+                        $interval_from_param = round((time() - $TimeOfOrderCreated) / 60, 0);
+
+                        $dateTimeObjectcreated = date_create($date_created);
+                        $dateTimeObjenow= date_create(date('YmdHis'));
+                        $interval = date_diff($dateTimeObjenow, $dateTimeObjectcreated);
+
+                        $created_minutes_ago = $interval->days * 24 * 60;
+                        $created_minutes_ago += $interval->h * 60;
+                        $created_minutes_ago += $interval->i;
+
+                    if( ((int)$created_minutes_ago < 180) && ((int)$interval_from_param < 180) ) {
+
+                        $order_id = $GetOrderId;
+                        $this->message_orderid = $order_id;
+
+                    }else{
+                        $this->message = __('Wrong redirect. The confirmation date for this payment has already passed. Please contact to your seller and give him the order number', 'dotpay-payment-gateway');
+                        $this->message .= ' '.strip_tags( (int) wp_unslash( (int)$this->getParam('trid') ) ); 
+
+                    }
+                    
+                }else{
+
+                    $this->message = __('Wrong redirect! Please contact to your seller and give him the order number', 'dotpay-payment-gateway');
+
+                }
+            }
+
+        }
+
+       //re-adds sessions with order id for the duration of payment status verification
+        if($order_id !== null){
+            WC()->session->set( 'dotpay_payment_order_id', $order_id );
+        }
+        
         return $this->render('check_status.phtml');
     }
 
@@ -889,8 +980,10 @@ protected function generateCHK($DotpayPin, $ParametersArray)
                 "<br>  - Active: ".(bool)$this->isEnabled().
 				"<br>  - ID: ".$this->getSellerId().
                 "<br>  - Test: ".(bool)$this->isTestMode().
+                "<br>  - Account migrated to P24: ".(int)$this->isMigratedtoP24()."<br>".
                 "<br>  - Hostname: ".$this->realHostName().
                 "<br>  - Proxy server not uses: ".(bool)$this->isProxyNotUses().
+                "<br>  - The order id should be added to the return url: ".(bool)$this->isCheckStatusURLwithIdOrder().
                 "<br> - &dollar;_SERVER&lbrack;&apos;REMOTE_ADDR&apos;&rbrack;: ".$_SERVER['REMOTE_ADDR'].
                 "<br>  - currencies_that_block_main:  ".$this->get_option('dontview_currency').
                 "<br>  - is_multisite: ".(bool)is_multisite().

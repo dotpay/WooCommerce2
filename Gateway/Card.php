@@ -33,7 +33,7 @@ class Gateway_Card extends Gateway_Gateway {
      * Prepare gateway
      */
     public function __construct() {
-        $this->title = __('Credit Cards (Dotpay)', 'dotpay-payment-gateway');
+        $this->title = __('Credit Cards (P24)', 'dotpay-payment-gateway');
         parent::__construct();
         $this->id = 'Dotpay_cc';
         $this->method_description = __('All Dotpay settings can be adjusted', 'dotpay-payment-gateway').sprintf('<a href="%s"> ', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=dotpay' ) ).__('here', 'dotpay-payment-gateway').'</a>.';

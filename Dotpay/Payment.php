@@ -48,16 +48,20 @@ class Dotpay_Payment extends WC_Payment_Gateway
     const OFFICE_IP = '77.79.195.34';
     // Dotpay URL
     const DOTPAY_URL = 'https://ssl.dotpay.pl/t2/';
+    // Dotpay Proxy in Przelewy24 URL
+    const DPROXY_URL = 'https://dproxy.przelewy24.pl/t2/';
     // Dotpay URL TEST
     const DOTPAY_URL_TEST = 'https://ssl.dotpay.pl/test_payment/';
     // Dotpay Seller Api URL
     const DOTPAY_SELLER_API_URL = 'https://ssl.dotpay.pl/s2/login/';
+
+    // Dotpay Proxy in Przelewy24 Seller Api URL
+    const DPROXY_SELLER_API_URL = 'https://dproxy.przelewy24.pl/s2/login/';
     // Dotpay Seller Api URL test
     const DOTPAY_TEST_SELLER_API_URL = 'https://ssl.dotpay.pl/test_seller/';
-    // STR EMPTY
-    const STR_EMPTY = '';
+
     // Module version
-    const MODULE_VERSION = '3.6.5';
+    const MODULE_VERSION = '3.7.0';
 
 
     public static $ocChannel = '248';
@@ -292,6 +296,22 @@ class Dotpay_Payment extends WC_Payment_Gateway
     }
 
 
+
+    /**
+     * Checks if this account was migrated from Dotpay to Przelewy24 Api
+     * @return boolean
+     */
+    public function isMigratedtoP24()
+    {
+        $result = false;
+        if ('yes' == $this->get_option('dproxy_migrated')) {
+            $result = true;
+        }
+
+        return $result;
+    }
+    
+
     /**
      * Return flag, if show payment instructions for Transfers method is enabled
      * @return boolean
@@ -337,6 +357,20 @@ class Dotpay_Payment extends WC_Payment_Gateway
     }
 
 
+    /**
+     * Return flag, if Turn it on if the order id should be added to the return url
+     * @return boolean
+     */
+    public function isCheckStatusURLwithIdOrder()
+    {
+        $result = false;
+        if ('yes' == $this->get_option('CheckStatusURLwithIdOrder')) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
 
     /**
      * Return url to Dotpay payment server
@@ -344,7 +378,12 @@ class Dotpay_Payment extends WC_Payment_Gateway
      */
     public function getPaymentUrl()
     {
-        $dotpay_url = self::DOTPAY_URL;
+        if($this->isMigratedtoP24() == false){
+            $dotpay_url = self::DOTPAY_URL;
+        }else{
+            $dotpay_url = self::DPROXY_URL;
+        }
+
         if ($this->isTestMode()) {
             $dotpay_url = self::DOTPAY_URL_TEST;
         }
@@ -361,7 +400,7 @@ class Dotpay_Payment extends WC_Payment_Gateway
     {
         $order = $this->getOrder();
         if ($full == 'full') {
-            return $this->getLegacyOrderId($order) . '|domain:' . $this->realHostName() . '|WooCommerce module:' . self::MODULE_VERSION;
+            return $this->getLegacyOrderId($order) . '|domain:' . $this->realHostName() . '|WooCommerce module ' . self::MODULE_VERSION . ', dp-p24 migrated '.(int)$this->isMigratedtoP24;
         } else {
             return $this->getLegacyOrderId($order);
         }
@@ -1060,7 +1099,13 @@ if( null !== $Items_shipping){
      */
     public function getSellerApiUrl()
     {
-        $dotSellerApi = self::DOTPAY_SELLER_API_URL;
+        if($this->isMigratedtoP24() == false){
+            $dotSellerApi = self::DOTPAY_SELLER_API_URL;
+        }else{
+            $dotSellerApi = self::DPROXY_SELLER_API_URL;
+        }
+
+
         if ($this->isTestMode()) {
             $dotSellerApi = self::DOTPAY_TEST_SELLER_API_URL;
         }

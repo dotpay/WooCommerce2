@@ -32,8 +32,8 @@ if (! class_exists('simple_html_dom_node'))
  */
 class Dotpay_Instruction extends Dotpay_Payment {
     const DOTPAY_NAME = 'PayPro S.A.';
-    const DOTPAY_STREET = 'ul. Kanclerska 15';
-    const DOTPAY_CITY = '60-327 Poznań';
+    const DOTPAY_STREET = 'ul. Pastelowa 8';
+    const DOTPAY_CITY = '60-198 Poznań';
 
     private $instructionId;
     private $orderId;
@@ -547,4 +547,20 @@ class Dotpay_Instruction extends Dotpay_Payment {
             return $this->getBankPage();
         }
     }
+
+    /**
+     * Return flag, if test mode is enabled
+     * @return boolean
+     */
+    public function isTestMode()
+    {
+        $result = false;
+        if ('yes' == $this->get_option('test')) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+
 }

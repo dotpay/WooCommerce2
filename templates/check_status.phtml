@@ -94,6 +94,28 @@
 </style>
 <script type="text/javascript">
 
+        // Create an element in the DOM for testing if Material Icons are present
+        let $span = document.createElement("span");
+        $span.className = "material-icons";
+        $span.style.display = "none";
+        document.body.insertBefore($span, document.body.firstChild);
+
+        // See if the computed font-family value is material icons
+        const needToLoadMaterialIcons = window.getComputedStyle($span, null).getPropertyValue("font-family") !== "Material Icons";
+
+        // If it's not, load the resource
+        if (needToLoadMaterialIcons) {
+        console.log('Need to load Material Icon...');
+        let $link = document.createElement("link");
+        $link.href = "https://fonts.googleapis.com/icon?family=Material+Icons";
+        $link.rel = "stylesheet";
+        document.head.appendChild($link);
+        }
+
+        // Cleanup the original <span>
+        document.body.removeChild($span);
+        
+
    var dotpayCheckStatusTimeout = 2;//in minutes
     function dotpayCheckStatus(interval) {
         
@@ -104,7 +126,7 @@
                 switch(r) {
                     case '1':
                         clearAlerts();
-                        createAlert('success', '<?php echo __('Payment status: completed', 'dotpay-payment-gateway'); ?>', '<?php echo __('Payment Success', 'dotpay-payment-gateway'); ?>');
+                        createAlert('success', '<?php echo __('Payment status: completed', 'dotpay-payment-gateway'); if(null !== WC()->session->get('dotpay_payment_order_id')) {echo  ' . '.__('The order number:', 'dotpay-payment-gateway').' '.WC()->session->get('dotpay_payment_order_id').'.';}?>', '<?php echo __('Payment Success', 'dotpay-payment-gateway'); ?>');
                         jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>thumb_up_alt</i> " );
                         setTimeout(function(){location.href = "<?php echo $this->getOrderSummaryUrl(); ?>";}, 3000);
                         break;
@@ -168,7 +190,7 @@ jQueryDotpayCheckStatus = function(){
             var counter = 0;
 
             console.log('%cpending payment status...','background: #cfcfcf; color: darkviolet;');
-            console.log('<?php print_r($this->getOrder()->get_status() ); ?>')
+            console.log('<?php print_r($this->getOrder()->get_status() ); ?>');
 
             createAlert('info', '<?php echo __('Payment wait for confirmation by Dotpay... It make take up to 2 minutes.', 'dotpay-payment-gateway');?>');
             jQuery( "p.alertDot" ).prepend( "<span class='loading'></span><br><code id='dp_countdown'></code><br><br><i class='material-icons' style='font-size: 48px; font-weight: bold;'>help_outline</i><br>" );
@@ -235,7 +257,7 @@ jQueryDotpayCheckStatus = function(){
     if (typeof jQuery != 'undefined') {
         jQuery(document).ready(function(){
             createAlert('error', '<?php echo $this->message; ?>', '<?php echo __('Error', 'dotpay-payment-gateway'); ?>');
-            jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons'>warning</i> " );
+            jQuery( "div.dotpay-alert > H3" ).prepend( "<i class='material-icons' style='color:red;'>warning</i> " );
         });
     }else{
       console.log("\n -------------------------------------------------------------------------------------\n");  	

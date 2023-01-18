@@ -29,16 +29,22 @@
  * Standard gateway channel
  */
 class Gateway_Dotpay extends Gateway_Gateway {
+   
+      
     /**
      * Prepare gateway
      */
-    public function __construct() {
-        $this->title = __('Dotpay (fast payment)', 'dotpay-payment-gateway');
-        parent::__construct();
-        $this->description = __('Fast and secure payment via Dotpay', 'dotpay-payment-gateway');
-        $this->method_description = __(' Online payment', 'dotpay-payment-gateway');
-        $this->addActions();
-    }
+        public function __construct() {
+
+  
+                $this->title = __('Przelewy24 (fast payment)', 'dotpay-payment-gateway');
+                parent::__construct();
+                $this->description = __('Fast and secure payment via Przelewy24', 'dotpay-payment-gateway');
+                $this->method_description = __(' Online payment', 'dotpay-payment-gateway');
+                $this->addActions();
+        }    
+
+
 
     /**
      * Return data for payments form
@@ -89,12 +95,14 @@ class Gateway_Dotpay extends Gateway_Gateway {
     }
 
     /**
-     * Return url to icon file
+     * Return url to icon file for dotpay/P24
      * @return string
      */
     protected function getIcon() {
-        return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/dotpay.png';
+        //return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/dotpay.png';
+        return WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/p24_logo_mini.png';
     }
+
 
     public function validate_fields() {
 
@@ -140,11 +148,19 @@ class Gateway_Dotpay extends Gateway_Gateway {
 
         $this->form_fields = array(
             'enabled' => array(
-                'title' => __('Enable', 'dotpay-payment-gateway').' <img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/dotpay.png'.'" style="vertical-align: text-bottom" alt="Dotpay">',
+                'title' => __('Enable', 'dotpay-payment-gateway').' <img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/dotpay.png'.'" style="vertical-align: text-bottom" alt="Dotpay"> | <img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/p24_logo_mini.png'.'" style="vertical-align: text-bottom" alt="Przelewy24">',
                 'label' => '<strong style="color: #881920; font-size: 1.4em;">'.__('You can enable Dotpay payments', 'dotpay-payment-gateway').'</strong>',
                 'type' => 'checkbox',
                 'default' => 'yes',
 				'class' => 'dotpay_module_enable'
+            ),
+            
+            'dproxy_migrated' => array(
+                'title' => "<span style=\"margin: 10px;\">🧑‍💻 ".__('My account has already been migrated from dotpay to Przelewy24', 'dotpay-payment-gateway')."</span>",
+                'label' => __('My new panel is at: <a href="https://panel.przelewy24.pl/" class="hide-if-no-js page-title-action"  target="_blank" title="Przelewy24 Transaction Panel">https://panel.przelewy24.pl/</a>', 'dotpay-payment-gateway'),
+                'type' => 'checkbox',
+                'description' => "<em>".__('If your account has already been transferred to the new Przelewy24 panel, be sure to select this option. ', 'dotpay-payment-gateway')."<br>".__('Thanks to this, you will ensure trouble-free and fast payment service.', 'dotpay-payment-gateway')."<br>".__('The sandbox environment is not available in this option.', 'dotpay-payment-gateway')."</em>",
+                'default' => 'no'
             ),
             'id' => array(
                 'title' => "🆔 ".__('Dotpay customer ID', 'dotpay-payment-gateway'),
@@ -182,6 +198,14 @@ class Gateway_Dotpay extends Gateway_Gateway {
                 'type' => 'checkbox',
                 'default' => 'yes'
             ),
+            'CheckStatusURLwithIdOrder' => array(
+                'title' => "🧶 ".__('Add the order id to the return url', 'dotpay-payment-gateway'),
+                'label' => __('Turn it on if your customers return to the thank you page and see a message that the order was not found.', 'dotpay-payment-gateway'),
+                'type' => 'checkbox',
+                'default' => 'no'
+            ),
+
+
             'ccPV_show' => array(
                 'title' => '<span style="color: #0073AA;">'.__('Separate Dotpay account for currencies (EUR, USD or GBP)', 'dotpay-payment-gateway').'</span>',
                 'type' => 'checkbox',
