@@ -439,10 +439,17 @@ define('formWidget',['jquery', 'xhr', 'config', 'widgetsCommon', 'errorHandler']
         formWidget: function (data) {
             errorHandler.apiResponseErrorHandler(data);
 
+        if($_dp('div.'+ config.widget.widgetClass).length < 1){
+
             $_dp('<div>', {
                 'class': config.widget.widgetClass,
                 html: widgetsCommon.prepareChannelsList(data, 'FormWidget')
             }).appendTo( '.' + config.widget.widgetFormContainerClass + ' .' + config.widget.channelsWrapperContainerClass);
+
+
+        }
+
+           // console.log('debug: widget div count: ' + $_dp('div.'+ config.widget.widgetClass).length );
 
             widgetsCommon.removeLoadingAnimation('.channels-wrapper');
             /* ------- początek obszaru zmienianego ------- */

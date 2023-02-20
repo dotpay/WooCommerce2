@@ -174,13 +174,10 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                 if(jQuery( "button[name='woocommerce_checkout_place_order']" ).length > 0  ) {
                                     
                                     jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
-
                                 }
 
-                                if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0){                               
-
+                                if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0){
                                     jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
-
                                 }
                                             
                             }
@@ -211,7 +208,6 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                                             jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                                             if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0){
                                                                 jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
-
                                                         }
                                                         }else{
                                                             jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
@@ -297,8 +293,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                                     if(jQuery( "button[name='woocommerce_checkout_place_order']" ).length > 0) {
                                                                 jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                                         }else if(jQuery('div#payment div.form-row button#place_order').length > 0) {
-                                                            jQuery('div#payment div.form-row button#place_order').prop('disabled', false);        
-
+                                                                        jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
                                                         }
                                                 }
 
@@ -307,7 +302,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                                             $('input#dp_agreements_bylaw').change(function(){
                                                                 if($(this).is(":checked")) {
                                                                     jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
-                                                                        console.log('Payment regulations accepted (3)');
+                                                                    console.log('Payment regulations accepted (3)');
                                                                     jQuery('li.payment_method_dotpay').find("label#agreements_bylaw").css({"background-color": "", "padding": "", "border-style": "", "border-width": "0px", "border-color": ""});
                                                                 } else {
                                                                     console.log('%cSelect first PayPro S.A. Regulations of Payments (3) !','background:red;color:#fff');
@@ -328,6 +323,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
 
                                                         if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0 && jQuery('input#dp_agreements_bylaw').is(":checked") == 'true'){
                                                             jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
+
                                                         }
                                                     
                                                         if(jQuery('div#payment div.form-row button#place_order').length > 0 && 
@@ -410,10 +406,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                                 jQuery(function ($) {
                                                     $('input#dp_agreements_bylaw').parents('li.payment_method_dotpay').change(function () {    
                                                         if ($("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_dotpay').length > 0 && jQuery('div.channel-container.selected.dp_cloned').length > 0) {
-                                                            
                                                             jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
-
-
                                                             console.log('Payment regulations accepted (5)');
                                                             jQuery('li.payment_method_dotpay').find("label#agreements_bylaw").css({
                                                                 "background-color": "",
@@ -505,7 +498,6 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                                 jQuery('.dp_cloned').not(':last').remove();
                                                 jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                                 if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0 && jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_dotpay').length < 1){
-                                                    
                                                     jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
                                                 }
                                                         
@@ -670,7 +662,6 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                                                 jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', false);
                                                                 if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0){
                                                                     jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
-
                                                                     }
                                                                 jQuery('#dotpay_empty_channel').remove(); 
                                                             }           
@@ -698,9 +689,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                                                 console.log('Selected another payment method: ' + this.value);
                                                                 jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', false);
                                                                 if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0){
-                                                                    
                                                                     jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
-                                                                    
                                                                 }
                                                                 jQuery('#dotpay_empty_channel').remove(); 
                                                             }         
@@ -767,8 +756,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                                                 console.log('Selected another payment method: ' + this.value);
                                                                 jQuery( "button[name='woocommerce_checkout_place_order']" ).prop('disabled', false);
                                                                 if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0){
-                                                                
-                                                                    jQuery('div#payment div.form-row button#place_order').prop('disabled', false);                                                               
+                                                                jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
                                                                 }
                                                                 jQuery('#dotpay_empty_channel').remove(); 
                                                                 createCookieDP("dp_channel_selected", jQuery('.dp_channel-input').attr("value"), "0.08");
@@ -826,9 +814,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                             if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 0) {
                                                     jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
                                                     if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0){
-                                                    
-                                                        jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
-
+                                                    jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
                                                 }
                                             
                                                     console.log('%cChannel selection payment only on the Dotpay website after redirection.','background: #cfcfcf; color: brown;');
