@@ -61,7 +61,7 @@ class Dotpay_Payment extends WC_Payment_Gateway
     const DOTPAY_TEST_SELLER_API_URL = 'https://ssl.dotpay.pl/test_seller/';
 
     // Module version
-    const MODULE_VERSION = '3.7.0';
+    const MODULE_VERSION = '3.7.2';
 
 
     public static $ocChannel = '248';
@@ -400,7 +400,7 @@ class Dotpay_Payment extends WC_Payment_Gateway
     {
         $order = $this->getOrder();
         if ($full == 'full') {
-            return $this->getLegacyOrderId($order) . '|domain:' . $this->realHostName() . '|WooCommerce module ' . self::MODULE_VERSION . ', dp-p24 migrated '.(int)$this->isMigratedtoP24;
+            return $this->getLegacyOrderId($order) . '|domain:' . $this->realHostName() . '|WooCommerce module ' . self::MODULE_VERSION . ', dp-p24 migrated '.(int)$this->isMigratedtoP24();
         } else {
             return $this->getLegacyOrderId($order);
         }

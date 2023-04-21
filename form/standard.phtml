@@ -173,7 +173,7 @@ echo "<p style=\"font-size:1em;text-align:left;color:#2f2f97;padding:2px;border-
 					jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_dotpay').change(function(){
                         if (jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_dotpay').length > 0) {
 
-                            console.log('Dotpay: Payment regulations accepted');
+                            console.log('Dotpay: Payment regulations accepted (1)');
                             jQuery('li.payment_method_dotpay').find("label#agreements_bylaw").css({
                                 "background-color": "",
                                 "padding": "",
@@ -280,7 +280,7 @@ var dotpayWidgetConfig = {
                                             $('input#dp_agreements_bylaw').change(function(){
                                                 if($(this).is(":checked")) {
                                                     jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
-                                                    console.log('Payment regulations accepted3');
+                                                    console.log('Payment regulations accepted (3)');
                                                     jQuery('li.payment_method_dotpay').find("label#agreements_bylaw").css({"background-color": "", "padding": "", "border-style": "", "border-width": "0px", "border-color": ""});
                                                 } else {
                                                     console.log('%cSelect first PayPro S.A. Regulations of Payments 3!','background:red;color:#fff');
@@ -331,7 +331,7 @@ var dotpayWidgetConfig = {
              createCookieDP("dp_channel_selected", "", "-1");
 
                                     if(jQuery('input#dp_agreements_bylaw').is(":checked")){
-                                        console.log('Payment regulations accepted1');
+                                        console.log('Payment regulations accepted (2)');
                                         jQuery('li.payment_method_dotpay').find("label#agreements_bylaw").css({"background-color": "", "padding": "", "border-style": "", "border-width": "0px", "border-color": ""});
                                     }else{
 
@@ -397,7 +397,7 @@ var dotpayWidgetConfig = {
                                     $('input#dp_agreements_bylaw').parents('li.payment_method_dotpay').change(function () {    
                                         if ($("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_dotpay').length > 0 && jQuery('div.channel-container.selected.dp_cloned').length > 0) {
                                             jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
-                                            console.log('Payment regulations accepted');
+                                            console.log('Payment regulations accepted (4)');
                                             jQuery('li.payment_method_dotpay').find("label#agreements_bylaw").css({
                                                 "background-color": "",
                                                 "padding": "",
@@ -425,9 +425,6 @@ var dotpayWidgetConfig = {
                                     });
                                 });
 
-
-
-
                             }
            }); 		
 
@@ -441,7 +438,7 @@ var dotpayWidgetConfig = {
         setTimeout(function(){
                                 jQuery('input#dp_agreements_bylaw').parents('li.payment_method_dotpay').change(function () {    
                                         if (jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_dotpay').length > 0 ) {
-                                            console.log('Payment regulations accepted');
+                                            console.log('Payment regulations accepted 5');
                                             jQuery('li.payment_method_dotpay').find("label#agreements_bylaw").css({
                                                 "background-color": "",
                                                 "padding": "",
@@ -452,7 +449,20 @@ var dotpayWidgetConfig = {
                                         }
                                 });  
 
-                         }, 200);
+                                if(jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length >0 && jQuery("label.dotpay_agreements > input[name=bylaw]:checked").parents('li.payment_method_dotpay').length > 0 && jQuery('div.channel-container.selected.dp_cloned').length > 0){
+
+                                        if(jQuery( "button[name='woocommerce_checkout_place_order']" ).length > 0  ) {
+                                            
+                                            jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', false);
+                                        }
+
+                                        if(jQuery('div#payment div.form-row button#place_order').length > 0 && jQuery('li.payment_method_dotpay > input#payment_method_dotpay:checked').length > 0){
+                                            jQuery('div#payment div.form-row button#place_order').prop('disabled', false);
+                                        }
+                                                    
+                                 }
+
+                             }, 200);
 
 
         setTimeout(function(){
