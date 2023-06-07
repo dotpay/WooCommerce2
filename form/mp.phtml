@@ -160,7 +160,7 @@ jQuery(document).ready(function () {
         if (typeof jQuery != 'undefined') {
             jQuery(document).ready(function () {          
                 if(jQuery('input#payment_method_Dotpay_mp').is(':checked')) { 
-                    console.log('%cMasterpass method via Dotpay is checked','background: #cfcfcf; color: green;');
+                    console.log('%cMasterpass method via Przelewy24 (Dotpay) is checked','background: #cfcfcf; color: green;');
                     jQueryEnableButtonMP();
                     CheckBylawMP();
 		        }
@@ -169,7 +169,7 @@ jQuery(document).ready(function () {
             jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
                     if (this.checked) {
                         if (this.value == 'Dotpay_mp') {                           
-                            console.log('%cMasterpass method via Dotpay is checked manually','background: #cfcfcf; color: green;');
+                            console.log('%cMasterpass method via Przelewy24 (Dotpay) is checked manually','background: #cfcfcf; color: green;');
                             jQueryEnableButtonMP();
                             CheckBylawMP();
                         };

@@ -2,10 +2,10 @@
 
 /**
   * @wordpress-plugin
-  * Plugin Name: WooCommerce Dotpay Gateway
-  * Version: 3.7.2
+  * Plugin Name: WooCommerce Przelewy24 (Dotpay) Gateway
+  * Version: 3.7.3
   * Plugin URI: https://github.com/dotpay/WooCommerce2
-  * Description: Fast and secure Dotpay payment gateway for WooCommerce
+  * Description: Fast and secure Przelewy24 (Dotpay) payment gateway for WooCommerce
   * Author: Dotpay (tech@dotpay.pl)
   * Author URI: https://github.com/dotpay/WooCommerce2
   * Text Domain: woocommerce-dotpay
@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
 		$minPHP = '5.6';
 		$minWC = '3.2';
 		$operator = '>=';
-		$thisVersionModule = '3.7.2';
+		$thisVersionModule = '3.7.3';
 
 	// PHP compare
         if (!version_compare(PHP_VERSION, $minPHP, $operator) ) {
@@ -53,7 +53,7 @@ if (!defined('ABSPATH')) {
     {
     		global $minPHP, $operator;
             print(
-                '<div class="error notice is-dismissible"><p>'.__('Warning! WooCommerce Dotpay Gateway requires PHP', 'dotpay-payment-gateway').' '.$operator.' '.$minPHP.' '.__('Currently in use','dotpay-payment-gateway').' '.PHP_VERSION.'</p></div>'
+                '<div class="error notice is-dismissible"><p>'.__('Warning! WooCommerce Przelewy24 (Dotpay) Gateway requires PHP', 'dotpay-payment-gateway').' '.$operator.' '.$minPHP.' '.__('Currently in use','dotpay-payment-gateway').' '.PHP_VERSION.'</p></div>'
     			);
       }
 
@@ -65,7 +65,7 @@ if (!defined('ABSPATH')) {
 				if (!version_compare( WC_VERSION, $minWC, $operator ) )
 				{
 					print(
-						'<div class="error notice is-dismissible"><p>'.__('Attention! WooCommerce Dotpay Gateway to function properly requires Woocommerce', 'dotpay-payment-gateway').' '.$operator.' '.$minWC.' '.__('Currently in use','dotpay-payment-gateway').' '.WOOCOMMERCE_VERSION.'</p></div>'
+						'<div class="error notice is-dismissible"><p>'.__('Attention! WooCommerce Przelewy24 (Dotpay) Gateway to function properly requires Woocommerce', 'dotpay-payment-gateway').' '.$operator.' '.$minWC.' '.__('Currently in use','dotpay-payment-gateway').' '.WOOCOMMERCE_VERSION.'</p></div>'
 						);
 
 				}
@@ -211,13 +211,13 @@ $git_latest_version_plugin = getLatestVersionDotpayModule();
 
 
                     if($git_code_response != 200){
-                        print '<br><br><div class="notice is-dismissible notice-warning notice-alt"><p>'.__('Attention! There is a temporary problem with checking information about latest version of the Dotpay payment module','dotpay-payment-gateway').' (error: '.$git_code_response.').
-                        <br>'.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Dotpay Gateway v'.$thisVersionModule.'</b>
-                        <br>'.__('You can check manually and download latest version and upgrade from this address:','dotpay-payment-gateway').' <a href="https://github.com/dotpay/WooCommerce2/releases/latest" title="'.__('check if there is a new version of Dotpay payment plugin','dotpay-payment-gateway').'" target="_blank">'.__('WooCommerce Dotpay payment module','dotpay-payment-gateway').'</a></p></div>';
+                        print '<br><br><div class="notice is-dismissible notice-warning notice-alt"><p>'.__('Attention! There is a temporary problem with checking information about latest version of the Przelewy24 (Dotpay) payment module','dotpay-payment-gateway').' (error: '.$git_code_response.').
+                        <br>'.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Przelewy24 (Dotpay) Gateway v'.$thisVersionModule.'</b>
+                        <br>'.__('You can check manually and download latest version and upgrade from this address:','dotpay-payment-gateway').' <a href="https://github.com/dotpay/WooCommerce2/releases/latest" title="'.__('check if there is a new version of Przelewy24 (Dotpay) payment plugin','dotpay-payment-gateway').'" target="_blank">'.__('WooCommerce Przelewy24 (Dotpay) payment module','dotpay-payment-gateway').'</a></p></div>';
                     }else{
                         print '<br><br><div class="update-message notice inline notice-warning notice-alt"><p>
-                        '.__('Attention! A new version of the Dotpay payment module is available:','dotpay-payment-gateway').' '.$dp_module_new_version_git.'. '.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Dotpay Gateway v'.$thisVersionModule.'</b>
-                        <br><b>'.__('Download latest version and upgrade manually this:','dotpay-payment-gateway').' <a href="'.$dp_module_git_url.'" class="update-link" aria-label="'.__('Upgrade WooCommerce Dotpay Gateway','dotpay-payment-gateway').'">'.$dp_module_new_version_git.'</b></a></p></div>';
+                        '.__('Attention! A new version of the Przelewy24 (Dotpay) payment module is available:','dotpay-payment-gateway').' '.$dp_module_new_version_git.'. '.__('Currently in use','dotpay-payment-gateway').' <b>WooCommerce Przelewy24 (Dotpay) Gateway v'.$thisVersionModule.'</b>
+                        <br><b>'.__('Download latest version and upgrade manually this:','dotpay-payment-gateway').' <a href="'.$dp_module_git_url.'" class="update-link" aria-label="'.__('Upgrade WooCommerce Przelewy24 (Dotpay) Gateway','dotpay-payment-gateway').'">'.$dp_module_new_version_git.'</b></a></p></div>';
                     }
 	   }
 

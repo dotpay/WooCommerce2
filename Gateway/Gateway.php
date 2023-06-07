@@ -20,7 +20,7 @@
 * needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
-*  @copyright Dotpay
+*  @copyright PayPro S.A. (Dotpay)
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *
 */
@@ -687,7 +687,7 @@ protected function generateCHK($DotpayPin, $ParametersArray)
                     $this->message = __('There were not given all request parameters.', 'dotpay-payment-gateway');
                     break;
                 case 'URLC_INVALID':
-                    $this->message = __('Account settings in Dotpay require the seller to have SSL certificate enabled on his website.', 'dotpay-payment-gateway');
+                    $this->message = __('Account settings in Przelewy24 (Dotpay) require the seller to have SSL certificate enabled on his website.', 'dotpay-payment-gateway');
                     break;
                 default:
                     $this->message = __('There was an unidentified error. Please contact to your seller and give him the order number.', 'dotpay-payment-gateway');
@@ -1057,7 +1057,7 @@ protected function generateCHK($DotpayPin, $ParametersArray)
         $chDataNR = $this->getChannelName($chNR);
         $PaymentChannelName = $chDataNR['name'];
         $PaymentChannelLogo= $chDataNR['logo'];
-        $note = __("Dotpay send notification", 'dotpay-payment-gateway') . ": <br><span style=\"color: #4b5074; font-style: italic;\" >".__("transaction number:", 'dotpay-payment-gateway') ." <span style=\"font-weight: bold;\" id=\"dptrnr\">".$operationNR."</span>, <br>". __("payment channel:", 'dotpay-payment-gateway')." <span style=\"font-weight: bold;\">".$PaymentChannelName."</span> /<span style=\"font-weight: bold;\">".$chNR."</span>/</span><br><img src=\"".$PaymentChannelLogo."\" width=\"100px\" height=\"50px\" alt=\"".$PaymentChannelName."\"> <br><span style=\"font-weight: bold; \">status</span>: ";
+        $note = __("Przelewy24 (Dotpay) send notification", 'dotpay-payment-gateway') . ": <br><span style=\"color: #4b5074; font-style: italic;\" >".__("transaction number:", 'dotpay-payment-gateway') ." <span style=\"font-weight: bold;\" id=\"dptrnr\">".$operationNR."</span>, <br>". __("payment channel:", 'dotpay-payment-gateway')." <span style=\"font-weight: bold;\">".$PaymentChannelName."</span> /<span style=\"font-weight: bold;\">".$chNR."</span>/</span><br><img src=\"".$PaymentChannelLogo."\" width=\"100px\" height=\"50px\" alt=\"".$PaymentChannelName."\"> <br><span style=\"font-weight: bold; \">status</span>: ";
 
 
         $order_status_note =  $order->needs_processing() ? __('paid : processing', 'dotpay-payment-gateway') :  __('paid : completed (virtual product)', 'dotpay-payment-gateway');
@@ -1081,7 +1081,7 @@ protected function generateCHK($DotpayPin, $ParametersArray)
                     
                     $order->set_status($order->needs_processing() ? self::STATUS_DOUBLE_COMPLETED : self::STATUS_DOUBLE_COMPLETED_VIRTUAL);
 
-                    $order->add_order_note('<span style="color: red; font-weight: bold;" >'.__('DOUBLE PAYMENT !', 'dotpay-payment-gateway').'<br>'.__('for the order no:', 'dotpay-payment-gateway').' '.$order->get_id().': <span style="background-color: yellow; padding: 2px;" >'.$count_double_payment1 .'</span></span><br>'.__('Dotpay registered under numbers:', 'dotpay-payment-gateway').' <br><span style="color: #4b5074; font-weight: bold;" >'.$received_notifications.'<br><hr> '. __('Check the posting for this order in your Dotpay panel - there is a risk that the payer has paid more than 1 time for this order.', 'dotpay-payment-gateway').'</span>');
+                    $order->add_order_note('<span style="color: red; font-weight: bold;" >'.__('DOUBLE PAYMENT !', 'dotpay-payment-gateway').'<br>'.__('for the order no:', 'dotpay-payment-gateway').' '.$order->get_id().': <span style="background-color: yellow; padding: 2px;" >'.$count_double_payment1 .'</span></span><br>'.__('Przelewy24 (Dotpay) registered under numbers:', 'dotpay-payment-gateway').' <br><span style="color: #4b5074; font-weight: bold;" >'.$received_notifications.'<br><hr> '. __('Check the posting for this order in your Przelewy24 panel - there is a risk that the payer has paid more than 1 time for this order.', 'dotpay-payment-gateway').'</span>');
                     $order->save();
                 }
 
@@ -1112,7 +1112,7 @@ protected function generateCHK($DotpayPin, $ParametersArray)
                 $order->update_status(self::STATUS_DEFAULT, $note.'  <span style="color: orange; font-weight: bold;" id=\"dptrst\">'.__('processing', 'dotpay-payment-gateway').'</span>. <br>');
             }else{
                 $order->add_order_note($note.'  <span style="color: orange; font-weight: bold;" id=\"dptrst\">'.__('processing', 'dotpay-payment-gateway').'</span>. <br>');
-                $order->add_order_note('<span style="color: #4b5074; font-size:0.9em;">'.__('A message for: ','dotpay-payment-gateway').' <strong>'.$operationNR.'</strong><br>'.__('The order status has not been changed to', 'dotpay-payment-gateway') .'<span style="color: #997024; font-weight: bold;" > '.__('processing', 'dotpay-payment-gateway').'</span> '.__('because the order has previously been paid for (check previous notes).', 'dotpay-payment-gateway').'<br>'.__('You can also check the accounting for this order in the Dotpay panel.', 'dotpay-payment-gateway').'<br>'.__('So it\'s current status:', 'dotpay-payment-gateway').'<span style="color: green; font-weight: bold;" id=\"dptrst\"> <br>'.$order_status_note.'</span></span>');
+                $order->add_order_note('<span style="color: #4b5074; font-size:0.9em;">'.__('A message for: ','dotpay-payment-gateway').' <strong>'.$operationNR.'</strong><br>'.__('The order status has not been changed to', 'dotpay-payment-gateway') .'<span style="color: #997024; font-weight: bold;" > '.__('processing', 'dotpay-payment-gateway').'</span> '.__('because the order has previously been paid for (check previous notes).', 'dotpay-payment-gateway').'<br>'.__('You can also check the accounting for this order in the Przelewy24 panel.', 'dotpay-payment-gateway').'<br>'.__('So it\'s current status:', 'dotpay-payment-gateway').'<span style="color: green; font-weight: bold;" id=\"dptrst\"> <br>'.$order_status_note.'</span></span>');
                 $order->save();
 
             }

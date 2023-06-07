@@ -1,10 +1,10 @@
-# WooCommerce Dotpay payment module
+# WooCommerce Przelewy24 (Dotpay) payment module
 
 [![](https://img.shields.io/github/release/dotpay/Woocommerce2.svg?style=for-the-badge)](https://github.com/dotpay/WooCommerce2/releases/latest "Download")
 
 _English version below_
 
-## Wtyczka dla WooCommerce dodająca bramkę płatności Dotpay
+## Wtyczka dla WooCommerce dodająca bramkę płatności Przelewy24 (Dotpay)
 
 #### Instrukcja:
 
@@ -15,11 +15,11 @@ _English version below_
 
 1.  Po zalogowaniu do [panelu Dotpay](https://ssl.dotpay.pl/s2/login/) należy przejść w **(1) Ustawienia** -> **(2) Powiadomienia**.
 
-_**ID** klienta Dotpay_ (6 cyfr bez znaku #) wraz z _**PIN** klienta Dotpay_ są podane na widocznej stronie. Należy je wprowadzić do konfiguracji modułu płatności Dotpay dla WooCommerce.
+_**ID** klienta Dotpay_ (6 cyfr bez znaku #) wraz z _**PIN** klienta Dotpay_ są podane na widocznej stronie. Należy je wprowadzić do konfiguracji modułu płatności Przelewy24 (Dotpay) dla WooCommerce.
 
 ![Dotpay panel 1](assets/images/PL_1.png "Ustawienia")
 
-Po wprowadzeniu podstawowych danych konfiguracyjnych do modułu płatności Dotpay dla WooCommerce należy zapisać zmiany.
+Po wprowadzeniu podstawowych danych konfiguracyjnych do modułu płatności Przelewy24 (Dotpay) dla WooCommerce należy zapisać zmiany.
 
 2.  Następnym krokiem jest przejście do **(3) Edycji**, gdzie należy odznaczyć opcję **Blokuj zewnętrzne urlc** i zastosować lub zapisać zmiany.
 
@@ -33,7 +33,7 @@ Jeśli strona sprzedażowa posiada certyfikat SSL (adres strony rozpoczyna się 
 
 * * *
 
-## WooCommerce plugin adding Dotpay payment gateway
+## WooCommerce plugin adding Przelewy24 (Dotpay) payment gateway
 
 #### Instructions:
 
@@ -44,11 +44,11 @@ Jeśli strona sprzedażowa posiada certyfikat SSL (adres strony rozpoczyna się 
 
 1.  Log into [Dotpay seller panel](https://ssl.dotpay.pl/s2/login/) and navigate to **(1) Settings** -> **(2) Notifications**. 
 
-_Dotpay customer **ID**_ (6 digits without #) and _Dotpay customer **PIN**_ can also be found on this page. Those two parameters should be entered into configuration of Dotpay payment gateway for WooCommerce.
+_Dotpay customer **ID**_ (6 digits without #) and _Dotpay customer **PIN**_ can also be found on this page. Those two parameters should be entered into configuration of Przelewy24 (Dotpay) payment gateway for WooCommerce.
 
 ![Dotpay_en panel 1](assets/images/EN_1.png "Settings")
 
-After entering basic configuration data into Dotpay payment gateway, save the changes.
+After entering basic configuration data into Przelewy24 (Dotpay) payment gateway, save the changes.
 
 2.  Next navigate to **(3) Edit** and deselect **Block external urlc** option, and submit changes.
 

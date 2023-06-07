@@ -19,7 +19,7 @@
  * needs please refer to http://www.dotpay.pl for more information.
  *
  *  @author    Dotpay Team <tech@dotpay.pl>
- *  @copyright Dotpay
+ *  @copyright PayPro S.A. (Dotpay)
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *
  */
@@ -61,7 +61,7 @@ class Dotpay_Payment extends WC_Payment_Gateway
     const DOTPAY_TEST_SELLER_API_URL = 'https://ssl.dotpay.pl/test_seller/';
 
     // Module version
-    const MODULE_VERSION = '3.7.2';
+    const MODULE_VERSION = '3.7.3';
 
 
     public static $ocChannel = '248';

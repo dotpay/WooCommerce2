@@ -1,5 +1,5 @@
 /**
- * Last modified by Dotpay: 2020-06-24
+ * Last modified by Dotpay (P24): 2023-06-07
  */
 
 (function () {
@@ -211,19 +211,21 @@ define('widgetsCommon',['jquery', 'xhr', 'config'], function ($, xhr, config) {
         updateWidgetChannelsList: function (value, widget){
             if(!$.parseJSON(value.is_disable.toLowerCase())) {
                 var channelNotOnlineClass = '';
+                var channelClassdiv = 'channel-container'; 
                 if($.parseJSON(value.is_not_online.toLowerCase())) {
                     var channelNotOnlineClass = this.getChannelNotOnlineClass();
+                    var channelClassdiv = 'channel-container' + ' channelNotOnlineClass'; 
                 }
                 switch (widget) {
 					case 'FormWidget':
 						var tooltipMessage = this.setTooltip(value.not_online_message);
 						if (config.widget.channelNameVisibility == 1) {
-								return `<div class='channel-container ${channelNotOnlineClass}' id='dp_channel_${value.group}'> ${tooltipMessage} <div class='image-container'><img src='${value.logo}' alt='${value.name}' title='${value.name} (${value.group_name})'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='dp_channel-input'/></div><div class='label-container'><label for='${value.id}'> ${value.name}</label></div></div>`;
+								return `<div class='${channelClassdiv}' id='dp_channel_${value.group}'> ${tooltipMessage} <div class='image-container'><img src='${value.logo}' alt='${value.name}' title='${value.name} (${value.group_name})'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='dp_channel-input'/></div><div class='label-container'><label for='${value.id}'> ${value.name}</label></div></div>`;
 						} else {
 							if(value.name == value.group_name) {
-								return `<div class='channel-container ${channelNotOnlineClass}' id='dp_channel_${value.group}'> ${tooltipMessage} <div class='image-container only-dotpay-logo'><img src='${value.logo}' alt='${value.name}' title='${value.name}'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='dp_channel-input'/></div></div>`;
+								return `<div class='${channelClassdiv}' id='dp_channel_${value.group}'> ${tooltipMessage} <div class='image-container only-dotpay-logo'><img src='${value.logo}' alt='${value.name}' title='${value.name}'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='dp_channel-input'/></div></div>`;
 							}else{
-								return `<div class='channel-container ${channelNotOnlineClass}' id='dp_channel_${value.group}'> ${tooltipMessage} <div class='image-container only-dotpay-logo'><img src='${value.logo}' alt='${value.name} (${value.group_name})' title='${value.name} (${value.group_name})'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='dp_channel-input'/></div></div>`;
+								return `<div class='${channelClassdiv}' id='dp_channel_${value.group}'> ${tooltipMessage} <div class='image-container only-dotpay-logo'><img src='${value.logo}' alt='${value.name} (${value.group_name})' title='${value.name} (${value.group_name})'/></div><div class='input-container'><input type='radio' id='${value.id}' value='${value.id}' name='channel'  class='dp_channel-input'/></div></div>`;
 							}
 
 						}

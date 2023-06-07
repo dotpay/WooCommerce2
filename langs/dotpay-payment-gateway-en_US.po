@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Gateway Dotpay\n"
-"POT-Creation-Date: 2023-01-18 12:01+0100\n"
-"PO-Revision-Date: 2023-01-18 12:02+0100\n"
+"POT-Creation-Date: 2023-06-07 13:20+0200\n"
+"PO-Revision-Date: 2023-06-07 13:20+0200\n"
 "Last-Translator: Dotpay <tech@dotpay.pl>\n"
 "Language-Team: Dotpay <tech@dotpay.pl>\n"
 "Language: en_US\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.1\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -37,10 +37,9 @@ msgstr "Order ID: "
 msgid "BLIK (P24)"
 msgstr "BLIK (P24)"
 
-#: ../Gateway/Blik.php:39 ../Gateway/Card.php:39 ../Gateway/MasterPass.php:39
-#: ../Gateway/OneClick.php:39 ../Gateway/PV.php:39 ../Gateway/PayPo.php:39
-msgid "All Dotpay settings can be adjusted"
-msgstr "All Dotpay settings can be adjusted"
+#: ../Gateway/Blik.php:39 ../Gateway/Card.php:39
+msgid "All Przelewy24 (Dotpay) settings can be adjusted"
+msgstr "All Przelewy24 (Dotpay) settings can be adjusted"
 
 #: ../Gateway/Blik.php:39 ../Gateway/Card.php:39 ../Gateway/MasterPass.php:39
 #: ../Gateway/OneClick.php:39 ../Gateway/PV.php:39 ../Gateway/PayPo.php:39
@@ -52,7 +51,6 @@ msgid "BLIK code is incorrect"
 msgstr "BLIK code is incorrect"
 
 #: ../Gateway/Card.php:36
-#| msgid "Credit Cards"
 msgid "Credit Cards (P24)"
 msgstr "Credit Cards (P24)"
 
@@ -84,16 +82,12 @@ msgid "Needed separate agreement."
 msgstr "Needed separate agreement."
 
 #: ../Gateway/Dotpay.php:129 ../Gateway/Dotpay.php:136
-#: ../Gateway/Dotpay.php:258 ../Gateway/Dotpay.php:283
-#: ../Gateway/Dotpay.php:301 ../Gateway/Dotpay.php:343
-msgid "Contact Dotpay customer service before using this option"
-msgstr "Contact Dotpay customer service before using this option"
+msgid "Contact Przelewy24 (Dotpay) customer service before using this option"
+msgstr "Contact Przelewy24 (Dotpay) customer service before using this option"
 
 #: ../Gateway/Dotpay.php:130 ../Gateway/Dotpay.php:137
-#: ../Gateway/Dotpay.php:260 ../Gateway/Dotpay.php:285
-#: ../Gateway/Dotpay.php:302 ../Gateway/Dotpay.php:344
-msgid "Dotpay customer service"
-msgstr "Dotpay customer service"
+msgid "Przelewy24 (Dotpay) customer service"
+msgstr "Przelewy24 (Dotpay) customer service"
 
 #: ../Gateway/Dotpay.php:130 ../Gateway/Dotpay.php:137
 #: ../Gateway/Dotpay.php:261 ../Gateway/Dotpay.php:286
@@ -136,8 +130,8 @@ msgid "Enable"
 msgstr "Enable"
 
 #: ../Gateway/Dotpay.php:152
-msgid "You can enable Dotpay payments"
-msgstr "You can enable Dotpay payments"
+msgid "You can enable Przelewy24 (Dotpay) payments"
+msgstr "You can enable Przelewy24 (Dotpay) payments"
 
 #: ../Gateway/Dotpay.php:159
 msgid "My account has already been migrated from dotpay to Przelewy24"
@@ -280,6 +274,16 @@ msgstr "Credit cards"
 #: ../Gateway/Dotpay.php:256 ../Gateway/Dotpay.php:281
 msgid "Show separately payment channel in a shop."
 msgstr "Show separately payment channel in a shop."
+
+#: ../Gateway/Dotpay.php:258 ../Gateway/Dotpay.php:283
+#: ../Gateway/Dotpay.php:301 ../Gateway/Dotpay.php:343
+msgid "Contact Dotpay customer service before using this option"
+msgstr "Contact Dotpay customer service before using this option"
+
+#: ../Gateway/Dotpay.php:260 ../Gateway/Dotpay.php:285
+#: ../Gateway/Dotpay.php:302 ../Gateway/Dotpay.php:344
+msgid "Dotpay customer service"
+msgstr "Dotpay customer service"
 
 #: ../Gateway/Dotpay.php:266
 msgid "Number of credit card channel"
@@ -463,11 +467,11 @@ msgstr "There were not given all request parameters."
 
 #: ../Gateway/Gateway.php:690
 msgid ""
-"Account settings in Dotpay require the seller to have SSL certificate "
-"enabled on his website."
+"Account settings in Przelewy24 (Dotpay) require the seller to have SSL "
+"certificate enabled on his website."
 msgstr ""
-"Account settings in Dotpay require the seller to have SSL certificate "
-"enabled on his website."
+"Account settings in Przelewy24 (Dotpay) require the seller to have SSL "
+"certificate enabled on his website."
 
 #: ../Gateway/Gateway.php:693
 msgid ""
@@ -491,88 +495,98 @@ msgid ""
 msgstr ""
 "Wrong redirect! Please contact to your seller and give him the order number"
 
-#: ../Gateway/Gateway.php:776 ../Gateway/OneClick.php:132
+#: ../Gateway/Gateway.php:774 ../Gateway/OneClick.php:132
 msgid "Please accept all agreements"
 msgstr "Please accept all agreements"
 
-#: ../Gateway/Gateway.php:1062
-msgid "Dotpay send notification"
-msgstr "Dotpay send notification"
+#: ../Gateway/Gateway.php:1060
+msgid "Przelewy24 (Dotpay) send notification"
+msgstr "Przelewy24 (Dotpay) send notification"
 
-#: ../Gateway/Gateway.php:1062
+#: ../Gateway/Gateway.php:1060
 msgid "transaction number:"
 msgstr "transaction number:"
 
-#: ../Gateway/Gateway.php:1062
+#: ../Gateway/Gateway.php:1060
 msgid "payment channel:"
 msgstr "payment channel:"
 
-#: ../Gateway/Gateway.php:1065
+#: ../Gateway/Gateway.php:1063
 msgid "paid : processing"
 msgstr "paid : processing"
 
-#: ../Gateway/Gateway.php:1065
+#: ../Gateway/Gateway.php:1063
 msgid "paid : completed (virtual product)"
 msgstr "paid : completed (virtual product)"
 
-#: ../Gateway/Gateway.php:1081
+#: ../Gateway/Gateway.php:1079
 msgid "positive notifications:"
 msgstr "positive notifications:"
 
-#: ../Gateway/Gateway.php:1086
+#: ../Gateway/Gateway.php:1084
 msgid "DOUBLE PAYMENT !"
 msgstr "DOUBLE PAYMENT !"
 
-#: ../Gateway/Gateway.php:1086
+#: ../Gateway/Gateway.php:1084
 msgid "for the order no:"
 msgstr "for the order no:"
 
-#: ../Gateway/Gateway.php:1086
-msgid "Dotpay registered under numbers:"
-msgstr "Dotpay registered under numbers:"
+#: ../Gateway/Gateway.php:1084
+msgid "Przelewy24 (Dotpay) registered under numbers:"
+msgstr "Przelewy24 (Dotpay) registered under numbers:"
 
-#: ../Gateway/Gateway.php:1086
+#: ../Gateway/Gateway.php:1084
 msgid ""
-"Check the posting for this order in your Dotpay panel - there is a risk that "
-"the payer has paid more than 1 time for this order."
+"Check the posting for this order in your Przelewy24 panel - there is a risk "
+"that the payer has paid more than 1 time for this order."
 msgstr ""
-"Check the posting for this order in your Dotpay panel - there is a risk that "
-"the payer has paid more than 1 time for this order."
+"Check the posting for this order in your Przelewy24 panel - there is a risk "
+"that the payer has paid more than 1 time for this order."
 
-#: ../Gateway/Gateway.php:1100 ../Gateway/Gateway.php:1102
-#: ../Gateway/Gateway.php:1103
+#: ../Gateway/Gateway.php:1098 ../Gateway/Gateway.php:1100
+#: ../Gateway/Gateway.php:1101
 msgid "cancelled"
 msgstr "cancelled"
 
-#: ../Gateway/Gateway.php:1103 ../Gateway/Gateway.php:1117
+#: ../Gateway/Gateway.php:1101 ../Gateway/Gateway.php:1115
 msgid "A message for: "
 msgstr "A message for: "
 
-#: ../Gateway/Gateway.php:1103 ../Gateway/Gateway.php:1117
+#: ../Gateway/Gateway.php:1101 ../Gateway/Gateway.php:1115
 msgid "The order status has not been changed to"
 msgstr "The order status has not been changed to"
 
-#: ../Gateway/Gateway.php:1103 ../Gateway/Gateway.php:1117
+#: ../Gateway/Gateway.php:1101 ../Gateway/Gateway.php:1115
 msgid "because the order has previously been paid for (check previous notes)."
 msgstr "because the order has previously been paid for (check previous notes)."
 
-#: ../Gateway/Gateway.php:1103 ../Gateway/Gateway.php:1117
+#: ../Gateway/Gateway.php:1101
 msgid "You can also check the accounting for this order in the Dotpay panel."
 msgstr "You can also check the accounting for this order in the Dotpay panel."
 
-#: ../Gateway/Gateway.php:1103 ../Gateway/Gateway.php:1117
+#: ../Gateway/Gateway.php:1101 ../Gateway/Gateway.php:1115
 msgid "So it's current status:"
 msgstr "So it's current status:"
 
-#: ../Gateway/Gateway.php:1114 ../Gateway/Gateway.php:1116
-#: ../Gateway/Gateway.php:1117
+#: ../Gateway/Gateway.php:1112 ../Gateway/Gateway.php:1114
+#: ../Gateway/Gateway.php:1115
 msgid "processing"
 msgstr "processing"
 
+#: ../Gateway/Gateway.php:1115
+msgid ""
+"You can also check the accounting for this order in the Przelewy24 panel."
+msgstr ""
+"You can also check the accounting for this order in the Przelewy24 panel."
+
 #: ../Gateway/MasterPass.php:36
-#| msgid "MasterPass"
 msgid "MasterPass (P24)"
 msgstr "MasterPass (P24)"
+
+#: ../Gateway/MasterPass.php:39 ../Gateway/OneClick.php:39 ../Gateway/PV.php:39
+#: ../Gateway/PayPo.php:39
+msgid "All Dotpay settings can be adjusted"
+msgstr "All Dotpay settings can be adjusted"
 
 #: ../Gateway/OneClick.php:38
 msgid "One Click (credit card)"
@@ -616,8 +630,8 @@ msgid "Error occured: Payment not exist"
 msgstr "Error occured: Payment not exist"
 
 #: ../woocommerce-dotpay.php:56
-msgid "Warning! WooCommerce Dotpay Gateway requires PHP"
-msgstr "Warning! WooCommerce Dotpay Gateway requires PHP"
+msgid "Warning! WooCommerce Przelewy24 (Dotpay) Gateway requires PHP"
+msgstr "Warning! WooCommerce Przelewy24 (Dotpay) Gateway requires PHP"
 
 #: ../woocommerce-dotpay.php:56 ../woocommerce-dotpay.php:68
 #: ../woocommerce-dotpay.php:215 ../woocommerce-dotpay.php:219
@@ -626,11 +640,11 @@ msgstr "Currently in use"
 
 #: ../woocommerce-dotpay.php:68
 msgid ""
-"Attention! WooCommerce Dotpay Gateway to function properly requires "
-"Woocommerce"
+"Attention! WooCommerce Przelewy24 (Dotpay) Gateway to function properly "
+"requires Woocommerce"
 msgstr ""
-"Attention! WooCommerce Dotpay Gateway to function properly requires "
-"Woocommerce"
+"Attention! WooCommerce Przelewy24 (Dotpay) Gateway to function properly "
+"requires Woocommerce"
 
 #: ../woocommerce-dotpay.php:82 ../woocommerce-dotpay.php:101
 msgid "Duplicate Payment - check!"
@@ -643,10 +657,10 @@ msgstr "Settings"
 #: ../woocommerce-dotpay.php:214
 msgid ""
 "Attention! There is a temporary problem with checking information about "
-"latest version of the Dotpay payment module"
+"latest version of the Przelewy24 (Dotpay) payment module"
 msgstr ""
 "Attention! There is a temporary problem with checking information about "
-"latest version of the Dotpay payment module"
+"latest version of the Przelewy24 (Dotpay) payment module"
 
 #: ../woocommerce-dotpay.php:216
 msgid ""
@@ -657,24 +671,28 @@ msgstr ""
 "address:"
 
 #: ../woocommerce-dotpay.php:216
-msgid "check if there is a new version of Dotpay payment plugin"
-msgstr "check if there is a new version of Dotpay payment plugin"
+msgid "check if there is a new version of Przelewy24 (Dotpay) payment plugin"
+msgstr "check if there is a new version of Przelewy24 (Dotpay) payment plugin"
 
 #: ../woocommerce-dotpay.php:216
-msgid "WooCommerce Dotpay payment module"
-msgstr "WooCommerce Dotpay payment module"
+msgid "WooCommerce Przelewy24 (Dotpay) payment module"
+msgstr "WooCommerce Przelewy24 (Dotpay) payment module"
 
 #: ../woocommerce-dotpay.php:219
-msgid "Attention! A new version of the Dotpay payment module is available:"
-msgstr "Attention! A new version of the Dotpay payment module is available:"
+msgid ""
+"Attention! A new version of the Przelewy24 (Dotpay) payment module is "
+"available:"
+msgstr ""
+"Attention! A new version of the Przelewy24 (Dotpay) payment module is "
+"available:"
 
 #: ../woocommerce-dotpay.php:220
 msgid "Download latest version and upgrade manually this:"
 msgstr "Download latest version and upgrade manually this:"
 
 #: ../woocommerce-dotpay.php:220
-msgid "Upgrade WooCommerce Dotpay Gateway"
-msgstr "Upgrade WooCommerce Dotpay Gateway"
+msgid "Upgrade WooCommerce Przelewy24 (Dotpay) Gateway"
+msgstr "Upgrade WooCommerce Przelewy24 (Dotpay) Gateway"
 
 #: ../woocommerce-dotpay.php:280
 msgid "My saved credit cards"
@@ -745,37 +763,37 @@ msgstr ""
 msgid "Incorrect module configuration! Invalid shop ID."
 msgstr "Incorrect module configuration! Invalid shop ID."
 
-#: ../form/standard.phtml:151 ../form/standard.phtml:205
+#: ../form/standard.phtml:151 ../form/standard.phtml:226
 msgid "Choose one of the payment channels below:"
 msgstr "Choose one of the payment channels below:"
 
-#: ../form/standard.phtml:203
+#: ../form/standard.phtml:224
 msgid "No payment channel selected!"
 msgstr "No payment channel selected!"
 
-#: ../form/standard.phtml:203
+#: ../form/standard.phtml:224
 msgid ""
 "You must select one of the available payment channels to continue payment."
 msgstr ""
 "You must select one of the available payment channels to continue payment."
 
-#: ../form/standard.phtml:231 ../form/standard.phtml:444
+#: ../form/standard.phtml:252 ../form/standard.phtml:475
 msgid "Selected"
 msgstr "Selected"
 
-#: ../form/standard.phtml:442
+#: ../form/standard.phtml:473
 msgid "To select different channel click the above icon again"
 msgstr "To select different channel click the above icon again"
 
-#: ../form/standard.phtml:739
-msgid "You chose the fast and secure payments via Dotpay."
-msgstr "You chose the fast and secure payments via Dotpay."
+#: ../form/standard.phtml:772
+msgid "You chose the fast and secure payments via Przelewy24."
+msgstr "You chose the fast and secure payments via Przelewy24."
 
-#: ../form/standard.phtml:739
-msgid "Continue to choose your payment method on the Dotpay website."
-msgstr "Continue to choose your payment method on the Dotpay website."
+#: ../form/standard.phtml:772
+msgid "Continue to choose your payment method on the P24 website."
+msgstr "Continue to choose your payment method on the P24 website."
 
-#: ../form/standard.phtml:739
+#: ../form/standard.phtml:772
 msgid "Or choose a different payment method."
 msgstr "Or choose a different payment method."
 
@@ -813,9 +831,9 @@ msgstr "Status payment check error"
 
 #: ../templates/check_status.phtml:195
 msgid ""
-"Payment wait for confirmation by Dotpay... It make take up to 2 minutes."
+"Payment wait for confirmation by Przelewy24... It make take up to 2 minutes."
 msgstr ""
-"Payment wait for confirmation by Dotpay... It make take up to 2 minutes."
+"Payment wait for confirmation by Przelewy24... It make take up to 2 minutes."
 
 #: ../templates/check_status.phtml:220
 msgid "The confirmation payment has timed out!"
@@ -938,7 +956,6 @@ msgid "Payment channel logo"
 msgstr "Payment channel logo"
 
 #: ../templates/payment_info.phtml:86
-#| msgid "Test mode is activated. This is just a payment simulation."
 msgid ""
 "WARNING! Test mode is activated. This is just a payment simulation. Do not "
 "make a deposit at your bank."

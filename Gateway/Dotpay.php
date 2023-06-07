@@ -20,7 +20,7 @@
 * needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
-*  @copyright Dotpay
+*  @copyright PayPro S.A. (Dotpay)
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *
 */
@@ -126,15 +126,15 @@ class Gateway_Dotpay extends Gateway_Gateway {
             __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
             __('Payment with a credit card by MasterPass', 'dotpay-payment-gateway').
             '<p class="description">'.__('Needed separate agreement.', 'dotpay-payment-gateway').'<br>'.
-			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="https://www.dotpay.pl/kontakt" target="_blank" '.
-               'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
+			__('Contact Przelewy24 (Dotpay) customer service before using this option', 'dotpay-payment-gateway').' <a href="https://www.dotpay.pl/kontakt" target="_blank" '.
+               'title="'.__('Przelewy24 (Dotpay) customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
         );
         $nameArrayPayPo = array(
             __('Show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
             __('Payment with a postponed method by <a href="https://www.dotpay.pl/en/payment-methods/deferred-payments/paypo/" target="_blank" title="Postponed payments – PayPo">PayPo</a>', 'dotpay-payment-gateway').
             '<p class="description">'.__('Needed separate agreement.', 'dotpay-payment-gateway').'<br>'.
-			__('Contact Dotpay customer service before using this option', 'dotpay-payment-gateway').' <a href="https://www.dotpay.pl/kontakt" target="_blank" '.
-               'title="'.__('Dotpay customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
+			__('Contact Przelewy24 (Dotpay) customer service before using this option', 'dotpay-payment-gateway').' <a href="https://www.dotpay.pl/kontakt" target="_blank" '.
+               'title="'.__('Przelewy24 (Dotpay) customer service', 'dotpay-payment-gateway').'">'.__('Contact', 'dotpay-payment-gateway').'</a></p>',
         );
         $nameArrayccPV = array(
             __('I have a separate account in Dotpay: show separately payment channel in a shop. ', 'dotpay-payment-gateway'),
@@ -149,7 +149,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
         $this->form_fields = array(
             'enabled' => array(
                 'title' => __('Enable', 'dotpay-payment-gateway').' <img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/dotpay.png'.'" style="vertical-align: text-bottom" alt="Dotpay"> | <img src="'.WOOCOMMERCE_DOTPAY_GATEWAY_URL . 'resources/images/p24_logo_mini.png'.'" style="vertical-align: text-bottom" alt="Przelewy24">',
-                'label' => '<strong style="color: #881920; font-size: 1.4em;">'.__('You can enable Dotpay payments', 'dotpay-payment-gateway').'</strong>',
+                'label' => '<strong style="color: #881920; font-size: 1.4em;">'.__('You can enable Przelewy24 (Dotpay) payments', 'dotpay-payment-gateway').'</strong>',
                 'type' => 'checkbox',
                 'default' => 'yes',
 				'class' => 'dotpay_module_enable'

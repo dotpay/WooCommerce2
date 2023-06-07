@@ -86,7 +86,7 @@ if(!(bool)$this->isIDshopCorrectPattern()) {
                                  }
 
                             }, 500);
-                            console.log('%cIncorrect configuration Dotpay payment module! Invalid shop ID.This method has been blocked.','background: #f7e2e2; color: brown;');
+                            console.log('%cIncorrect configuration Przelewy24 (Dotpay) payment module! Invalid shop ID.This method has been blocked.','background: #f7e2e2; color: brown;');
 
                     });
                     BrowserDetect3DSV2(); 
@@ -360,8 +360,8 @@ var dotpayWidgetConfig = {
 			jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
                    if (this.checked) {
                              if (this.value == 'dotpay') {                           
-                                  console.log('%cDotpay main method is checked manually.','background: #cfcfcf; color: green;'); 
-								  console.log('loaded main Dotpay payment method: waiting for payment channel selection...1');               
+                                  console.log('%Przelewy24 (Dotpay) main method is checked manually.','background: #cfcfcf; color: green;'); 
+								  console.log('loaded main Przelewy24 (Dotpay) payment method: waiting for payment channel selection...1');               
                                     if(jQuery( "button[name='woocommerce_checkout_place_order']" ).length > 0 ) {
                                         jQuery("button[name='woocommerce_checkout_place_order']").prop('disabled', true);
                                         console.log('%cSelect first PayPro S.A. Regulations of Payments !','background:red;color:#fff');
@@ -581,7 +581,7 @@ if($channelsforwidget_real_count == 1) {
                         jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
                                  if (this.checked) {
                                     if (this.value == 'dotpay') {                           
-                                        console.log('%cDotpay main method is checked manually.','background: #cfcfcf; color: green;'); 
+                                        console.log('%Przelewy24 (Dotpay) main method is checked manually.','background: #cfcfcf; color: green;'); 
                                          jQueryDotpayWidget1channel();
                                          createCookieDP("dp_channel_selected", jQuery('.dp_channel-input').attr("value"), "0.08");
                                     }else{
@@ -648,7 +648,7 @@ if($channelsforwidget_real_count == 1) {
                                                     console.log('Available channels: '+ jQuery('.dp_channel-input').length);
                                                 }
 
-                                                console.log('%cDotpay main method is checked manually.','background: #cfcfcf; color: green;'); 
+                                                console.log('%Przelewy24 (Dotpay) main method is checked manually.','background: #cfcfcf; color: green;'); 
                                                 
                                                 if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 1) {
                                                     jQueryDotpayWidget1channel();
@@ -715,7 +715,7 @@ if($channelsforwidget_real_count == 1) {
                                     jQuery("ul.wc_payment_methods input[type=radio]").on("change", function () {
                                         if (this.checked) {
                                             if (this.value == 'dotpay') {                           
-                                                console.log('%cDotpay main method is checked manually.','background: #cfcfcf; color: green;'); 
+                                                console.log('%Przelewy24 (Dotpay) main method is checked manually.','background: #cfcfcf; color: green;'); 
                                                 if (jQuery('div.dotpay-channels-selection > div.channel-container').length == 1) {
                                                     jQueryDotpayWidget1channel();
                                                 }
@@ -769,7 +769,7 @@ jQueryDotpayWidget = function(){
 
 
     } else {
-        echo "<p style=\"font-size:1em;text-align:center;color:#2f2f97;padding:20px;border-radius:3px \" class=\"NoWidget\"><strong>".__('You chose the fast and secure payments via Dotpay.', 'dotpay-payment-gateway')."<br>".__('Continue to choose your payment method on the Dotpay website.', 'dotpay-payment-gateway')."</strong><br><small>".__('Or choose a different payment method.', 'dotpay-payment-gateway')."</small></p>";
+        echo "<p style=\"font-size:1em;text-align:center;color:#2f2f97;padding:20px;border-radius:3px \" class=\"NoWidget\"><strong>".__('You chose the fast and secure payments via Przelewy24.', 'dotpay-payment-gateway')."<br>".__('Continue to choose your payment method on the P24 website.', 'dotpay-payment-gateway')."</strong><br><small>".__('Or choose a different payment method.', 'dotpay-payment-gateway')."</small></p>";
         ?>
         <script type="text/javascript">
         
