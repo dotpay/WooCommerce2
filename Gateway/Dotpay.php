@@ -156,10 +156,10 @@ class Gateway_Dotpay extends Gateway_Gateway {
             ),
             
             'dproxy_migrated' => array(
-                'title' => "<span style=\"margin: 10px;\">🧑‍💻 ".__('My account has already been migrated from dotpay to Przelewy24', 'dotpay-payment-gateway')."</span>",
+                'title' => "<span style=\"margin: 10px;\">🧑‍💻 ".__('My production account has already been migrated from Dotpay to Przelewy24', 'dotpay-payment-gateway')."</span>",
                 'label' => __('My new panel is at: <a href="https://panel.przelewy24.pl/" class="hide-if-no-js page-title-action"  target="_blank" title="Przelewy24 Transaction Panel">https://panel.przelewy24.pl/</a>', 'dotpay-payment-gateway'),
-                'type' => 'checkbox',
-                'description' => "<em>".__('If your account has already been transferred to the new Przelewy24 panel, be sure to select this option. ', 'dotpay-payment-gateway')."<br>".__('Thanks to this, you will ensure trouble-free and fast payment service.', 'dotpay-payment-gateway')."<br>".__('The sandbox environment is not available in this option.', 'dotpay-payment-gateway')."</em>",
+                'type' => 'hidden',
+                'description' => "<em>".__('Your account has already been transferred to the new Przelewy24 panel.', 'dotpay-payment-gateway')."</em>",
                 'default' => 'no'
             ),
             'id' => array(
@@ -182,7 +182,7 @@ class Gateway_Dotpay extends Gateway_Gateway {
 
             'test' => array(
                 'title' => "🧪 ".__('Testing environment', 'dotpay-payment-gateway'),
-                'label' => __('Only payment simulation - required Dotpay test account: <a href="https://www.dotpay.pl/developer/sandbox/en/?affilate_id=woocommerce" class="hide-if-no-js page-title-action"  target="_blank" title="Dotpay test account registration">registration</a>', 'dotpay-payment-gateway'),
+                'label' => __('Only payment simulation - required Dotpay test account.', 'dotpay-payment-gateway'),
                 'type' => 'checkbox',
                 'default' => 'yes'
             ),

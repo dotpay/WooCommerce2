@@ -902,13 +902,6 @@ protected function generateCHK($DotpayPin, $ParametersArray)
         }
 
 
-        if( ($clientIp == self::OFFICE_IP) && (strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')) 
-        {
-                $dotpay_office = true;
-                
-        }else{
-                $dotpay_office = false;
-        }
 
         if( strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' && isset($_GET['dp_debug']) ){
             $string_to_hash = 'h:'.$this->realHostName().',id:'.$this->getSellerId().',d:'.date('YmdHi').',p:'.$this->getSellerPin();

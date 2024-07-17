@@ -212,6 +212,9 @@ if (typeof jQuery != 'undefined') {
                  } 
 
       		});
+    
+    // The option to choose whether the account is migrated or not is disabled.      
+    jQuery('#woocommerce_dotpay_dproxy_migrated').attr('disabled', true);      
 
 
     //  module setup: validatte ID2

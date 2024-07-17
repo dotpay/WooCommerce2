@@ -192,9 +192,10 @@ jQueryDotpayCheckStatus = function(){
             console.log('%cpending payment status...','background: #cfcfcf; color: darkviolet;');
             console.log('<?php print_r($this->getOrder()->get_status() ); ?>');
 
-            createAlert('info', '<?php echo __('Payment wait for confirmation by Przelewy24... It make take up to 2 minutes.', 'dotpay-payment-gateway');?>');
-            jQuery( "p.alertDot" ).prepend( "<span class='loading'></span><br><code id='dp_countdown'></code><br><br><i class='material-icons' style='font-size: 48px; font-weight: bold;'>help_outline</i><br>" );
-            
+            if (!jQuery(".dotpay-alert.info").length) {
+                createAlert('info', '<?php echo __('Payment wait for confirmation by Przelewy24... It make take up to 2 minutes.', 'dotpay-payment-gateway');?>');
+                jQuery( "p.alertDot" ).prepend( "<span class='loading'></span><br><code id='dp_countdown'></code><br><br><i class='material-icons' style='font-size: 48px; font-weight: bold;'>help_outline</i><br>" );
+            }
 
             var now1 = new Date().getTime();
             var countDownDate = new Date(now1 + 1000*120).getTime();

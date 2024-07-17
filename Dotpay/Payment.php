@@ -32,28 +32,23 @@ class Dotpay_Payment extends WC_Payment_Gateway
     // Dotpay IP addresses
 
     const DOTPAY_IP_WHITE_LIST = array(
-                                        '195.150.9.37',
-                                        '91.216.191.181',
-                                        '91.216.191.182',
-                                        '91.216.191.183',
-                                        '91.216.191.184',
-                                        '91.216.191.185',
+                                        '20.215.81.124',
                                         '5.252.202.254',
                                         '5.252.202.255',
+                                        '195.150.9.37'
                                       );
 
 
 
-    // Office Dotpay IP address
-    const OFFICE_IP = '77.79.195.34';
+
     // Dotpay URL
-    const DOTPAY_URL = 'https://ssl.dotpay.pl/t2/';
+    const DOTPAY_URL = 'https://dproxy.przelewy24.pl/t2/';
     // Dotpay Proxy in Przelewy24 URL
     const DPROXY_URL = 'https://dproxy.przelewy24.pl/t2/';
     // Dotpay URL TEST
     const DOTPAY_URL_TEST = 'https://ssl.dotpay.pl/test_payment/';
     // Dotpay Seller Api URL
-    const DOTPAY_SELLER_API_URL = 'https://ssl.dotpay.pl/s2/login/';
+    const DOTPAY_SELLER_API_URL = 'https://dproxy.przelewy24.pl/s2/login/';
 
     // Dotpay Proxy in Przelewy24 Seller Api URL
     const DPROXY_SELLER_API_URL = 'https://dproxy.przelewy24.pl/s2/login/';
@@ -61,7 +56,7 @@ class Dotpay_Payment extends WC_Payment_Gateway
     const DOTPAY_TEST_SELLER_API_URL = 'https://ssl.dotpay.pl/test_seller/';
 
     // Module version
-    const MODULE_VERSION = '3.7.3';
+    const MODULE_VERSION = '3.7.4';
 
 
     public static $ocChannel = '248';
